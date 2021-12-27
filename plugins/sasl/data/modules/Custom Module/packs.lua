@@ -194,7 +194,7 @@ end
 local function update_bleed_config_and_targets()
     -- if x-bleed is on one engine feeds bleed air
     local not_both_engines = not (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail)
-    is_single_bleed = x_bleed_status and not_both_engines or (eng_bleed_switch[1] == false or  eng_bleed_switch[2] == false)) and 1 or 0
+    is_single_bleed = (x_bleed_status and not_both_engines or (eng_bleed_switch[1] == false or eng_bleed_switch[2] == false)) and 1 or 0
     -- only if we have both packs on, we have a dual bleed situation regarding demand
     if not pack_valve_pos[1] or not pack_valve_pos[2] then is_single_bleed = 0 end
 

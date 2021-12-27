@@ -236,7 +236,7 @@ MessageGroup_ADKIS_NWS_FAULT = {
 
     is_inhibited = function()
         local eng_both_avail = ENG.dyn[1].is_avail and ENG.dyn[2].is_avail
-        return get(EWD_flight_phase) < PHASE_1ST_ENG_ON or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and !eng_both_avail) or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF
+        return get(EWD_flight_phase) < PHASE_1ST_ENG_ON or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and not eng_both_avail) or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF
     end
 
 }

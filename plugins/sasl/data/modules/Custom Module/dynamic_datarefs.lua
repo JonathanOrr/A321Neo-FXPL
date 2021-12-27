@@ -287,7 +287,7 @@ XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
 
 --ENG
 -- ***
--- *** WARNING: Consider using the per-engine struct in engines.lua insetad of adding new datarefs here
+-- *** NOTE: Consider using the per-engine struct in engines.lua insetad of adding new datarefs here
 -- ***
 Eng_Dual_Cooling = createGlobalPropertyf("a321neo/dynamics/engines/dual_cooling", 0, false, true, false) -- Is dual cooling on?
 Eng_Continuous_Ignition = createGlobalPropertyf("a321neo/dynamics/engines/continuous_ignition", 0, false, true, false) -- Is continuous ignition active?

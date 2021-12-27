@@ -1148,7 +1148,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
         -- than 3 seconds, then SOFT GA is enabled until it's back to TOGA or CLB
         -- Also, both engines must be available
         -- Further details here: https://safetyfirst.airbus.com/introduction-to-the-soft-go-around-function/
-        elseif ENG.dyn[engine].n1_mode == 7 or get(TIME) - last_time_toga[engine] < 3) and ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
+        elseif (ENG.dyn[engine].n1_mode == 7 or get(TIME) - last_time_toga[engine] < 3) and ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
             ENG.dyn[engine].n1_mode = 7 -- SOFT GA
             
             -- In this case we replace the MCT value

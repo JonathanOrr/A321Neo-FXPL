@@ -1069,7 +1069,7 @@ MessageGroup_ENG_REV_SET = {
 
 local Message_EFAIL_THR_LEVER_IDLE = {
     text = function()
-        local which_engine = ENG.dyn[1].is_failed == 1 and "1" or "2"
+        local which_engine = ENG.dyn[1].is_failed and "1" or "2"
         return " - THR LEVER " .. which_engine .. ".......IDLE"
     end,
 
@@ -1078,13 +1078,13 @@ local Message_EFAIL_THR_LEVER_IDLE = {
     end,
 
     is_active = function()
-        return (ENG.dyn[1].is_failed == 1 and math.abs(get(Cockpit_throttle_lever_L)) or math.abs(get(Cockpit_throttle_lever_R))) > 0.05
+        return (ENG.dyn[1].is_failed and math.abs(get(Cockpit_throttle_lever_L)) or math.abs(get(Cockpit_throttle_lever_R))) > 0.05
     end
 }
 
 local Message_EFAIL_ENG_MASTER_OFF = {
     text = function()
-        local which_engine = ENG.dyn[1].is_failed == 1 and "1" or "2"
+        local which_engine = ENG.dyn[1].is_failed and "1" or "2"
         return " - ENG MASTER " .. which_engine .. ".......OFF"
     end,
 
@@ -1093,13 +1093,13 @@ local Message_EFAIL_ENG_MASTER_OFF = {
     end,
 
     is_active = function()
-        return (ENG.dyn[1].is_failed == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
+        return (ENG.dyn[1].is_failed and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
     end
 }
 
 local Message_EFAIL_ENG_PB_PUSH = {
     text = function()
-        local which_engine = ENG.dyn[1].is_failed == 1 and "1" or "2"
+        local which_engine = ENG.dyn[1].is_failed and "1" or "2"
         return "   - ENG FIRE P/B " .. which_engine .. "..PUSH"
     end,
 
@@ -1108,7 +1108,7 @@ local Message_EFAIL_ENG_PB_PUSH = {
     end,
 
     is_active = function()
-      return (ENG.dyn[1].is_failed == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
+      return (ENG.dyn[1].is_failed and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
     end
 }
 
@@ -1122,7 +1122,7 @@ local Message_EFAIL_AGENT_1 = {
     end,
 
     is_active = function()
-        if ENG.dyn[1].is_failed == 1 then
+        if ENG.dyn[1].is_failed then
             return not FIRE_sys.eng[1].squib_1_disch
         else
             return not FIRE_sys.eng[2].squib_1_disch
@@ -1150,7 +1150,7 @@ MessageGroup_ENG_FAIL_SINGLE = {
     messages = {
         {
             text = function()
-                local which_engine = ENG.dyn[1].is_failed == 1 and "1" or "2"
+                local which_engine = ENG.dyn[1].is_failed and "1" or "2"
                 return "    " .. which_engine .. " FAIL"
             end,
             color = function() return COL_CAUTION end,
@@ -1172,7 +1172,7 @@ MessageGroup_ENG_FAIL_SINGLE = {
         },
         {
             text = function()
-                local which_engine = ENG.dyn[1].is_failed == 1 and "1" or "2"
+                local which_engine = ENG.dyn[1].is_failed and "1" or "2"
                 return "   ENG " .. which_engine .. " RELIGHT CONSIDER"
             end,
             color = function() return COL_ACTIONS end,
@@ -1181,7 +1181,7 @@ MessageGroup_ENG_FAIL_SINGLE = {
     },
 
     is_active = function()
-        return ENG.dyn[1].is_failed + ENG.dyn[2].is_failed == 1
+        return xor(ENG.dyn[1].is_failed, ENG.dyn[2].is_failed)
     end,
 
     is_inhibited = function()
@@ -1275,7 +1275,7 @@ MessageGroup_ENG_FAIL_DUAL = {
     },
 
     is_active = function()
-        return ENG.dyn[1].is_failed + ENG.dyn[2].is_failed == 2
+        return ENG.dyn[1].is_failed and ENG.dyn[2].is_failed
     end,
 
     is_inhibited = function()
