@@ -426,11 +426,11 @@ end
 -- Returns true if the FADEC has electrical power
 local function fadec_has_elec_power(eng)
     if eng == 1 then
-        return get(Eng_1_FADEC_powered) == 1
+        return ENG.dyn[1].is_fadec_pwrd == 1
     end
 
     if eng == 2 then
-        return get(Eng_2_FADEC_powered) == 1
+        return ENG.dyn[2].is_fadec_pwrd == 1
     end
 end
 

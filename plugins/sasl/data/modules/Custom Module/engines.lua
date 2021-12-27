@@ -128,7 +128,7 @@ local function engine_create_state()
                 oil_temp=get(OTA),      -- Oil Temperature [°C]
                 vib_n1=0,               -- Vibration of N1 stage [see fcom]
                 vib_n2=0,               -- Vibration of N1 stage [see fcom]
-                fadec_pwrd=false,       -- Is FADEC on?    
+                is_fadec_pwrd=false,    -- Is FADEC on?    
                 n1_idle=0,              -- Value for N1 idle [%]
                 n1_mode=0,              -- Current N1 mode for displaying AND N1 computation 
                                         -- 0: not visible, 1: TOGA, 2:MCT, 3:CLB, 4: IDLE, 5: MREV, 6: FLEX, 7: SOFT GA
@@ -411,7 +411,7 @@ local function update_avail()
 
     -- ENG 1
     if ENG.dyn[1].n1 > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_1_FAILURE) == 0 then
-        if !ENG.dyn[1].is_avail then
+        if not ENG.dyn[1].is_avail then
             set(EWD_engine_avail_ind_start, get(TIME), 1)
             ENG.dyn[1].is_avail = true
         end
@@ -424,7 +424,7 @@ local function update_avail()
     
     -- ENG 2
     if ENG.dyn[2].n1 > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_2_FAILURE) == 0 then
-        if !ENG.dyn[2].is_avail then
+        if not ENG.dyn[2].is_avail then
             set(EWD_engine_avail_ind_start, get(TIME), 2)
             ENG.dyn[2].is_avail = true
         end
@@ -828,8 +828,8 @@ local function update_startup()
 
     local eng_1_air_cond = (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1)
     local eng_2_air_cond = (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2)
-    local does_engine_1_can_start_or_crank = !ENG.dyn[1].is_avail and eng_1_air_cond and get(Eng_1_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
-    local does_engine_2_can_start_or_crank = !ENG.dyn[2].is_avail and eng_2_air_cond and get(Eng_2_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
+    local does_engine_1_can_start_or_crank = not ENG.dyn[1].is_avail and eng_1_air_cond and ENG.dyn[1].is_fadec_pwrd == 1 and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
+    local does_engine_2_can_start_or_crank = not ENG.dyn[2].is_avail and eng_2_air_cond and ENG.dyn[2].is_fadec_pwrd == 1 and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
 
     if get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
         does_engine_1_can_start_or_crank = false -- No fadec? No start
@@ -904,18 +904,18 @@ local function update_startup()
         end
     -- CASE 3: Master Switch protection
     else
-        if !ENG.dyn[1].is_avail and fast_restart_1 and get(Engine_1_master_switch) then
+        if not ENG.dyn[1].is_avail and fast_restart_1 and get(Engine_1_master_switch) then
             perform_starting_procedure(1, get(All_on_ground) == 0)
             require_cooldown[1] = false
         end
-        if !ENG.dyn[2].is_avail and fast_restart_2 and get(Engine_2_master_switch) then
+        if not ENG.dyn[2].is_avail and fast_restart_2 and get(Engine_2_master_switch) then
             perform_starting_procedure(2, get(All_on_ground) == 0)
             require_cooldown[2] = false
         end
     end
     
     -- CASE 3: No ignition, no crank, engine is off or shutting down
-    if !ENG.dyn[1].is_avail  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
+    if not ENG.dyn[1].is_avail  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
         set(Eng_fsm_state,FSM_SHUTDOWN,1)
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
@@ -929,7 +929,7 @@ local function update_startup()
         igniter_eng[1] = 0
         starter_valve_eng[1] = 0
     end
-    if !ENG.dyn[2].is_avail and require_cooldown[2] then    -- Turn off the engine
+    if not ENG.dyn[2].is_avail and require_cooldown[2] then    -- Turn off the engine
         set(Eng_fsm_state,FSM_SHUTDOWN,2)
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
@@ -1039,7 +1039,7 @@ local function update_continuous_ignition()
 
     if ENG.dyn[1].is_avail and ENG.dyn[2].is_avail and get(Engine_mode_knob) == 0 then
         already_back_to_norm = true
-    elseif !ENG.dyn[1].is_avail or !ENG.dyn[2].is_avail then
+    elseif not ENG.dyn[1].is_avail or not ENG.dyn[2].is_avail then
         already_back_to_norm = false
     end
     
@@ -1089,12 +1089,12 @@ end
 
 local function update_oil_qty()
     -- initial oil qty is set when initializing engine type
-    if get(Eng_fsm_state, 1) >= FSM_START_PHASE_N2 and !ENG.dyn[1].is_avail then
+    if get(Eng_fsm_state, 1) >= FSM_START_PHASE_N2 and not ENG.dyn[1].is_avail then
         update_oil_qty_startup(1)
         return
     end
 
-    if get(Eng_fsm_state, 2) >= FSM_START_PHASE_N2 and !ENG.dyn[2].is_avail then
+    if get(Eng_fsm_state, 2) >= FSM_START_PHASE_N2 and not ENG.dyn[2].is_avail then
         update_oil_qty_startup(2)
         return
     end
@@ -1198,8 +1198,8 @@ local function update_n1_mode_and_limits()
 end
 
 local function update_fadec_status()
-    set(Eng_1_FADEC_powered, fadec_has_elec_power(1) and 1 or 0)
-    set(Eng_2_FADEC_powered, fadec_has_elec_power(2) and 1 or 0)
+    ENG.dyn[1].is_fadec_pwrd = fadec_has_elec_power(1)
+    ENG.dyn[2].is_fadec_pwrd = fadec_has_elec_power(2)
 end
 
 
@@ -1228,7 +1228,7 @@ end
 local function update_failing_eng(x)
     local eng_ms    = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
     local n2_below  = (x == 1 and ENG.dyn[1].n2 or ENG.dyn[2].n2) < 62
-    local not_avail = !ENG.dyn[x].is_avail
+    local not_avail = not ENG.dyn[x].is_avail
     local eng_st    = already_started_eng[x]
     local no_fire_pb= (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
 

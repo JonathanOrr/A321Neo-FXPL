@@ -71,8 +71,8 @@ function update()
     -- - No engines
     -- - Never took off
     if  get(Any_wheel_on_ground)  == 1 
-    and !ENG.dyn[1].is_avail
-    and !ENG.dyn[2].is_avail
+    and not ENG.dyn[1].is_avail
+    and not ENG.dyn[2].is_avail
     and already_took_off  == false
     then
         set(EWD_flight_phase, PHASE_ELEC_PWR)
@@ -199,7 +199,7 @@ function update()
     -- - Already took off
     
     if  get(Any_wheel_on_ground)  == 1 
-    and (!ENG.dyn[1].is_avail and !ENG.dyn[2].is_avail)
+    and (not ENG.dyn[1].is_avail and not ENG.dyn[2].is_avail)
     and already_took_off  == true
     then
         set(EWD_flight_phase, PHASE_2ND_ENG_OFF)

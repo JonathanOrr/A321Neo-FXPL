@@ -58,7 +58,7 @@ local function is_at_working()
         return false --less than one FAC
     end
 
-    if not get(FAILURE_ENG_FADEC_CH1) == 0 and get(FAILURE_ENG_FADEC_CH2) == 0 and get(Eng_1_FADEC_powered) == 1 and get(Eng_2_FADEC_powered) == 1 then
+    if not get(FAILURE_ENG_FADEC_CH1) == 0 and get(FAILURE_ENG_FADEC_CH2) == 0 and ENG.dyn[1].is_fadec_pwrd == 1 and ENG.dyn[2].is_fadec_pwrd == 1 then
         return false -- FADEC failure
     end
 

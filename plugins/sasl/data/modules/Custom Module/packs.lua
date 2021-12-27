@@ -215,7 +215,7 @@ local function update_hp_valves()
     elseif ENG.dyn[1].is_avail and eng_bleed_switch[1] and get(L_bleed_press) < target_max_bleed  then
         -- TODO just open the valve here will not increase pressure, since for display only
         set(L_HP_valve, 1)
-    elseif !ENG.dyn[1].is_avail or (not eng_bleed_switch[1]) or get(L_bleed_press) >= target_max_bleed then
+    elseif not ENG.dyn[1].is_avail or (not eng_bleed_switch[1]) or get(L_bleed_press) >= target_max_bleed then
         set(L_HP_valve, 0)
     end
 
@@ -224,7 +224,7 @@ local function update_hp_valves()
         set(R_HP_valve,0)
     elseif ENG.dyn[2].is_avail and eng_bleed_switch[2] and get(R_bleed_press) < target_max_bleed then
         set(R_HP_valve, 1)
-    elseif !ENG.dyn[2].is_avail or (not eng_bleed_switch[2]) or get(R_bleed_press) >= target_max_bleed then
+    elseif not ENG.dyn[2].is_avail or (not eng_bleed_switch[2]) or get(R_bleed_press) >= target_max_bleed then
         set(R_HP_valve, 0)
     end
 
@@ -301,7 +301,7 @@ local function update_bleed_valves()
 end
 
 local function update_eng_pressures()
-    if !ENG.dyn[1].is_avail then
+    if not ENG.dyn[1].is_avail then
         -- shut down
         eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], 0, 0, 100, 1)
     else
@@ -311,7 +311,7 @@ local function update_eng_pressures()
         -- TODO N1 takes some demand into account (WAI/NAI) but not pack config situation which should be done here or is it done just by HP valve
     end
     
-    if !ENG.dyn[2].is_avail then
+    if not ENG.dyn[2].is_avail then
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], 0, 0, 100, 1)
     else
         local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, ENG.dyn[2].n1) + math.random() + get(FAILURE_BLEED_ENG_2_hi_press) * 25

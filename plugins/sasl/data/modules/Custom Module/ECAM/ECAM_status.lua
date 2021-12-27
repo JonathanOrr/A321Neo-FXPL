@@ -144,8 +144,8 @@ local function prepare_sts_page_left()
                 (get(FBW_total_control_law) == FBW_DIRECT_LAW 
                 or get(FAILURE_FCTL_LELEV) == 1 
                 or get(FAILURE_FCTL_RELEV) == 1 
-                or !ENG.dyn[1].is_avail 
-                or !ENG.dyn[2].is_avail)
+                or not ENG.dyn[1].is_avail 
+                or not ENG.dyn[2].is_avail)
                 or get(FAILURE_FCTL_THS_MECH) == 1
                 or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_G_press) < 1450)
                 or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_B_press) < 1450)

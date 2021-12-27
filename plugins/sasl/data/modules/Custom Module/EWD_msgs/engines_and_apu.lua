@@ -2010,10 +2010,10 @@ MessageGroup_ENG_LO_START_AIR = {
         {
             text = function()
                 local N = ""
-                if (get(L_bleed_press) <= 10 and !ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) then
+                if (get(L_bleed_press) <= 10 and not ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) then
                     N = "1"
                 end
-                if (get(R_bleed_press) <= 10 and !ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1) then
+                if (get(R_bleed_press) <= 10 and not ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1) then
                     if #N > 0 then
                         N = N .. "+"
                     end
@@ -2039,7 +2039,7 @@ MessageGroup_ENG_LO_START_AIR = {
     },
 
     is_active = function()
-        return get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and !ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and !ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
+        return get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and not ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and not ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
     end,
 
     is_inhibited = function()
@@ -2055,7 +2055,7 @@ MessageGroup_ENG_LO_START_AIR = {
 
 local function start_fault_1()
     
-    if get(All_on_ground) == 1 and MessageGroup_ENG_START_FAULT.eng_1_s_time == 0 and !ENG.dyn[1].is_avail  and ENG.dyn[1].n2 > 11 then
+    if get(All_on_ground) == 1 and MessageGroup_ENG_START_FAULT.eng_1_s_time == 0 and not ENG.dyn[1].is_avail  and ENG.dyn[1].n2 > 11 then
         MessageGroup_ENG_START_FAULT.eng_1_s_time = get(TIME)
     elseif (ENG.dyn[1].is_avail and 1 or 0) + get(Engine_1_master_switch) ~= 1 or get(All_on_ground) == 0 then
         MessageGroup_ENG_START_FAULT.eng_1_s_time = 0
@@ -2063,12 +2063,12 @@ local function start_fault_1()
     local TIME_LIMIT = 60
     local engine_L = math.abs(get(Cockpit_throttle_lever_L))  >= 0.05
                      or (MessageGroup_ENG_START_FAULT.eng_1_s_time ~= 0 and get(TIME) - MessageGroup_ENG_START_FAULT.eng_1_s_time > TIME_LIMIT)
-    return (engine_L and !ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1)
+    return (engine_L and not ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1)
 end
 
 local function start_fault_2()
 
-    if get(All_on_ground) == 1 and  MessageGroup_ENG_START_FAULT.eng_2_s_time == 0 and !ENG.dyn[2].is_avail  and ENG.dyn[2].n2 > 11 then
+    if get(All_on_ground) == 1 and  MessageGroup_ENG_START_FAULT.eng_2_s_time == 0 and not ENG.dyn[2].is_avail  and ENG.dyn[2].n2 > 11 then
         MessageGroup_ENG_START_FAULT.eng_2_s_time = get(TIME)
     elseif (ENG.dyn[2].is_avail and 1 or 0) + get(Engine_2_master_switch) ~= 1 or get(All_on_ground) == 0  then
         MessageGroup_ENG_START_FAULT.eng_2_s_time = 0
@@ -2078,7 +2078,7 @@ local function start_fault_2()
     local engine_R = math.abs(get(Cockpit_throttle_lever_R))  >= 0.05
                      or (MessageGroup_ENG_START_FAULT.eng_2_s_time ~= 0 and get(TIME) - MessageGroup_ENG_START_FAULT.eng_2_s_time > TIME_LIMIT)
 
-    return (engine_R and !ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1)
+    return (engine_R and not ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1)
 
 end
 

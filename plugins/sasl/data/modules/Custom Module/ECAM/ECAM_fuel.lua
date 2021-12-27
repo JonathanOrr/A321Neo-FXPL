@@ -182,8 +182,8 @@ end
 
 local function draw_engine_nr()
 
-    local color_1 = (!ENG.dyn[1].is_avail and get(Engine_1_master_switch) == 1) and ECAM_ORANGE or ECAM_WHITE
-    local color_2 = (!ENG.dyn[2].is_avail and get(Engine_2_master_switch) == 1) and ECAM_ORANGE or ECAM_WHITE
+    local color_1 = (not ENG.dyn[1].is_avail and get(Engine_1_master_switch) == 1) and ECAM_ORANGE or ECAM_WHITE
+    local color_2 = (not ENG.dyn[2].is_avail and get(Engine_2_master_switch) == 1) and ECAM_ORANGE or ECAM_WHITE
 
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-220, size[2]-65, "1", 46, false, false, TEXT_ALIGN_CENTER, color_1)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+220, size[2]-65, "2", 46, false, false, TEXT_ALIGN_CENTER, color_2)

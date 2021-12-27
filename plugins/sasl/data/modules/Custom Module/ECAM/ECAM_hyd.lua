@@ -104,11 +104,11 @@ end
 
 local function draw_engine_numbers()
     -- ENGINE 1
-    local num_color = !ENG.dyn[1].is_avail  and ECAM_ORANGE or ECAM_WHITE
+    local num_color = not ENG.dyn[1].is_avail  and ECAM_ORANGE or ECAM_WHITE
     sasl.gl.drawText(Font_AirbusDUL, 230, y_psi_pos-290, "1", 34, false, false, TEXT_ALIGN_CENTER, num_color)
 
     -- ENGINE 2
-    num_color = !ENG.dyn[2].is_avail  and ECAM_ORANGE or ECAM_WHITE
+    num_color = not ENG.dyn[2].is_avail  and ECAM_ORANGE or ECAM_WHITE
     sasl.gl.drawText(Font_AirbusDUL, 670, y_psi_pos-290, "2", 34, false, false, TEXT_ALIGN_CENTER, num_color)
 
 end

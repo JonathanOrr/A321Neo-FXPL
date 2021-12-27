@@ -189,8 +189,8 @@ local inop_systems_desc = {
     },
     {
      text = "GEN", nr = 2,
-     cond_1 = function() return get(FAILURE_ELEC_GEN_1) == 1 or (!ENG.dyn[1].is_avail and get(All_on_ground) == 0) or not ELEC_sys.generators[1].idg_status end,
-     cond_2 = function() return get(FAILURE_ELEC_GEN_2) == 1 or (!ENG.dyn[2].is_avail and get(All_on_ground) == 0) or not ELEC_sys.generators[2].idg_status end,
+     cond_1 = function() return get(FAILURE_ELEC_GEN_1) == 1 or (not ENG.dyn[1].is_avail and get(All_on_ground) == 0) or not ELEC_sys.generators[1].idg_status end,
+     cond_2 = function() return get(FAILURE_ELEC_GEN_2) == 1 or (not ENG.dyn[2].is_avail and get(All_on_ground) == 0) or not ELEC_sys.generators[2].idg_status end,
     },
     {
      text = "BAT", nr = 2,
@@ -227,8 +227,8 @@ local inop_systems_desc = {
     {
      text = "REVERSER", nr = 2,
      all_cond = base_cond,
-     cond_1 = function() return get(FAILURE_ENG_REV_FAULT, 1) == 1 or get(Eng_1_FADEC_powered) == 0 or (get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1) or get(Hydraulic_G_press) < 1000 end,
-     cond_2 = function() return get(FAILURE_ENG_REV_FAULT, 2) == 1 or get(Eng_2_FADEC_powered) == 0 or (get(FAILURE_ENG_FADEC_CH1, 2) == 1 and get(FAILURE_ENG_FADEC_CH2, 2) == 1) or get(Hydraulic_Y_press) < 1000 end,
+     cond_1 = function() return get(FAILURE_ENG_REV_FAULT, 1) == 1 or ENG.dyn[1].is_fadec_pwrd == 0 or (get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1) or get(Hydraulic_G_press) < 1000 end,
+     cond_2 = function() return get(FAILURE_ENG_REV_FAULT, 2) == 1 or ENG.dyn[2].is_fadec_pwrd == 0 or (get(FAILURE_ENG_FADEC_CH1, 2) == 1 and get(FAILURE_ENG_FADEC_CH2, 2) == 1) or get(Hydraulic_Y_press) < 1000 end,
     },
     
 
@@ -388,11 +388,11 @@ local inop_systems_desc = {
     },
     {
      text = "G ENG 1 PUMP", nr = 1,
-     cond_1 = function() return (!ENG.dyn[1].is_avail and get(All_on_ground) == 0) or get(FAILURE_HYD_G_pump) == 1 or get(FAILURE_HYD_G_R_overheat) == 1 or get(Hydraulic_G_qty) == 0 end,
+     cond_1 = function() return (not ENG.dyn[1].is_avail and get(All_on_ground) == 0) or get(FAILURE_HYD_G_pump) == 1 or get(FAILURE_HYD_G_R_overheat) == 1 or get(Hydraulic_G_qty) == 0 end,
     },
     {
      text = "Y ENG 2 PUMP", nr = 1,
-     cond_1 = function() return (!ENG.dyn[2].is_avail and get(All_on_ground) == 0) or get(FAILURE_HYD_Y_pump) == 1 or get(FAILURE_HYD_Y_R_overheat) == 1 or get(Hydraulic_Y_qty) == 0 end,
+     cond_1 = function() return (not ENG.dyn[2].is_avail and get(All_on_ground) == 0) or get(FAILURE_HYD_Y_pump) == 1 or get(FAILURE_HYD_Y_R_overheat) == 1 or get(Hydraulic_Y_qty) == 0 end,
     },
     {
      text = "PTU", nr = 1,

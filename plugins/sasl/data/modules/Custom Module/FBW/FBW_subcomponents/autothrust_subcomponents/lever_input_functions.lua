@@ -229,7 +229,7 @@ end
 local function can_reverse_open(eng)
 
     -- We need fadec elec power to open the reverser
-    if (eng == 1 and get(Eng_1_FADEC_powered) == 0) or (eng == 2 and get(Eng_2_FADEC_powered) == 0) then
+    if (eng == 1 and ENG.dyn[1].is_fadec_pwrd == 0) or (eng == 2 and ENG.dyn[2].is_fadec_pwrd == 0) then
         return false
     end
 

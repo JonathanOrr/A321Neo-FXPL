@@ -47,7 +47,7 @@ function update()
     set(Ground_speed_kmh, get(Ground_speed_ms) * 3.6)
     set(Ground_speed_mph, get(Ground_speed_ms) * 2.237)
 
-    if !ENG.dyn[1].is_avail or !ENG.dyn[2].is_avail then
+    if not ENG.dyn[1].is_avail or not ENG.dyn[2].is_avail then
         set(cabin_screen_page, 0)
     elseif ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
         set(cabin_screen_page, 1)

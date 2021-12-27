@@ -596,7 +596,7 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and !ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and !ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
+            get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and not ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and not ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
         end
     },
     {
@@ -606,7 +606,7 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and !ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and !ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
+            get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and not ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and not ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
         end
     },
     {
@@ -616,7 +616,7 @@ local proc_messages = {
         indent_lvl = 1, 
         cond = function()
             return
-            get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and !ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and !ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
+            get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and not ENG.dyn[1].is_avail  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and not ENG.dyn[2].is_avail  and get(Engine_2_master_switch) == 1))
         end
     },
 

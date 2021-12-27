@@ -59,10 +59,10 @@ function update_consumptions()
     end
     if get(Engine_mode_knob) == 1 then    -- Ignition mode
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.1, 0.1)
-        if !ENG.dyn[1].is_avail then
+        if not ENG.dyn[1].is_avail then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 1, 1.2)
         end
-        if !ENG.dyn[2].is_avail then
+        if not ENG.dyn[2].is_avail then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 1, 1.2)
         end
     end
