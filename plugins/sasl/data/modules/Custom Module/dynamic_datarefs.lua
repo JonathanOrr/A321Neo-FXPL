@@ -286,15 +286,12 @@ XP_Battery_1 = globalProperty("sim/cockpit2/electrical/battery_on[0]")
 XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
 
 --ENG
-Eng_1_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_fadec_powered", 0, false, true, false) -- do not consider fadec failures
-Eng_2_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_fadec_powered", 0, false, true, false) -- do not consider fadec failures
-
-Eng_N1_idle = createGlobalPropertyf("a321neo/dynamics/engines/n1_idle", 1, false, true, false) -- current value (depends on altitude) for the minimum N1
-Eng_N1_bleed_corrected_idle = createGlobalPropertyfa("a321neo/dynamics/engines/n1_idle_bleed_corrected", 2) -- corrected N1 idle based on bleed/packs config only used in IDLE
+-- ***
+-- *** WARNING: Consider using the per-engine struct in engines.lua insetad of adding new datarefs here
+-- ***
 Eng_Dual_Cooling = createGlobalPropertyf("a321neo/dynamics/engines/dual_cooling", 0, false, true, false) -- Is dual cooling on?
 Eng_Continuous_Ignition = createGlobalPropertyf("a321neo/dynamics/engines/continuous_ignition", 0, false, true, false) -- Is continuous ignition active?
 
-Eng_N1_mode = createGlobalPropertyia("a321neo/dynamics/engines/n1_mode", 2) -- 0: not visible, 1: TOGA, 2:MCT, 3:CLB, 4: IDLE, 5: MREV, 6: FLEX, 7: SOFT GA
 Eng_N1_flex_temp = createGlobalPropertyf("a321neo/dynamics/engines/n1_flex_temp", 0, false, true, false)    -- 0 means NO FLEX TAKEOFF
 
 Eng_N1_max              = createGlobalPropertyf("a321neo/dynamics/engines/n1_max", 0, false, true, false) -- Current max
@@ -305,14 +302,6 @@ Eng_N1_max_detent_flex  = createGlobalPropertyf("a321neo/dynamics/engines/n1_max
 
 Eng_1_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_1", 0, false, true, false)
 Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_2", 0, false, true, false)
-Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
-Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
-
-Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2) -- cranking
-Eng_starter_valve_open  = createGlobalPropertyia("a321neo/dynamics/engines/sav_open", 2)  -- valve open time exceeds spool up so we need a separate property
-
-Eng_fsm_state = createGlobalPropertyia("a321neo/dynamics/engines/eng_fsm_state", 2) -- engine state
-Eng_is_failed = createGlobalPropertyia("a321neo/dynamics/engines/eng_failed", 2) -- There's a special condition for this
 
 -- Engine startup config stuff
 ENG_config_cooling_time = createGlobalPropertyi("a321neo/config/eng/initial_cooling", 0, false, true, false)

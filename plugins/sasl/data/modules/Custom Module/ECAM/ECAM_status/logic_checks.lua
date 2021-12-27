@@ -30,7 +30,7 @@ end
 
 function elec_in_emer_config()
       condition =  ((get(Gen_1_pwr) == 0 or get(Gen_1_line_active) == 1) and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0)
-        condition = condition and not (get(Eng_is_failed, 1) and get(Eng_is_failed, 2))
+        condition = condition and not (ENG.dyn[1].is_failed and ENG.dyn[2].is_failed)
     return condition
 end
 
@@ -126,7 +126,7 @@ end
 
   function elec_in_emer_config()
       condition =  ((get(Gen_1_pwr) == 0 or get(Gen_1_line_active) == 1) and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0)
-        condition = condition and not (get(Eng_is_failed, 1) and get(Eng_is_failed, 2))
+        condition = condition and not (ENG.dyn[1].is_failed and ENG.dyn[2].is_failed)
     return condition
 end
 

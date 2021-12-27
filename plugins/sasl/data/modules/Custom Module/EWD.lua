@@ -128,7 +128,7 @@ end
 local function draw_engines_egt(x)
     local xx         = (x == 1 and get(EWD_engine_1_XX) or get(EWD_engine_2_XX)) == 1
     local avail      = ENG.dyn[x].is_avail
-    local eng_mode = get(Eng_N1_mode, x)
+    local eng_mode = ENG.dyn[x].n1_mode
     local x_shift    = x == 1 and -215 or 125
     local x_shift_2  = x == 1 and -140 or 200
     local x_shift_3  = x == 1 and -170 or 170
@@ -427,7 +427,7 @@ local function draw_packs_wai_nai()
     if not ENG.dyn[1].is_avail and not ENG.dyn[2].is_avail then
         return
     end
-    local max_eng_n1_mode = math.max(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
+    local max_eng_n1_mode = math.max(ENG.dyn[1].n1_mode, ENG.dyn[2].n1_mode) 
     
     -- PACKS / WAI / NAI indication
     if get(Any_wheel_on_ground) == 1 or max_eng_n1_mode < 3 or max_eng_n1_mode > 5 then
@@ -464,7 +464,7 @@ local function draw_extra_indication()
         sasl.gl.drawText(Font_ECAMfont, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
 
-    local max_eng_n1_mode = math.min(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
+    local max_eng_n1_mode = math.min(ENG.dyn[1].n1_mode, ENG.dyn[2].n1_mode) 
 
     if max_eng_n1_mode == 0 then
         return
@@ -771,7 +771,7 @@ function update()
         params.last_update = get(TIME)
     end
 
-    if params.eng_n1[1] < get(Eng_N1_idle) + 2 and params.eng_n1[2] < get(Eng_N1_idle) + 2 and get(Any_wheel_on_ground) == 0 then
+    if params.eng_n1[1] < ENG.dyn[1].n1_idle + 2 and params.eng_n1[2] < ENG.dyn[2].n1_idle + 2 and get(Any_wheel_on_ground) == 0 then
         if eng_idle_start == 0 then
             eng_idle_start = get(TIME)
         end

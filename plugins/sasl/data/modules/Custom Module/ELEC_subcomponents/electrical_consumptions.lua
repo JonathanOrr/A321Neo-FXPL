@@ -46,13 +46,13 @@ function update_consumptions()
     end
     
     -- FADEC and engine related stuffs
-    if get(Eng_1_Firewall_valve) == 0 then
+    if ENG.dyn[1].firewall_valve == 0 then
         -- FADEC has power if fire valve is open
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 0.5, 0.5)
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 0.5, 0.5)
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_1, 0.05, 0.05)
     end
-    if get(Eng_2_Firewall_valve) == 0 then
+    if ENG.dyn[2].firewall_valve == 0 then
         -- FADEC has power if fire valve is open
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 0.5, 0.5)
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.55, 0.55)

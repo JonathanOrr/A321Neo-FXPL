@@ -193,7 +193,7 @@ end
 
 local function update_bleed_config_and_targets()
     -- if x-bleed is on one engine feeds bleed air
-    local not_both_engines = !(ENG.dyn[1].is_avail and ENG.dyn[2].is_avail)
+    local not_both_engines = not (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail)
     is_single_bleed = x_bleed_status and not_both_engines or (eng_bleed_switch[1] == false or  eng_bleed_switch[2] == false)) and 1 or 0
     -- only if we have both packs on, we have a dual bleed situation regarding demand
     if not pack_valve_pos[1] or not pack_valve_pos[2] then is_single_bleed = 0 end
@@ -336,7 +336,7 @@ local function update_bleed_consumption()
                          + LOSS_PSI_HYD/2
                          + LOSS_PSI_WATER_TANK/2
                          + get(Pack_L) * LOSS_PSI_PACK_L
-                         + get(Eng_is_spooling_up, 1) * LOSS_PSI_ENG_CRANK
+                         + (ENG.dyn[1].cranking and 1 or 0) * LOSS_PSI_ENG_CRANK
     -- in dual bleed with x-feed and other pack on this will add to consumption
     if x_bleed_status == true and is_single_bleed == true then  bleed_consumption[1] = bleed_consumption[1] + get(Pack_R) * LOSS_PSI_PACK_R end
     
@@ -345,7 +345,7 @@ local function update_bleed_consumption()
                          + LOSS_PSI_HYD/2
                          + LOSS_PSI_WATER_TANK/2
                          + get(Pack_R) * LOSS_PSI_PACK_R
-                         + get(Eng_is_spooling_up, 2) * LOSS_PSI_ENG_CRANK
+                         + (ENG.dyn[2].cranking and 1 or 0) * LOSS_PSI_ENG_CRANK
     -- TODO what is the demand in case of only one engine bleed available regarding demand and no x-feed?
     if x_bleed_status == true and is_single_bleed == true then  bleed_consumption[2] = bleed_consumption[2] + get(Pack_L) * LOSS_PSI_PACK_L end
 

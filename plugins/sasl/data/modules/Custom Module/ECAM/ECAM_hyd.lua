@@ -252,8 +252,8 @@ local function draw_hyd_textures()
 
     SASL_drawSegmentedImg_xcenter_aligned(ECAM_HYD_PTU_img, size[1]/2+3, size[2]/2+160, 2360, 43, 4, get(Hydraulic_PTU_status) + 1)
 
-    draw_fire_valve(162,289, get(Eng_1_Firewall_valve) == 1 and 2 or 1, get(Eng_1_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
-    draw_fire_valve(746,289, get(Eng_2_Firewall_valve) == 1 and 2 or 1, get(Eng_2_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
+    draw_fire_valve(162,289, ENG.dyn[1].firewall_valve == 1 and 2 or 1, ENG.dyn[1].firewall_valve == 1 and ECAM_ORANGE or ECAM_GREEN)
+    draw_fire_valve(746,289, ENG.dyn[2].firewall_valve == 1 and 2 or 1, ENG.dyn[2].firewall_valve == 1 and ECAM_ORANGE or ECAM_GREEN)
 end
 
 local function draw_hyd_actuator_symbol(x,y)

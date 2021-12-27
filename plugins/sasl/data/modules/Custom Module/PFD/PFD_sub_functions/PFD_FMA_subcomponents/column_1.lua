@@ -41,7 +41,7 @@ PFD_FMA_column_1 = {
         size = {163, 82},
         position = {10, 808},
         shown = function ()
-            return get(Eng_N1_mode, 1) == 7 or get(Eng_N1_mode, 2) == 7
+            return ENG.dyn[1].n1_mode == 7 or ENG.dyn[2].n1_mode == 7
         end,
         draw_with_function = false,
         boxed = true,

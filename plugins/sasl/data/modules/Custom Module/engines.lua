@@ -282,12 +282,8 @@ local function update_n1_minimum()
                           or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
     comp_min_n1 = comp_min_n1 + (AI_sys.comp[ANTIICE_WING_L].valve_status and N1_INC_AI_WING or 0) + (AI_sys.comp[ANTIICE_WING_R].valve_status and N1_INC_AI_WING or 0)
 
-    local curr_n1_idle_base = get(Eng_N1_idle)
-    local curr_n1_idle_L = get(Eng_N1_bleed_corrected_idle,1)
-    local curr_n1_idle_R = get(Eng_N1_bleed_corrected_idle,2)
-
-    -- read-out takes place in autothrust pid logic get_N1_target (AT_PID_functions)
-    set(Eng_N1_idle, curr_n1_idle_base)-- TODO speed of animation? depend of delta?
+    local curr_n1_idle_L = ENG.dyn[1].n1_idle
+    local curr_n1_idle_R = ENG.dyn[2].n1_idle
 
     -- TODO pack configuration has to be considered for N1 as well in combination of engine bleed availability and x-bleed
     if (get(ENG_1_bleed_switch) == 0 or get(ENG_2_bleed_switch) == 0)
@@ -296,16 +292,16 @@ local function update_n1_minimum()
         comp_min_n1 = comp_min_n1 + 9.3
         if get(ENG_1_bleed_switch) == 0 then
             -- animation is used to avoid blue circle jump in EWD when switching bleed config
-            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_R,comp_min_n1,0,100,1.5),2) -- demand increase is on opposite engine
-            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_L,comp_min_n1-1.9,0,100,1),1) -- imbalance prevention
+            ENG.dyn[2].n1_idle = Set_linear_anim_value(curr_n1_idle_R,comp_min_n1,0,100,1.5) -- demand increase is on opposite engine
+            ENG.dyn[1].n1_idle = Set_linear_anim_value(curr_n1_idle_L,comp_min_n1-1.9,0,100,1) -- imbalance prevention
         else
-            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_R,comp_min_n1-1.9,0,100,1),2) -- demand increase is on opposite engine
-            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_L,comp_min_n1,0,100,1.5),1) -- imbalance prevention
+            ENG.dyn[2].n1_idle = Set_linear_anim_value(curr_n1_idle_R,comp_min_n1-1.9,0,100,1) -- demand increase is on opposite engine
+            ENG.dyn[1].n1_idle = Set_linear_anim_value(curr_n1_idle_L,comp_min_n1,0,100,1.5) -- imbalance prevention
         end
     else
         -- both engines bleeding TODO imbalance is possible here under various circumstances as well, TODO animation
-        set(Eng_N1_bleed_corrected_idle,comp_min_n1,1)
-        set(Eng_N1_bleed_corrected_idle,comp_min_n1,2)
+        ENG.dyn[2].n1_idle = comp_min_n1
+        ENG.dyn[1].n1_idle = comp_min_n1
     end
 
     local always_a_minimum = ENG_N1_LL_IDLE + 0.2 -- regardless altitude and anti-ice N1 of running engine can never be lower
@@ -534,9 +530,9 @@ end
 -- TODO we need to differentiate between full and low crank (cooling)
 local function perform_crank_procedure(eng, wet_cranking)
     -- This is PHASE 1 which will be called during startup as long N2 is below ENG_N2_CRANK_MARGIN
-    set(Eng_fsm_state, FSM_START_PHASE_CRANK, eng)
+    ENG.dyn[eng].start_fsm_state = FSM_START_PHASE_CRANK
 
-    if (eng==1 and ENG.dyn[1].is_avail) or (eng==2 and ENG.dyn[2].is_avail) then
+    if ENG.dyn[eng].is_avail then
         -- Just for precaution, crank has no sense if the engine is already running
         -- In chase, just don't do anything
         return
@@ -565,7 +561,8 @@ local function perform_crank_procedure(eng, wet_cranking)
     if  eng_EGT_off[eng] > oat then
         eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], oat, -50, 1500, 2) -- TODO speed depends on delta t?
     end
-    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
+
+    ENG.dyn[eng].cranking = true
     
     if wet_cranking then
         -- Wet cranking requested, let's spill a bit of fuel
@@ -582,7 +579,7 @@ local function perform_starting_procedure_follow_n2(eng)
     -- This is PHASE 2 after spool-up / cranking
 
     local oat = get(OTA)
-    set(Eng_fsm_state, FSM_START_PHASE_N2, eng)
+    ENG.dyn[eng].start_fsm_state = FSM_START_PHASE_N2
 
     if igniter_eng[eng] == 0 and not eng_manual_switch[eng] and eng_N2_off[eng] > ENG.data.startup.ign_on_n2 then
         igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
@@ -592,7 +589,7 @@ local function perform_starting_procedure_follow_n2(eng)
         starter_valve_eng[eng] = 1 -- TODO is valve open on manual start?
     end
 
-    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua, TODO bleed PSI seems to be to high currently
+    ENG.dyn[eng].cranking = true -- Need for bleed air computation, see packs.lua, TODO bleed PSI seems to be to high currently
     
     for i=1,(#ENG.data.startup.n2-1) do
         -- For each phase... 
@@ -637,7 +634,7 @@ end
 
 local function perform_starting_procedure_follow_n1(eng)
     -- This is PHASE 3
-    set(Eng_fsm_state, FSM_START_PHASE_N1,eng)
+    ENG.dyn[eng].start_fsm_state = FSM_START_PHASE_N1
 
     for i=1,(#ENG.data.startup.n1-1) do
         -- For each phase...
@@ -723,12 +720,13 @@ local function update_starter_datarefs()
     set(Ecam_eng_igniter_eng_1, igniter_eng[1])
     set(Ecam_eng_igniter_eng_2, igniter_eng[2])
 
-    set(Eng_starter_valve_open, starter_valve_eng[1],1)
-    set(Eng_starter_valve_open, starter_valve_eng[2],2)
+    ENG.dyn[1].starter_valve = starter_valve_eng[1]
+    ENG.dyn[2].starter_valve = starter_valve_eng[2]
 
-    -- TODO for how long bleed air consumption will be influenced? Why is spooling up resetted here?
-    set(Eng_is_spooling_up, 0, 1) -- Need for bleed air computation, see packs.lua
-    set(Eng_is_spooling_up, 0, 2) -- Need for bleed air computation, see packs.lua
+    -- Reset cranking (Need for bleed air computation, see packs.lua)
+    -- TODO May need refinements
+    ENG.dyn[1].cranking = false
+    ENG.dyn[2].cranking = false
  
 end
 
@@ -791,7 +789,7 @@ local function needs_cooling(eng)
 end
 
 local function perform_cooling(eng)
-    set(Eng_fsm_state,FSM_START_COOLING,eng)
+    ENG.dyn[eng].start_fsm_state = FSM_START_COOLING
     if cooling_left_time[eng] == 0 then
         cooling_has_cooled[eng] = true
         initial_cooling_phase[eng] = COOLING_DONE
@@ -916,7 +914,7 @@ local function update_startup()
     
     -- CASE 3: No ignition, no crank, engine is off or shutting down
     if not ENG.dyn[1].is_avail  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
-        set(Eng_fsm_state,FSM_SHUTDOWN,1)
+        ENG.dyn[1].start_fsm_state = FSM_SHUTDOWN
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
         eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, ENG.data.max_n2, 1)
@@ -930,7 +928,7 @@ local function update_startup()
         starter_valve_eng[1] = 0
     end
     if not ENG.dyn[2].is_avail and require_cooldown[2] then    -- Turn off the engine
-        set(Eng_fsm_state,FSM_SHUTDOWN,2)
+        ENG.dyn[2].start_fsm_state = FSM_SHUTDOWN
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
         eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, ENG.data.max_n2, 1)
@@ -1032,8 +1030,8 @@ local function update_continuous_ignition()
     -- - Engine flameout
     -- - Manually move the mode selection to IGN but after start!
 
-    local cond_1 = (get(Engine_1_master_switch) == 1 and get(Eng_is_failed, 1) == 1)
-                or (get(Engine_2_master_switch) == 1 and get(Eng_is_failed, 2) == 1)
+    local cond_1 = (get(Engine_1_master_switch) == 1 and ENG.dyn[1].is_failed == 1)
+                or (get(Engine_2_master_switch) == 1 and ENG.dyn[2].is_failed == 1)
     
     local cond_2 = ENG.dyn[1].is_avail and ENG.dyn[2].is_avail and get(Engine_mode_knob) == 1 and already_back_to_norm
 
@@ -1089,18 +1087,18 @@ end
 
 local function update_oil_qty()
     -- initial oil qty is set when initializing engine type
-    if get(Eng_fsm_state, 1) >= FSM_START_PHASE_N2 and not ENG.dyn[1].is_avail then
+    if ENG.dyn[1].start_fsm_state >= FSM_START_PHASE_N2 and not ENG.dyn[1].is_avail then
         update_oil_qty_startup(1)
         return
     end
 
-    if get(Eng_fsm_state, 2) >= FSM_START_PHASE_N2 and not ENG.dyn[2].is_avail then
+    if ENG.dyn[2].start_fsm_state >= FSM_START_PHASE_N2 and not ENG.dyn[2].is_avail then
         update_oil_qty_startup(2)
         return
     end
 
 
-    if get(Eng_fsm_state, 1) == FSM_SHUTDOWN then
+    if ENG.dyn[1].start_fsm_state == FSM_SHUTDOWN then
         ENG.dyn[1].oil_qty = Set_linear_anim_value(ENG.dyn[1].oil_qty, initial_oil_qty[1], 1,ENG.data.oil.qty_max , 0.1)
     else
         local curr_oil = ENG.dyn[1].oil_qty
@@ -1109,7 +1107,7 @@ local function update_oil_qty()
         ENG.dyn[1].oil_qty = curr_oil
     end
 
-    if get(Eng_fsm_state, 2) == FSM_SHUTDOWN then
+    if ENG.dyn[2].start_fsm_state == FSM_SHUTDOWN then
         ENG.dyn[2].oil_qty = Set_linear_anim_value(ENG.dyn[2].oil_qty, initial_oil_qty[2], 1,ENG.data.oil.qty_max , 0.1)
     else
         local curr_oil = ENG.dyn[2].oil_qty
@@ -1130,7 +1128,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
     local emergency_force_idle = get(FAILURE_ENG_REV_UNLOCK, engine) == 1
     
     if emergency_force_idle then    -- If reverser unlock (failure), then the engine is auto put to idle
-        set(Eng_N1_mode, 4, engine) -- IDLE
+        ENG.dyn[engine].n1_mode = 4 -- IDLE
         return
     end
 
@@ -1140,27 +1138,27 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
             -- This is needed for soft GA
             last_time_toga[engine] = get(TIME)
         end
-        set(Eng_N1_mode, 1, engine) -- TOGA
+        ENG.dyn[engine].n1_mode = 1 -- TOGA
     elseif thr_pos > THR_MCT_THRESHOLD + 0.001 then
     
         if get(Eng_N1_flex_temp) ~= 0 and get(EWD_flight_phase) >= PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) <= PHASE_LIFTOFF then
-            set(Eng_N1_mode, 6, engine) -- FLEX
+            ENG.dyn[engine].n1_mode = 6 -- FLEX
     
         -- If the pilot moves the throttle from MCT to TOGA, and then from TOGA to SOFT GA in less
         -- than 3 seconds, then SOFT GA is enabled until it's back to TOGA or CLB
         -- Also, both engines must be available
         -- Further details here: https://safetyfirst.airbus.com/introduction-to-the-soft-go-around-function/
-        elseif (get(Eng_N1_mode, engine) == 7 or get(TIME) - last_time_toga[engine] < 3) and ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
-            set(Eng_N1_mode, 7, engine) -- SOFT GA
+        elseif ENG.dyn[engine].n1_mode == 7 or get(TIME) - last_time_toga[engine] < 3) and ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
+            ENG.dyn[engine].n1_mode = 7 -- SOFT GA
             
             -- In this case we replace the MCT value
             set(Eng_N1_max_detent_mct, eng_N1_limit_ga_soft(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
         else    -- otherwise is a normal MCT
-            set(Eng_N1_mode, 2, engine) -- MCT
+            ENG.dyn[engine].n1_mode = 2 -- MCT
         end
         last_time_toga[engine] = 0
     elseif thr_pos >= THR_CLB_THRESHOLD then
-        set(Eng_N1_mode, 3, engine) -- CLB
+        ENG.dyn[engine].n1_mode = 3 -- CLB
         last_time_toga[engine] = 0
 
         if get(All_on_ground) == 0 then
@@ -1168,10 +1166,10 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
         end
 
     elseif thr_pos > -THR_CLB_THRESHOLD or reverse_forced_idle then   -- Reverse protection
-        set(Eng_N1_mode, 4, engine) -- IDLE
+        ENG.dyn[engine].n1_mode = 4 -- IDLE
         last_time_toga[engine] = 0
     elseif thr_pos <= -THR_CLB_THRESHOLD then
-        set(Eng_N1_mode, 5, engine) -- MREV
+        ENG.dyn[engine].n1_mode = 5 -- MREV
         last_time_toga[engine] = 0
     end
     
@@ -1227,18 +1225,18 @@ end
 
 local function update_failing_eng(x)
     local eng_ms    = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
-    local n2_below  = (x == 1 and ENG.dyn[1].n2 or ENG.dyn[2].n2) < 62
+    local n2_below  = ENG.dyn[x].n2 < 62
     local not_avail = not ENG.dyn[x].is_avail
     local eng_st    = already_started_eng[x]
     local no_fire_pb= (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
 
     if eng_ms and n2_below and eng_st and no_fire_pb and not_avail then
-        set(Eng_is_failed, 1, x)
+        ENG.dyn[x].is_failed = true
     end
     
     if not n2_below then
         already_started_eng[x] = true
-        set(Eng_is_failed, 0, x)
+        ENG.dyn[x].is_failed = false
     end
 
 end

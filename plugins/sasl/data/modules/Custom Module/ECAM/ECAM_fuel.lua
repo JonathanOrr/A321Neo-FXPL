@@ -230,22 +230,22 @@ local function draw_fuel_valves()
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_xfeed_img, size[1]/2+2, size[2]/2+186, 415, 58, 5, get(Ecam_fuel_valve_X_BLEED) + 1, ECAM_WHITE)
 
     --engine 1 valve
-    local is_faulty = get(Eng_1_Firewall_valve) == 2
-    or ( get(Eng_1_Firewall_valve) == 1 and get(Engine_1_master_switch) == 1 and get(Fire_pb_ENG1_status) == 0 )
-    or ( get(Eng_1_Firewall_valve) == 0 and (get(Engine_1_master_switch) == 0 or get(Fire_pb_ENG1_status) == 1))
+    local is_faulty = ENG.dyn[1].firewall_valve == 2
+    or ( ENG.dyn[1].firewall_valve == 1 and get(Engine_1_master_switch) == 1 and get(Fire_pb_ENG1_status) == 0 )
+    or ( ENG.dyn[1].firewall_valve == 0 and (get(Engine_1_master_switch) == 0 or get(Fire_pb_ENG1_status) == 1))
 
     local color = is_faulty and ECAM_ORANGE or  ECAM_GREEN
-    local position = get(Eng_1_Firewall_valve) > 0 and get(Eng_1_Firewall_valve) or 3
+    local position = ENG.dyn[1].firewall_valve > 0 and ENG.dyn[1].firewall_valve or 3
 
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2-218, size[2]/2+264, 180, 58, 3, position, color)
 
     --engine 2 valve
-    is_faulty = get(Eng_2_Firewall_valve) == 2
-    or ( get(Eng_2_Firewall_valve) == 1 and get(Engine_2_master_switch) == 1 and get(Fire_pb_ENG2_status) == 0 )
-    or ( get(Eng_2_Firewall_valve) == 0 and (get(Engine_2_master_switch) == 0 or get(Fire_pb_ENG2_status) == 1))
+    is_faulty = ENG.dyn[2].firewall_valve == 2
+    or ( ENG.dyn[2].firewall_valve == 1 and get(Engine_2_master_switch) == 1 and get(Fire_pb_ENG2_status) == 0 )
+    or ( ENG.dyn[2].firewall_valve == 0 and (get(Engine_2_master_switch) == 0 or get(Fire_pb_ENG2_status) == 1))
 
     color = is_faulty and ECAM_ORANGE or  ECAM_GREEN
-    position = get(Eng_2_Firewall_valve) > 0 and get(Eng_2_Firewall_valve) or 3
+    position = ENG.dyn[2].firewall_valve > 0 and ENG.dyn[2].firewall_valve or 3
 
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2+220, size[2]/2+264, 180, 58, 3, position, color)
 

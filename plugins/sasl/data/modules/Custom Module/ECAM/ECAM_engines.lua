@@ -287,7 +287,7 @@ local function draw_valve_and_ignition()
                      false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
         -- starter valve
-        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,1) == 1 and 2 or 1, ECAM_GREEN)
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, ENG.dyn[1].starter_valve and 2 or 1, ECAM_GREEN)
     end
     if xx_statuses[2] then
         -- igniter indications A/B
@@ -300,7 +300,7 @@ local function draw_valve_and_ignition()
                      false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
         -- starter valve
-        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,2) == 1 and 2 or 1, ECAM_GREEN)
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, ENG.dyn[2].starter_valve and 2 or 1, ECAM_GREEN)
     end
 end
 
