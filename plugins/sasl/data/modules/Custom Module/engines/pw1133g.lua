@@ -193,7 +193,9 @@ function configure_pw1133g()
 
         },
         model = {
-            zero_thrust_n1            = 14,
+            n1_thrust_non_linearity   = 0.5,    -- It must be strictly 0 < x <= 1
+                                                -- 1 means that the relation between
+                                                -- thrust and n1 is linear
             coeff_to_thrust_crit_temp = 0.0075, -- See thrust_takeoff_computation
             perc_penalty_AI_engine    = 0.012,  -- See thrust_penalty_computation
             perc_penalty_AI_wing      = 0.058,  -- See thrust_penalty_computation

@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 139456.125000000
-P _gear/0/_stat_def 0.135808766
+P _gear/0/_stat_def 0.135808840
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -59485,7 +59485,7 @@ P acf/_rock_h_opt 0.0
 P acf/_rock_max_opt 0.0
 P acf/_rock_max_sl 0.0
 P acf/_rock_max_vac 0.0
-P acf/_roll_co 0.027000001
+P acf/_roll_co 0.025000000
 P acf/_roll_to_eng_spo1 0.300000012
 P acf/_roll_to_eng_spo2 0.100000001
 P acf/_rotor_mi_rat 1.0

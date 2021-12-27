@@ -73,7 +73,7 @@ end
 local function delay_thrust(eng_state, thrust_target, T_max, N1_base_max)
     assert(N1_base_max>0)
     local T_ratio = T_max > 0 and eng_state.T_theoric / T_max or 0
-    local N1_spooled = (N1_base_max-ENG.data.model.zero_thrust_n1) * T_ratio + ENG.data.model.zero_thrust_n1
+    local N1_spooled = N1_base_max * T_ratio^ENG.data.model.n1_thrust_non_linearity
     local spd_N1 = thrust_spool_derivative(math.max(19.5,N1_spooled))
     local T_ratio_inv = spd_N1 / N1_base_max
     local spd_T = T_max * T_ratio_inv
@@ -97,12 +97,12 @@ function thrust_spool(eng_state, T_desired, T_penalty, T_max, N1_base_max, engin
 
     local T_ratio = (T_max > 0) and (T_theoric / T_max) or 0
 
-    local N1_spooled = (N1_base_max-ENG.data.model.zero_thrust_n1) * T_ratio + ENG.data.model.zero_thrust_n1
+    local N1_spooled = N1_base_max * T_ratio^ENG.data.model.n1_thrust_non_linearity
 
     if engine_is_available then
         N1_spooled = math.max(18.5, N1_spooled) -- N1 cannot be lower than 18.5 if the engine is running 
     else
-        if N1_spooled <= ENG.data.model.zero_thrust_n1 + 5 then
+        if N1_spooled <= 15 then
             N1_spooled = Set_linear_anim_value(eng_state.N1_spooled, 0, 0, 100, 1)
         end
     end
