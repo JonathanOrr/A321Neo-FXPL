@@ -43,7 +43,8 @@ end
 local function draw_static()
     sasl.gl.drawText(Font_B612MONO_regular, 200, 670, "ENGINE 1 (L)", 28, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, size[1]-200, 670, "ENGINE 2 (R)", 28, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawLine(size[1]/2, 680, size[1]/2, 20, UI_WHITE)
+    sasl.gl.drawLine(size[1]/2, 680, size[1]/2, 45, UI_WHITE)
+    sasl.gl.drawLine(10, 45, 790, 45, UI_WHITE)
 
     sasl.gl.drawTexture(image_engine, 50, 400, 300, 200, {1,1,1})
     sasl.gl.drawTexture(image_engine, 450, 400, 300, 200, {1,1,1})
@@ -154,6 +155,15 @@ local function draw_fadec_section(eng)
 
 end
 
+local function draw_max_section()
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 25, "N1 max TOGA = " .. Fwd_string_fill(""..Round_fill(get(Eng_N1_max_detent_toga),2), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 5, "N1 max FLEX = " .. Fwd_string_fill(""..Round_fill(get(Eng_N1_max_detent_flex),2), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_B612MONO_regular, 410, 25, "N1 max MCT  = " .. Fwd_string_fill(""..Round_fill(get(Eng_N1_max_detent_mct),2), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 410, 5, "N1 max CLB  = " .. Fwd_string_fill(""..Round_fill(get(Eng_N1_max_detent_clb),2), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+end
+
 function draw()
     draw_static()
     draw_img_data()
@@ -167,4 +177,6 @@ function draw()
     draw_thrust_model(2)
     draw_fadec_section(1)
     draw_fadec_section(2)
+    draw_max_section()
+
 end
