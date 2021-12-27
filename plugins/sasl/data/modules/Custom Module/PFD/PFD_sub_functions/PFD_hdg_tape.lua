@@ -6,12 +6,12 @@ function PFD_draw_hdg_tape(PFD_table)
     local boarder_cl = ECAM_WHITE
 
     --bgd
-    sasl.gl.drawRectangle(size[1]/2-259, size[2]/2-432, 407, 55, PFD_TAPE_GREY)
+    sasl.gl.drawRectangle(size[1]/2-259, size[2]/2-432, 407, 55, ECAM_GREY)
 
     if adirs_is_hdg_ok(PFD_table.Screen_ID) == false then
         boarder_cl = PFD_table.HDG_blink_now and ECAM_RED or {0, 0, 0, 0}
         if PFD_table.HDG_blink_now == true then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-59, size[2]/2-420, "HDG", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-59, size[2]/2-420, "HDG", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
     end
 
@@ -30,6 +30,6 @@ function PFD_draw_hdg_tape(PFD_table)
         sasl.gl.resetClipArea ()
 
         --hdg needle
-        sasl.gl.drawWideLine(size[1]/2-55, size[2]/2-388, size[1]/2-55, size[2]/2-340, 6, PFD_YELLOW)
+        sasl.gl.drawWideLine(size[1]/2-55, size[2]/2-388, size[1]/2-55, size[2]/2-340, 6, ECAM_YELLOW)
     end
 end

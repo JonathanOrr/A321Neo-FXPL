@@ -58,7 +58,7 @@ function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, 
         sasl.gl.drawRectangle ( x - width/2 + 2 ,  y - height/2 - (number_of_rows)*height + 2 - 4,  width - 4 , height + (number_of_rows -1)*height - 3 + 5, inside_colour)
 
         for i, v in pairs(table) do
-            drawTextCentered(Font_Airbus_panel, x  ,  y-1 - height*i , table[i], 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+            drawTextCentered(Font_ECAMfont, x  ,  y-1 - height*i , table[i], 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
 
             if EFB_CURSOR_Y > y-1 - height*i - 15 and EFB_CURSOR_Y < y-1 - height*i + 14 and  EFB_CURSOR_X >  x - width/2 and EFB_CURSOR_X <  x + width/2 then
                 --sasl.gl.drawFrame (  x - width/2 + 5 , y-1 - height*i - 10 - 3 , width - 8 , height , EFB_WHITE )
@@ -71,7 +71,7 @@ function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, 
     sasl.gl.drawTriangle ( x + width/2 + 6 ,  y + height/2 - 8 , x + width/2 + selector_extend_distance - 6 -2 , y + height/2 - 8 , ((x + width/2 + 2) + (x + width/2 + selector_extend_distance - 2 ))/2 - 1  ,  y - height/2 + 8 , outside_colour )
 
     if #table > 0 then
-        drawTextCentered(Font_Airbus_panel, x  ,  y-1 , table[selected] , 20, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+        drawTextCentered(Font_ECAMfont, x  ,  y-1 , table[selected] , 20, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
     end
 
     local component_x = x
@@ -95,8 +95,8 @@ function draw_standby_screen(onscreen_message)
         sasl.gl.drawCircle(x, y, 13, true, STANDBY_SCREEN_COLOURS[i])
     end
 
-    drawTextCentered(Font_Airbus_panel,  50, 105, "PLEASE WAIT", 25, false, false, TEXT_ALIGN_LEFT, EFB_LIGHTGREY)
-    drawTextCentered(Font_Airbus_panel,  50, 70, onscreen_message, 30, false, false, TEXT_ALIGN_LEFT, EFB_WHITE)
+    drawTextCentered(Font_ECAMfont,  50, 105, "PLEASE WAIT", 25, false, false, TEXT_ALIGN_LEFT, EFB_LIGHTGREY)
+    drawTextCentered(Font_ECAMfont,  50, 70, onscreen_message, 30, false, false, TEXT_ALIGN_LEFT, EFB_WHITE)
 end
 
 function within(what,min,max)

@@ -34,7 +34,7 @@ local MATCH_MSG_COLORS = { [0] = ECAM_WHITE,
                            [7] = ECAM_GREEN -- Blinking
                            }
 
-local COLOR_FIXED_EL = ECAM_LINE_GREY
+local COLOR_FIXED_EL = ECAM_GREY
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -222,7 +222,7 @@ local function draw_engines_draw_n1_upper_box(x, text, color)
 
     local lr_offset = (170+170) * (x-1)
 
-    Sasl_DrawWideFrame(size[1]/2 - 195 + lr_offset, size[2]/2 + 305, 110, 35, 2, 0, ECAM_LINE_GREY)
+    Sasl_DrawWideFrame(size[1]/2 - 195 + lr_offset, size[2]/2 + 305, 110, 35, 2, 0, ECAM_GREY)
     sasl.gl.drawText(Font_ECAMfont, size[1]/2 - 140 + lr_offset, size[2]/2 + 310, text, 32, true, false, TEXT_ALIGN_CENTER, color)
 
 end
@@ -231,7 +231,7 @@ local function draw_engines_draw_n1_lower_box(x, text, color, box_shown)
 
     local lr_offset = (170+170) * (x-1)
     if box_shown then
-        Sasl_DrawWideFrame(size[1]/2 - 195 + lr_offset, size[2]/2 + 270, 110, 35, 2, 0, ECAM_LINE_GREY)
+        Sasl_DrawWideFrame(size[1]/2 - 195 + lr_offset, size[2]/2 + 270, 110, 35, 2, 0, ECAM_GREY)
     end
     sasl.gl.drawText(Font_ECAMfont, size[1]/2 - 140 + lr_offset, size[2]/2 + 275, text, 32, true, false, TEXT_ALIGN_CENTER, color)
 
@@ -331,7 +331,7 @@ local function draw_engines_n1(x)
     end
 
     -- N1 digits
-    Sasl_DrawWideFrame(size[1]/2 - 195 + lr_offset, size[2]/2 + 270, 110, 35, 2, 0, ECAM_LINE_GREY)
+    Sasl_DrawWideFrame(size[1]/2 - 195 + lr_offset, size[2]/2 + 270, 110, 35, 2, 0, ECAM_GREY)
     sasl.gl.drawText(Font_ECAMfont, size[1]/2+60+x_shift_3, size[2]/2+275, math.floor(params.eng_n1[x]) .. "." , 33, true, false, TEXT_ALIGN_RIGHT, n1_color)
     sasl.gl.drawText(Font_ECAMfont, size[1]/2+75+x_shift_3, size[2]/2+275, math.floor((params.eng_n1[x]%1)*10)  , 26, true, false, TEXT_ALIGN_RIGHT, n1_color)
 
@@ -513,7 +513,7 @@ local function draw_extras()
 
         -- Blinking the ADV box with a period of 2 seconds (1 second WHITE, 1 second gray)
         if math.floor(get(TIME)) % 2 == 0 then
-            color = ECAM_HIGH_GREY
+            color = ECAM_GREY
         end
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+88, size[2]/2-165, "ADV", 30, true, false, TEXT_ALIGN_LEFT, color)    
         sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-167, 62, 28 , color)
@@ -604,7 +604,7 @@ local function draw_slat_flap_indications()
         indication_text_cl = ECAM_GREEN
     end
 
-    sasl.gl.drawTexture(EWD_wing_indic_img, size[1]/2 + 150, size[2]/2 - 73, 38, 21, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(EWD_wing_indic_img, size[1]/2 + 150, size[2]/2 - 73, 38, 21, ECAM_GREY)
     if get(Flaps_internal_config) > 0 or get(Slats) > 0 then
         sasl.gl.drawTexture(EWD_slat_tract_img, size[1]/2 + 15, size[2]/2 - 115, 94, 62, ECAM_WHITE)
     end

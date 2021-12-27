@@ -256,11 +256,11 @@ local function draw_bleed_bgd()
     fuck_my_ass(198, 571,"LO","HI")
     fuck_my_ass(198, 675,"C","H")
 
-    Sasl_DrawWideFrame(158, 344, 84, 84, 3, 0, ECAM_LINE_GREY)
-    Sasl_DrawWideFrame(659, 344, 84, 84, 3, 0, ECAM_LINE_GREY)
+    Sasl_DrawWideFrame(158, 344, 84, 84, 3, 0, ECAM_GREY)
+    Sasl_DrawWideFrame(659, 344, 84, 84, 3, 0, ECAM_GREY)
 
-    sasl.gl.drawTexture(ECAM_BLEED_house_img, 125, 598, 149, 204, ECAM_LINE_GREY)
-    sasl.gl.drawTexture(ECAM_BLEED_house_img, 626, 598, 149, 204, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(ECAM_BLEED_house_img, 125, 598, 149, 204, ECAM_GREY)
+    sasl.gl.drawTexture(ECAM_BLEED_house_img, 626, 598, 149, 204, ECAM_GREY)
 end
 
 function draw_bleed_page()

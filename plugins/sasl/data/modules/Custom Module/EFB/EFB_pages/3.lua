@@ -192,12 +192,12 @@ local function draw_slider_corresponding_values()
     local tow = zfw + fuel_weight
     local overweight = tonumber(tow) > 101000
 
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 0, passenger_number , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 1, slider_actual_values[2] <= 0.5 and "FWD" or "AFT" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 2, tostring(fwd_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 3, tostring(aft_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 4, tostring(bulk_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 5, tostring(fuel_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_ECAMfont,  630 ,426 - 52 * 0, passenger_number , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_ECAMfont,  630 ,426 - 52 * 1, slider_actual_values[2] <= 0.5 and "FWD" or "AFT" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_ECAMfont,  630 ,426 - 52 * 2, tostring(fwd_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_ECAMfont,  630 ,426 - 52 * 3, tostring(aft_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_ECAMfont,  630 ,426 - 52 * 4, tostring(bulk_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_ECAMfont,  630 ,426 - 52 * 5, tostring(fuel_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
 
     passenger_weight = number_to_loadsheet_format(passenger_weight)
     fwd_cargo_weight = number_to_loadsheet_format(fwd_cargo_weight)
@@ -554,8 +554,8 @@ local function draw_buttons()
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_s3_generate_button, 200 + 280,70,368,32,2,2)
     end
 
-    drawTextCentered(Font_Airbus_panel,  197 ,85, "LOAD AIRCRAFT" , 18, true, false, TEXT_ALIGN_CENTER, EFB_BACKGROUND_COLOUR)
-    drawTextCentered(Font_Airbus_panel,  479 ,85, "RESET DEFAULTS" , 18, true, false, TEXT_ALIGN_CENTER, EFB_BACKGROUND_COLOUR)
+    drawTextCentered(Font_ECAMfont,  197 ,85, "LOAD AIRCRAFT" , 18, true, false, TEXT_ALIGN_CENTER, EFB_BACKGROUND_COLOUR)
+    drawTextCentered(Font_ECAMfont,  479 ,85, "RESET DEFAULTS" , 18, true, false, TEXT_ALIGN_CENTER, EFB_BACKGROUND_COLOUR)
 end
 
 
@@ -674,7 +674,7 @@ end
 local function mutual_draw_loop()
     SASL_draw_img_center_aligned (EFB_INFO_selector, 1026,33, 147, 32, EFB_WHITE) -- THIS IS THE SELECTOR, IT DRAWS ON ALL PAGES
 
-        sasl.gl.drawText ( Font_Airbus_panel , 880 , 24 , "Page "..efb_subpage_number.."/"..NUMBER_OF_SUBPAGES.."", 20 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
+        sasl.gl.drawText ( Font_ECAMfont , 880 , 24 , "Page "..efb_subpage_number.."/"..NUMBER_OF_SUBPAGES.."", 20 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
 
 end
 

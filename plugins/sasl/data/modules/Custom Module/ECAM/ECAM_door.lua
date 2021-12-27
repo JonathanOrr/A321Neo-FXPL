@@ -96,7 +96,7 @@ local function draw_door_bgd()
 end
 
 function draw_door_page()
-    sasl.gl.drawTexture(ECAM_DOOR_grey_lines_img, 244, 169, 419, 639, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(ECAM_DOOR_grey_lines_img, 244, 169, 419, 639, ECAM_GREY)
     update_param()
     draw_oxygen()
     draw_cabin_vs()

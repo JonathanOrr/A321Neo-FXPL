@@ -82,6 +82,15 @@
 {8898aeb5-c507-40ae-9e24-3d677087647c} event:/SSPriority/Dual Input
 {ba01eb1c-97af-4fa4-8e6a-de94d0a0de3c} event:/SSPriority/Left
 {66ce5125-40cb-4adf-8244-08b31aec3de0} event:/SSPriority/Right
+{74c93fd6-f1af-4d6e-a60e-3b0fad9a85fc} event:/Switches/SoftPB/Momentary/1
+{06409cb8-e9f6-4650-b310-23105de50978} event:/Switches/SoftPB/Momentary/2
+{f30f6d22-ac58-4984-b1ab-b77495faa140} event:/Switches/SoftPB/Momentary/3
+{dc3ced7a-6947-4883-9499-0facd9317c22} event:/Switches/SoftPB/1/On
+{d6edcdf4-da6e-4fc8-ae7c-3b73fc24cd2d} event:/Switches/SoftPB/1/Off
+{6daf48dd-5013-40e2-8e0a-d215ef3b8235} event:/Switches/SoftPB/2/On
+{f897e685-8778-48bd-8318-b0ed30650a1c} event:/Switches/SoftPB/2/Off
+{3d311596-233d-435c-8e6a-64b712f99b39} event:/Switches/SoftPB/3/On
+{b5caf57b-0b75-4742-866e-91609f33eafe} event:/Switches/SoftPB/3/Off
 {ebce89fb-2a44-4dec-bc09-add0e5f32326} event:/Switches/FCU/ADF/Mid
 {b1cecd76-b22b-4e26-ade5-e1c1878cc3d5} event:/Switches/FCU/ADF/Side
 {76e9ba6b-e077-43cc-a7ac-d8ac8147d0eb} event:/Switches/FCU/Chrono Round/1

@@ -89,14 +89,14 @@ local function draw_cond_bgd()
     sasl.gl.drawWideLine(16, 850, 127, 850, 3, ECAM_WHITE)
 
 
-    sasl.gl.drawWideLine(713, 900-524, 713,900-532, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(713, 900-532, 644,900-532, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(590, 900-532, 521,900-532, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(521, 900-532, 521,900-461, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(521, 900-461, 713,900-461, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(713, 900-461, 713,900-468, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(713, 900-524, 713,900-532, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(713, 900-532, 644,900-532, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(590, 900-532, 521,900-532, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(521, 900-532, 521,900-461, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(521, 900-461, 713,900-461, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(713, 900-461, 713,900-468, 4, ECAM_GREY)
 
-    sasl.gl.drawTexture(ECAM_COND_grey_lines_img, 108, 627, 600, 128, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(ECAM_COND_grey_lines_img, 108, 627, 600, 128, ECAM_GREY)
 end
 
 function draw_cond_page()

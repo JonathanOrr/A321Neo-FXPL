@@ -40,19 +40,19 @@ end
 
 local function draw_upper_info_freq(data, freq, crs, id_text, tuned_id, color)
     -- Frequency
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-130, size[2]-50, math.floor(freq), 34, false, false, TEXT_ALIGN_LEFT, color)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-70, size[2]-50, "." .. leading_zeros_int(Round((freq*100)%100,0), 2), 28, false, false, TEXT_ALIGN_LEFT, color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-130, size[2]-50, math.floor(freq), 34, false, false, TEXT_ALIGN_LEFT, color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-70, size[2]-50, "." .. leading_zeros_int(Round((freq*100)%100,0), 2), 28, false, false, TEXT_ALIGN_LEFT, color)
     
     -- CRS
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-165, size[2]-90, "CRS", 34, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-165, size[2]-90, "CRS", 34, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     if adirs_is_hdg_ok(data.id) then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]-90, crs .. "°", 34, false, false, TEXT_ALIGN_RIGHT, color == ECAM_WHITE and ECAM_BLUE or color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-15, size[2]-90, crs .. "°", 34, false, false, TEXT_ALIGN_RIGHT, color == ECAM_WHITE and ECAM_BLUE or color)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]-90, "---°", 34, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-15, size[2]-90, "---°", 34, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     end
 
     -- Identifier
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-25, size[2]-130, id_text, 34, false, false, TEXT_ALIGN_RIGHT, color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-25, size[2]-130, id_text, 34, false, false, TEXT_ALIGN_RIGHT, color)
 
     -- Tuned symbol
     local tuned_symbol = ""
@@ -63,7 +63,7 @@ local function draw_upper_info_freq(data, freq, crs, id_text, tuned_id, color)
     end
     
     if tuned_symbol ~= "" then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-130, size[2]-130, tuned_symbol, 22, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-130, size[2]-130, tuned_symbol, 22, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         sasl.gl.drawWideLine(size[1]-130, size[2]-135, size[1]-140, size[2]-135, 2, ECAM_WHITE)
     end
 end
@@ -74,7 +74,7 @@ local function draw_upper_right_info_vor(data)
     local is_valid = radio_vor_is_valid(curr_nav)
     data.misc.vor_failure = not is_valid
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-250, size[2]-50, "VOR" .. curr_nav, 34, false, false, TEXT_ALIGN_LEFT, is_valid and ECAM_WHITE or ECAM_RED)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-250, size[2]-50, "VOR" .. curr_nav, 34, false, false, TEXT_ALIGN_LEFT, is_valid and ECAM_WHITE or ECAM_RED)
 
     if not is_valid then
         if data.misc.vor_failure_time == nil then
@@ -101,7 +101,7 @@ local function draw_upper_right_info_ils(data)
     local is_valid = radio_ils_is_valid()
     data.misc.loc_failure = not is_valid
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-250, size[2]-50, "ILS" .. curr_nav, 34, false, false, TEXT_ALIGN_LEFT, is_valid and ECAM_WHITE or ECAM_RED)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-250, size[2]-50, "ILS" .. curr_nav, 34, false, false, TEXT_ALIGN_LEFT, is_valid and ECAM_WHITE or ECAM_RED)
 
     if not is_valid then
         if data.misc.loc_failure_time == nil then
@@ -200,7 +200,7 @@ local function draw_rose_loc_indication(data)
         angle = angle - 180
     end
     local text = radio_get_ils_is_backcourse() and "B/C" or "LOC"
-    sasl.gl.drawRotatedText(Font_AirbusDUL, size[1]/2-180, size[1]/2+20, size[1]/2, size[1]/2, angle, text, 30, false , false , TEXT_ALIGN_CENTER , ECAM_MAGENTA )
+    sasl.gl.drawRotatedText(Font_ECAMfont, size[1]/2-180, size[1]/2+20, size[1]/2, size[1]/2, angle, text, 30, false , false , TEXT_ALIGN_CENTER , ECAM_MAGENTA )
 end
 
 local function draw_rose_gs_indication(data)

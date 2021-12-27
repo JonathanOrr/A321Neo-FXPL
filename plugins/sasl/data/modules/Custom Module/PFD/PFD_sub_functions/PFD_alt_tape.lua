@@ -32,7 +32,7 @@ local UNIT_HPA  = 2
 
 local function draw_altitude_numbers(string, ycord)
     for i=1, 3 do
-        sasl.gl.drawText(Font_AirbusDUL, 680 + (i-1) * 20 , ycord, string.sub(string, i, i) , 36, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, 680 + (i-1) * 20 , ycord, string.sub(string, i, i) , 36, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
 end
 
@@ -85,12 +85,12 @@ function PFD_draw_alt_tape(PFD_table)
     if adirs_is_alt_ok(PFD_table.Screen_ID) == false and adirs_is_gps_alt_visible(PFD_table.Screen_ID) == false then
         boarder_cl = PFD_table.ALT_blink_now and ECAM_RED or {0, 0, 0, 0}
         if PFD_table.ALT_blink_now == true then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+255, size[2]/2-20, "ALT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+255, size[2]/2-20, "ALT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
     end
 
-    sasl.gl.drawRectangle(size[1]/2+217, size[2]/2-244, 75, 212, PFD_TAPE_GREY)
-    sasl.gl.drawRectangle(size[1]/2+217, size[2]/2+19, 75, 210, PFD_TAPE_GREY)
+    sasl.gl.drawRectangle(size[1]/2+217, size[2]/2-244, 75, 212, ECAM_GREY)
+    sasl.gl.drawRectangle(size[1]/2+217, size[2]/2+19, 75, 210, ECAM_GREY)
 
     local altitude = adirs_is_gps_alt_visible(PFD_table.Screen_ID) and adirs_get_gps_alt(PFD_table.Screen_ID) or adirs_get_alt(PFD_table.Screen_ID)
 
@@ -126,7 +126,7 @@ function PFD_draw_alt_tape(PFD_table)
         end
         -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        sasl.gl.drawTexture(PFD_alt_box, size[1]/2+217, size[2]/2-48, 127, 83, PFD_YELLOW)
+        sasl.gl.drawTexture(PFD_alt_box, size[1]/2+217, size[2]/2-48, 127, 83, ECAM_YELLOW)
 
         --negative altitude indication
         if adirs_get_alt(PFD_table.Screen_ID) < 0 then
@@ -134,10 +134,10 @@ function PFD_draw_alt_tape(PFD_table)
         end
 
         --alt needle
-        sasl.gl.drawWideLine(size[1]/2+153, size[2]/2-8, size[1]/2+211, size[2]/2-8, 6, PFD_YELLOW)
+        sasl.gl.drawWideLine(size[1]/2+153, size[2]/2-8, size[1]/2+211, size[2]/2-8, 6, ECAM_YELLOW)
 
         if adirs_is_gps_alt_visible(PFD_table.Screen_ID) then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+395, size[2]/2-22, "GPS", 42, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+395, size[2]/2-22, "GPS", 42, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         end
     end
 

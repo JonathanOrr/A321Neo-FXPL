@@ -17,36 +17,36 @@ local function draw_throttle_value()
     local right_throttle = Round(get(Cockpit_throttle_lever_R),2)
 
     if left_throttle == 0 then
-        drawTextCentered( Font_Airbus_panel , 331 , 367, "L:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_ECAMfont , 331 , 367, "L:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
-        drawTextCentered( Font_Airbus_panel , 331 , 367, left_throttle == 1 and "L:1.00" or "L:"..left_throttle , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_ECAMfont , 331 , 367, left_throttle == 1 and "L:1.00" or "L:"..left_throttle , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     end
 
     if right_throttle == 0 then
-        drawTextCentered( Font_Airbus_panel , 389 , 367, "R:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_ECAMfont , 389 , 367, "R:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
-        drawTextCentered( Font_Airbus_panel , 389 , 367, right_throttle == 1 and "R:1.00" or "R:"..right_throttle , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_ECAMfont , 389 , 367, right_throttle == 1 and "R:1.00" or "R:"..right_throttle , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     end
 
-    drawTextCentered( Font_Airbus_panel , 397 , 327, "REGISTERED DETENT:" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
+    drawTextCentered( Font_ECAMfont , 397 , 327, "REGISTERED DETENT:" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
 
     if get(Lever_in_CL) == 1 then
-        drawTextCentered( Font_Airbus_panel , 397 , 294, "CLIMB" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        drawTextCentered( Font_ECAMfont , 397 , 294, "CLIMB" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_FULL_GREEN)
     elseif get(Lever_in_FLEX_MCT) == 1 then
-        drawTextCentered( Font_Airbus_panel , 397 , 294, "FLX/MCT" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        drawTextCentered( Font_ECAMfont , 397 , 294, "FLX/MCT" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_FULL_GREEN)
     elseif get(Lever_in_TOGA) == 1 then
-        drawTextCentered( Font_Airbus_panel , 397 , 294, "TOGA" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        drawTextCentered( Font_ECAMfont , 397 , 294, "TOGA" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_FULL_GREEN)
     elseif left_throttle == 0 and right_throttle == 0 then
-        drawTextCentered( Font_Airbus_panel , 397 , 294, "IDLE" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
+        drawTextCentered( Font_ECAMfont , 397 , 294, "IDLE" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTGREY)
     elseif left_throttle < 0 and right_throttle < 0 then
-        drawTextCentered( Font_Airbus_panel , 397 , 294, "REVR" , 23 ,false , false , TEXT_ALIGN_CENTER , ECAM_ORANGE)
+        drawTextCentered( Font_ECAMfont , 397 , 294, "REVR" , 23 ,false , false , TEXT_ALIGN_CENTER , ECAM_ORANGE)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, ECAM_ORANGE)
     else
-        drawTextCentered( Font_Airbus_panel , 397 , 294, "MANUAL" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
+        drawTextCentered( Font_ECAMfont , 397 , 294, "MANUAL" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTBLUE)
     end
 end

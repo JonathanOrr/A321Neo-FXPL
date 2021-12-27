@@ -212,9 +212,9 @@ function p5s2_draw()
     end
 
 
-    drawTextCentered( Font_Airbus_panel ,  187, 474 ,"SAVE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
-    drawTextCentered( Font_Airbus_panel ,  187, 342 ,"FETCH" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
-    drawTextCentered( Font_Airbus_panel ,  672, 68 ,"APPLY TO ACF" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_ECAMfont ,  187, 474 ,"SAVE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_ECAMfont ,  187, 342 ,"FETCH" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_ECAMfont ,  672, 68 ,"APPLY TO ACF" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
     drawTextCentered( Font_ECAMfont ,  446, 527 ,displayed_info["departure"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
     drawTextCentered( Font_ECAMfont ,  446, 462 ,displayed_info["arrival"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )

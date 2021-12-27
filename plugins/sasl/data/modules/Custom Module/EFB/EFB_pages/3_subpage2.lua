@@ -43,8 +43,8 @@ local flaps_table = {"1+F", 2, 3}
 local function draw_no_dep_data()
     if deparr_apts[1] == "" then
         sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
-        drawTextCentered(Font_Airbus_panel,  572, 360, "NO DEPARTURE DATA", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
-        drawTextCentered(Font_Airbus_panel,  572, 333, "RETURN TO PAGE 3 SUBPAGE 1", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_ECAMfont,  572, 360, "NO DEPARTURE DATA", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_ECAMfont,  572, 333, "RETURN TO PAGE 3 SUBPAGE 1", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
     end
 end
 
@@ -74,44 +74,44 @@ local function draw_buttons()
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 800,115,544,32,2,2)
     end
 
-    drawTextCentered( Font_Airbus_panel , 343 , 130, "REFRESH"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
-    drawTextCentered( Font_Airbus_panel , 800 , 130, "FORWARD TO MCDU"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_ECAMfont , 343 , 130, "REFRESH"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_ECAMfont , 800 , 130, "FORWARD TO MCDU"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
 end
 
 local function draw_qnh_oat()
-    drawTextCentered( Font_Airbus_panel , 909 , 518, Round(constant_conversions() ,0) , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_GREEN )
-    drawTextCentered( Font_Airbus_panel , 909 , 491, Round(get(OTA),0) , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont , 909 , 518, Round(constant_conversions() ,0) , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_GREEN )
+    drawTextCentered( Font_ECAMfont , 909 , 491, Round(get(OTA),0) , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_GREEN  )
 end
 
 
 
 local function draw_column_1_values()
-    drawTextCentered( Font_Airbus_panel , 225 , 361, displayed_zfw      , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 225 , 335, displayed_zfwcg    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 225 , 309, displayed_block_fuel     , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 225 , 361, displayed_zfw      , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 225 , 335, displayed_zfwcg    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 225 , 309, displayed_block_fuel     , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
 local function draw_column_2_values()
-    drawTextCentered( Font_Airbus_panel , 549 , 361, displayed_v1    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 335, displayed_vr    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 309, displayed_v2    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 283, displayed_flaps , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 257, displayed_trim , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 231, displayed_flex , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 549 , 361, displayed_v1    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 549 , 335, displayed_vr    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 549 , 309, displayed_v2    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 549 , 283, displayed_flaps , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 549 , 257, displayed_trim , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 549 , 231, displayed_flex , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
 local function draw_column_3_values()
-    drawTextCentered( Font_Airbus_panel , 885 , 361, displayed_wind  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 885 , 335, displayed_tow  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 885 , 309, displayed_flex_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 885 , 283, displayed_mtow_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 885 , 257, displayed_rwy_length, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 885 , 361, displayed_wind  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 885 , 335, displayed_tow  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 885 , 309, displayed_flex_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 885 , 283, displayed_mtow_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_ECAMfont , 885 , 257, displayed_rwy_length, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
 local function refresh_data_reminder()
     if New_takeoff_data_available then
-        drawTextCentered( Font_Airbus_panel , 370 , 45, "NEW PERFORMANCE DATA AVAILABLE, PLEASE REFRESH"  , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
+        drawTextCentered( Font_ECAMfont , 370 , 45, "NEW PERFORMANCE DATA AVAILABLE, PLEASE REFRESH"  , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
     end
 end
 
