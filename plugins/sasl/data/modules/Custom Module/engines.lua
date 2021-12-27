@@ -339,6 +339,12 @@ end
 local function update_nfan()
     ENG.dyn[1].nfan = eng_model_get_NFAN(1)
     ENG.dyn[2].nfan = eng_model_get_NFAN(2)
+
+    local angle_1_delta = ENG.dyn[1].nfan / 60 * 360
+    local angle_2_delta = ENG.dyn[2].nfan / 60 * 360
+    set(Eng_fan_angle, get(Eng_fan_angle, 1) + angle_1_delta, 1)
+    set(Eng_fan_angle, get(Eng_fan_angle, 2) + angle_2_delta, 2)
+
 end
 
 
@@ -822,7 +828,7 @@ local function update_startup()
     
     -- When the pilot moves very fast master switch ON -> OFF -> ON
     local fast_restart_1 = ENG.dyn[1].n1 > 25
-    local fast_restart_2 = Eng.dyn[2].n1 > 25
+    local fast_restart_2 = ENG.dyn[2].n1 > 25
 
     local eng_1_air_cond = (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1)
     local eng_2_air_cond = (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2)

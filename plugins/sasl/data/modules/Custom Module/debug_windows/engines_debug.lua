@@ -16,174 +16,155 @@
 -- Short description: Engine debug window
 -------------------------------------------------------------------------------
 
-size = {500, 500}
+size = {800, 700}
+
+local image_engine = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/debug_uis/engine_scheme.png", 0, 0, 300, 200)
+local image_turbine = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/debug_uis/engine_turbine.png", 0, 0, 64, 64)
+
+local function draw_avail(eng)
+    local offset = eng == 1 and 0 or 400
+
+    local color = ENG.dyn[eng].is_avail and ECAM_GREEN or ECAM_RED
+    local text = ENG.dyn[eng].is_avail and "AVAIL" or "NOT AVAIL"
+    sasl.gl.drawText(Font_B612MONO_regular, offset+70, 630, text, 14, false, false, TEXT_ALIGN_CENTER, color)
+
+    local color = ENG.dyn[eng].is_failed and ECAM_RED or ECAM_GREEN
+    local text = ENG.dyn[eng].is_failed and "FAILED" or "NOT FAILED"
+    sasl.gl.drawText(Font_B612MONO_regular, offset+200, 630, text, 14, false, false, TEXT_ALIGN_CENTER, color)
 
 
-local Font_B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-local xp_avail_1 = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
-local xp_avail_2 = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
+    local color = ENG.dyn[eng].is_fadec_pwrd and ECAM_GREEN or ECAM_RED
+    local text = ENG.dyn[eng].is_fadec_pwrd and "FADEC PWRD" or "FADEC OFF"
+    sasl.gl.drawText(Font_B612MONO_regular, offset+330, 630, text, 14, false, false, TEXT_ALIGN_CENTER, color)
 
-local Eng_1_N2_XP = globalProperty("sim/flightmodel2/engines/N2_percent[0]")
-local Eng_2_N2_XP = globalProperty("sim/flightmodel2/engines/N2_percent[1]")
 
-local Eng_1_EGT_XP = globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[0]")
-local Eng_2_EGT_XP = globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[1]")
+end
 
-local eng_FF_kgs          = globalPropertyfa("sim/cockpit2/engine/indicators/fuel_flow_kg_sec")
+local function draw_static()
+    sasl.gl.drawText(Font_B612MONO_regular, 200, 670, "ENGINE 1 (L)", 28, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, size[1]-200, 670, "ENGINE 2 (R)", 28, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+    sasl.gl.drawLine(size[1]/2, 680, size[1]/2, 20, UI_WHITE)
 
-local eng_ignition_switch = globalPropertyia("sim/cockpit2/engine/actuators/ignition_key")
-local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixture_ratio")
-local eng_igniters        = globalPropertyia("sim/cockpit2/engine/actuators/igniter_on")
+    sasl.gl.drawTexture(image_engine, 50, 400, 300, 200, {1,1,1})
+    sasl.gl.drawTexture(image_engine, 450, 400, 300, 200, {1,1,1})
 
-local starter_duration    = globalPropertyfa("sim/cockpit/engine/starter_duration")
+    sasl.gl.drawText(Font_B612MONO_regular, 200, 270, "THRUST MODEL", 20, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, size[1]-200, 270, "THRUST MODEL", 20, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+
+    sasl.gl.drawText(Font_B612MONO_regular, 200, 125, "FADEC", 20, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, size[1]-200, 125, "FADEC", 20, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+
+end
+
+local function draw_img_data()
+    sasl.gl.drawText(Font_B612MONO_regular, 263, 585, "FF=" .. Round_fill(ENG.dyn[1].ff,2) .. "KG/s", 12, false, false, TEXT_ALIGN_LEFT, {.7,0,0})
+    sasl.gl.drawText(Font_B612MONO_regular, 663, 585, "FF=" .. Round_fill(ENG.dyn[2].ff,2) .. "KG/s", 12, false, false, TEXT_ALIGN_LEFT, {.7,0,0})
+
+    sasl.gl.drawText(Font_B612MONO_regular, 60, 585, "FADEC Throttle=" .. Fwd_string_fill(""..math.floor(get(Override_eng_1_lever) * 100), " ", 3) .. "%", 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLACK)
+    sasl.gl.drawText(Font_B612MONO_regular, 460, 585, "FADEC Throttle=" .. Fwd_string_fill(""..math.floor(get(Override_eng_2_lever) * 100), " ", 3) .. "%", 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLACK)
+
+    sasl.gl.drawText(Font_B612MONO_regular, 300, 505, " EGT", 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLACK)
+    sasl.gl.drawText(Font_B612MONO_regular, 300, 485, Fwd_string_fill(""..math.floor(ENG.dyn[1].egt), " ", 4) .. "°C", 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLACK)
+
+    sasl.gl.drawText(Font_B612MONO_regular, 700, 505, " EGT", 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLACK)
+    sasl.gl.drawText(Font_B612MONO_regular, 700, 485, Fwd_string_fill(""..math.floor(ENG.dyn[2].egt), " ", 4) .. "°C", 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLACK)
+
+    sasl.gl.drawWideLine(235, 565, 255, 545, 2, {.7,0,0})
+    sasl.gl.drawText(Font_B612MONO_regular, 250, 555, "Firewall VLV", 12, false, false, TEXT_ALIGN_LEFT, {.7,0,0})
+    local fw_status_text = ENG.dyn[1].firewall_valve == 1 and "CLOSED" or (ENG.dyn[1].firewall_valve == 0 and "OPEN" or "TRANSIT")
+    sasl.gl.drawText(Font_B612MONO_regular, 260, 540, fw_status_text, 12, false, false, TEXT_ALIGN_LEFT, {.7,0,0})
+
+    sasl.gl.drawWideLine(635, 565, 655, 545, 2, {.7,0,0})
+    sasl.gl.drawText(Font_B612MONO_regular, 650, 555, "Firewall VLV", 12, false, false, TEXT_ALIGN_LEFT, {.7,0,0})
+    local fw_status_text = ENG.dyn[2].firewall_valve == 1 and "CLOSED" or (ENG.dyn[2].firewall_valve == 0 and "OPEN" or "TRANSIT")
+    sasl.gl.drawText(Font_B612MONO_regular, 660, 540, fw_status_text, 12, false, false, TEXT_ALIGN_LEFT, {.7,0,0})
+
+
+end
+
+local function draw_img_over(engine)
+    local offset = engine == 1 and 0 or 400
+    sasl.gl.drawWideLine(offset+130, 450, offset+130, 325, 2, {0,.6,.9})
+    sasl.gl.drawWideLine(offset+130, 325, offset+250, 325, 2, {0,.6,.9})
+    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 315, "NFAN = " .. Fwd_string_fill(""..Round_fill(ENG.dyn[engine].nfan, 2), " ", 6) .. " %", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
+    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 300, "       " .. Fwd_string_fill(""..math.floor(ENG.dyn[engine].nfan * ENG.data.fan_n1_rpm_max / 100), " ", 4) .. " RPM", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
+
+    sasl.gl.drawWideLine(offset+180, 490, offset+180, 350, 2, {0,.6,.9})
+    sasl.gl.drawWideLine(offset+180, 350, offset+250, 350, 2, {0,.6,.9})
+    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 345, "  N1 = " .. Fwd_string_fill(""..Round_fill(ENG.dyn[engine].n1, 2), " ", 6) .. " %", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
+    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 330, "       " .. Fwd_string_fill(""..math.floor(ENG.dyn[engine].n1 * ENG.data.fan_n1_rpm_max / 100), " ", 4) .. " RPM", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
+
+    sasl.gl.drawWideLine(offset+210, 490, offset+210, 380, 2, {0,.6,.9})
+    sasl.gl.drawWideLine(offset+210, 380, offset+250, 380, 2, {0,.6,.9})
+    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 375, "  N2 = " .. Fwd_string_fill(""..Round_fill(ENG.dyn[engine].n2, 2), " ", 6) .. " %", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
+    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 360, "       " .. Fwd_string_fill(""..math.floor(ENG.dyn[engine].n2 * ENG.data.fan_n1_rpm_max / 100), " ", 4) .. " RPM", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
+
+end
+
+local function draw_turbine(eng)
+    local offset = eng == 1 and 0 or 400
+    local fan_angle = get(Eng_fan_angle, eng)
+    sasl.gl.drawWideLine(offset+25+32, 390, offset+25+32, 500, 2, UI_WHITE)
+    sasl.gl.drawWideLine(offset+25+32, 500, offset+25+90, 500, 2, UI_WHITE)
+    sasl.gl.drawRotatedTexture(image_turbine, fan_angle, offset+25, 325, 64, 64, {1,1,1})
+end
+
+local function draw_thrust_model(eng)
+    local offset = eng == 1 and 0 or 400
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 250, "Thrust Actual Total     = " .. Fwd_string_fill(Round_fill(ENG.model_state[eng].T_actual_spool/1000,1), " ", 5) .. " kN", 12, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 230, "   - Thrust Core        = " .. Fwd_string_fill(Round_fill(ENG.model_state[eng].T_core/1000,1), " ", 5) .. " kN", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 210, "   - Thrust Fan         = " .. Fwd_string_fill(Round_fill(ENG.model_state[eng].T_turbine/1000,1), " ", 5) .. " kN", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 190, "Thrust AI/Bleed Penalty = " .. Fwd_string_fill(Round_fill(ENG.model_state[eng].T_penalty_actual/1000,1), " ", 5) .. " kN", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 170, "Thrust Current Max      = " .. Fwd_string_fill(Round_fill(ENG.model_state[eng].T_max/1000,1), " ", 5) .. " kN" , 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 150, "Thrust Rated Max        = " .. Fwd_string_fill(Round_fill(ENG.data.max_thrust*4.44822/1000,1), " ", 5) .. " kN" , 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+end
+
+local function draw_fadec_section(eng)
+    local offset = eng == 1 and 0 or 400
+    -- 0: not visible, 1: TOGA, 2:MCT, 3:CLB, 4: IDLE, 5: MREV, 6: FLEX, 7: SOFT GA
+    local text = ""
+    if ENG.dyn[eng].n1_mode == 0 then
+        text="N/A"
+    elseif ENG.dyn[eng].n1_mode == 1 then
+        text="TOGA"
+    elseif ENG.dyn[eng].n1_mode == 2 then
+        text="MCT"
+    elseif ENG.dyn[eng].n1_mode == 3 then
+        text="CLB"
+    elseif ENG.dyn[eng].n1_mode == 4 then
+        text="IDLE"
+    elseif ENG.dyn[eng].n1_mode == 5 then
+        text="MREV"
+    elseif ENG.dyn[eng].n1_mode == 6 then
+        text="FLEX"
+    elseif ENG.dyn[eng].n1_mode == 7 then
+        text="SOFT GA"
+    else
+        text="????"
+    end
+
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 110, "N1 Mode = " .. text, 12, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+200, 110, "N1 Idle = " .. Fwd_string_fill(""..Round_fill(ENG.dyn[eng].n1_idle, 1), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+
+    local throttle = eng==1 and  get(Override_eng_1_lever) or get(Override_eng_2_lever)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 90, "Pilot Target N1 = " .. Fwd_string_fill(""..Round_fill(get(Throttle_blue_dot, eng), 1), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 70, "A/T   Target N1 = " .. Fwd_string_fill(""..Round_fill(get(ATHR_desired_N1, eng), 1), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, offset+10, 50, "FADEC Throttle  = " .. Fwd_string_fill(""..Round_fill(throttle*100, 1), " ", 5) .. " %", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+
+end
 
 function draw()
-
-    sasl.gl.drawText(Font_B612MONO_regular, 120, 400, "ENGINE 1", 28, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]-120, 400, "ENGINE 2", 28, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawLine(size[1]/2, 430, size[1]/2, 20, UI_WHITE)
-    
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 480, "Computed N1 IDLE value: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 210, 480, Round(get(Eng_N1_idle),2), 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 460, "Engine mode: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    text = get(Engine_mode_knob) == 0 and "NORMAL" or (get(Engine_mode_knob) == 1 and "IGN" or "CRANK")
-    sasl.gl.drawText(Font_B612MONO_regular, 120, 460, text, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 440, "Sim Time: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, 440, Round(get(TIME),1), 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-
-
-    -- AVAIL ENG1
-    text  = ENG.dyn[1].is_avail and "AVAIL" or "NOT AVAIL"
-    color = ENG.dyn[1].is_avail and UI_GREEN or UI_LIGHT_RED
-    sasl.gl.drawText(Font_B612MONO_regular, 70, 375, text, 12, false, false, TEXT_ALIGN_CENTER, color)
-    sasl.gl.drawFrame(30,370,80,20,color)
-
-    text  = get(xp_avail_1) == 1 and "XP AVAIL" or "XP NOT AVAIL"
-    color = get(xp_avail_1) == 1 and UI_GREEN or UI_LIGHT_RED
-    sasl.gl.drawText(Font_B612MONO_regular, 180, 375, text, 12, false, false, TEXT_ALIGN_CENTER, color)
-    sasl.gl.drawFrame(130,370,100,20,color)
-
-    -- AVAIL ENG2
-    text  = ENG.dyn[2].is_avail and "AVAIL" or "NOT AVAIL"
-    color = ENG.dyn[2].is_avail and UI_GREEN or UI_LIGHT_RED
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+70, 375, text, 12, false, false, TEXT_ALIGN_CENTER, color)
-    sasl.gl.drawFrame(size[1]/2+30,370,80,20,color)
-
-    text  = get(xp_avail_2) == 1 and "XP AVAIL" or "XP NOT AVAIL"
-    color = get(xp_avail_2) == 1 and UI_GREEN or UI_LIGHT_RED
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+180, 375, text, 12, false, false, TEXT_ALIGN_CENTER, color)
-    sasl.gl.drawFrame(size[1]/2+130,370,100,20,color)
-
-    
-    -- FIREWALL Valves
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 350, "Firewall valve: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    text  = get(Eng_1_Firewall_valve) == 0 and "OPEN" or (get(Eng_1_Firewall_valve) == 1 and "CLOSE" or "TRANSIT")
-    color = get(Eng_1_Firewall_valve) == 0 and UI_GREEN or (get(Eng_1_Firewall_valve) == 1 and UI_LIGHT_RED or UI_YELLOW)
-    sasl.gl.drawText(Font_B612MONO_regular, 150, 350, text, 12, false, false, TEXT_ALIGN_LEFT, color)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20, 350, "Firewall valve: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    text  = get(Eng_2_Firewall_valve) == 0 and "OPEN" or (get(Eng_2_Firewall_valve) == 1 and "CLOSE" or "TRANSIT")
-    color = get(Eng_2_Firewall_valve) == 0 and UI_GREEN or (get(Eng_2_Firewall_valve) == 1 and UI_LIGHT_RED or UI_YELLOW)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+150, 350, text, 12, false, false, TEXT_ALIGN_LEFT, color)
-
-    -- Master Switches
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 330, "Master switch: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    text  = get(Engine_1_master_switch) == 1 and "ON" or "OFF"
-    color = get(Engine_1_master_switch) == 1 and UI_GREEN or UI_LIGHT_RED
-    sasl.gl.drawText(Font_B612MONO_regular, 150, 330, text, 12, false, false, TEXT_ALIGN_LEFT, color)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20, 330, "Master switch: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    text  = get(Engine_2_master_switch) == 1 and "ON" or "OFF"
-    color = get(Engine_2_master_switch) == 1 and UI_GREEN or UI_LIGHT_RED
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+150, 330, text, 12, false, false, TEXT_ALIGN_LEFT, color)
-    
-    -- Mixture
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 310, "Mixture (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 170, 310, math.floor(get(eng_mixture,1)*100) .. "%", 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20, 310, "Mixture (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+170, 310, math.floor(get(eng_mixture,2)*100) .. "%", 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
-
-    -- Ignition key
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 290, "Ignition key (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 170, 290, get(eng_ignition_switch, 1) == 4 and "STARTING" or "-", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20, 290, "Ignition key (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+170, 290, get(eng_ignition_switch, 2) == 4 and "STARTING" or "-", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-
-    -- Igniters
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 270, "Igniter: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    text  = get(eng_igniters, 1) == 1 and "ON" or "OFF"
-    color = get(eng_igniters, 1) == 1 and UI_LIGHT_BLUE or UI_DARK_BLUE
-    sasl.gl.drawText(Font_B612MONO_regular, 100, 270, text, 12, false, false, TEXT_ALIGN_LEFT, color)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20, 270, "Igniter: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    text  = get(eng_igniters, 2) == 1 and "ON" or "OFF"
-    color = get(eng_igniters, 2) == 1 and UI_LIGHT_BLUE or UI_DARK_BLUE
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+100, 270, text, 12, false, false, TEXT_ALIGN_LEFT, color)
-
-    -- Throttle valve
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 250, "Starter duration: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 220, 250, Round(get(starter_duration,1),2) , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20, 250, "Starter duration: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+220, 250, Round(get(starter_duration,2),2), 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
-
-    -- Throttle valve
-    sasl.gl.drawText(Font_B612MONO_regular, 20, 230, "Throttle (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 170, 230, math.floor(get(Override_eng_1_lever)*100) .. "%" , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20, 230, "Throttle (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+170, 230, math.floor(get(Override_eng_2_lever)*100) .. "%" , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
-
-    
-   
-    
-    -- Parameters
-    param_y = 200
-    sasl.gl.drawText(Font_B612MONO_regular, 20,  param_y, "Parameter", 12, true, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 130, param_y, "XP", 12, true, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 190, param_y, "Our", 12, true, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    
-    sasl.gl.drawText(Font_B612MONO_regular, 30,  param_y-20, "N1", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 155, param_y-20, Round_fill(get(Eng_1_N1), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 210, param_y-20, "=", 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, 30,  param_y-40, "N2", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 155, param_y-40, Round_fill(get(Eng_1_N2_XP), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 210, param_y-40, Round_fill(get(Eng_1_N2), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    
-    sasl.gl.drawText(Font_B612MONO_regular, 30,  param_y-60, "EGT", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 155, param_y-60, Round_fill(get(Eng_1_EGT_XP), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 210, param_y-60, Round_fill(get(Eng_1_EGT_c), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    
-    sasl.gl.drawText(Font_B612MONO_regular, 30,  param_y-80, "FF", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 155, param_y-80, Round_fill(get(eng_FF_kgs, 1), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 210, param_y-80, Round_fill(get(Eng_1_FF_kgs), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    
-    
-    -- Parameters
-    param_y = 200
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+20,  param_y, "Parameter", 12, true, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+130, param_y, "XP", 12, true, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+190, param_y, "Our", 12, true, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+30,  param_y-20, "N1", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+155, param_y-20, Round_fill(get(Eng_2_N1), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+210, param_y-20, "=", 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+30,  param_y-40, "N2", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+155, param_y-40, Round_fill(get(Eng_2_N2_XP), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+210, param_y-40, Round_fill(get(Eng_2_N2), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+30,  param_y-60, "EGT", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+155, param_y-60, Round_fill(get(Eng_2_EGT_XP), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+210, param_y-60, Round_fill(get(Eng_2_EGT_c), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+30,  param_y-80, "FF", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+155, param_y-80, Round_fill(get(eng_FF_kgs, 2), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+210, param_y-80, Round_fill(get(Eng_2_FF_kgs), 2), 12, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-    
+    draw_static()
+    draw_img_data()
+    draw_img_over(1)
+    draw_img_over(2)
+    draw_turbine(1)
+    draw_turbine(2)
+    draw_avail(1)
+    draw_avail(2)
+    draw_thrust_model(1)
+    draw_thrust_model(2)
+    draw_fadec_section(1)
+    draw_fadec_section(2)
 end

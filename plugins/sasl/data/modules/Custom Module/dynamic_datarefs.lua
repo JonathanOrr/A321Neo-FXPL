@@ -303,6 +303,8 @@ Eng_N1_max_detent_flex  = createGlobalPropertyf("a321neo/dynamics/engines/n1_max
 Eng_1_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_1", 0, false, true, false)
 Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_2", 0, false, true, false)
 
+Eng_fan_angle = createGlobalPropertyfa("a321neo/dynamics/engines/fan_angle", 2) -- For blender model 0-359
+
 -- Engine startup config stuff
 ENG_config_cooling_time = createGlobalPropertyi("a321neo/config/eng/initial_cooling", 0, false, true, false)
 ENG_config_egt_drop = createGlobalPropertyi("a321neo/config/eng/pw1100_egt_drop", 0, false, true, false)

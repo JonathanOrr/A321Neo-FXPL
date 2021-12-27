@@ -15,8 +15,6 @@
 
 include('engines/model/glue.lua')
 
-local engine_1_state = nil
-local engine_2_state = nil
 local n1_start_left = 0
 local n1_start_right = 0
 
@@ -27,19 +25,20 @@ local total_eng_forces = globalPropertyf("sim/flightmodel/forces/faxil_prop")
 function eng_model_enforce_n1(eng, n1)
     local N1_max = eng_N1_limit_takeoff_clean(get(OTA), get(ACF_elevation) * 3.28084)
     if eng == 1 then
-        engine_1_state.N1_spooled = n1
-        engine_1_state.T_theoric = n1 / N1_max * engine_1_state.T_max
+        ENG.model_state[1].N1_spooled = n1
+        ENG.model_state[1].T_theoric = n1 / N1_max * ENG.model_state[1].T_max
         ENG.dyn[1].n1 = n1 or 0 -- Just to be safe, let's check it's not nil
     else
-        engine_2_state.N1_spooled = n1
-        engine_2_state.T_theoric = n1 / N1_max * engine_2_state.T_max
+        ENG.model_state[2].N1_spooled = n1
+        ENG.model_state[2].T_theoric = n1 / N1_max * ENG.model_state[2].T_max
         ENG.dyn[2].n1 = n1 or 0 -- Just to be safe, let's check it's not nil
     end
 end
 
 local function initialize()
-    engine_1_state = engine_model_create_state()
-    engine_2_state = engine_model_create_state()
+    ENG.model_state = {}
+    ENG.model_state[1] = engine_model_create_state()
+    ENG.model_state[2] = engine_model_create_state()
 
     local override_eng_forc = globalPropertyi("sim/operation/override/override_engine_forces")
     local override_eng = globalPropertyi("sim/operation/override/override_engines")
@@ -92,8 +91,8 @@ function update_engine_model()
     }
 
     -- THE ORDER OR THE NExT FUNCTION CALLS IS *IMPORTANT*
-    update_thrust(engine_1_state, inputs_eng_1)
-    update_thrust(engine_2_state, inputs_eng_2)
+    update_thrust(ENG.model_state[1], inputs_eng_1)
+    update_thrust(ENG.model_state[2], inputs_eng_2)
 
     if n1_start_left ~= 0 then
         eng_model_enforce_n1(1, n1_start_left)
@@ -104,43 +103,43 @@ function update_engine_model()
         n1_start_right = 0
     end
 
-    update_thrust_penalty(engine_1_state, inputs_eng_1)
-    update_thrust_penalty(engine_2_state, inputs_eng_2)
-    update_thrust_spooling(engine_1_state, inputs_eng_1)
-    update_thrust_spooling(engine_2_state, inputs_eng_2)
-    update_thrust_reversal(engine_1_state, inputs_eng_1)
-    update_thrust_reversal(engine_2_state, inputs_eng_2)
-    update_thrust_secondary(engine_1_state, inputs_eng_1)
-    update_thrust_secondary(engine_2_state, inputs_eng_2)
+    update_thrust_penalty(ENG.model_state[1], inputs_eng_1)
+    update_thrust_penalty(ENG.model_state[2], inputs_eng_2)
+    update_thrust_spooling(ENG.model_state[1], inputs_eng_1)
+    update_thrust_spooling(ENG.model_state[2], inputs_eng_2)
+    update_thrust_reversal(ENG.model_state[1], inputs_eng_1)
+    update_thrust_reversal(ENG.model_state[2], inputs_eng_2)
+    update_thrust_secondary(ENG.model_state[1], inputs_eng_1)
+    update_thrust_secondary(ENG.model_state[2], inputs_eng_2)
 
-    ENG.dyn[1].n1 = engine_1_state.N1_spooled
-    ENG.dyn[2].n1 = engine_2_state.N1_spooled
+    ENG.dyn[1].n1 = ENG.model_state[1].N1_spooled
+    ENG.dyn[2].n1 = ENG.model_state[2].N1_spooled
 
-    set(total_eng_forces, -(engine_1_state.T_actual_spool + engine_2_state.T_actual_spool))
+    set(total_eng_forces, -(ENG.model_state[1].T_actual_spool + ENG.model_state[2].T_actual_spool))
     update_moment()
 end
 
 function eng_model_get_FF(eng)
-    local state = eng == 1 and engine_1_state or engine_2_state
+    local state = eng == 1 and ENG.model_state[1] or ENG.model_state[2]
     return state and state.FF or 0
 end
 
 function eng_model_get_N2(eng)
-    local state = eng == 1 and engine_1_state or engine_2_state
+    local state = eng == 1 and ENG.model_state[1] or ENG.model_state[2]
     return state and state.N2 or 0
 end
 
 function eng_model_get_NFAN(eng)
-    local state = eng == 1 and engine_1_state or engine_2_state
+    local state = eng == 1 and ENG.model_state[1] or ENG.model_state[2]
     return state and state.NFAN or 0
 end
 
 
 function update_moment()
 
-    local thrust_total = engine_1_state.T_actual_spool + engine_2_state.T_actual_spool
+    local thrust_total = ENG.model_state[1].T_actual_spool + ENG.model_state[2].T_actual_spool
     set(pitch_moment, thrust_total * ENG.data.model.CG_vert_displacement)
 
-    local thrust_asymmetry = engine_1_state.T_actual_spool - engine_2_state.T_actual_spool
+    local thrust_asymmetry = ENG.model_state[1].T_actual_spool - ENG.model_state[2].T_actual_spool
     set(yaw_moment, thrust_asymmetry * ENG.data.model.CG_lat_displacement)
 end

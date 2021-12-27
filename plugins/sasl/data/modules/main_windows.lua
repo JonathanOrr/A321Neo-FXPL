@@ -109,15 +109,15 @@ ELEC_debug_window = contextWindow {
 
 ENG_debug_window = contextWindow {
   name = "ENG DEBUG";
-  position = { 200 , 200 , 500 , 500};
+  position = { 200 , 200 , 800 , 700};
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 500 , 500 };
-  maximumSize = { 500 , 500 };
+  minimumSize = { 800 , 700 };
+  maximumSize = { 800 , 700 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    engines_debug {position = { 0 , 0 , 500 , 500 }}
+    engines_debug {position = { 0 , 0 , 800 , 700 }}
   };
 }
 

@@ -63,15 +63,19 @@ function update_thrust_secondary(engine_state, inputs)
 end
 
 function update_thrust_reversal(engine_state, inputs)
-    if  inputs.reverser_status < 0.01 then
-        return -- Nothing to do
-    end
 
     -- Compute the core thrust, this must not be considered for the reverser 
     local core_thrust = 1/(1+ENG.data.bypass_ratio) * engine_state.T_actual_spool
 
     -- Now, let's get the remaining thrust
     local full_rev_thr = math.max(0, engine_state.T_actual_spool - core_thrust)
+
+    engine_state.T_core    = core_thrust
+    engine_state.T_turbine = full_rev_thr
+
+    if  inputs.reverser_status < 0.01 then
+        return -- Nothing to do
+    end
 
     -- And according to reverser position let's compute the forward thrust 
     local forward_thr = full_rev_thr * inputs.reverser_status
