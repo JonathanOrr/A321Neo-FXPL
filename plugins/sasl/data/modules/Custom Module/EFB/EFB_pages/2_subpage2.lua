@@ -58,8 +58,8 @@ end
 
 local function draw_aircraft_in_air()
     sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
-    drawTextCentered(Font_ECAMfont,  572, 360, "AIRCRAFT IS AIRBORNE", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
-    drawTextCentered(Font_ECAMfont,  572, 333, "DOOR OPERATIONS NOT POSSIBLE", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  572, 360, "AIRCRAFT IS AIRBORNE", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  572, 333, "DOOR OPERATIONS NOT POSSIBLE", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
 end
 
 function p2s2_buttons()
@@ -143,7 +143,7 @@ function p2s2_draw()
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_GROUND2_closeall_button, 220,60,634,32,2,2)
     end
-    drawTextCentered( Font_ECAMfont ,  214, 75 ,"CLOSE ALL DOORS" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_Airbus_panel ,  214, 75 ,"CLOSE ALL DOORS" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
     for i=1, #door_anim_drf_names do
         local door_state = get(door_anim_drf_names[i])

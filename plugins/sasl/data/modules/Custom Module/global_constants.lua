@@ -18,7 +18,8 @@
 
 --colors
 ECAM_WHITE =  {1.0, 1.0, 1.0}
-ECAM_GREY = {113/255, 130/255, 151/255}
+ECAM_LINE_GREY = {113/255, 130/255, 151/255}
+ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
 ECAM_BLUE = {0.004, 1.0, 1.0}
 ECAM_GREEN = {0.20, 0.98, 0.20}
 ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
@@ -26,6 +27,7 @@ ECAM_ORANGE = {265/255, 179/255, 58/255}
 ECAM_YELLOW = {1, 1, 0}
 ECAM_RED = {1.0, 0.0, 0.0}
 ECAM_MAGENTA = {1.0, 112/255, 1.0}
+ECAM_GREY = {0.3, 0.3, 0.3}
 ECAM_BLACK = {0, 0, 0}
 ECAM_YELLOW = {1, 1, 0}
 UI_WHITE = {1.0, 1.0, 1.0}
@@ -56,6 +58,9 @@ EFB_YELLOW = {168/255, 200/255, 91/255}
 EFB_DROPDOWN_INSIDE = {31/255, 41/255, 55/255}
 EFB_DROPDOWN_OUTSIDE = {141/255, 153/255, 170/255}
 EFB_SLIDER_COLOUR = {143/255,255/255,127/255}
+
+PFD_TAPE_GREY = {113/255, 130/255, 151/255}
+PFD_YELLOW = {1, 1, 0}
 
 LED_TEXT_CL = {235/255, 200/255, 135/255}
 
@@ -175,8 +180,10 @@ NAV_ID_GLS     = 15
 NAV_ID_LTPFTP  = 16
 
 -- Fonts
+Font_AirbusDUL       = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 Font_AirbusDUL_vert  = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
+Font_Airbus_panel    = sasl.gl.loadFont("fonts/A320PanelFont_V0.2b.ttf")
 Font_7_digits        = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
 Font_B612regular     = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 Font_B612MONO_regular= sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
@@ -187,7 +194,7 @@ Font_Roboto          = sasl.gl.loadFont("fonts/Roboto-Regular.ttf")
 Font_MCDU            = sasl.gl.loadFont("fonts/MCDU.ttf")
 Font_MCDUSmall       = sasl.gl.loadFont("fonts/MCDUSmall.ttf")
 
-sasl.gl.setFontRenderMode(Font_ECAMfont, TEXT_RENDER_FORCED_MONO, 0.6)
+sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
 sasl.gl.setFontRenderMode(Font_MCDU, TEXT_RENDER_FORCED_MONO, 0.72)

@@ -2,13 +2,13 @@ local function draw_top_text()
     local CENTER_X = size[1] / 2
     local CENTER_Y = size[2] / 2
 
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X + 235, CENTER_Y + 20, "ALT", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 235, CENTER_Y + 20, "ALT", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
 
     sasl.gl.drawWideLine(CENTER_X + 265, CENTER_Y + 28, CENTER_X + 305, CENTER_Y + 28, 4, LED_TEXT_CL)
     sasl.gl.drawWideLine(CENTER_X + 405, CENTER_Y + 28, CENTER_X + 435, CENTER_Y + 28, 4, LED_TEXT_CL)
     sasl.gl.drawWideLine(CENTER_X + 267, CENTER_Y + 30, CENTER_X + 267, CENTER_Y + 20, 4, LED_TEXT_CL)
     sasl.gl.drawWideLine(CENTER_X + 433, CENTER_Y + 30, CENTER_X + 433, CENTER_Y + 20, 4, LED_TEXT_CL)
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X + 355, CENTER_Y + 20, "LVL/CH", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 355, CENTER_Y + 20, "LVL/CH", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
 end
 
 local function draw_alt_value()

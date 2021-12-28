@@ -325,10 +325,10 @@ end
 local function draw_meters_display()
     Sasl_DrawWideFrame(210, 441, 198, 37, 2, 0, ECAM_YELLOW)
     local meter_alt = math.floor(math.abs(get(ISIS_Altitude)) * 0.3048)
-    sasl.gl.drawText (Font_ECAMfont, 360, 446, meter_alt, 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText (Font_ECAMfont, 403, 446, "M", 34, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText (Font_AirbusDUL, 360, 446, meter_alt, 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText (Font_AirbusDUL, 403, 446, "M", 34, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     if get(ISIS_Altitude) < 0 then
-        sasl.gl.drawText (Font_ECAMfont, 218, 446, "NEG", 34, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText (Font_AirbusDUL, 218, 446, "NEG", 34, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
 end
 
@@ -432,7 +432,7 @@ local function draw_mach()
         if get(ISIS_Mach) > 1 then
             draw_mach_stby()
         else
-            sasl.gl.drawText (Font_ECAMfont, 83, 35, string.sub(Aft_string_fill(tostring(Round(get(ISIS_Mach),2)), "0", 4), 2, 4), 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText (Font_AirbusDUL, 83, 35, string.sub(Aft_string_fill(tostring(Round(get(ISIS_Mach),2)), "0", 4), 2, 4), 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         end
     end
 end
@@ -555,9 +555,9 @@ local function draw_off_signs()
     for i=1, 6 do
         if bugs_enabled[i] == false then
             if i >= 1 and i <= 4 then
-                sasl.gl.drawText (Font_ECAMfont, speed_bug_coords[i][1]-140, speed_bug_coords[i][2], "OFF", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                sasl.gl.drawText (Font_AirbusDUL, speed_bug_coords[i][1]-140, speed_bug_coords[i][2], "OFF", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             else
-                sasl.gl.drawText (Font_ECAMfont, alt_bug_coords[i-4][1]+20, alt_bug_coords[i-4][2], "OFF", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                sasl.gl.drawText (Font_AirbusDUL, alt_bug_coords[i-4][1]+20, alt_bug_coords[i-4][2], "OFF", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
         end
     end
@@ -567,7 +567,7 @@ end
 
 local function draw_speeds()
     for i=1, 4 do
-        sasl.gl.drawText (Font_ECAMfont, speed_bug_coords[i][1], speed_bug_coords[i][2], Fwd_string_fill(tostring(bugs[i]), "0", 3), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText (Font_AirbusDUL, speed_bug_coords[i][1], speed_bug_coords[i][2], Fwd_string_fill(tostring(bugs[i]), "0", 3), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     end
 end
 
@@ -575,7 +575,7 @@ end
 
 local function draw_alts()
     for i=1, 2 do
-        sasl.gl.drawText (Font_ECAMfont, alt_bug_coords[i][1], alt_bug_coords[i][2], Fwd_string_fill(tostring(bugs[i+4]), "0", 5), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText (Font_AirbusDUL, alt_bug_coords[i][1], alt_bug_coords[i][2], Fwd_string_fill(tostring(bugs[i+4]), "0", 5), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     end
 end
 

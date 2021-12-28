@@ -60,11 +60,11 @@ local function draw_apu_page_bgd()
     drawTextCentered(Font_ECAMfont, 450, 870, "APU", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawWideLine(409, 850, 490, 850, 3, ECAM_WHITE)
 
-    Sasl_DrawWideFrame(641, 627, 135, 72, 3, 0, ECAM_GREY)
+    Sasl_DrawWideFrame(641, 627, 135, 72, 3, 0, ECAM_LINE_GREY)
 
-    sasl.gl.drawWideLine(801, 517, 801, 563, 3, ECAM_GREY)
-    sasl.gl.drawWideLine(112, 563, 801, 563, 3, ECAM_GREY)
-    sasl.gl.drawWideLine(112, 517, 112, 563, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(801, 517, 801, 563, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(112, 563, 801, 563, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(112, 517, 112, 563, 3, ECAM_LINE_GREY)
 end
 
 local function round_to_5(value)

@@ -23,7 +23,7 @@ function Draw_LAW_MODE_module_480x240(x_pos, y_pos)
     for i = 1, 5 do
         sasl.gl.drawRectangle(CENTER_X - 235 + (90 + 5) * (i - 1), CENTER_Y + 69, 90, 26, LIGHT_GREY)
         sasl.gl.drawRectangle(CENTER_X - 235 + (90 + 5) * (i - 1), CENTER_Y + 69, 90, 26 * fbw_vertical_modes[i], LIGHT_BLUE)
-        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 235 + (90 + 5) * (i - 1) + 45, CENTER_Y + 69 + 7, fbw_vertical_modes_names[i], 18, false, false, TEXT_ALIGN_CENTER, WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (90 + 5) * (i - 1) + 45, CENTER_Y + 69 + 7, fbw_vertical_modes_names[i], 18, false, false, TEXT_ALIGN_CENTER, WHITE)
     end
 
     local fbw_lateral_modes_names = {
@@ -41,7 +41,7 @@ function Draw_LAW_MODE_module_480x240(x_pos, y_pos)
     for i = 1, 3 do
         sasl.gl.drawRectangle(CENTER_X - 235 + (153.5 + 5) * (i - 1), CENTER_Y + 18, 153.5, 26, LIGHT_GREY)
         sasl.gl.drawRectangle(CENTER_X - 235 + (153.5 + 5) * (i - 1), CENTER_Y + 18, 153.5, 26 * fbw_lateral_modes[i], LIGHT_BLUE)
-        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 235 + (153.5 + 5) * (i - 1) + (153.5) / 2, CENTER_Y + 18 + 7, fbw_lateral_modes_names[i], 18, false, false, TEXT_ALIGN_CENTER, WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (153.5 + 5) * (i - 1) + (153.5) / 2, CENTER_Y + 18 + 7, fbw_lateral_modes_names[i], 18, false, false, TEXT_ALIGN_CENTER, WHITE)
     end
 
     local fbw_total_laws_names = {
@@ -82,31 +82,31 @@ function Draw_LAW_MODE_module_480x240(x_pos, y_pos)
 
     for i = 1, 6 do
         sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 27, 74, 26, (get(FBW_total_control_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
-        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 27 + 8, fbw_total_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 27 + 8, fbw_total_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
     end
 
     for i = 1, 6 do
         if fbw_vertical_laws_names[i][2] then
             sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 57, 74, 26, (get(FBW_vertical_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
-            sasl.gl.drawText(Font_ECAMfont, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 57 + 8, fbw_vertical_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+            sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 57 + 8, fbw_vertical_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
         end
     end
 
     for i = 1, 6 do
         if fbw_lateral_laws_names[i][2] then
             sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 87, 74, 26, (get(FBW_lateral_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
-            sasl.gl.drawText(Font_ECAMfont, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 87 + 8, fbw_lateral_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+            sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 87 + 8, fbw_lateral_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
         end
     end
 
     for i = 1, 6 do
         if fbw_yaw_laws_names[i][2] then
             sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 117, 74, 26, (get(FBW_yaw_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
-            sasl.gl.drawText(Font_ECAMfont, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 117 + 8, fbw_yaw_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+            sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 117 + 8, fbw_yaw_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
         end
     end
 
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X, CENTER_Y + 120 - 18, "VERTICAL MODES", 14, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X, CENTER_Y + 120 - 18 - 26 - 20 - 5, "LATERAL MODES", 14, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X, CENTER_Y + 120 - 26 - 20 - 20 - 50, "CONTROL LAW: TOTAL -> LAT -> VERT -> YAW", 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X, CENTER_Y + 120 - 18, "VERTICAL MODES", 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X, CENTER_Y + 120 - 18 - 26 - 20 - 5, "LATERAL MODES", 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X, CENTER_Y + 120 - 26 - 20 - 20 - 50, "CONTROL LAW: TOTAL -> LAT -> VERT -> YAW", 14, false, false, TEXT_ALIGN_CENTER, WHITE)
 end

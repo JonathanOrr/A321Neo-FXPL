@@ -98,7 +98,7 @@ local function draw_request_button()
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 680,565,300,32,2,2)
     end
-    drawTextCentered( Font_ECAMfont , 680,580, "REQUEST" , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_Airbus_panel , 680,580, "REQUEST" , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 end
 
 local function draw_metar_results()
@@ -129,8 +129,8 @@ local function draw_text_window(x,y,w,h)
 end
 
 local function draw_background()
-    drawTextCentered(Font_ECAMfont,  1143/2, 640, "WEATHER REQUEST" , 30, false, false, TEXT_ALIGN_CENTER, EFB_LIGHTBLUE)
-    drawTextCentered(Font_ECAMfont,  330, 579, "ARPT ICAO:" , 21, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  1143/2, 640, "WEATHER REQUEST" , 30, false, false, TEXT_ALIGN_CENTER, EFB_LIGHTBLUE)
+    drawTextCentered(Font_Airbus_panel,  330, 579, "ARPT ICAO:" , 21, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
     draw_text_window(450,579,100,24)
     draw_text_window(572,295,843,430)
 end

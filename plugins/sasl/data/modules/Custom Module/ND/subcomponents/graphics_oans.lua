@@ -122,10 +122,10 @@ local function draw_oans_rwy(data, rwy_start, functions)
         local font_size = 50
         local text_rwy = rwy_start.sibl_name .. "-" .. rwy_start.name
         
-        local width, height = sasl.gl.measureText (Font_ECAMfont, text_rwy, font_size, false, false)
+        local width, height = sasl.gl.measureText (Font_AirbusDUL, text_rwy, font_size, false, false)
         
         sasl.gl.drawRotatedTexturePart(image_black_square, m_angle, m_x-width/2-2 , m_y-height/2, width+4, height, 0, 0, width+4, height, {0,0,0})    
-        sasl.gl.drawRotatedText(Font_ECAMfont, m_x , m_y-height/2 , m_x, m_y, m_angle, text_rwy, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawRotatedText(Font_AirbusDUL, m_x , m_y-height/2 , m_x, m_y, m_angle, text_rwy, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
     -- Runway sign start/end
     m_angle = m_angle+90
@@ -148,11 +148,11 @@ local function draw_oans_rwy(data, rwy_start, functions)
     local y_shift = y_start + dist_text * msin(angle)
     local font_size = 50
     local width = 30 * #rwy_start.name
-    sasl.gl.drawRotatedText(Font_ECAMfont, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_start.name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_start.name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     local x_shift = x_end - dist_text * mcos(angle)
     local y_shift = y_end - dist_text * msin(angle)
-    sasl.gl.drawRotatedText(Font_ECAMfont, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibl_name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibl_name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
 end
 
@@ -329,7 +329,7 @@ local function draw_oans_tower(data, functions, apt, apt_details)
         local y_shift = (height-3)/2
 
         sasl.gl.drawRectangle (x-width/2-2, y-y_shift-3+data.config.range, width+4, height-4,  {0,0,0})
-        sasl.gl.drawText(Font_ECAMfont,x,y-y_shift, "TWR", height-4, false, false, TEXT_ALIGN_CENTER, {0., 0.6, 0.})
+        sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, "TWR", height-4, false, false, TEXT_ALIGN_CENTER, {0., 0.6, 0.})
         k_v = height - 5
         sasl.gl.drawTriangle ( x-15, y+k_v, x+15, y+k_v , x, y+k_v+15, {0., 0.6, 0.})
     
@@ -372,7 +372,7 @@ local function draw_oans_mark_taxi(data, functions, apt, apt_details)
 
             sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
 
-            sasl.gl.drawText(Font_ECAMfont,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, COLOR_YELLOW)
+            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, COLOR_YELLOW)
         end
     end
 end
@@ -405,7 +405,7 @@ local function draw_oans_mark_gate(data, functions, apt, apt_details)
         local y_shift = (height-3)/2
 
         sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
-        sasl.gl.drawText(Font_ECAMfont,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end
 
 end

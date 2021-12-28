@@ -649,39 +649,39 @@ function draw()
     sasl.gl.drawWideLine(125, 0, 125, 120, 4, ECAM_WHITE)
     sasl.gl.drawWideLine(size[1] - 125, 0, size[1] - 125, 120, 4, ECAM_WHITE)
 
-    sasl.gl.drawText (Font_ECAMfont, 10, 20, display_btm_left[3].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[3].color )
-    sasl.gl.drawText (Font_ECAMfont, 10, 50, display_btm_left[2].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[2].color )
-    sasl.gl.drawText (Font_ECAMfont, 10, 80, display_btm_left[1].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[1].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, 20, display_btm_left[3].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[3].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, 50, display_btm_left[2].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[2].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, 80, display_btm_left[1].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[1].color )
 
 
-    sasl.gl.drawText (Font_ECAMfont, size[1]-10, 20, display_btm_right[3].text , 20, false, false, TEXT_ALIGN_RIGHT, display_btm_right[3].color )
-    sasl.gl.drawText (Font_ECAMfont, size[1]-10, 50, display_btm_right[2].text , 20, false, false, TEXT_ALIGN_RIGHT, display_btm_right[2].color )
-    sasl.gl.drawText (Font_ECAMfont, size[1]-10, 80, display_btm_right[1].text , 20, false, false, TEXT_ALIGN_RIGHT, display_btm_right[1].color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]-10, 20, display_btm_right[3].text , 20, false, false, TEXT_ALIGN_RIGHT, display_btm_right[3].color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]-10, 50, display_btm_right[2].text , 20, false, false, TEXT_ALIGN_RIGHT, display_btm_right[2].color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]-10, 80, display_btm_right[1].text , 20, false, false, TEXT_ALIGN_RIGHT, display_btm_right[1].color )
 
-    sasl.gl.drawText (Font_ECAMfont, size[1]/2, 80, display_title.text, 20, false, false, TEXT_ALIGN_CENTER, display_title.color )
-    sasl.gl.drawText (Font_ECAMfont, size[1]/2+100, 50, display_r[1].text , 20, false, false, TEXT_ALIGN_RIGHT, display_r[1].color )
-    sasl.gl.drawText (Font_ECAMfont, size[1]/2+100, 20, display_r[2].text , 20, false, false, TEXT_ALIGN_RIGHT, display_r[2].color )
-    sasl.gl.drawText (Font_ECAMfont, size[1]/2-95, 50,  display_l[1].text , 20, false, false, TEXT_ALIGN_LEFT, display_l[1].color )
-    sasl.gl.drawText (Font_ECAMfont, size[1]/2-95, 20,  display_l[2].text , 20, false, false, TEXT_ALIGN_LEFT, display_l[2].color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]/2, 80, display_title.text, 20, false, false, TEXT_ALIGN_CENTER, display_title.color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]/2+100, 50, display_r[1].text , 20, false, false, TEXT_ALIGN_RIGHT, display_r[1].color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]/2+100, 20, display_r[2].text , 20, false, false, TEXT_ALIGN_RIGHT, display_r[2].color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]/2-95, 50,  display_l[1].text , 20, false, false, TEXT_ALIGN_LEFT, display_l[1].color )
+    sasl.gl.drawText (Font_AirbusDUL, size[1]/2-95, 20,  display_l[2].text , 20, false, false, TEXT_ALIGN_LEFT, display_l[2].color )
 
-    sasl.gl.drawText (Font_ECAMfont, 10, size[2]-20, display_running_text.text , 17, false, false, TEXT_ALIGN_LEFT, display_running_text.color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-20, display_running_text.text , 17, false, false, TEXT_ALIGN_LEFT, display_running_text.color )
 
     if display_ack.text ~= "" then
     
         if display_ack.background then
-            width, height = sasl.gl.measureText(Font_ECAMfont, display_ack.text, 25, false, false)
+            width, height = sasl.gl.measureText(Font_AirbusDUL, display_ack.text, 25, false, false)
             sasl.gl.drawRectangle ( size[1]-width-10, size[2]-33, width+10 , 32 , display_ack.color )
-            sasl.gl.drawText (Font_ECAMfont, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, ECAM_BLACK )
+            sasl.gl.drawText (Font_AirbusDUL, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, ECAM_BLACK )
         else
-            sasl.gl.drawText (Font_ECAMfont, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, display_ack.color )
+            sasl.gl.drawText (Font_AirbusDUL, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, display_ack.color )
         end
     end
     
-    sasl.gl.drawText (Font_ECAMfont, 10, size[2]-56,  display_top[1].text , 25, false, false, TEXT_ALIGN_LEFT, display_top[1].color )
-    sasl.gl.drawText (Font_ECAMfont, 10, size[2]-92,  display_top[2].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[2].color )
-    sasl.gl.drawText (Font_ECAMfont, 10, size[2]-128, display_top[3].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[3].color )
-    sasl.gl.drawText (Font_ECAMfont, 10, size[2]-164, display_top[4].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[4].color )
-    sasl.gl.drawText (Font_ECAMfont, 10, size[2]-200, display_top[5].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[5].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-56,  display_top[1].text , 25, false, false, TEXT_ALIGN_LEFT, display_top[1].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-92,  display_top[2].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[2].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-128, display_top[3].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[3].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-164, display_top[4].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[4].color )
+    sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-200, display_top[5].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[5].color )
 
     sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(DCDU_1_brightness_act)})
     perf_measure_stop("DCDU:draw()")   

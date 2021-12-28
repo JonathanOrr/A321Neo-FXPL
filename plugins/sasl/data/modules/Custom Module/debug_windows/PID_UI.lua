@@ -207,16 +207,16 @@ local function draw_gain_values(PID_array, x_pos, y_pos, width, height, P_color,
     local END_X = x_pos + width
     local END_Y = y_pos + height
 
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X + 290, CENTER_Y + 130, "P GAIN: " .. Round_fill(PID_array.P_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, P_color)
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X + 290, CENTER_Y + 115, "I GAIN: " .. Round_fill(PID_array.I_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, I_color)
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X + 290, CENTER_Y + 100, "D GAIN: " .. Round_fill(PID_array.D_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, D_color)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 290, CENTER_Y + 130, "P GAIN: " .. Round_fill(PID_array.P_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, P_color)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 290, CENTER_Y + 115, "I GAIN: " .. Round_fill(PID_array.I_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, I_color)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 290, CENTER_Y + 100, "D GAIN: " .. Round_fill(PID_array.D_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, D_color)
 end
 
 local function draw_FF_gain_values(FF_PID, x_pos, y_pos, width, height, FF_color)
     local CENTER_X = (2 * x_pos + width) / 2
     local CENTER_Y = (2 * y_pos + height) / 2
 
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X + 290, CENTER_Y + 85, "FF GAIN: " .. Round_fill(FF_PID.FF_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, FF_color)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 290, CENTER_Y + 85, "FF GAIN: " .. Round_fill(FF_PID.FF_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, FF_color)
 end
 
 init_tuning_PID(FBW_PID_arrays.FBW_CSTAR_PID)

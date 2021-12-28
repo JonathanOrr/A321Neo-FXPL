@@ -163,8 +163,8 @@ local function draw_efb_bgd()
     sasl.gl.drawRectangle ( 0 , 710 , 1143, 90, EFB_BACKGROUND_TOP)
     local efb_titles = {"HOME", "GND", "PERF", "CONFIG", "NETWK","ENG","","","","OFF"}
     for i=1, #efb_titles do
-        drawTextCentered(Font_ECAMfont, (1143/10)*i - 56  ,  750 , efb_titles[i] , 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
-        drawTextCentered(Font_ECAMfont, (1143/10)*i - 56  ,  750 , efb_titles[i] , 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_Airbus_panel, (1143/10)*i - 56  ,  750 , efb_titles[i] , 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_Airbus_panel, (1143/10)*i - 56  ,  750 , efb_titles[i] , 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
     end
 end
 

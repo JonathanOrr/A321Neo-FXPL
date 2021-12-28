@@ -3,11 +3,11 @@ local function draw_hdg_track_mode_indication()
     local CENTER_Y = size[2] / 2
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 0 then
-        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 15, CENTER_Y - 10, "HDG", 28, false, false, TEXT_ALIGN_RIGHT, LED_TEXT_CL)
+        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 15, CENTER_Y - 10, "HDG", 28, false, false, TEXT_ALIGN_RIGHT, LED_TEXT_CL)
     end
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 1 then
-        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 15, CENTER_Y - 35, "TRK", 28, false, false, TEXT_ALIGN_RIGHT, LED_TEXT_CL)
+        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 15, CENTER_Y - 35, "TRK", 28, false, false, TEXT_ALIGN_RIGHT, LED_TEXT_CL)
     end
 end
 
@@ -16,14 +16,14 @@ local function draw_top_text()
     local CENTER_Y = size[2] / 2
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 0 then
-        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 290, CENTER_Y + 20, "HDG", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 290, CENTER_Y + 20, "HDG", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
     end
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 1 then
-        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 235, CENTER_Y + 20, "TRK", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235, CENTER_Y + 20, "TRK", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
     end
 
-    sasl.gl.drawText(Font_ECAMfont, CENTER_X - 180, CENTER_Y + 20, "LAT", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+    sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 180, CENTER_Y + 20, "LAT", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
 end
 
 local function draw_hdg_trk_value()

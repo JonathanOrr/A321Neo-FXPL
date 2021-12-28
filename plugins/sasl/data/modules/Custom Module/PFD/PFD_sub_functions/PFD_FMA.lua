@@ -69,8 +69,8 @@ function PFD_draw_FMA(fma_table)
         end
     end
 
-    sasl.gl.drawWideLine(185, 900, 185, 762, 4, ECAM_GREY)
-    sasl.gl.drawWideLine(375, 900, 375, 762, 4, ECAM_GREY)
-    sasl.gl.drawWideLine(580, 900, 580, 762, 4, ECAM_GREY)
-    sasl.gl.drawWideLine(755, 900, 755, 762, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(185, 900, 185, 762, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(375, 900, 375, 762, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(580, 900, 580, 762, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(755, 900, 755, 762, 4, ECAM_LINE_GREY)
 end
