@@ -646,7 +646,7 @@ local function perform_starting_procedure_follow_n1(eng)
         -- For each phase...
         
         -- Get the current N1, but it can't be zero 
-        local curr_N1 = math.max(math.max(eng_N1_off[eng],2), Eng.dyn[eng].n1)
+        local curr_N1 = math.max(math.max(eng_N1_off[eng],2), ENG.dyn[eng].n1)
         
         if curr_N1 < ENG.data.startup.n1[i+1].n1_set then
             -- We have found the correct row in phase table
