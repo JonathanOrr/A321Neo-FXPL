@@ -104,17 +104,17 @@ local function draw_menu(data)
             color = {0.6,0.6,0.6}
         end
         
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-40, "ADD CROSS", 28, false, false, TEXT_ALIGN_LEFT, color)
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-80, "ADD FLAG", 28, false, false, TEXT_ALIGN_LEFT, color)
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-120, "ERASE ALL CROSSES", 28, false, false, TEXT_ALIGN_LEFT, color)
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-160, "ERASE ALL FLAGS", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, x+10, y-40, "ADD CROSS", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, x+10, y-80, "ADD FLAG", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, x+10, y-120, "ERASE ALL CROSSES", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, x+10, y-160, "ERASE ALL FLAGS", 28, false, false, TEXT_ALIGN_LEFT, color)
     
         local color = ECAM_WHITE
         if nd_data.config.mode ~= ND_MODE_PLAN then
             color = {0.6,0.6,0.6}
         end
         
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-200, "CENTER ON ACFT", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, x+10, y-200, "CENTER ON ACFT", 28, false, false, TEXT_ALIGN_LEFT, color)
         
         if data.plan_mouse_x ~= nil then
             if data.plan_mouse_x > x and data.plan_mouse_x < x + 300 and 

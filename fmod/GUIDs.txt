@@ -192,6 +192,15 @@
 {e6b3cbd8-8857-47e8-b8bb-7893e8ded8c2} event:/Switches/Pedestal/SwitchingPanel/4/1
 {3bcc3fe3-7127-4374-9d56-3da39531be06} event:/Switches/Pedestal/SwitchingPanel/4/2
 {19f84c33-5c2f-4299-9599-5e2ab7e37899} event:/Switches/Pedestal/SwitchingPanel/4/3
+{d6edcdf4-da6e-4fc8-ae7c-3b73fc24cd2d} event:/Switches/SoftPB/1/Off
+{dc3ced7a-6947-4883-9499-0facd9317c22} event:/Switches/SoftPB/1/On
+{f897e685-8778-48bd-8318-b0ed30650a1c} event:/Switches/SoftPB/2/Off
+{6daf48dd-5013-40e2-8e0a-d215ef3b8235} event:/Switches/SoftPB/2/On
+{b5caf57b-0b75-4742-866e-91609f33eafe} event:/Switches/SoftPB/3/Off
+{3d311596-233d-435c-8e6a-64b712f99b39} event:/Switches/SoftPB/3/On
+{74c93fd6-f1af-4d6e-a60e-3b0fad9a85fc} event:/Switches/SoftPB/Momentary/1
+{06409cb8-e9f6-4650-b310-23105de50978} event:/Switches/SoftPB/Momentary/2
+{f30f6d22-ac58-4984-b1ab-b77495faa140} event:/Switches/SoftPB/Momentary/3
 {8800785d-9ee0-4bf3-9d06-5325c5ba3b24} event:/TA Test/End
 {b4686c64-ab84-4b6a-be93-ec4c449a90ea} event:/TA Test/Pass
 {2d60f531-2f76-4284-bd40-9b5b22287cda} event:/TA Test/Start
