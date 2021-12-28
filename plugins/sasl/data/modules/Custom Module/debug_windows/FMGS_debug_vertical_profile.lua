@@ -89,6 +89,12 @@ local function draw_takeoff_dynamic()
         sasl.gl.drawText(Font_B612MONO_regular, 120, 250, "??? ft/min", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
     end
 
+    if FMGS_sys.data.pred.takeoff.total_fuel_kgs then
+        sasl.gl.drawText(Font_B612MONO_regular, 700, 5, "Total fuel consumption: " .. math.floor(FMGS_sys.data.pred.takeoff.total_fuel_kgs) .. " Kg", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    else
+        sasl.gl.drawText(Font_B612MONO_regular, 700, 5, "Total fuel consumption: N/A", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
+
 end
 
 local function draw_takeoff()

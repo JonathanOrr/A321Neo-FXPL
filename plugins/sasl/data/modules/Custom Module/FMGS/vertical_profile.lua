@@ -55,33 +55,39 @@ local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     -- This is the climb from rwy alt to rwy_alt + 400
 
     local N1 = get(Eng_N1_flex_temp) == 0 and get(Eng_N1_max_detent_toga) or get(Eng_N1_max_detent_flex)
+    local oat = get(OTA)
     local density = get(Weather_Sigma)
     local _, tas, mach = convert_to_eas_tas_mach(v2, rwy_alt+200)   -- Let's use +200 to stay in the middle
-    local thrust = predict_engine_thrust(mach, density, get(OTA), rwy_alt+200, N1) * 2
+    local thrust = predict_engine_thrust(mach, density, oat, rwy_alt+200, N1) * 2
     local drag   = predict_drag(density, tas, mach, 5)
-    return compute_vs(thrust,drag, takeoff_weight, tas)
+    fuel_consumption = ENG.data.n1_to_FF(N1, rwy_alt, mach, oat-Temperature_get_ISA())
+    return compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
 end
 
 
 local function get_time_dist_from_V2_to_VSRS(rwy_alt, v2, takeoff_weight)
     local ref_alt = rwy_alt+400
+    local oat = get(OTA)
     local density = get_density_ratio(ref_alt)
     local N1 = get(Eng_N1_flex_temp) == 0 and get(Eng_N1_max_detent_toga) or get(Eng_N1_max_detent_flex)
     local _, tas, mach = convert_to_eas_tas_mach(v2, ref_alt)
-    local thrust = predict_engine_thrust(mach, density, get(OTA), ref_alt, N1) * 2
+    local thrust = predict_engine_thrust(mach, density, oat, ref_alt, N1) * 2
     local drag   = predict_drag(density, tas, mach, 0)
     local acc = (thrust - drag) / takeoff_weight    -- Acceleration in m/s2
 
     local time = kts_to_ms(10) / acc -- 10 knots
     local dist = 0.5 * acc * (time^2) + kts_to_ms(v2) * time
-    return time, m_to_nm(dist)  -- Time, dist
+    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())
+    return time, m_to_nm(dist), fuel_consumption  -- Time, dist, fuel
 end
 
 local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, weight)
-    local density = get_density_ratio(begin_alt)
-    local ota_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, end_alt-begin_alt)
-    local _, tas, mach = convert_to_eas_tas_mach(ias, begin_alt)
-    local thrust = predict_engine_thrust(mach, density, ota_pred, begin_alt, N1) * 2
+    local ref_alt = (end_alt+begin_alt)/2
+    local density = get_density_ratio(ref_alt)
+    local oat = get(OTA)
+    local ota_pred = predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
+    local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
+    local thrust = predict_engine_thrust(mach, density, ota_pred, ref_alt, N1) * 2
     local drag   = predict_drag(density, tas, mach, 0)
     local vs = compute_vs(thrust,drag, weight, tas)
 
@@ -89,15 +95,34 @@ local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, we
 
     local gs = tas_to_gs(tas, vs, 0, 0)    -- TODO Wind
 
-    return time, gs * time / 3600
+    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())
+    return time, gs * time / 3600, fuel_consumption
 end
 
 local function get_time_dist_from_VSRS_to_VACC(begin_alt, end_alt, speed, weight)
     local N1 = get(Eng_N1_flex_temp) == 0 and get(Eng_N1_max_detent_toga) or get(Eng_N1_max_detent_flex)
 
-    local time, dist = get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, speed, weight)
+    local time, dist, fuel = get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, speed, weight)
 
-    return time, dist
+    return time, dist, fuel
+end
+
+-------------------------------------------------------------------------------
+-- Climb
+-------------------------------------------------------------------------------
+
+local function predict_climb_thrust_net_avail(ias,altitude)
+    local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
+    local N1 = eng_N1_limit_clb(oat, 0, altitude, true, false, false))
+    local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
+    local density = get_density_ratio(ref_alt)
+
+    local thrust_per_engine = predict_engine_thrust(mach, density, oat_pred, altitude, N1)
+
+    -- let's remove the drag now
+    local drag = predict_drag(density, tas, mach, 0)
+
+    return thrust_per_engine * 2 - drag
 end
 
 -------------------------------------------------------------------------------
@@ -111,12 +136,15 @@ end
 
 local function vertical_profile_takeoff_update()
 
+    local fuel_consumed = 0 -- We will return the total fuel consumption for the takeoff phase (including taxi)
+
     -- Let's compute the predicted weight at T/O
     local total_to_weight = FMGS_sys.data.init.weights.zfw
                           + FMGS_sys.data.init.weights.block_fuel
                           - FMGS_sys.data.init.weights.taxi_fuel
     total_to_weight = 1000 * total_to_weight -- Change it to kgs
 
+    fuel_consumed = FMGS_sys.data.init.weights.taxi_fuel * 1000 -- In kgs
 
     local rwy_alt = FMGS_sys.fpln.active.apts.dep.alt
 
@@ -126,27 +154,41 @@ local function vertical_profile_takeoff_update()
         return
     end
 
+    local fuel_consumption
+
     -- Initial climb, from rwy altitude + 30 to 400
-    FMGS_sys.data.pred.takeoff.ROC_init = get_ROC_after_TO(rwy_alt, FMGS_sys.perf.takeoff.v2, total_to_weight)
+    FMGS_sys.data.pred.takeoff.ROC_init, fuel_consumption = get_ROC_after_TO(rwy_alt, FMGS_sys.perf.takeoff.v2, total_to_weight)
     FMGS_sys.data.pred.takeoff.time_to_400ft = (400-30) / FMGS_sys.data.pred.takeoff.ROC_init * 60
     FMGS_sys.data.pred.takeoff.dist_to_400ft = FMGS_sys.data.pred.takeoff.time_to_400ft * FMGS_sys.perf.takeoff.v2 / 3600
+    fuel_consumed = fuel_consumed + fuel_consumption * FMGS_sys.data.pred.takeoff.time_to_400ft
 
     -- Acceleration at 400ft
-    local time,dist = get_time_dist_from_V2_to_VSRS(rwy_alt+400, FMGS_sys.perf.takeoff.v2, total_to_weight)
+    local time,dist,fuel_consumption = get_time_dist_from_V2_to_VSRS(rwy_alt+400, FMGS_sys.perf.takeoff.v2, total_to_weight)
     FMGS_sys.data.pred.takeoff.time_to_sec_climb = time
     FMGS_sys.data.pred.takeoff.dist_to_sec_climb = dist
+    fuel_consumed = fuel_consumed + fuel_consumption * time
 
     -- Second part of the initial climb to takeoff acceleration altitude
     local acc_alt = FMGS_get_takeoff_acc()
-    time,dist = get_time_dist_from_VSRS_to_VACC(rwy_alt+400, FMGS_sys.perf.takeoff.acc, FMGS_sys.perf.takeoff.v2+10, total_to_weight)
+    time,dist,fuel_consumption = get_time_dist_from_VSRS_to_VACC(rwy_alt+400, FMGS_sys.perf.takeoff.acc, FMGS_sys.perf.takeoff.v2+10, total_to_weight)
     FMGS_sys.data.pred.takeoff.time_to_vacc = time
     FMGS_sys.data.pred.takeoff.dist_to_vacc = dist
+    fuel_consumed = fuel_consumed + fuel_consumption * time
 
+    return fuel_consumed
 end
 
 function vertical_profile_climb_update()
 
+    local PERC_ACCELERATION = 0.6   -- (1-this) is the energy left for climbing when speed target is not matched
 
+    local curr_altitude = FMGS_sys.perf.takeoff.acc
+    local curr_spd      = FMGS_sys.perf.takeoff.v2+10
+
+    for leg in ipairs(FMGS_sys.fpln.active.apts.dep_sid)
+        local thrust_available = predict_climb_thrust_net_avail(ias,altitude)
+        -- ...
+    end
 
 end
 
@@ -165,6 +207,7 @@ function vertical_profile_update()
     end
 
     -- Ok, we have everything, let's go!
-    vertical_profile_takeoff_update()
+    local fuel_consumed = vertical_profile_takeoff_update() -- In Kgs
+    FMGS_sys.data.pred.takeoff.total_fuel_kgs = fuel_consumed
 
 end
