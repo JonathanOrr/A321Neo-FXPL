@@ -832,8 +832,8 @@ local function update_startup()
 
     local eng_1_air_cond = (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1)
     local eng_2_air_cond = (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2)
-    local does_engine_1_can_start_or_crank = not ENG.dyn[1].is_avail and eng_1_air_cond and ENG.dyn[1].is_fadec_pwrd == 1 and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
-    local does_engine_2_can_start_or_crank = not ENG.dyn[2].is_avail and eng_2_air_cond and ENG.dyn[2].is_fadec_pwrd == 1 and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
+    local does_engine_1_can_start_or_crank = not ENG.dyn[1].is_avail and eng_1_air_cond and ENG.dyn[1].is_fadec_pwrd and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
+    local does_engine_2_can_start_or_crank = not ENG.dyn[2].is_avail and eng_2_air_cond and ENG.dyn[2].is_fadec_pwrd and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
 
     if get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
         does_engine_1_can_start_or_crank = false -- No fadec? No start
@@ -1036,8 +1036,8 @@ local function update_continuous_ignition()
     -- - Engine flameout
     -- - Manually move the mode selection to IGN but after start!
 
-    local cond_1 = (get(Engine_1_master_switch) == 1 and ENG.dyn[1].is_failed == 1)
-                or (get(Engine_2_master_switch) == 1 and ENG.dyn[2].is_failed == 1)
+    local cond_1 = (get(Engine_1_master_switch) == 1 and ENG.dyn[1].is_failed)
+                or (get(Engine_2_master_switch) == 1 and ENG.dyn[2].is_failed)
     
     local cond_2 = ENG.dyn[1].is_avail and ENG.dyn[2].is_avail and get(Engine_mode_knob) == 1 and already_back_to_norm
 
