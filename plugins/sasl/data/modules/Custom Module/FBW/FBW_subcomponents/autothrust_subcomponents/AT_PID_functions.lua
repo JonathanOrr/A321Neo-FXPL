@@ -49,8 +49,8 @@ local function cap_integral_limit(n1, int_sum)
 
     bottom_limit = 0.64*(n1-13.5)/100
     bottom_limit = math.max(0.035, bottom_limit)
-    up_limit = math.log(n1/100+0.11)+1.04
-    up_limit = math.max(0.25, up_limit)
+    up_limit = math.log(n1/100+0.11)+1.02
+    up_limit = math.max(0.15, up_limit)
     int_sum = math.min(int_sum, up_limit)
     int_sum = math.max(int_sum, bottom_limit)
     return int_sum
