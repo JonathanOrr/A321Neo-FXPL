@@ -321,14 +321,14 @@ end
 
 local function update_n2()
     local eng_1_n1 = ENG.dyn[1].n1
-    if eng_1_n1 > 5 and get(Engine_1_master_switch) == 1  then
+    if eng_1_n1 > 5  then
         ENG.dyn[1].n2 = Set_linear_anim_value(ENG.dyn[1].n2, eng_model_get_N2(1), 0, 130, 10)
     else
         ENG.dyn[1].n2 = Set_linear_anim_value(ENG.dyn[1].n2, eng_N2_off[1], 0, 130, 10)
     end
 
     local eng_2_n1 = ENG.dyn[2].n1
-    if eng_2_n1 > 5 and get(Engine_2_master_switch) == 1  then
+    if eng_2_n1 > 5  then
         ENG.dyn[2].n2 = Set_linear_anim_value(ENG.dyn[2].n2, eng_model_get_N2(2), 0, 130, 10)
     else
         ENG.dyn[2].n2 = Set_linear_anim_value(ENG.dyn[2].n2, eng_N2_off[2], 0, 130, 10)
