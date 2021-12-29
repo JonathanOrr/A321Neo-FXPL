@@ -359,7 +359,7 @@ local function update_egt()
         local computed_egt = ENG.data.n1_to_egt_fun(eng_1_n1, get(OTA))
         computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 1) * get(eng_1_n1)/90 * math.random())
         computed_egt = computed_egt + egt_eng_1_offset + random_pool_1*2 -- Let's add a bit of randomness
-        ENG.dyn[1].egt = Set_linear_anim_value(ENG.dyn[1].egt, computed_egt, -50, 1500, 70)
+        ENG.dyn[1].egt = Set_linear_anim_value(ENG.dyn[1].egt, computed_egt, -50, 1500, 50)
     else
         -- engine off, starting or shutting down
         -- TODO switching to this else branch lead to small jump to higher EGT value (about 30-40 °C) if no auto-start
@@ -378,7 +378,7 @@ local function update_egt()
         local computed_egt = ENG.data.n1_to_egt_fun(eng_2_n1, get(OTA))
         computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 2) * get(eng_1_n1)/90 * math.random())
         computed_egt = computed_egt + egt_eng_2_offset + random_pool_2*2 -- Let's add a bit of randomness
-        ENG.dyn[2].egt = Set_linear_anim_value(ENG.dyn[2].egt, computed_egt, -50, 1500, 70)
+        ENG.dyn[2].egt = Set_linear_anim_value(ENG.dyn[2].egt, computed_egt, -50, 1500, 50)
     else
         local current_egt = ENG.dyn[2].egt
         if eng_EGT_off[2] > current_egt and get(Engine_2_master_switch) == 0  then eng_EGT_off[2] = current_egt end -- workaround to avoid jump up
@@ -944,7 +944,8 @@ local function update_startup()
         
         -- Set FF to zero, drop EGT and N1 TODO check drop behavior based on SIM videos
         if eng_EGT_off[1] == EGT_MAGIC then eng_EGT_off[1] = ENG.dyn[1].egt end -- otherwise in auto start case we will have a big jump since eng_EGT_off is not set before
-        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, eng_EGT_off[1] > 100 and 10 or 3)
+        local egt_speed = math.min(10, (eng_EGT_off[1]-get(OTA))/100)
+        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, egt_speed)
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
         igniter_eng[1] = 0
@@ -958,7 +959,8 @@ local function update_startup()
         
         -- Set EGT and FF to zero
         if eng_EGT_off[2] == EGT_MAGIC then eng_EGT_off[2] = ENG.dyn[2].egt end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
-        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, eng_EGT_off[2] > 100 and 10 or 3)
+        local egt_speed = math.min(10, (eng_EGT_off[2]-get(OTA))/20)
+        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, egt_speed)
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
         igniter_eng[2] = 0

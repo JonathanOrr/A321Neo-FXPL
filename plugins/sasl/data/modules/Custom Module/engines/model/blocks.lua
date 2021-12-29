@@ -68,7 +68,8 @@ end
 
 local function thrust_spool_derivative(n1)
     -- Interpolated from here: https://www.youtube.com/watch?v=7gIgC5BH82o
-
+    -- TODO: This should be different per engine type (but we have no data other
+    -- than that video)
     if n1 < 25 then
         n1 = 25
     elseif n1 > 81 then
