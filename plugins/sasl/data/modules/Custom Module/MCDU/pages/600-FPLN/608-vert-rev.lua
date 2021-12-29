@@ -30,7 +30,8 @@ function THIS_PAGE:render(mcdu_data)
         mcdu_data.page_data[608] = {}
     end
 
-    subject_id = mcdu_data.vert_rev_subject.data.id
+    local subject = mcdu_data.vert_rev_subject
+    local subject_id = subject.data.id
 
     assert(subject_id)
 
@@ -41,12 +42,27 @@ function THIS_PAGE:render(mcdu_data)
         {txt="             " .. subject_id, col=main_col, size=MCDU_LARGE}
     })
 
+    if subject.data.point_type == POINT_TYPE_DEP_SID
+       or subject.data.point_type == POINT_TYPE_DEP_TRANS then
+        mcdu_data.page_data[608].is_clb_or_desc = 1  -- CLIMB
+    elseif subject.data.point_type == POINT_TYPE_ARR_APPR
+        or subject.data.point_type == POINT_TYPE_ARR_STAR
+        or subject.data.point_type == POINT_TYPE_ARR_VIA
+        or subject.data.point_type == POINT_TYPE_ARR_TRANS
+    then
+        mcdu_data.page_data[608].is_clb_or_desc = 2  -- DESCENT
+    elseif subject.data.pred and subject.data.pred.is_climb then
+        mcdu_data.page_data[608].is_clb_or_desc = 1  -- CLIMB
+    elseif subject.data.pred and subject.data.pred.is_descent then
+        mcdu_data.page_data[608].is_clb_or_desc = 2  -- DESCENT
+    end
+
     
     -------------------------------------
     -- LINE 1
     -------------------------------------
 
-    self:set_line(mcdu_data, MCDU_LEFT, 1, " EFOB=---.-  EXTRA=---.-", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_LEFT, 1, " EFOB".. mcdu_format_force_to_small("=").. "---.-  EXTRA=---.-", MCDU_SMALL)
 
     -------------------------------------
     -- RIGHT 2
@@ -54,10 +70,25 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "RTA>", MCDU_LARGE)
 
     -------------------------------------
-    -- LEFT 3
+    -- LEFT 2
     -------------------------------------
 
+    if mcdu_data.page_data[608].is_clb_or_desc > 0 then
+        if mcdu_data.page_data[608].is_clb_or_desc == 1 then
+            self:set_line(mcdu_data, MCDU_LEFT, 2, "CLB SPD LIM", MCDU_SMALL)
+        elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
+            self:set_line(mcdu_data, MCDU_LEFT, 2, "DES SPD LIM", MCDU_SMALL)
+        end
 
+        if FMGS_sys.data.init.alt_speed_limit_climb then
+            -- ex: 210/5000 or 210/50.
+            local text = FMGS_sys.data.init.alt_speed_limit_climb[1].."/"..FMGS_sys.data.init.alt_speed_limit_climb[2]
+            text = (FMGS_sys.data.init.alt_speed_limit_climb[1] == 250 and FMGS_sys.data.init.alt_speed_limit_climb[2] == 10000) and mcdu_format_force_to_small(text) or text
+            self:set_line(mcdu_data, MCDU_LEFT, 2, text, MCDU_LARGE, ECAM_MAGENTA)
+        else
+            self:set_line(mcdu_data, MCDU_LEFT, 2, "[  ]/[     ]", MCDU_LARGE, ECAM_MAGENTA)
+        end
+    end
     -------------------------------------
     -- RIGHT 3
     -------------------------------------
@@ -82,6 +113,33 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE)
 end
 
+function THIS_PAGE:L2(mcdu_data)
+    if mcdu_data.clr then   -- A clear is requested
+        if mcdu_data.page_data[608].is_clb_or_desc == 1 then
+            FMGS_sys.data.init.alt_speed_limit_climb = nil
+            return
+        elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
+            FMGS_sys.data.init.alt_speed_limit_descent = nil
+            return
+        end
+    else
+        local a, b = mcdu_get_entry(mcdu_data, {"!!!"}, {"!!!!!","!!!!", "!!!","!!"}, false)
+        b = tonumber(b)
+        if b < 1000 then
+            b = b * 100
+        end
+        local new_limit = {tonumber(a), b}
+        if mcdu_data.page_data[608].is_clb_or_desc == 1 then
+            FMGS_sys.data.init.alt_speed_limit_climb = new_limit
+            return
+        elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
+            FMGS_sys.data.init.alt_speed_limit_descent = new_limit
+            return
+        end
+    end
+
+    MCDU_Page:L2(mcdu_data) -- Error
+end
 function THIS_PAGE:L6(mcdu_data)
     mcdu_open_page(mcdu_data, 600)
 end

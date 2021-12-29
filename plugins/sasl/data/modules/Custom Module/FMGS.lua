@@ -44,7 +44,9 @@ FMGS_sys.data = {
             block_fuel = nil, -- Existing known fuel load
             rsv_fuel_perc = 5.0,
             rsv_fuel      = nil,
-        }
+        },
+        alt_speed_limit_climb   = {250, 10000},
+        alt_speed_limit_descent = {250, 10000}
     },
     
     pred = {    -- Various predictions
@@ -83,7 +85,7 @@ FMGS_sys.fpln = {
         -- {discontinuity = true}
 
         legs = {
---            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333},
+--            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333, pred = { is_climb=false, is_descent=false }},
             {discontinuity = true}
         },
         
