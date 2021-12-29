@@ -67,7 +67,15 @@ function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
 end
 
 local function thrust_spool_derivative(n1)
-    return math.max(0.5,-21.639 + 1.256 * n1 - 0.010391 * n1^2);
+    -- Interpolated from here: https://www.youtube.com/watch?v=7gIgC5BH82o
+
+    if n1 < 25 then
+        n1 = 25
+    elseif n1 > 81 then
+        n1 = 81
+    end
+    local base = 331.81 - 40.378 * n1 + 1.8311 * n1^2 -0.038558 * n1^3 + 0.00038644 * n1 ^4 -1.4955e-06 * n1^5;
+    return base;
 end
 
 local function delay_thrust(eng_state, thrust_target, T_max, N1_base_max)
