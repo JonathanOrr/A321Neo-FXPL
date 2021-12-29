@@ -502,6 +502,28 @@ local function trigger_lat_rev(mcdu_data, id)
     return false
 end
 
+local function trigger_vert_rev(mcdu_data, id)
+    if mcdu_data.page_data[600].ref_lines and mcdu_data.page_data[600].ref_lines[id] then
+
+        local obj = mcdu_data.page_data[600].ref_lines[id]
+
+        if obj.invalid then
+            return false
+        end
+
+        if mcdu_data.page_data[600].curr_fpln.apts.arr and obj.id == mcdu_data.page_data[600].curr_fpln.apts.arr.id then
+            return false
+        end
+
+        mcdu_data.vert_rev_subject = {}
+        mcdu_data.vert_rev_subject.data = obj
+        mcdu_open_page(mcdu_data, 608)
+        return true
+    end
+    return false
+end
+
+
 function THIS_PAGE:L1(mcdu_data)
     if mcdu_data.page_data[600].curr_idx == 1 then
         if mcdu_data.page_data[600].curr_fpln.apts.dep then
@@ -522,7 +544,6 @@ function THIS_PAGE:L1(mcdu_data)
     end
     
 end
-
 
 function THIS_PAGE:L2(mcdu_data)
     if not trigger_lat_rev(mcdu_data, 2) then
@@ -556,6 +577,42 @@ function THIS_PAGE:L6(mcdu_data)
         trigger_lat_rev_apt_dest(mcdu_data)
     else
         MCDU_Page:L6(mcdu_data) -- ERROR
+    end
+end
+
+
+function THIS_PAGE:R1(mcdu_data)
+    if mcdu_data.page_data[600].curr_idx == 1 then
+        MCDU_Page:R1(mcdu_data) -- Error
+    else
+        if not trigger_vert_rev(mcdu_data, 1) then
+            MCDU_Page:R1(mcdu_data) -- Error
+            return
+        end
+    end
+end
+
+function THIS_PAGE:R2(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 2) then
+        MCDU_Page:R2(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:R3(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 3) then
+        MCDU_Page:R3(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:R4(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 4) then
+        MCDU_Page:R4(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:R5(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 5) then
+        MCDU_Page:R5(mcdu_data) -- Error
     end
 end
 
