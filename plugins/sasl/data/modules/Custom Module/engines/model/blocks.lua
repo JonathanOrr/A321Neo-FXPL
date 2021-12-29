@@ -103,6 +103,7 @@ function thrust_spool(eng_state, T_desired, T_penalty, T_max, N1_base_max, engin
         N1_spooled = math.max(18.5, N1_spooled) -- N1 cannot be lower than 18.5 if the engine is running 
     else
         if N1_spooled <= 15 then
+            -- Engine is shutdowning...
             N1_spooled = Set_linear_anim_value(eng_state.N1_spooled, 0, 0, 100, 1)
         end
     end

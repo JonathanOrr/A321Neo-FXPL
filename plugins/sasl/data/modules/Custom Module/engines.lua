@@ -340,10 +340,14 @@ local function update_nfan()
     ENG.dyn[1].nfan = eng_model_get_NFAN(1)
     ENG.dyn[2].nfan = eng_model_get_NFAN(2)
 
-    local angle_1_delta = ENG.dyn[1].nfan / 60 * 360
-    local angle_2_delta = ENG.dyn[2].nfan / 60 * 360
-    set(Eng_fan_angle, get(Eng_fan_angle, 1) + angle_1_delta, 1)
-    set(Eng_fan_angle, get(Eng_fan_angle, 2) + angle_2_delta, 2)
+    local rpm_fan_1 = ENG.dyn[1].nfan * ENG.data.fan_n1_rpm_max / 100
+    local rpm_fan_2 = ENG.dyn[2].nfan * ENG.data.fan_n1_rpm_max / 100
+
+    local angle_1_delta = (rpm_fan_1 / 60 * 360) * get(DELTA_TIME)
+    local angle_2_delta = (rpm_fan_2 / 60 * 360) * get(DELTA_TIME)
+
+    set(Eng_fan_angle, (get(Eng_fan_angle, 1) + angle_1_delta) % 360, 1)
+    set(Eng_fan_angle, (get(Eng_fan_angle, 2) + angle_2_delta) % 360, 2)
 
 end
 
@@ -415,6 +419,7 @@ local function update_avail()
     if ENG.dyn[1].n1 > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_1_FAILURE) == 0 then
         if not ENG.dyn[1].is_avail then
             set(EWD_engine_avail_ind_start, get(TIME), 1)
+            set(Eng_is_starting, 0, 1)
             ENG.dyn[1].is_avail = true
         end
     else
@@ -428,6 +433,7 @@ local function update_avail()
     if ENG.dyn[2].n1 > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_2_FAILURE) == 0 then
         if not ENG.dyn[2].is_avail then
             set(EWD_engine_avail_ind_start, get(TIME), 2)
+            set(Eng_is_starting, 0, 2)
             ENG.dyn[2].is_avail = true
         end
     else
@@ -551,15 +557,18 @@ local function perform_crank_procedure(eng, wet_cranking)
     local starting_duration = get(TIME)- time_current_startup[eng]
 
     local target_n2
-    if starting_duration < 3.82 then
-        target_n2 = 0   -- polynomal will return negative values below that
+    if starting_duration < 5 then
+        -- Let's start more slowly
+        target_n2 = 1 / (5-starting_duration)
     elseif starting_duration > 35 then
         target_n2 = ENG_N2_LOW_CRANK - random_pool_hf * 0.4
     else
         target_n2 = ENG.data.n2_spoolup_fun(starting_duration)  -- this is ok only for low cranking
     end
-    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], target_n2, 0, ENG.data.max_n2, 70)
+    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], target_n2, 0, ENG.data.max_n2, 10)
     
+    eng_model_enforce_n2(eng, eng_N2_off[eng])
+
     -- Handle  EGT during cranking
     -- during initial startup we MUST use OAT as target EGT here, otherwise EGT will increase without FF
     -- when in a hot restart situation where EGT is still above OAT we decrease to OAT TODO what in high altitudes with big delta t?
@@ -620,7 +629,8 @@ local function perform_starting_procedure_follow_n2(eng)
 
                 -- Let's compute the new N2
                 eng_N2_off[eng] = eng_N2_off[eng] + ENG.data.startup.n2[i].n2_increase_per_sec * get(DELTA_TIME)
-                    
+                eng_model_enforce_n2(eng, eng_N2_off[eng])
+
                 -- And let's compute the EGT based on percent of progress in phase TODO separate engine type specific EGT, e.g. EGT drop as of PW SIL 013
                 perc = (eng_N2_off[eng] - ENG.data.startup.n2[i].n2_start) / (ENG.data.startup.n2[i+1].n2_start - ENG.data.startup.n2[i].n2_start)
                 if fuelflow > 0 then
@@ -647,7 +657,6 @@ local function perform_starting_procedure_follow_n1(eng)
         
         -- Get the current N1, but it can't be zero 
         local curr_N1 = math.max(math.max(eng_N1_off[eng],2), ENG.dyn[eng].n1)
-        
         if curr_N1 < ENG.data.startup.n1[i+1].n1_set then
             -- We have found the correct row in phase table
 
@@ -687,6 +696,8 @@ end
 local function perform_starting_procedure(eng, inflight_restart)
     -- Note: startup-procedure is only called when cooling has been already done or not required
 
+    set(Eng_is_starting, 1, eng)
+
     if eng_N2_off[eng] < ENG_N2_CRANK_MARGIN and not inflight_restart then
         -- Phase 1: Ok let's start by cranking the engine to start rotation
         perform_crank_procedure(eng, false)
@@ -696,7 +707,7 @@ local function perform_starting_procedure(eng, inflight_restart)
     if inflight_restart and eng_N2_off[eng] < ENG.data.startup.n2[#ENG.data.startup.n2].n2_start then
         -- v is different, let's skip the first phase
         eng_N2_off[eng] = ENG.data.startup.n2[#ENG.data.startup.n2].n2_start
-        eng_N1_off[eng] = Eng.dyn[eng].n1
+        eng_N1_off[eng] = ENG.dyn[eng].n1
     end
     
     -- If the N2 powered by bleed so far is larger than 10, then we can start the real startup procedure
@@ -712,6 +723,7 @@ local function perform_starting_procedure(eng, inflight_restart)
         perform_starting_procedure_follow_n1(eng)
     else
         -- Yeeeh engine ready
+        set(Eng_is_starting, 0, eng)
     end
     
 end
@@ -817,6 +829,11 @@ end
 
 
 local function update_startup()
+
+    -- These datarefs will be set later in the related subfunctions
+    -- it is used only in engine model and FMOD, do not use in this file
+    set(Eng_is_starting, 0, 1)
+    set(Eng_is_starting, 0, 2)
 
     if ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then return end
 
@@ -1001,33 +1018,22 @@ local function update_buttons_datarefs()
     set(Eng_Dual_Cooling, dual_cooling_switch and 1 or 0)
 end
 
-local function update_time_since_shutdown()
-    if ENG.dyn[1].egt < 100 then
-        if time_last_shutdown[1] == 0 and get(Engine_1_master_switch) == 0 then
-            -- only when really in shutdown process otherwise cooling may appear again during startup after cranking/cooling
-            time_last_shutdown[1] = get(TIME)
-            time_current_startup[1]  = -1
-            initial_oil_qty[1] = initial_oil_qty[1] - used_oil_qty[1] -- we must take used qty into account for next start
+local function update_time_since_shutdown(eng)
+    if ENG.dyn[eng].egt < 100 then
+        if (eng == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 0 then
+            time_current_startup[eng]  = -1
+            if time_last_shutdown[eng] == 0 then
+                -- only when really in shutdown process otherwise cooling may appear again during startup after cranking/cooling
+                time_last_shutdown[eng] = get(TIME)
+                initial_oil_qty[eng] = initial_oil_qty[eng] - used_oil_qty[eng] -- we must take used qty into account for next start
+            end
         end
     else
         -- init cooling requirement
-        cooling_has_cooled[1] = false
-        cooling_left_time[1] = COOLING_REQUIRED_MAGIC -- mark with cooling is required flag
-        time_last_shutdown[1] = 0
+        cooling_has_cooled[eng] = false
+        cooling_left_time[eng] = COOLING_REQUIRED_MAGIC -- mark with cooling is required flag
+        time_last_shutdown[eng] = 0
     end 
-
-    if ENG.dyn[2].egt < 100  then
-        if time_last_shutdown[2] == 0 and get(Engine_2_master_switch) == 0 then
-            time_last_shutdown[2] = get(TIME)
-            time_current_startup[2]  = -1
-            initial_oil_qty[2] = initial_oil_qty[2] - used_oil_qty[2]
-        end
-    else
-        cooling_has_cooled[2] = false
-        cooling_left_time[2] = COOLING_REQUIRED_MAGIC
-        time_last_shutdown[2] = 0
-    end 
-
 
 end
 
@@ -1286,7 +1292,8 @@ function update()
     update_vibrations()
     
     update_auto_start()
-    update_time_since_shutdown()
+    update_time_since_shutdown(1)
+    update_time_since_shutdown(2)
     update_continuous_ignition()
 
     update_oil_qty()

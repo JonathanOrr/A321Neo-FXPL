@@ -98,7 +98,7 @@ local function draw_img_over(engine)
     sasl.gl.drawWideLine(offset+210, 490, offset+210, 380, 2, {0,.6,.9})
     sasl.gl.drawWideLine(offset+210, 380, offset+250, 380, 2, {0,.6,.9})
     sasl.gl.drawText(Font_B612MONO_regular, offset+260, 375, "  N2 = " .. Fwd_string_fill(""..Round_fill(ENG.dyn[engine].n2, 2), " ", 6) .. " %", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
-    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 360, "       " .. Fwd_string_fill(""..math.floor(ENG.dyn[engine].n2 * ENG.data.fan_n1_rpm_max / 100), " ", 4) .. " RPM", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
+    sasl.gl.drawText(Font_B612MONO_regular, offset+260, 360, "       " .. Fwd_string_fill(""..math.floor(ENG.dyn[engine].n2 * ENG.data.fan_n2_rpm_max / 100), " ", 4) .. " RPM", 12, false, false, TEXT_ALIGN_LEFT, {0,.6,.9})
 
 end
 

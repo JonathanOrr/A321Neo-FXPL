@@ -38,6 +38,12 @@ function configure_pw1133g()
             return n1 / 3.0625
         end,
         
+        n2_to_n1_fun = function(n2)
+            -- Needed for startup procedure
+            -- MUST BE the inverse of n1_to_n2_fun
+            return math.exp((n2 + 2.6492) / 22.1036)
+        end,
+
         n1_to_egt_fun = function(n1, oat)
             return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (oat-6) *2
         end,
@@ -79,10 +85,11 @@ function configure_pw1133g()
 
         startup = {
             n2 = {
-                -- n2_start: start point after which the element is considered
+                -- n2_start: time point after which the element is considered
                 -- n2_increase_per_sec: N2 is increasing this value each second
                 -- fuel_flow: the fuel flow to use in this phase (static)
                 -- egt: the value for EGT at the beginning of this phase (it will increase towards the next value)
+                -- NOTE: this is valid starts after cranking (>=~10 N1)!
                 {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   egt=0}, -- egt 0 lead to OAT in display
                 {n2_start = 10,   n2_increase_per_sec = 1.5, fuel_flow = 0,    egt=0},
                 {n2_start = 16.2, n2_increase_per_sec = 1.5, fuel_flow = 120,  egt=0}, -- EGT can increase only with fuel

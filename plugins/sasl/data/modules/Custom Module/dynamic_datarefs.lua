@@ -303,7 +303,8 @@ Eng_N1_max_detent_flex  = createGlobalPropertyf("a321neo/dynamics/engines/n1_max
 Eng_1_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_1", 0, false, true, false)
 Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_2", 0, false, true, false)
 
-Eng_fan_angle = createGlobalPropertyfa("a321neo/dynamics/engines/fan_angle", 2) -- For blender model 0-359
+Eng_fan_angle   = createGlobalPropertyfa("a321neo/dynamics/engines/fan_angle", 2) -- For blender model 0-359
+Eng_is_starting = createGlobalPropertyia("a321neo/dynamics/engines/is_starting", 2) -- For FMOD boolean 1/0
 
 -- Engine startup config stuff
 ENG_config_cooling_time = createGlobalPropertyi("a321neo/config/eng/initial_cooling", 0, false, true, false)
@@ -614,6 +615,8 @@ Flightmodel_TOT_NRM_FORCE    = globalProperty("sim/flightmodel/forces/fnrml_tota
 Flightmodel_LIFT = globalProperty("sim/flightmodel/forces/lift_path_axis")
 Flightmodel_DRAG = globalProperty("sim/flightmodel/forces/drag_path_axis")
 Flightmodel_SIDE = globalProperty("sim/flightmodel/forces/side_path_axis")
+
+Flightmodel_mach = globalProperty("sim/flightmodel/misc/machno")	-- Mach
 
 Filtered_CA_AoA =        createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_capt_AoA", 0, false, true, false)
 Filtered_FO_AoA = 	     createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_fo_AoA", 0, false, true, false)
