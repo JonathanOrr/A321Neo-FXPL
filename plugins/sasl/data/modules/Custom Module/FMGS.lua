@@ -85,8 +85,11 @@ FMGS_sys.fpln = {
         -- {discontinuity = true}
 
         legs = {
---            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333, pred = { is_climb=false, is_descent=false }},
-            {discontinuity = true}
+            {ptr_type = FMGS_PTR_WPT, id="LAGEN", lat=44.394166667, lon=8.498055556, pred = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="ANAKI", lat=44.201111111, lon=8.725555556, pred = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="IXITO", lat=44.134722222, lon=8.803611111, pred = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="UNITA", lat=43.944444444, lon=9.025000000, pred = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="TIDKA", lat=43.800000000, lon=9.191944444, pred = { is_climb=false, is_descent=false }},
         },
         
         
