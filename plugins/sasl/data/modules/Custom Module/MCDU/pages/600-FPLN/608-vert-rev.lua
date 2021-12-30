@@ -100,7 +100,7 @@ function THIS_PAGE:render(mcdu_data)
     if subject.data.point_type ~= POINT_TYPE_PSUEDO then
         self:set_line(mcdu_data, MCDU_LEFT, 3, " SPD CSTR", MCDU_SMALL)
         if subject.data.cstr_speed_type and subject.data.cstr_speed_type == CIFP_CSTR_SPD_BELOW then
-            -- The FMS speed limit is displayed here only if it's a BELOW constrint,
+            -- The FMS speed limit is displayed here only if it's a BELOW constraint,
             -- otherwise is not showed
             self:set_line(mcdu_data, MCDU_LEFT, 3, subject.data.cstr_speed, MCDU_LARGE, ECAM_BLUE)
         else

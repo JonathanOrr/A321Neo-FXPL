@@ -192,6 +192,7 @@ end
 function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
+    local last_spd_cstr_value = nil
 
     for i,x in ipairs(list_messages) do
 
@@ -199,9 +200,11 @@ function THIS_PAGE:render_list(mcdu_data)
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_discontinuity(mcdu_data, line_id)
             end, x)
+            last_spd_cstr_value = nil
         elseif x.point_type == nil then
              -- NOP -- This is normal: in some cases we add a non existent line
                     -- to the array (see prepare_list)
+            last_spd_cstr_value = nil
         elseif x.point_type ~= POINT_TYPE_LEG then
             local name, proc = cifp_convert_leg_name(x)
             x.id = name -- This is necessary for the LAT REV page
@@ -211,7 +214,17 @@ function THIS_PAGE:render_list(mcdu_data)
             end
 
             local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
-            local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
+            local spd_cstr = ""
+            if x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
+                spd_cstr  = tostring(x.cstr_speed)
+                if last_spd_cstr_value == spd_cstr then
+                    spd_cstr = "\""
+                else
+                    last_spd_cstr_value = spd_cstr
+                end 
+            else
+                last_spd_cstr_value = nil
+            end
             local distance = x.computed_distance
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
@@ -220,7 +233,17 @@ function THIS_PAGE:render_list(mcdu_data)
             local distance = x.computed_distance
             local proc = x.airway_name or ""
             local alt_cstr, alt_cstr_col = nil, nil
-            local spd_cstr = nil
+            local spd_cstr = ""
+            if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
+                spd_cstr  = tostring(x.cstr_speed)
+                if last_spd_cstr_value == spd_cstr then
+                    spd_cstr = "\""
+                else
+                    last_spd_cstr_value = spd_cstr
+                end 
+            else
+                last_spd_cstr_value = nil
+            end
             local name = x.id or "(MAN)"
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
