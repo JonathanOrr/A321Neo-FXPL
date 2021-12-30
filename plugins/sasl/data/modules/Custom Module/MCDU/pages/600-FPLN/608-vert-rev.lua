@@ -55,8 +55,9 @@ function THIS_PAGE:render(mcdu_data)
         mcdu_data.page_data[608].is_clb_or_desc = 1  -- CLIMB
     elseif subject.data.pred and subject.data.pred.is_descent then
         mcdu_data.page_data[608].is_clb_or_desc = 2  -- DESCENT
+    else
+        mcdu_data.page_data[608].is_clb_or_desc = 0
     end
-
     
     -------------------------------------
     -- LINE 1
@@ -75,9 +76,9 @@ function THIS_PAGE:render(mcdu_data)
 
     if mcdu_data.page_data[608].is_clb_or_desc > 0 then
         if mcdu_data.page_data[608].is_clb_or_desc == 1 then
-            self:set_line(mcdu_data, MCDU_LEFT, 2, "CLB SPD LIM", MCDU_SMALL)
+            self:set_line(mcdu_data, MCDU_LEFT, 2, " CLB SPD LIM", MCDU_SMALL)
         elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
-            self:set_line(mcdu_data, MCDU_LEFT, 2, "DES SPD LIM", MCDU_SMALL)
+            self:set_line(mcdu_data, MCDU_LEFT, 2, " DES SPD LIM", MCDU_SMALL)
         end
 
         if FMGS_sys.data.init.alt_speed_limit_climb then
@@ -94,9 +95,18 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
 
     -------------------------------------
-    -- LEFT 4
+    -- LEFT 3
     -------------------------------------
-
+    if subject.data.point_type ~= POINT_TYPE_PSUEDO then
+        self:set_line(mcdu_data, MCDU_LEFT, 3, " SPD CSTR", MCDU_SMALL)
+        if subject.data.cstr_speed_type and subject.data.cstr_speed_type == CIFP_CSTR_SPD_BELOW then
+            -- The FMS speed limit is displayed here only if it's a BELOW constrint,
+            -- otherwise is not showed
+            self:set_line(mcdu_data, MCDU_LEFT, 3, subject.data.cstr_speed, MCDU_LARGE, ECAM_BLUE)
+        else
+            self:set_line(mcdu_data, MCDU_LEFT, 3, "*[   ]", MCDU_LARGE, ECAM_BLUE)
+        end
+    end
 
     -------------------------------------
     -- RIGHT 4
@@ -110,7 +120,11 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 5, "<WIND", MCDU_LARGE)
     self:set_line(mcdu_data, MCDU_RIGHT, 5, "STEP ALTS>", MCDU_LARGE)
 
-    self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE)
+    if mcdu_data.page_data[608].ask_clb_des then
+        self:set_line(mcdu_data, MCDU_LEFT, 6, "*CLB      " .. mcdu_format_force_to_small("or").. "      DES*", MCDU_LARGE, ECAM_ORANGE)
+    else
+        self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE)
+    end
 end
 
 function THIS_PAGE:L2(mcdu_data)
@@ -125,23 +139,83 @@ function THIS_PAGE:L2(mcdu_data)
     else
         local a, b = mcdu_get_entry(mcdu_data, {"!!!"}, {"!!!!!","!!!!", "!!!","!!"}, false)
         b = tonumber(b)
-        if b < 1000 then
-            b = b * 100
-        end
-        local new_limit = {tonumber(a), b}
-        if mcdu_data.page_data[608].is_clb_or_desc == 1 then
-            FMGS_sys.data.init.alt_speed_limit_climb = new_limit
-            return
-        elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
-            FMGS_sys.data.init.alt_speed_limit_descent = new_limit
-            return
+        a = tonumber(a)
+        if a~=nil and b~=nil then
+            if b < 1000 then
+                b = b * 100
+            end
+            local new_limit = {tonumber(a), b}
+            if mcdu_data.page_data[608].is_clb_or_desc == 1 then
+                FMGS_sys.data.init.alt_speed_limit_climb = new_limit
+                return
+            elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
+                FMGS_sys.data.init.alt_speed_limit_descent = new_limit
+                return
+            end
         end
     end
 
     MCDU_Page:L2(mcdu_data) -- Error
 end
+
+function THIS_PAGE:L3(mcdu_data)
+    local subject = mcdu_data.vert_rev_subject
+    if mcdu_data.clr then   -- A clear is requested
+        subject.data.cstr_speed_type = CIFP_CSTR_SPD_NONE
+        mcdu_open_page(mcdu_data, 600)
+    else
+        local a = mcdu_get_entry(mcdu_data, {"!!!"}, false)
+        a = tonumber(a)
+        if a == nil then
+            MCDU_Page:L3(mcdu_data) -- Error
+            return
+        end
+
+        if mcdu_data.page_data[608].is_clb_or_desc > 0 then
+            subject.data.cstr_speed_type = CIFP_CSTR_SPD_BELOW
+            subject.data.cstr_speed = a
+            mcdu_open_page(mcdu_data, 600)
+        else
+            mcdu_data.page_data[608].ask_clb_des = true
+            mcdu_data.page_data[608].to_set_spd = {CIFP_CSTR_SPD_BELOW, a}
+        end
+    end
+
+
+end
+
+local function set_spd_cstr(mcdu_data, is_clb)
+    local subject = mcdu_data.vert_rev_subject
+    if mcdu_data.page_data[608].ask_clb_des then
+        subject.data.cstr_speed_type = mcdu_data.page_data[608].to_set_spd[1]
+        subject.data.cstr_speed = mcdu_data.page_data[608].to_set_spd[2]
+
+        if not subject.data.pred then
+            subject.data.pred = {}
+        end
+        if is_clb then
+            subject.data.pred.is_climb = true
+        else
+            subject.data.pred.is_descent = true
+        end
+        mcdu_data.page_data[608].ask_clb_des = false
+        return true
+    end
+    return false
+end
+
 function THIS_PAGE:L6(mcdu_data)
+    set_spd_cstr(mcdu_data, true)
     mcdu_open_page(mcdu_data, 600)
 end
+
+function THIS_PAGE:R6(mcdu_data)
+    if set_spd_cstr(mcdu_data, false) then
+        mcdu_open_page(mcdu_data, 600)
+    else
+        MCDU_Page:R6(mcdu_data) -- Error
+    end
+end
+
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

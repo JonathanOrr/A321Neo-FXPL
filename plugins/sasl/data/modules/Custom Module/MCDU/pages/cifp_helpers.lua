@@ -21,6 +21,7 @@ POINT_TYPE_ARR_TRANS     = 4
 POINT_TYPE_ARR_STAR      = 5
 POINT_TYPE_ARR_VIA       = 6
 POINT_TYPE_ARR_APPR      = 7
+POINT_TYPE_PSUEDO        = 8 -- Pseudo WPTs like T/C etc.
 
 function cifp_is_a_fix(x)
     assert(x)

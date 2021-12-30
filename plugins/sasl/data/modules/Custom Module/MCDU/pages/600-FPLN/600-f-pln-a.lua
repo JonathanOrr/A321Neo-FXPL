@@ -511,6 +511,10 @@ local function trigger_vert_rev(mcdu_data, id)
             return false
         end
 
+        if obj.discontinuity then
+            return false
+        end
+
         if mcdu_data.page_data[600].curr_fpln.apts.arr and obj.id == mcdu_data.page_data[600].curr_fpln.apts.arr.id then
             return false
         end
