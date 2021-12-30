@@ -122,6 +122,7 @@ function cifp_convert_alt_cstr(x)
 end
 
 function appr_type_char_to_idx(x)
+    assert(x~=nil)
     if x == CIFP_TYPE_APPR_MLS then
         return 1, "MLS"
     elseif x == CIFP_TYPE_APPR_ILS then
@@ -160,6 +161,10 @@ function dest_get_selected_appr_procedure()
         return nil
     end
     local _, type_str = appr_type_char_to_idx(appr_obj.type)
+    if type_str == nil then
+        logWarning("Approach procedure type is invalid: this shouldn't happen.")
+        return nil
+    end
     local rwy_name_with_suffix = appr_obj.proc_name:sub(2)
     local appr_name = type_str .. rwy_name_with_suffix
     return appr_name
