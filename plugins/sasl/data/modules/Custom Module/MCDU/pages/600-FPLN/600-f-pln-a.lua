@@ -241,6 +241,13 @@ function THIS_PAGE:render_list(mcdu_data)
                 else
                     last_spd_cstr_value = spd_cstr
                 end 
+            elseif x.cstr_speed_mach then
+                spd_cstr  = "." .. tostring(math.floor(x.cstr_speed_mach*100))
+                if last_spd_cstr_value == spd_cstr then
+                    spd_cstr = "\""
+                else
+                    last_spd_cstr_value = spd_cstr
+                end 
             else
                 last_spd_cstr_value = nil
             end

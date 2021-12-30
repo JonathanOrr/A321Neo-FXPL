@@ -63,7 +63,7 @@ function THIS_PAGE:render(mcdu_data)
     -- LINE 1
     -------------------------------------
 
-    self:set_line(mcdu_data, MCDU_LEFT, 1, " EFOB".. mcdu_format_force_to_small("=").. "---.-  EXTRA=---.-", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_LEFT, 1, mcdu_format_force_to_small(" EFOB").. "=" .. mcdu_format_force_to_small("---.-  EXTRA").. "=" .. mcdu_format_force_to_small("---.-"), MCDU_LARGE)
 
     -------------------------------------
     -- RIGHT 2
@@ -109,9 +109,16 @@ function THIS_PAGE:render(mcdu_data)
     end
 
     -------------------------------------
-    -- RIGHT 4
+    -- LEFT 4
     -------------------------------------
-
+    if subject.data.point_type == POINT_TYPE_LEG then
+        self:set_line(mcdu_data, MCDU_LEFT, 4, "MACH/START WPT", MCDU_SMALL)
+        if subject.data.cstr_speed_mach then
+            self:set_line(mcdu_data, MCDU_LEFT, 4, "." .. math.floor(100*subject.data.cstr_speed_mach) .. "/" .. subject_id, MCDU_LARGE, ECAM_BLUE)
+        else
+            self:set_line(mcdu_data, MCDU_LEFT, 4, " [ ]/" .. mcdu_format_force_to_small(subject_id), MCDU_LARGE, ECAM_BLUE)
+        end
+    end
 
     -------------------------------------
     -- LEFT / RIGHT 5
@@ -180,10 +187,35 @@ function THIS_PAGE:L3(mcdu_data)
             mcdu_data.page_data[608].to_set_spd = {CIFP_CSTR_SPD_BELOW, a}
         end
     end
-
-
 end
 
+function THIS_PAGE:L4(mcdu_data)
+
+    if mcdu_data.vert_rev_subject.data.point_type == POINT_TYPE_LEG then
+        if mcdu_data.clr then
+            mcdu_data.vert_rev_subject.data.cstr_speed_mach = nil
+            mcdu_open_page(mcdu_data, 600)
+            return
+        end
+
+        local a = mcdu_get_entry(mcdu_data, {"!!", ".!!", "!.!!"}, false)
+        a = tonumber(a)
+        if a then
+            if a >= 0.5 and a < 1 then
+                mcdu_data.vert_rev_subject.data.cstr_speed_mach = a
+                mcdu_open_page(mcdu_data, 600)
+                return
+            else
+                mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+                return
+            end
+        else
+            return
+        end
+    end
+
+    MCDU_Page:L3(mcdu_data) -- Error
+end
 local function set_spd_cstr(mcdu_data, is_clb)
     local subject = mcdu_data.vert_rev_subject
     if mcdu_data.page_data[608].ask_clb_des then
