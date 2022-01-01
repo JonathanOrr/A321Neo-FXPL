@@ -73,7 +73,7 @@ local function mcdu_eval_entries(entry, expected_formats)
     end
 end
 
-local function mcdu_parse_entry(entry, expected_format)
+function mcdu_parse_entry(entry, expected_format)
     local code = nil
 	local format_type = expected_format[1]
 
@@ -83,8 +83,12 @@ local function mcdu_parse_entry(entry, expected_format)
 		if string.sub(entry, 1, 2) == "FL" then
 			entry = string.sub(entry, 3, -1) -- get rid of FL
         else
-            entry = tostring(math.floor(tonumber(entry) / 100))
-		end
+            if tonumber(entry) then
+                entry = tostring(math.floor(tonumber(entry) / 100))
+            else
+                return "$invalid"
+            end
+        end
 	end
 	if format_type == "heading" then
 		format_type = "number"
