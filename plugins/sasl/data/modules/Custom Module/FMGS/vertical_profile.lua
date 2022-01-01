@@ -23,6 +23,13 @@ include("libs/speed_helpers.lua")
 include('libs/air_helpers.lua')
 
 -------------------------------------------------------------------------------
+-- Global variables
+-------------------------------------------------------------------------------
+local the_big_array = nil   -- Contains all the legs regardless of type
+local last_clb_idx  = nil
+local first_des_idx = nil
+
+-------------------------------------------------------------------------------
 -- Helper functions
 -------------------------------------------------------------------------------
 local function compute_vs(T,D,W, tas)
@@ -45,6 +52,98 @@ local function get_density_ratio(ref_alt)   -- Get density according to ISA
     local density = get_air_density(ref_alt, FMGS_sys.data.init.tropo, temp_sea_level, press_sea_level)
     density = density_to_ratio(density)
     return density
+end
+
+
+local function prepare_the_common_big_array_merge(array)
+    if not (array and array.legs) then
+        return
+    end
+    for i, leg in ipairs(array.legs) do
+        if not leg.discontinuity then
+            if leg.pred and not leg.pred.is_climb and not last_clb_idx then
+                last_clb_idx = #the_big_array
+            end
+            table.insert(the_big_array, leg)
+            if leg.pred and leg.pred.is_descent and not last_des_idx then
+                last_des_idx = #the_big_array
+            end
+        end
+    end
+end
+
+local function prepare_the_common_big_array()
+    the_big_array = {}
+    last_clb_idx = nil
+    last_des_idx = nil
+
+    prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.dep_sid)
+    prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.dep_trans)
+    prepare_the_common_big_array_merge(FMGS_sys.fpln.active)
+    prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_trans)
+    prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_star)
+    prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_via)
+    prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_appr)
+
+    -- Now I have to update the vertical constraints (CLIMB)
+    local last_alt_cstr = 999999 
+    if last_clb_idx and last_clb_idx > 0 then
+        for i=last_clb_idx,1,-1  do
+            if    the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_BELOW
+               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_AT 
+               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW
+            then
+                -- If altitude is Below or At (or the block) take it for the climb
+                local alt = the_big_array[i].cstr_altitude1
+                if the_big_array[i].cstr_altitude1_fl then
+                    alt = alt * 100
+                end
+                if alt < last_alt_cstr then
+                    last_alt_cstr = alt
+                end
+            end
+            if not the_big_array[i].pred then
+                the_big_array[i].pred = {}
+            end
+            the_big_array[i].pred.prop_clb_cstr = last_alt_cstr
+        end
+    end
+
+    -- Now I have to update the vertical constraints (DESCENT)
+    local last_alt_cstr = 999999 
+    if last_des_idx and last_des_idx > 0 then
+        for i=last_des_idx,#the_big_array  do
+            if    the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE
+               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_AT
+            then
+                -- If altitude is Above or At take it for the descent
+                local alt = the_big_array[i].cstr_altitude1
+                if the_big_array[i].cstr_altitude1_fl then
+                    alt = alt * 100
+                end
+                if alt < last_alt_cstr then
+                    last_alt_cstr = alt
+                end
+            end
+            if    the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND
+               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW
+            then
+                -- If altitude is Above or At take it for the descent
+                local alt = the_big_array[i].cstr_altitude2
+                if the_big_array[i].cstr_altitude2_fl then
+                    alt = alt * 100
+                end
+                if alt < last_alt_cstr then
+                    last_alt_cstr = alt
+                end
+            end
+            if not the_big_array[i].pred then
+                the_big_array[i].pred = {}
+            end
+            the_big_array[i].pred.prop_des_cstr = last_alt_cstr
+        end
+    end
+
 end
 
 -------------------------------------------------------------------------------
@@ -113,7 +212,7 @@ end
 
 local function predict_climb_thrust_net_avail(ias,altitude)
     local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
-    local N1 = eng_N1_limit_clb(oat, 0, altitude, true, false, false))
+    local N1 = eng_N1_limit_clb(oat, 0, altitude, true, false, false)
     local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
     local density = get_density_ratio(ref_alt)
 
@@ -151,7 +250,7 @@ local function vertical_profile_takeoff_update()
     FMGS_sys.data.pred.takeoff.gdot = compute_green_dot(total_to_weight, rwy_alt)
 
     if not FMGS_sys.perf.takeoff.v2 then
-        return
+        return nil
     end
 
     local fuel_consumption
@@ -185,12 +284,19 @@ function vertical_profile_climb_update()
     local curr_altitude = FMGS_sys.perf.takeoff.acc
     local curr_spd      = FMGS_sys.perf.takeoff.v2+10
 
-    for leg in ipairs(FMGS_sys.fpln.active.apts.dep_sid)
-        local thrust_available = predict_climb_thrust_net_avail(ias,altitude)
-        -- ...
+    for i, leg in ipairs(the_big_array) do
+        if i > last_clb_idx then
+            break
+        end
+        local thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_altitude)
+        
+        -- First of all I compute the climb to the next segment ignoring the
+        -- altitude constraint
+
     end
 
 end
+
 
 function vertical_profile_update()
     -- Start with reset
@@ -209,5 +315,11 @@ function vertical_profile_update()
     -- Ok, we have everything, let's go!
     local fuel_consumed = vertical_profile_takeoff_update() -- In Kgs
     FMGS_sys.data.pred.takeoff.total_fuel_kgs = fuel_consumed
+    if not fuel_consumed then
+        return -- Cannot make any other prediction
+    end
+
+    prepare_the_common_big_array()
+    vertical_profile_climb_update()
 
 end

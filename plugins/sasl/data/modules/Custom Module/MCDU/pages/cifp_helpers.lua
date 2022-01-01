@@ -118,7 +118,6 @@ end
 function cifp_convert_alt_cstr(x)
 
     local clb_desc_type = 0
-    print(x.pred, x.pred and x.pred.is_climb or "N/A")
     if x.pred and x.pred.is_climb then
         clb_desc_type = 1
     elseif x.pred and x.pred.is_descent then
