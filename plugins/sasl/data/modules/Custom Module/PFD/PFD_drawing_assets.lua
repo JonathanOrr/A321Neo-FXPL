@@ -59,7 +59,3 @@ PFD_H_diamond_R = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/
 PFD_V_diamond = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/VDiamond.png")
 PFD_V_diamond_U = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Diamond Up.png")
 PFD_V_diamond_D = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Diamond Down.png")
-
-PFD_alt_shader = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/shader_alt.png")
-PFD_spd_shader = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/shader_spd.png")
-PFD_vs_shader = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/shader_vs.png")

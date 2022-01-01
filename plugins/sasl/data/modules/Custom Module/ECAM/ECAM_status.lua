@@ -24,7 +24,7 @@ include('ECAM/ECAM_status/inop_sys.lua')
 include('ECAM/ECAM_status/maintain.lua')
 
 local at_least_one_print = false
-local x_left_pos        = size[1]/2-410
+local x_left_pos        = size[1]/2-430
 
 ecam_sts = {
     
@@ -74,8 +74,8 @@ ecam_sts = {
 
 local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
     sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
-    local width, height = sasl.gl.measureText(Font_AirbusDUL, text, size, false, false)
-    sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 4, color)
+    local width, height = sasl.gl.measureText(Font_ECAMfont, text, size, false, false)
+    sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 2, color)
 end
 
 local function not_inhibited_on_ground()
@@ -117,7 +117,7 @@ local function prepare_sts_page_left()
     -- SPEED LIMIT    
     if get(is_RAT_out) == 1 then
         table.insert(messages, { draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MIN RAT SPEED.........140 KT", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, "MIN RAT SPEED.........140 KT", 31, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
             end }
         )
     end
@@ -125,7 +125,7 @@ local function prepare_sts_page_left()
     local max_knots, max_mach = ecam_sts:get_max_speed()
     if max_knots ~= 0 then
         table.insert(messages, { draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX SPEED..........".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, "MAX SPEED..........".. max_knots .." / ." .. max_mach, 31, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
             end }
         )
     end
@@ -134,7 +134,7 @@ local function prepare_sts_page_left()
     local max_fl = ecam_sts:get_max_fl()
     if max_fl ~= 0 and max_fl ~= 999 then
         table.insert(messages, { draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, "MAX FL.............".. max_fl .." / MEA", 31, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
             end }
         )
     end
@@ -152,17 +152,17 @@ local function prepare_sts_page_left()
                 or (get(Hydraulic_B_press) < 1450 and get(Hydraulic_G_press) < 1450)
                 then
             table.insert(messages, { draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MANEUVER WITH CARE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                    sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, "MANEUVER WITH CARE", 31, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
                 end }
             )
         end
 
         if get(Fuel_engine_gravity) == 1 then
             table.insert(messages, { draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "FUEL GRVTY FEED", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                    sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, "FUEL GRVTY FEED", 31, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
                 end })
                 table.insert(messages, { draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "AVOID NEGATIVE G FACTOR", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                    sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, "AVOID NEGATIVE G FACTOR", 31, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
                 end })
         end
     end
@@ -173,14 +173,14 @@ local function prepare_sts_page_left()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(Font_AirbusDUL, x_left_pos, top_position, "APPR PROC:", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_ECAMfont, x_left_pos, top_position, "APPR PROC:", 31, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
         
         for i,msg in ipairs(appr_proc) do
             table.insert(messages, { draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+                    sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, msg.text, 31, true, false, TEXT_ALIGN_LEFT, msg.color)
                 end }
             )
         end
@@ -200,7 +200,7 @@ local function prepare_sts_page_left()
        
         for i,msg in ipairs(procedures) do
             table.insert(messages, { draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+                    sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, msg.text, 31, true, false, TEXT_ALIGN_LEFT, msg.color)
                 end }
             )
         end
@@ -220,7 +220,7 @@ local function prepare_sts_page_left()
        
         for i,msg in ipairs(information) do
             table.insert(messages, { draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+                    sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, msg, 31, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
                 end }
             )
         end
@@ -241,15 +241,15 @@ local function prepare_sts_page_left()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(Font_AirbusDUL, x_left_pos+85, top_position, "CANCELLED CAUTION", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_ECAMfont, x_left_pos+85, top_position, "CANCELLED CAUTION", 31, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
         
         for i,msg in ipairs(cancelled_cautions) do
             table.insert(messages, { draw = function(top_position)
-                    drawUnderlineText(Font_AirbusDUL, x_left_pos, top_position, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    drawUnderlineText(Font_ECAMfont, x_left_pos, top_position, msg.title, 31, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    sasl.gl.drawText(Font_ECAMfont, x_left_pos, top_position, msg.text, 31, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
                 end }
             )
         end
@@ -260,7 +260,7 @@ end
 
 
 local function draw_sts_page_right(messages)
-    local default_visible_right_offset = size[2]/2+330
+    local default_visible_right_offset = size[2]/2+320
     local visible_right_offset = size[2]/2+330 + 650 * get(Ecam_sts_scroll_page)
     local msg_len = #messages
     
@@ -295,7 +295,7 @@ local function prepare_sts_page_right()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(Font_AirbusDUL, x_right_title_pos, top_position, "INOP SYS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_ECAMfont, x_right_title_pos, top_position, "INOP SYS", 31, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
@@ -304,7 +304,7 @@ local function prepare_sts_page_right()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+                    sasl.gl.drawText(Font_ECAMfont, x_right_pos, top_position, msg, 31, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
                 end
                 }
             )
@@ -325,7 +325,7 @@ local function prepare_sts_page_right()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(Font_AirbusDUL, x_right_title_pos-20, top_position, "MAINTENANCE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_ECAMfont, x_right_title_pos-20, top_position, "MAINTENANCE", 31, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
@@ -334,7 +334,7 @@ local function prepare_sts_page_right()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    sasl.gl.drawText(Font_ECAMfont, x_right_pos, top_position, msg, 31, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
                 end
                 }
             )
@@ -345,8 +345,8 @@ local function prepare_sts_page_right()
 end
 
 local function draw_status_bgd()
-    drawTextCentered(Font_ECAMfont, 450, 870, "STATUS", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(530, 850, 370, 850, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 870, "STATUS", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(530, 850, 370, 850, 3, ECAM_WHITE)
     sasl.gl.drawWideLine(570, 785, 570, 181, 4, ECAM_WHITE)
 
 end
@@ -355,7 +355,7 @@ function draw_sts_page()
     draw_status_bgd()
 
     if get(FAILURE_DISPLAY_FWC_1) == 1 and get(FAILURE_DISPLAY_FWC_2) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 50, 450, "STATUS UNAVAIL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 50, 450, "STATUS UNAVAIL", 31, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
         return
     end
 
@@ -376,7 +376,7 @@ function draw_sts_page()
     set(EWD_box_sts, 0)
 
     if ecam_sts:is_normal() then
-        sasl.gl.drawText(Font_AirbusDUL, x_left_pos, size[2]/2, "NORMAL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, x_left_pos, size[2]/2, "NORMAL", 31, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 
     if get(Ecam_arrow_overflow) == 1 then

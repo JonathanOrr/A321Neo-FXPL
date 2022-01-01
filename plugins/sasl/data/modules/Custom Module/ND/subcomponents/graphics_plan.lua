@@ -83,8 +83,8 @@ local function draw_ranges(data)
     if data.config.range > 0 then
         local ext_range = math.floor(2^(data.config.range-1) * 10 / 2) 
         local int_range = math.floor(ext_range / 2)
-        sasl.gl.drawText(Font_AirbusDUL, 240, 260, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, 365, 340, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 240, 260, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 365, 340, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     end
 
 end
@@ -96,10 +96,10 @@ local function draw_background(data)
     ND_DRAWING_small_triangle(170 ,450 , -90)
     ND_DRAWING_small_triangle(450 ,730 , 0)
     ND_DRAWING_small_triangle(450 ,170 , 180)
-    sasl.gl.drawText(Font_AirbusDUL, 440, 692, "N", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 440, 185, "S", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 694, 438, "E", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 187, 438, "W", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 440, 692, "N", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 440, 185, "S", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 694, 438, "E", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 187, 438, "W", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 end
 
 local function draw_plane(data)
@@ -166,7 +166,7 @@ local function draw_poi_array(data, poi, texture, color)
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
     
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
-        sasl.gl.drawText(Font_AirbusDUL, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
     end
     
     return modified, poi

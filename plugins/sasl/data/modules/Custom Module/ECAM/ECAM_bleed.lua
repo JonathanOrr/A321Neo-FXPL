@@ -22,9 +22,9 @@ local ground_open_start = 0
 local function draw_engines()
 
     -- Numbers
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-350, size[2]/2-200, "1", 50, false, false, 
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-350, size[2]/2-200, "1", 50, true, false, 
                      TEXT_ALIGN_CENTER, ENG.dyn[1].is_avail and ECAM_WHITE or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+350, size[2]/2-200, "2", 50, false, false,
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+350, size[2]/2-200, "2", 50, true, false,
                      TEXT_ALIGN_CENTER, ENG.dyn[2].is_avail and ECAM_WHITE or ECAM_ORANGE)
 
     eng1_bleed_ok = get(L_Eng_LP_press) > 4
@@ -59,10 +59,10 @@ end
 local function draw_bleed_numbers()
 
     if get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-55, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-90, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-55, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-90, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-250, size[2]/2-55, "XX", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-250, size[2]/2-90, "XX", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]/2-55, "XX", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]/2-90, "XX", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         return
     end
 
@@ -78,10 +78,10 @@ local function draw_bleed_numbers()
     local bleed_2_temp_col = (bleed_2_temp >= 150 and bleed_2_temp < 270) and ECAM_GREEN or ECAM_ORANGE
 
     --bleed temperature & pressure--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-55, bleed_1_press, 32, false, false, TEXT_ALIGN_CENTER, bleed_1_press_col)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-90, bleed_1_temp, 32, false, false, TEXT_ALIGN_CENTER, bleed_1_temp_col)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-55, bleed_2_press, 32, false, false, TEXT_ALIGN_CENTER, bleed_2_press_col)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-90, bleed_2_temp, 32, false, false, TEXT_ALIGN_CENTER, bleed_2_temp_col)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-250, size[2]/2-55, bleed_1_press, 32, true, false, TEXT_ALIGN_CENTER, bleed_1_press_col)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-250, size[2]/2-90, bleed_1_temp, 32, true, false, TEXT_ALIGN_CENTER, bleed_1_temp_col)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]/2-55, bleed_2_press, 32, true, false, TEXT_ALIGN_CENTER, bleed_2_press_col)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]/2-90, bleed_2_temp, 32, true, false, TEXT_ALIGN_CENTER, bleed_2_temp_col)
 
 end
 
@@ -91,7 +91,7 @@ local function draw_apu_and_gas()
         sasl.gl.drawWideLine(size[1]/2-60, size[2]/2+40, size[1]/2-50, size[2]/2+15, 3, ECAM_GREEN)
         sasl.gl.drawWideLine(size[1]/2-70, size[2]/2+15, size[1]/2-50, size[2]/2+15, 3, ECAM_GREEN)
         sasl.gl.drawWideLine(size[1]/2-70, size[2]/2+15, size[1]/2-60, size[2]/2+40, 3, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-60, size[2]/2-15, "GND", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-60, size[2]/2-15, "GND", 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
 
     if get(Apu_master_button_state) == 0 then
@@ -102,7 +102,7 @@ local function draw_apu_and_gas()
         sasl.gl.drawWideLine(size[1]/2, size[2]/2-50, size[1]/2, size[2]/2+42, 3, ECAM_GREEN)
     end
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-170, "APU", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2-170, "APU", 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawWideLine(size[1]/2, size[2]/2-140, size[1]/2, size[2]/2-100, 3, ECAM_GREEN)
 end
 
@@ -127,14 +127,14 @@ local function draw_packs()
     comp_2_temp = math.floor(get(R_compressor_temp)) - math.floor(get(R_compressor_temp))%5
     comp1_color = comp_1_temp > 230 and ECAM_GREEN or ECAM_ORANGE
     comp2_color = comp_2_temp > 230 and ECAM_GREEN or ECAM_ORANGE
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2+193, comp_1_temp, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+193, comp_2_temp, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-250, size[2]/2+193, comp_1_temp, 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]/2+193, comp_2_temp, 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
     --pre-cooler temperature--
     pack1_color = get(L_pack_temp) < 90 and ECAM_GREEN or ECAM_ORANGE
     pack2_color = get(R_pack_temp) < 90 and ECAM_GREEN or ECAM_ORANGE
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2+300, math.floor(get(L_pack_temp)), 36, false, false, TEXT_ALIGN_CENTER, pack1_color)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+300, math.floor(get(R_pack_temp)), 36, false, false, TEXT_ALIGN_CENTER, pack2_color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-250, size[2]/2+300, math.floor(get(L_pack_temp)), 36, true, false, TEXT_ALIGN_CENTER, pack1_color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]/2+300, math.floor(get(R_pack_temp)), 36, true, false, TEXT_ALIGN_CENTER, pack2_color)
 end
 
 local function draw_ram_air()
@@ -156,8 +156,8 @@ end
 local function draw_ai()
 
     if PB.ovhd.antiice_wings.status_bottom then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-340, size[2]/2+50, "ANTI\nICE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+345, size[2]/2+50, "ANTI\n ICE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)   -- The extra space on the second line is correct!
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-340, size[2]/2+50, "ANTI\nICE", 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+345, size[2]/2+50, "ANTI\n ICE", 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)   -- The extra space on the second line is correct!
     end
 
     if PB.ovhd.antiice_wings.status_bottom and get(Any_wheel_on_ground) == 1 then
@@ -228,28 +228,28 @@ end
 local function fuck_my_ass(big_dick, small_dick, left_text, right_text)
     sasl.gl.drawArc (big_dick, small_dick , 56, 59 , 30 , 120 , ECAM_WHITE)
     sasl.gl.drawWideLine(big_dick, small_dick+57, big_dick, small_dick+64, 3, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, big_dick+88, small_dick+37, right_text, 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, big_dick-88, small_dick+37, left_text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, big_dick+88, small_dick+37, right_text, 25, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, big_dick-88, small_dick+37, left_text, 25, true, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
 
-    drawTextCentered(Font_ECAMfont, big_dick+52, small_dick+81, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, big_dick+52, small_dick+81, "°C", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 end
 
 local function draw_bleed_bgd()
-    drawTextCentered(Font_ECAMfont, 79, 870, "BLEED", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(12, 848, 150, 848, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 79, 870, "BLEED", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(10, 848, 146, 848, 3, ECAM_WHITE)
 
-    drawTextCentered(Font_ECAMfont, 346, 147, "HP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 560, 147, "HP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 200, 147, "IP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 700, 147, "IP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 346, 147, "HP", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 560, 147, "HP", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 200, 147, "IP", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 700, 147, "IP", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
-    drawTextCentered(Font_ECAMfont, 283, 407, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 283, 368, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 621, 407, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 621, 368, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 283, 407, "PSI", 30, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 283, 368, "°C", 30, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 621, 407, "PSI", 30, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 621, 368, "°C", 30, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    drawTextCentered(Font_ECAMfont, 450, 649, "AIR", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 450, 683, "RAM", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 649, "AIR", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 683, "RAM", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     sasl.gl.drawWideLine(201, 432, 201, 542, 3, ECAM_GREEN)
     sasl.gl.drawWideLine(702, 432, 702, 542, 3, ECAM_GREEN)
@@ -259,11 +259,11 @@ local function draw_bleed_bgd()
     fuck_my_ass(198, 571,"LO","HI")
     fuck_my_ass(198, 675,"C","H")
 
-    Sasl_DrawWideFrame(158, 344, 84, 84, 3, 0, ECAM_LINE_GREY)
-    Sasl_DrawWideFrame(659, 344, 84, 84, 3, 0, ECAM_LINE_GREY)
+    Sasl_DrawWideFrame(158, 344, 84, 84, 3, 0, ECAM_GREY)
+    Sasl_DrawWideFrame(659, 344, 84, 84, 3, 0, ECAM_GREY)
 
-    sasl.gl.drawTexture(ECAM_BLEED_house_img, 125, 598, 149, 204, ECAM_LINE_GREY)
-    sasl.gl.drawTexture(ECAM_BLEED_house_img, 626, 598, 149, 204, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(ECAM_BLEED_house_img, 125, 598, 149, 204, ECAM_GREY)
+    sasl.gl.drawTexture(ECAM_BLEED_house_img, 626, 598, 149, 204, ECAM_GREY)
 end
 
 function draw_bleed_page()

@@ -45,7 +45,7 @@ function draw_fctl_page()
     local is_FCDC_2_ok = get(FCDC_2_status) == 1
 
     sasl.gl.drawTexture(ECAM_FCTL_bgd_img, 0, 0, 900, 900, {1,1,1})
-    sasl.gl.drawTexture(ECAM_FCTL_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(ECAM_FCTL_grey_lines_img, 0, 0, 900, 900, ECAM_GREY)
 
     --draw flight computers--
     --ELACs--
@@ -58,13 +58,13 @@ function draw_fctl_page()
         get(ELAC_2_status) == 1 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_GREEN or ECAM_ORANGE,
     }
     local ELAC_box_cl = {
-        get(ELAC_1_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
-        get(ELAC_2_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
+        get(ELAC_1_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
+        get(ELAC_2_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
     }
-    sasl.gl.drawText(Font_AirbusDUL, 298, 599, "ELAC", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 348, 599, ELAC_txt[1], 30, false, false, TEXT_ALIGN_CENTER, ELAC_txt_cl[1])
+    sasl.gl.drawText(Font_ECAMfont, 298, 599, "ELAC", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 348, 599, ELAC_txt[1], 30, false, false, TEXT_ALIGN_CENTER, ELAC_txt_cl[1])
     sasl.gl.drawTexture(ECAM_FCTL_computer_backets_img, 242, 584, 128, 52, ELAC_box_cl[1])
-    sasl.gl.drawText(Font_AirbusDUL, 386, 576, ELAC_txt[2], 30, false, false, TEXT_ALIGN_CENTER, ELAC_txt_cl[2])
+    sasl.gl.drawText(Font_ECAMfont, 386, 576, ELAC_txt[2], 30, false, false, TEXT_ALIGN_CENTER, ELAC_txt_cl[2])
     sasl.gl.drawTexture(ECAM_FCTL_computer_backets_img, 279, 561, 128, 52, ELAC_box_cl[2])
     --SECs--
     local SEC_txt = {
@@ -78,22 +78,22 @@ function draw_fctl_page()
         get(SEC_3_status) == 1 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_GREEN or ECAM_ORANGE,
     }
     local SEC_box_cl = {
-        get(SEC_1_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
-        get(SEC_2_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
-        get(SEC_3_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
+        get(SEC_1_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
+        get(SEC_2_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
+        get(SEC_3_status) == 0 and (is_FCDC_1_ok or is_FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
     }
-    sasl.gl.drawText(Font_AirbusDUL, 522, 599, "SEC", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 573, 599, SEC_txt[1], 30, false, false, TEXT_ALIGN_CENTER, SEC_txt_cl[1])
+    sasl.gl.drawText(Font_ECAMfont, 522, 599, "SEC", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 573, 599, SEC_txt[1], 30, false, false, TEXT_ALIGN_CENTER, SEC_txt_cl[1])
     sasl.gl.drawTexture(ECAM_FCTL_computer_backets_img, 467, 584, 128, 52, SEC_box_cl[1])
-    sasl.gl.drawText(Font_AirbusDUL, 611, 576, SEC_txt[2], 30, false, false, TEXT_ALIGN_CENTER, SEC_txt_cl[2])
+    sasl.gl.drawText(Font_ECAMfont, 611, 576, SEC_txt[2], 30, false, false, TEXT_ALIGN_CENTER, SEC_txt_cl[2])
     sasl.gl.drawTexture(ECAM_FCTL_computer_backets_img, 504, 561, 128, 52, SEC_box_cl[2])
-    sasl.gl.drawText(Font_AirbusDUL, 649, 553, SEC_txt[3], 30, false, false, TEXT_ALIGN_CENTER, SEC_txt_cl[3])
+    sasl.gl.drawText(Font_ECAMfont, 649, 553, SEC_txt[3], 30, false, false, TEXT_ALIGN_CENTER, SEC_txt_cl[3])
     sasl.gl.drawTexture(ECAM_FCTL_computer_backets_img, 541, 538, 128, 52, SEC_box_cl[3])
 
     --LAF--
     if get(FBW_LAF_DATA_AVAIL) == 1 then
         if get(FBW_LAF_DEGRADED_AIL) == 1 or get(FBW_LAF_DEGRADED_SPLR_4) == 1 or get(FBW_LAF_DEGRADED_SPLR_5) == 1 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2+215, "LAF DEGRADED", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+2, size[2]/2+215, "LAF DEGRADED", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
     end
 
@@ -176,22 +176,22 @@ function draw_fctl_page()
                 SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
             else
                 if not l_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                    sasl.gl.drawText(Font_ECAMfont, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
                 end
             end
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
         if r_spoilers_data_avail[i] then
             if get(r_spoiler_dataref[i]) > 2.5 then
                 SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
             else
                 if not r_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                    sasl.gl.drawText(Font_ECAMfont, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
                 end
             end
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
 
         if l_spoilers_data_avail[i] then
@@ -239,29 +239,29 @@ function draw_fctl_page()
     if FBW.fctl.AIL.STAT.L.data_avail then
         sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  139, Table_interpolate(aileron_anim, params.L_aileron), 26, 30, FBW.fctl.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 165, 564, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 165, 564, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if FBW.fctl.AIL.STAT.R.data_avail then
         sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 736, Table_interpolate(aileron_anim, params.R_aileron), 26, 30, FBW.fctl.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 736, 564, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 736, 564, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     --elevators--
     if FBW.fctl.ELEV.STAT.L.data_avail then
         sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  258, Table_interpolate(elevator_anim, params.L_elevator), 26, 30, FBW.fctl.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 284, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 284, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if FBW.fctl.ELEV.STAT.R.data_avail then
         sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 617, Table_interpolate(elevator_anim, params.R_elevator), 26, 30, FBW.fctl.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 617, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 617, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     --rudder
     if FBW.fctl.surfaces.rud.rud.data_avail then
         SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_rudder_img, size[1]/2+1, size[2]/2 - 135, 43, 155, Table_interpolate(rudder_anim, params.rudder), 0, -155, FBW.fctl.surfaces.rud.rud.mechanical and ECAM_GREEN or ECAM_ORANGE)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-250, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+2, size[2]/2-250, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if FBW.fctl.surfaces.rud.lim.data_avail then
         SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_left_rudder_lim_img,  size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, -get(Rudder_travel_lim)),  4, -160, FBW.fctl.surfaces.rud.lim.controlled and ECAM_GREEN or ECAM_ORANGE)
@@ -270,22 +270,22 @@ function draw_fctl_page()
     if FBW.fctl.surfaces.rud.trim.data_avail then
         SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_rudder_trim_img, size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, Math_clamp(get(Rudder_trim_target_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim))), 0, -160, FBW.fctl.surfaces.rud.trim.controlled and ECAM_BLUE or ECAM_ORANGE)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-320, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+2, size[2]/2-320, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     -- rudder
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-26, size[2]/2-164, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-164, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+29, size[2]/2-164, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-26, size[2]/2-164, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+2, size[2]/2-164, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+29, size[2]/2-164, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
     -- spdbrk
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-26, size[2]/2+405, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2+405, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+29, size[2]/2+405, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-26, size[2]/2+405, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+2, size[2]/2+405, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+29, size[2]/2+405, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
     -- elevators
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-263, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-233, size[2]/2-189, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-263, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-233, size[2]/2-189, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
 
     if is_FCDC_1_ok or is_FCDC_2_ok then
         sasl.gl.drawWideLine(size[1]/2 - 276, size[2]/2 - 194, size[1]/2 - 249, size[2]/2 - 194, 2, (get(ELAC_1_status) == 1 or get(SEC_1_status) == 1) and {0,0,0,0} or ECAM_ORANGE)
@@ -297,8 +297,8 @@ function draw_fctl_page()
         sasl.gl.drawWideLine(size[1]/2 - 247, size[2]/2 - 163, size[1]/2 - 220, size[2]/2 - 163, 2, (get(ELAC_2_status) == 1 or get(SEC_2_status) == 1) and {0,0,0,0} or ECAM_ORANGE)
     end
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+233, size[2]/2-189, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+263, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+233, size[2]/2-189, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+263, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
     if is_FCDC_1_ok or is_FCDC_2_ok then
         sasl.gl.drawWideLine(size[1]/2 + 221, size[2]/2 - 194, size[1]/2 + 248, size[2]/2 - 194, 2, (get(ELAC_2_status) == 1 or get(SEC_2_status) == 1) and {0,0,0,0} or ECAM_ORANGE)
@@ -311,12 +311,12 @@ function draw_fctl_page()
     end
 
     -- pitch trim
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+98, size[2]/2-8, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+125, size[2]/2-8, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+98, size[2]/2-8, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+125, size[2]/2-8, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
     -- ailerons
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-263, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-233, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-263, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-233, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
 
     if is_FCDC_1_ok or is_FCDC_2_ok then
         sasl.gl.drawWideLine(size[1]/2 - 276, size[2]/2 + 41, size[1]/2 - 249, size[2]/2 + 41, 2, get(ELAC_1_status) == 1 and {0,0,0,0} or ECAM_ORANGE)
@@ -328,8 +328,8 @@ function draw_fctl_page()
         sasl.gl.drawWideLine(size[1]/2 - 247, size[2]/2 + 72, size[1]/2 - 220, size[2]/2 + 72, 2, get(ELAC_2_status) == 1 and {0,0,0,0} or ECAM_ORANGE)
     end
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+233, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+263, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+233, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+263, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
     if is_FCDC_1_ok or is_FCDC_2_ok then
         sasl.gl.drawWideLine(size[1]/2 + 221, size[2]/2 + 41, size[1]/2 + 248, size[2]/2 + 41, 2, get(ELAC_1_status) == 1 and {0,0,0,0} or ECAM_ORANGE)
@@ -341,16 +341,16 @@ function draw_fctl_page()
         sasl.gl.drawWideLine(size[1]/2 + 250, size[2]/2 + 72, size[1]/2 + 277, size[2]/2 + 72, 2, get(ELAC_2_status) == 1 and {0,0,0,0} or ECAM_ORANGE)
     end
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-28, size[2]/2-8, "PITCH TRIM", 31, false, false, TEXT_ALIGN_CENTER, get(FAILURE_FCTL_THS_MECH) == 0 and ECAM_WHITE or ECAM_ORANGE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-28, size[2]/2-8, "PITCH TRIM", 31, false, false, TEXT_ALIGN_CENTER, get(FAILURE_FCTL_THS_MECH) == 0 and ECAM_WHITE or ECAM_ORANGE)
 
     if FBW.fctl.THS.STAT.data_avail then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(THS_DEF)))), 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(THS_DEF)))), 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
         if get(THS_DEF) >= 0 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
         end
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, "X.X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-25, size[2]/2-50, "X.X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end

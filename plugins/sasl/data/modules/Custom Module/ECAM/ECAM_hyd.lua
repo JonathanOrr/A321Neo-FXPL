@@ -32,15 +32,15 @@ local function draw_psi_numbers(g_psi, b_psi, y_psi)
 
     -- GREEN
     local g_color = g_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
-    sasl.gl.drawText(Font_AirbusDUL, 160, y_psi_pos, g_psi, 36, false, false, TEXT_ALIGN_CENTER, g_color)
+    sasl.gl.drawText(Font_ECAMfont, 160, y_psi_pos, g_psi, 36, true, false, TEXT_ALIGN_CENTER, g_color)
     sasl.gl.drawWideLine (160, y_psi_pos-20 , 160, y_psi_pos-230, 4 , g_color)
 
     local b_color = b_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
-    sasl.gl.drawText(Font_AirbusDUL, 453, y_psi_pos, b_psi, 36, false, false, TEXT_ALIGN_CENTER, b_color)
+    sasl.gl.drawText(Font_ECAMfont, 453, y_psi_pos, b_psi, 36, true, false, TEXT_ALIGN_CENTER, b_color)
     sasl.gl.drawWideLine (453, y_psi_pos-20 , 453, y_psi_pos-275, 4 , b_color)
 
     local y_color = y_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
-    sasl.gl.drawText(Font_AirbusDUL, 745, y_psi_pos, y_psi, 36, false, false, TEXT_ALIGN_CENTER, y_color)
+    sasl.gl.drawText(Font_ECAMfont, 745, y_psi_pos, y_psi, 36, true, false, TEXT_ALIGN_CENTER, y_color)
     sasl.gl.drawWideLine (745, y_psi_pos-20 , 745, y_psi_pos-230, 4 , y_color)
 end
 
@@ -65,7 +65,7 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
         color_rectangle = ECAM_GREEN
         sasl.gl.drawWideLine (160, y_psi_pos-290, 160, y_psi_pos-290+rect_size, 4, ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 160, y_psi_pos-275, "LO", 40, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 160, y_psi_pos-275, "LO", 40, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     -- Draw the rectangle external
     draw_single_square_border(160, y_psi_pos-290, rect_size, color_rectangle)
@@ -80,7 +80,7 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
         color_rectangle = ECAM_GREEN
         sasl.gl.drawWideLine (453, y_psi_pos-335, 453, y_psi_pos-335+rect_size, 4, ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 452, y_psi_pos-320, "LO", 40, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 452, y_psi_pos-320, "LO", 40, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     -- Draw the rectangle external
     draw_single_square_border(452, y_psi_pos-335, rect_size, color_rectangle)
@@ -95,7 +95,7 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
         color_rectangle = ECAM_GREEN
         sasl.gl.drawWideLine (745, y_psi_pos-290, 745, y_psi_pos-290+rect_size, 4, ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 745, y_psi_pos-275, "LO", 40, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 745, y_psi_pos-275, "LO", 40, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     -- Draw the rectangle external
     draw_single_square_border(745, y_psi_pos-290, rect_size, color_rectangle)
@@ -105,11 +105,11 @@ end
 local function draw_engine_numbers()
     -- ENGINE 1
     local num_color = not ENG.dyn[1].is_avail  and ECAM_ORANGE or ECAM_WHITE
-    sasl.gl.drawText(Font_AirbusDUL, 230, y_psi_pos-290, "1", 34, false, false, TEXT_ALIGN_CENTER, num_color)
+    sasl.gl.drawText(Font_ECAMfont, 230, y_psi_pos-290, "1", 34, true, false, TEXT_ALIGN_CENTER, num_color)
 
     -- ENGINE 2
     num_color = not ENG.dyn[2].is_avail  and ECAM_ORANGE or ECAM_WHITE
-    sasl.gl.drawText(Font_AirbusDUL, 670, y_psi_pos-290, "2", 34, false, false, TEXT_ALIGN_CENTER, num_color)
+    sasl.gl.drawText(Font_ECAMfont, 670, y_psi_pos-290, "2", 34, true, false, TEXT_ALIGN_CENTER, num_color)
 
 end
 
@@ -167,27 +167,27 @@ end
 local function draw_failures()
 
     if get(FAILURE_HYD_G_low_air) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 250, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, 250, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 250, size[2]/2-185, "LO AIR", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 250, size[2]/2-230, "PRESS", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end        
     if get(FAILURE_HYD_G_R_overheat) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 250, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 250, size[2]/2-310, "OVHT", 42, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     if get(FAILURE_HYD_B_low_air) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 540, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, 540, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 540, size[2]/2-185, "LO AIR", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 540, size[2]/2-230, "PRESS", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if get(FAILURE_HYD_B_R_overheat) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 540, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 540, size[2]/2-310, "OVHT", 42, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     if get(FAILURE_HYD_Y_low_air) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 830, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, 830, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 830, size[2]/2-185, "LO AIR", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 830, size[2]/2-230, "PRESS", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if get(FAILURE_HYD_Y_R_overheat) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 830, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 830, size[2]/2-310, "OVHT", 42, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
 
@@ -204,31 +204,31 @@ local function draw_extra_pumps()
     end
 
     local elec_color = get(AC_bus_2_pwrd) == 1 and ECAM_WHITE or ECAM_ORANGE
-    sasl.gl.drawText(Font_AirbusDUL, 840, size[2]/2+100, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, elec_color)
+    sasl.gl.drawText(Font_ECAMfont, 840, size[2]/2+100, "ELEC", 26, true, false, TEXT_ALIGN_CENTER, elec_color)
 
     if get(FAILURE_HYD_Y_E_overheat) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 840, size[2]/2+70, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 840, size[2]/2+70, "OVHT", 26, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
 
     -- BLUE ELEC pump messages
     local elec_color = get(AC_bus_1_pwrd) == 1 and ECAM_WHITE or ECAM_ORANGE
-    sasl.gl.drawText(Font_AirbusDUL, 540, size[2]/2-10, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, elec_color)
+    sasl.gl.drawText(Font_ECAMfont, 540, size[2]/2-10, "ELEC", 26, true, false, TEXT_ALIGN_CENTER, elec_color)
 
     if get(FAILURE_HYD_B_E_overheat) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 540, size[2]/2-40, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 540, size[2]/2-40, "OVHT", 26, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     -- RAT text and arrow
     if get(Hydraulic_RAT_status) == 0 then
-        sasl.gl.drawText(Font_AirbusDUL, 370, size[2]/2+85, "RAT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, 370, size[2]/2+85, "RAT", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         sasl.gl.drawWidePolyLine( {432 , size[2]/2+95 , 407 , size[2]/2+110 , 407 , size[2]/2+80, 432 , size[2]/2+95}, 4, ECAM_WHITE)
     elseif get(Hydraulic_RAT_status) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 370, size[2]/2+85, "RAT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, 370, size[2]/2+85, "RAT", 26, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         sasl.gl.drawTriangle ( 432 , size[2]/2+95 , 407 , size[2]/2+110 , 407 , size[2]/2+80 , ECAM_GREEN )
         sasl.gl.drawWideLine ( 428, size[2]/2+95 , 453, size[2]/2+95, 4 , ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, 370, size[2]/2+85, "RAT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, 370, size[2]/2+85, "RAT", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         sasl.gl.drawTriangle ( 432 , size[2]/2+95 , 407 , size[2]/2+110 , 407 , size[2]/2+80 , ECAM_ORANGE )
     end
 end
@@ -268,10 +268,10 @@ local function draw_hyd_actuator_symbol(x,y)
 end
 
 local function draw_hyd_bgd()
-    drawTextCentered(Font_ECAMfont, 451, 870, "HYD", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(409, 849, 492, 848, 4, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 305, 735, "PSI", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 595, 735, "PSI", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 451, 870, "HYD", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(409, 849, 492, 848, 3, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 305, 735, "PSI", 27, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 595, 735, "PSI", 27, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
     sasl.gl.drawWideLine(160, 172, 160, 290, 4, ECAM_WHITE)
     sasl.gl.drawWideLine(160, 168, 160, 142, 4, ECAM_ORANGE)

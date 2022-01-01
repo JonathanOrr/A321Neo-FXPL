@@ -150,20 +150,20 @@ local function draw_checklist(checklist_array)
         if checklist_array[i].Type == CHECKLIST_PROPERTIES then--if the item is a checklist property
             if get(current_checklist) == 1 then
                 sasl.gl.drawRectangle(20, size[2] - 20 - 30, size[1] - 20 - 20 - 30 - 10, 30, checklist_array[i].Color)
-                sasl.gl.drawText(Font_AirbusDUL, (size[1] - 40) / 2, size[2] - 20 - 30 + 7, checklist_array[i].Title, 22, false, false, TEXT_ALIGN_CENTER, DARK_GREY)
+                sasl.gl.drawText(Font_ECAMfont, (size[1] - 40) / 2, size[2] - 20 - 30 + 7, checklist_array[i].Title, 22, false, false, TEXT_ALIGN_CENTER, DARK_GREY)
             elseif get(current_checklist) == #all_checklist then
                 sasl.gl.drawRectangle(20 + 30 + 10, size[2] - 20 - 30, size[1] - 20 - (20 + 30 + 10), 30, checklist_array[i].Color)
-                sasl.gl.drawText(Font_AirbusDUL, (40 + size[1]) / 2, size[2] - 20 - 30 + 7, checklist_array[i].Title, 22, false, false, TEXT_ALIGN_CENTER, DARK_GREY)
+                sasl.gl.drawText(Font_ECAMfont, (40 + size[1]) / 2, size[2] - 20 - 30 + 7, checklist_array[i].Title, 22, false, false, TEXT_ALIGN_CENTER, DARK_GREY)
             else
                 sasl.gl.drawRectangle(20 + 30 + 10, size[2] - 20 - 30, size[1] - 20 - (20 + 30 + 10) - 30 - 10, 30, checklist_array[i].Color)
-                sasl.gl.drawText(Font_AirbusDUL, size[1] / 2, size[2] - 20 - 30 + 7, checklist_array[i].Title, 22, false, false, TEXT_ALIGN_CENTER, DARK_GREY)
+                sasl.gl.drawText(Font_ECAMfont, size[1] / 2, size[2] - 20 - 30 + 7, checklist_array[i].Title, 22, false, false, TEXT_ALIGN_CENTER, DARK_GREY)
             end
         elseif checklist_array[i].Type == CHECKLIST_LINE then--if the item is a line in the checklist
             --draw boxes
             sasl.gl.drawRectangle(20, rectangle_vertical_pos, 440, 30, LIGHT_GREY)
 
             --draw text
-            sasl.gl.drawText(Font_AirbusDUL, (20 + 460) / 2, text_vertical_pos, checklist_array[i].Name, 15, false, false, TEXT_ALIGN_CENTER, WHITE)
+            sasl.gl.drawText(Font_ECAMfont, (20 + 460) / 2, text_vertical_pos, checklist_array[i].Name, 15, false, false, TEXT_ALIGN_CENTER, WHITE)
 
             --scroll down
             rectangle_vertical_pos = rectangle_vertical_pos - 10 -30
@@ -193,10 +193,10 @@ local function draw_checklist(checklist_array)
 
             if checklist_array[i].Checked == false then--draw item according to state
                 --draw text
-                sasl.gl.drawText(Font_AirbusDUL, 25, text_vertical_pos, checklist_array[i].Name, 14, false, false, TEXT_ALIGN_LEFT, WHITE)
+                sasl.gl.drawText(Font_ECAMfont, 25, text_vertical_pos, checklist_array[i].Name, 14, false, false, TEXT_ALIGN_LEFT, WHITE)
             else
                 --draw text
-                sasl.gl.drawText(Font_AirbusDUL, 25, text_vertical_pos, checklist_array[i].Name, 14, false, false, TEXT_ALIGN_LEFT, LIGHT_BLUE)
+                sasl.gl.drawText(Font_ECAMfont, 25, text_vertical_pos, checklist_array[i].Name, 14, false, false, TEXT_ALIGN_LEFT, LIGHT_BLUE)
             end
 
 
@@ -217,10 +217,10 @@ local function draw_checklist(checklist_array)
 
                     if checklist_array[i].Checked == false then--draw item according to state
                         --draw text
-                        sasl.gl.drawText(Font_AirbusDUL, 25, text_vertical_pos, checklist_array[i].Sub_items[j], 14, false, false, TEXT_ALIGN_LEFT, WHITE)
+                        sasl.gl.drawText(Font_ECAMfont, 25, text_vertical_pos, checklist_array[i].Sub_items[j], 14, false, false, TEXT_ALIGN_LEFT, WHITE)
                     else
                         --draw text
-                        sasl.gl.drawText(Font_AirbusDUL, 25, text_vertical_pos, checklist_array[i].Sub_items[j], 14, false, false, TEXT_ALIGN_LEFT, LIGHT_BLUE)
+                        sasl.gl.drawText(Font_ECAMfont, 25, text_vertical_pos, checklist_array[i].Sub_items[j], 14, false, false, TEXT_ALIGN_LEFT, LIGHT_BLUE)
                     end
 
                     --scroll down
