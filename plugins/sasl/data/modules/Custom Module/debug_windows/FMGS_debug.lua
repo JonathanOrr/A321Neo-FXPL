@@ -66,8 +66,8 @@ local function mouse_down(x,y)
                 load_result_color = ECAM_ORANGE
                 FMGS_reset_dep_arr_airports()
                 FMGS_set_apt_dep("LIML")
-                FMGS_set_apt_arr("LIML")
-                FMGS_set_apt_alt("LIMC")
+                FMGS_set_apt_arr("LIRP")
+                FMGS_set_apt_alt("LIRC")
                 FMGS_create_temp_fpln()
                 FMGS_dep_set_rwy(FMGS_sys.fpln.temp.apts.dep.rwys[1], true)
             else
@@ -351,17 +351,19 @@ local function draw_page_fpln_column(x, fpln)
     ----------------
     local arr = fpln.apts.arr
     sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-510, arr and (arr.name .. "("..arr.id..")") or "APT NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr and UI_LIGHT_BLUE or {.6,.6,.6})
-    local arr_rwy = fpln.apts.arr_rwy
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-530, arr_rwy and (arr_rwy[2] and (arr_rwy[1].sibl_name .. " [S]") or dep_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
-
+    if fpln.apts.arr_rwy then
+        local arr_rwy = fpln.apts.arr_rwy
+        sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-530, arr_rwy and (arr_rwy[2] and (arr_rwy[1].sibl_name .. " [S]") or arr_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
+    end
     ----------------
     -- ALTERNATE
     ----------------
     local alt = fpln.apts.alt
     sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-560, alt and (alt.name .. "("..alt.id..")") or "APT NOT SET", 12, false, false, TEXT_ALIGN_LEFT, alt and UI_LIGHT_BLUE or {.6,.6,.6})
-    local alt_rwy = fpln.apts.alt_rwy
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-580, alt_rwy and (alt_rwy[2] and (alt_rwy[1].sibl_name .. " [S]") or dep_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, alt_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
-
+    if fpln.apts.alt_rwy then
+        local alt_rwy = fpln.apts.alt_rwy
+        sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-580, alt_rwy and (alt_rwy[2] and (alt_rwy[1].sibl_name .. " [S]") or alt_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, alt_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
+    end
 end
 
 local function draw_page_fpln()
@@ -505,9 +507,14 @@ end
 
 function update()
     if load_result_color == ECAM_ORANGE then
-        if FMGS_sys.fpln.temp.apts.dep_cifp then
+        if FMGS_sys.fpln.temp.apts.dep_cifp and FMGS_sys.fpln.temp.apts.arr_cifp then
             FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
             FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
+            FMGS_arr_set_appr(FMGS_sys.fpln.temp.apts.arr_cifp.apprs[9], FMGS_sys.fpln.temp.apts.arr.rwys[1], true)
+            FMGS_arr_set_star(FMGS_sys.fpln.temp.apts.arr_cifp.stars[22])
+            FMGS_reset_arr_via()
+            FMGS_reset_arr_trans()
+    
             FMGS_reshape_fpln()
             FMGS_insert_temp_fpln()
             load_result_color = ECAM_GREEN

@@ -192,6 +192,7 @@ end
 function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
+    local last_spd_cstr_value = nil
 
     for i,x in ipairs(list_messages) do
 
@@ -199,9 +200,11 @@ function THIS_PAGE:render_list(mcdu_data)
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_discontinuity(mcdu_data, line_id)
             end, x)
+            last_spd_cstr_value = nil
         elseif x.point_type == nil then
              -- NOP -- This is normal: in some cases we add a non existent line
                     -- to the array (see prepare_list)
+            last_spd_cstr_value = nil
         elseif x.point_type ~= POINT_TYPE_LEG then
             local name, proc = cifp_convert_leg_name(x)
             x.id = name -- This is necessary for the LAT REV page
@@ -211,7 +214,17 @@ function THIS_PAGE:render_list(mcdu_data)
             end
 
             local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
-            local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
+            local spd_cstr = ""
+            if x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
+                spd_cstr  = tostring(x.cstr_speed)
+                if last_spd_cstr_value == spd_cstr then
+                    spd_cstr = "\""
+                else
+                    last_spd_cstr_value = spd_cstr
+                end 
+            else
+                last_spd_cstr_value = nil
+            end
             local distance = x.computed_distance
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
@@ -219,8 +232,25 @@ function THIS_PAGE:render_list(mcdu_data)
         else
             local distance = x.computed_distance
             local proc = x.airway_name or ""
-            local alt_cstr, alt_cstr_col = nil, nil
-            local spd_cstr = nil
+            local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
+            local spd_cstr = ""
+            if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
+                spd_cstr  = tostring(x.cstr_speed)
+                if last_spd_cstr_value == spd_cstr then
+                    spd_cstr = "\""
+                else
+                    last_spd_cstr_value = spd_cstr
+                end 
+            elseif x.cstr_speed_mach then
+                spd_cstr  = "." .. tostring(math.floor(x.cstr_speed_mach*100))
+                if last_spd_cstr_value == spd_cstr then
+                    spd_cstr = "\""
+                else
+                    last_spd_cstr_value = spd_cstr
+                end 
+            else
+                last_spd_cstr_value = nil
+            end
             local name = x.id or "(MAN)"
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
@@ -502,6 +532,32 @@ local function trigger_lat_rev(mcdu_data, id)
     return false
 end
 
+local function trigger_vert_rev(mcdu_data, id)
+    if mcdu_data.page_data[600].ref_lines and mcdu_data.page_data[600].ref_lines[id] then
+
+        local obj = mcdu_data.page_data[600].ref_lines[id]
+
+        if obj.invalid then
+            return false
+        end
+
+        if obj.discontinuity then
+            return false
+        end
+
+        if mcdu_data.page_data[600].curr_fpln.apts.arr and obj.id == mcdu_data.page_data[600].curr_fpln.apts.arr.id then
+            return false
+        end
+
+        mcdu_data.vert_rev_subject = {}
+        mcdu_data.vert_rev_subject.data = obj
+        mcdu_open_page(mcdu_data, 608)
+        return true
+    end
+    return false
+end
+
+
 function THIS_PAGE:L1(mcdu_data)
     if mcdu_data.page_data[600].curr_idx == 1 then
         if mcdu_data.page_data[600].curr_fpln.apts.dep then
@@ -522,7 +578,6 @@ function THIS_PAGE:L1(mcdu_data)
     end
     
 end
-
 
 function THIS_PAGE:L2(mcdu_data)
     if not trigger_lat_rev(mcdu_data, 2) then
@@ -556,6 +611,42 @@ function THIS_PAGE:L6(mcdu_data)
         trigger_lat_rev_apt_dest(mcdu_data)
     else
         MCDU_Page:L6(mcdu_data) -- ERROR
+    end
+end
+
+
+function THIS_PAGE:R1(mcdu_data)
+    if mcdu_data.page_data[600].curr_idx == 1 then
+        MCDU_Page:R1(mcdu_data) -- Error
+    else
+        if not trigger_vert_rev(mcdu_data, 1) then
+            MCDU_Page:R1(mcdu_data) -- Error
+            return
+        end
+    end
+end
+
+function THIS_PAGE:R2(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 2) then
+        MCDU_Page:R2(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:R3(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 3) then
+        MCDU_Page:R3(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:R4(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 4) then
+        MCDU_Page:R4(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:R5(mcdu_data)
+    if not trigger_vert_rev(mcdu_data, 5) then
+        MCDU_Page:R5(mcdu_data) -- Error
     end
 end
 

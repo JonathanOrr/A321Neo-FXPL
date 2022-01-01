@@ -227,8 +227,8 @@ local inop_systems_desc = {
     {
      text = "REVERSER", nr = 2,
      all_cond = base_cond,
-     cond_1 = function() return get(FAILURE_ENG_REV_FAULT, 1) == 1 or ENG.dyn[1].is_fadec_pwrd == 0 or (get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1) or get(Hydraulic_G_press) < 1000 end,
-     cond_2 = function() return get(FAILURE_ENG_REV_FAULT, 2) == 1 or ENG.dyn[2].is_fadec_pwrd == 0 or (get(FAILURE_ENG_FADEC_CH1, 2) == 1 and get(FAILURE_ENG_FADEC_CH2, 2) == 1) or get(Hydraulic_Y_press) < 1000 end,
+     cond_1 = function() return get(FAILURE_ENG_REV_FAULT, 1) == 1 or not ENG.dyn[1].is_fadec_pwrd or (get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1) or get(Hydraulic_G_press) < 1000 end,
+     cond_2 = function() return get(FAILURE_ENG_REV_FAULT, 2) == 1 or not ENG.dyn[2].is_fadec_pwrd or (get(FAILURE_ENG_FADEC_CH1, 2) == 1 and get(FAILURE_ENG_FADEC_CH2, 2) == 1) or get(Hydraulic_Y_press) < 1000 end,
     },
     
 
