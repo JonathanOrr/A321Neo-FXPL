@@ -90,9 +90,7 @@ function THIS_PAGE:render(mcdu_data)
             self:set_line(mcdu_data, MCDU_LEFT, 2, "[  ]/[     ]", MCDU_LARGE, ECAM_MAGENTA)
         end
     end
-    -------------------------------------
-    -- RIGHT 3
-    -------------------------------------
+
 
     -------------------------------------
     -- LEFT 3
@@ -102,9 +100,43 @@ function THIS_PAGE:render(mcdu_data)
         if subject.data.cstr_speed_type and subject.data.cstr_speed_type == CIFP_CSTR_SPD_BELOW then
             -- The FMS speed limit is displayed here only if it's a BELOW constraint,
             -- otherwise is not showed
-            self:set_line(mcdu_data, MCDU_LEFT, 3, subject.data.cstr_speed, MCDU_LARGE, ECAM_BLUE)
+            self:set_line(mcdu_data, MCDU_LEFT, 3, subject.data.cstr_speed, MCDU_LARGE, ECAM_MAGENTA)
         else
             self:set_line(mcdu_data, MCDU_LEFT, 3, "*[   ]", MCDU_LARGE, ECAM_BLUE)
+        end
+    end
+
+
+    -------------------------------------
+    -- RIGHT 3
+    -------------------------------------
+    if subject.data.point_type ~= POINT_TYPE_PSUEDO then
+        self:set_line(mcdu_data, MCDU_RIGHT, 3, "ALT CSTR ", MCDU_SMALL)
+        if subject.data.cstr_alt_type and subject.data.cstr_alt_type ~= CIFP_CSTR_ALT_NONE then
+            -- The FMS speed limit is displayed here only if it's a BELOW constraint,
+            -- otherwise is not showed
+
+            local text = ""
+            if subject.data.cstr_alt_type == CIFP_CSTR_ALT_ABOVE then
+                text = "+" .. cifp_alt_to_text(subject.data.cstr_altitude1, subject.data.cstr_altitude1_fl, mcdu_data.page_data[608].is_clb_or_desc)
+            elseif subject.data.cstr_alt_type == CIFP_CSTR_ALT_BELOW then
+                text = "-" .. cifp_alt_to_text(subject.data.cstr_altitude1, subject.data.cstr_altitude1_fl, mcdu_data.page_data[608].is_clb_or_desc)
+            elseif subject.data.cstr_alt_type == CIFP_CSTR_ALT_AT then
+                text = " " .. cifp_alt_to_text(subject.data.cstr_altitude1, subject.data.cstr_altitude1_fl, mcdu_data.page_data[608].is_clb_or_desc)
+            elseif subject.data.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW then
+                text = cifp_alt_to_text(subject.data.cstr_altitude1, subject.data.cstr_altitude1_fl, mcdu_data.page_data[608].is_clb_or_desc) .. "-" .. cifp_alt_to_text(subject.data.cstr_altitude2, mcdu_data.page_data[608].is_clb_or_desc)
+            elseif subject.data.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND then
+                text = "+" .. cifp_alt_to_text(subject.data.cstr_altitude2, subject.data.cstr_altitude2_fl, mcdu_data.page_data[608].is_clb_or_desc)
+            elseif subject.data.cstr_alt_type == CIFP_CSTR_ALT_GLIDE then
+                self:set_line(mcdu_data, MCDU_RIGHT, 3, "GS INTCPT ", MCDU_SMALL)
+                text = " " .. subject.data.cstr_altitude1
+            else
+                assert(false, "Unknown CSTR ALT TYPE")
+            end
+
+            self:set_line(mcdu_data, MCDU_RIGHT, 3, text, MCDU_LARGE, ECAM_MAGENTA)
+        else
+            self:set_line(mcdu_data, MCDU_RIGHT, 3, "*[   ]", MCDU_LARGE, ECAM_BLUE)
         end
     end
 
@@ -114,7 +146,7 @@ function THIS_PAGE:render(mcdu_data)
     if subject.data.point_type == POINT_TYPE_LEG then
         self:set_line(mcdu_data, MCDU_LEFT, 4, "MACH/START WPT", MCDU_SMALL)
         if subject.data.cstr_speed_mach then
-            self:set_line(mcdu_data, MCDU_LEFT, 4, "." .. math.floor(100*subject.data.cstr_speed_mach) .. "/" .. subject_id, MCDU_LARGE, ECAM_BLUE)
+            self:set_line(mcdu_data, MCDU_LEFT, 4, "." .. math.floor(100*subject.data.cstr_speed_mach) .. "/" .. mcdu_format_force_to_small(subject_id), MCDU_LARGE, ECAM_BLUE)
         else
             self:set_line(mcdu_data, MCDU_LEFT, 4, " [ ]/" .. mcdu_format_force_to_small(subject_id), MCDU_LARGE, ECAM_BLUE)
         end
@@ -189,6 +221,46 @@ function THIS_PAGE:L3(mcdu_data)
     end
 end
 
+function THIS_PAGE:R3(mcdu_data)
+    local subject = mcdu_data.vert_rev_subject
+
+    if subject.data.point_type == POINT_TYPE_PSUEDO then
+        MCDU_Page:R3(mcdu_data) -- Error
+        return
+    end
+
+    if mcdu_data.clr then   -- A clear is requested
+        subject.data.cstr_alt_type = CIFP_CSTR_ALT_NONE
+        mcdu_open_page(mcdu_data, 600)
+    else
+        local cstr_type = CIFP_CSTR_ALT_AT
+        local entry = mcdu_data.entry.text
+        if string.sub(entry, 1, 1) == "+" then
+            cstr_type = CIFP_CSTR_ALT_ABOVE
+        elseif string.sub(entry, 1, 1) == "-" then
+            cstr_type = CIFP_CSTR_ALT_BELOW
+        end
+        local a = mcdu_parse_entry(string.sub(entry, cstr_type ~= CIFP_CSTR_ALT_AT and 2 or 1, -1), {"altitude"})
+        a = tonumber(a)
+        if a then
+            a = a * 100;
+
+            if mcdu_data.page_data[608].is_clb_or_desc > 0 then
+                subject.data.cstr_alt_type  = cstr_type
+                subject.data.cstr_altitude1 = a
+                subject.data.cstr_altitude1_fl = false
+            else
+                mcdu_data.page_data[608].ask_clb_des = true
+                mcdu_data.page_data[608].to_set_alt = {cstr_type, a}
+            end
+            mcdu_data.entry = {text="", color=nil}
+        else
+            mcdu_send_message(mcdu_data, "FORMAT ERROR")
+            return -- Error
+        end
+    end
+end
+
 function THIS_PAGE:L4(mcdu_data)
 
     if mcdu_data.vert_rev_subject.data.point_type == POINT_TYPE_LEG then
@@ -218,7 +290,7 @@ function THIS_PAGE:L4(mcdu_data)
 end
 local function set_spd_cstr(mcdu_data, is_clb)
     local subject = mcdu_data.vert_rev_subject
-    if mcdu_data.page_data[608].ask_clb_des then
+    if mcdu_data.page_data[608].ask_clb_des and mcdu_data.page_data[608].to_set_spd then
         subject.data.cstr_speed_type = mcdu_data.page_data[608].to_set_spd[1]
         subject.data.cstr_speed = mcdu_data.page_data[608].to_set_spd[2]
 
@@ -231,6 +303,24 @@ local function set_spd_cstr(mcdu_data, is_clb)
             subject.data.pred.is_descent = true
         end
         mcdu_data.page_data[608].ask_clb_des = false
+        mcdu_data.page_data[608].to_set_spd = nil
+        return true
+    end
+    if mcdu_data.page_data[608].ask_clb_des and mcdu_data.page_data[608].to_set_alt then
+        subject.data.cstr_alt_type = mcdu_data.page_data[608].to_set_alt[1]
+        subject.data.cstr_altitude1 = mcdu_data.page_data[608].to_set_alt[2]
+        subject.data.cstr_altitude1_fl = false
+
+        if not subject.data.pred then
+            subject.data.pred = {}
+        end
+        if is_clb then
+            subject.data.pred.is_climb = true
+        else
+            subject.data.pred.is_descent = true
+        end
+        mcdu_data.page_data[608].ask_clb_des = false
+        mcdu_data.page_data[608].to_set_alt = nil
         return true
     end
     return false
