@@ -747,6 +747,14 @@ function FMGS_perf_get_user_trans_alt()
     return FMGS_sys.perf.takeoff.user_trans_alt
 end
 
+function FMGS_perf_get_current_trans_alt()
+    if FMGS_sys.perf.takeoff.user_trans_alt then
+        return FMGS_sys.perf.takeoff.user_trans_alt
+    else
+        return FMGS_sys.perf.takeoff.trans_alt
+    end
+end
+
 function FMGS_perf_get_v_speeds()
     return FMGS_sys.perf.takeoff.v1, FMGS_sys.perf.takeoff.vr, FMGS_sys.perf.takeoff.v2
 end
@@ -912,6 +920,15 @@ end
 function FMGS_get_landing_trans_alt()
     return FMGS_sys.perf.landing.trans_alt, FMGS_sys.perf.landing.user_trans_alt
 end
+
+function FMGS_perf_get_current_landing_trans_alt()
+    if FMGS_sys.perf.landing.user_trans_alt then
+        return FMGS_sys.perf.landing.user_trans_alt
+    else
+        return FMGS_sys.perf.landing.trans_alt
+    end
+end
+
 
 function FMGS_set_landing_vapp_internal(spd) --not user value! but fmgs computed value!
     FMGS_sys.perf.landing.vapp = spd

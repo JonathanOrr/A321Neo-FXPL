@@ -101,22 +101,42 @@ function cifp_convert_leg_name(x)
     return "UKWN (" .. leg_type .. ")"
 end
 
+function cifp_alt_to_text(alt, in_fl, type)
+    if in_fl then
+        alt = alt * 100
+    end
+    print(type, alt, FMGS_perf_get_current_trans_alt())
+    if (type == 1 and alt > FMGS_perf_get_current_trans_alt()) 
+       or (type == 2 and alt > FMGS_perf_get_current_landing_trans_alt())
+       or type == 0 then
+        return "FL" .. math.floor(alt / 100)
+    else
+        return ""..alt
+    end
+end
+
 function cifp_convert_alt_cstr(x)
-    local fl_prefix_1 = x.cstr_altitude1_fl and "FL" or ""
-    local fl_prefix_2 = x.cstr_altitude2_fl and "FL" or ""
-    
+
+    local clb_desc_type = 0
+    print(x.pred, x.pred and x.pred.is_climb or "N/A")
+    if x.pred and x.pred.is_climb then
+        clb_desc_type = 1
+    elseif x.pred and x.pred.is_descent then
+        clb_desc_type = 2
+    end
+
     if     x.cstr_alt_type == CIFP_CSTR_ALT_NONE then
         return nil, nil
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE or x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW then
-            return Fwd_string_fill("+" .. fl_prefix_1 .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
+            return Fwd_string_fill("+" .. cifp_alt_to_text(x.cstr_altitude1, x.cstr_altitude1_fl,clb_desc_type), " ", 5), ECAM_MAGENTA
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_BELOW then
-        return Fwd_string_fill("-" .. fl_prefix_1 .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
+        return Fwd_string_fill("-" .. cifp_alt_to_text(x.cstr_altitude1, x.cstr_altitude1_fl,clb_desc_type)," ", 5),  ECAM_MAGENTA
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_AT or x.cstr_alt_type == CIFP_CSTR_ALT_GLIDE then
         if x.cstr_altitude1 ~= 0 then
-            return Fwd_string_fill(fl_prefix_1 .. tostring(x.cstr_altitude1), " ", 5), ECAM_GREEN
+            return Fwd_string_fill(cifp_alt_to_text(x.cstr_altitude1, x.cstr_altitude1_fl,clb_desc_type), " ", 5), ECAM_GREEN
         end
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND then
-        return Fwd_string_fill("+" .. fl_prefix_2 .. x.cstr_altitude2, " ", 5), ECAM_MAGENTA
+        return Fwd_string_fill("+" .. cifp_alt_to_text(x.cstr_altitude2, x.cstr_altitude2_fl,clb_desc_type), " ", 5), ECAM_MAGENTA
     end
 
     return nil, nil

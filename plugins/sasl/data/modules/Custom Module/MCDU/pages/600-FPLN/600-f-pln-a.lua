@@ -232,7 +232,7 @@ function THIS_PAGE:render_list(mcdu_data)
         else
             local distance = x.computed_distance
             local proc = x.airway_name or ""
-            local alt_cstr, alt_cstr_col = nil, nil
+            local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
             local spd_cstr = ""
             if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
                 spd_cstr  = tostring(x.cstr_speed)
