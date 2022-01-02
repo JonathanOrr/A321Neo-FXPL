@@ -57,6 +57,8 @@ local function thrust_rush()
 
     set(SOUND_rush_L , get(Throttle_blue_dot, 1) - ENG.dyn[1].n1)
     set(SOUND_rush_R , get(Throttle_blue_dot, 2) - ENG.dyn[2].n1)
+    set(SOUND_eng_N1, ENG.dyn[1].n1, 1)
+    set(SOUND_eng_N1, ENG.dyn[2].n1, 2)
 end
 
 local function reverser_drfs()
