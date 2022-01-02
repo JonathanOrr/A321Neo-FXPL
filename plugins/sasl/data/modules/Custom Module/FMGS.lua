@@ -242,7 +242,7 @@ local function update_status()
 
 end
 
-local function update_cifp()
+local function update_cifp_loading()
     if not AvionicsBay.is_initialized() or not AvionicsBay.is_ready() then
         return
     end
@@ -322,7 +322,7 @@ function update()
     perf_measure_start("FMGS:update()")
     update_status()
     update_route()
-    update_cifp()
+    update_cifp_loading()
 
     update_limits()
     update_predictions()
