@@ -828,6 +828,14 @@ function FMGS_set_takeoff_acc(user_acc)
     FMGS_sys.perf.takeoff.user_acc = user_acc
 end
 
+function FMGS_perf_get_current_takeoff_acc()
+    if FMGS_sys.perf.takeoff.user_acc then
+        return FMGS_sys.perf.takeoff.user_acc
+    else
+        return FMGS_sys.perf.takeoff.acc
+    end
+end
+
 function FMGS_get_takeoff_flaps()
     return FMGS_sys.perf.takeoff.flaps
 end

@@ -104,10 +104,29 @@ local function draw_takeoff()
 
 end
 
+local function draw_climb()
+    local legs = FMGS_sys.pred_debug.get_big_array()
+    if not legs then
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        return
+    end
+    for i, l in ipairs(legs) do
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 480-i*18, i .. ") " .. (l.id or l.name or "[UNKN]") 
+        .. "   CLB? " .. (l.pred.is_climb and "Y" or "N")
+        .. "   DES? " .. (l.pred.is_descent and "Y" or "N")
+        .. "   IAS=" .. (l.pred.ias or "N/A")
+        .. "   ALT=" .. (l.pred.altitude or "N/A")
+        .. "   MACH=" .. (l.pred.mach or "N/A")
+        , 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
+end
+
 function draw_vprof()
     draw_vprof_menu()
     if curr_subpage == 1 then
         draw_takeoff()
+    elseif curr_subpage == 2 then
+        draw_climb()
     end
 end
 

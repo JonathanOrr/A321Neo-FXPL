@@ -15,7 +15,6 @@
 
 -- Adapted from: https://aviation.stackexchange.com/a/77300/12643
 
-local ms_per_kt = 0.51444
 local feet_per_metre = 3.28
 local T_0C = 273.15   -- 0 degrees C in Kelvin
 
@@ -29,9 +28,6 @@ local k = 1.4         -- k is a shorthand for Gamma, the ratio of specific heats
 local lss0 = math.sqrt(k*R*T0) -- ISA sea level speed sound
 local rho0 = 1.225    -- ISA sea level density in Kg/m3
 
-local function kt(m)
-    return m/ms_per_kt
-end
 
 -- Return pressure ratio given a Mach number and static pressure,
 -- assuming compressible flow
@@ -72,22 +68,6 @@ local function density(h)
     return pressure(h) / (R * temperature(h))
 end
 
-function convert_to_eas_tas_mach(cas, alt)
-    cas = cas * ms_per_kt
-    alt = alt / feet_per_metre
-
-    local ps = pressure(alt)
-    local lss = lss(alt)
-    local oat = temperature(alt)
-    local rho = density(alt)
-    local pd = compressible_pitot(cas/lss0) * p0
-
-    local M = pitot_to_Mach(pd / ps)
-    local eas = lss0 * M * math.sqrt(ps/p0)
-    local tas = lss * M
-
-    return kt(eas), kt(tas), M
-end
 
 function m_to_nm(m)
     return m * 0.000539957;
@@ -101,9 +81,40 @@ function kts_to_ms(kts)
     return kts * 0.514444
 end
 
+function ms_to_kts(ms)
+    return ms * 1.94384
+end
+
+
 function fpm_to_kts(fpm)
     return fpm * 0.00987473
 end
+
+function fpm_to_ms(fpm)
+    return 0.00508 * fpm
+end
+
+function ms_to_fpm(ms)
+    return 196.85 * ms
+end
+
+function convert_to_eas_tas_mach(cas, alt)
+    cas = kts_to_ms(cas)
+    alt = alt / feet_per_metre
+
+    local ps = pressure(alt)
+    local lss = lss(alt)
+    local oat = temperature(alt)
+    local rho = density(alt)
+    local pd = compressible_pitot(cas/lss0) * p0
+
+    local M = pitot_to_Mach(pd / ps)
+    local eas = lss0 * M * math.sqrt(ps/p0)
+    local tas = lss * M
+
+    return ms_to_kts(eas), ms_to_kts(tas), M
+end
+
 
 -- return in [kts]
 -- inputs: tas [kts], vs [fpm], v_wind [kts], d_wind [deg, relative]

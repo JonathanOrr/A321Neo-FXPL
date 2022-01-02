@@ -22,6 +22,9 @@ include("FMGS/predictors/drag.lua")
 include("libs/speed_helpers.lua")
 include('libs/air_helpers.lua')
 
+local EARTH_GRAVITY = 9.80665
+local QUANTUM_BASE_IN_SEC = 60  -- Predictions are build with this maximum granularity (lower is possible)
+
 -------------------------------------------------------------------------------
 -- Global variables
 -------------------------------------------------------------------------------
@@ -65,8 +68,8 @@ local function prepare_the_common_big_array_merge(array)
                 last_clb_idx = #the_big_array
             end
             table.insert(the_big_array, leg)
-            if leg.pred and leg.pred.is_descent and not last_des_idx then
-                last_des_idx = #the_big_array
+            if leg.pred and leg.pred.is_descent and not first_des_idx then
+                first_des_idx = #the_big_array
             end
         end
     end
@@ -75,7 +78,7 @@ end
 local function prepare_the_common_big_array()
     the_big_array = {}
     last_clb_idx = nil
-    last_des_idx = nil
+    first_des_idx = nil
 
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.dep_sid)
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.dep_trans)
@@ -111,8 +114,8 @@ local function prepare_the_common_big_array()
 
     -- Now I have to update the vertical constraints (DESCENT)
     local last_alt_cstr = 999999 
-    if last_des_idx and last_des_idx > 0 then
-        for i=last_des_idx,#the_big_array  do
+    if first_des_idx and first_des_idx > 0 then
+        for i=first_des_idx,#the_big_array  do
             if    the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE
                or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_AT
             then
@@ -212,9 +215,9 @@ end
 
 local function predict_climb_thrust_net_avail(ias,altitude)
     local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
-    local N1 = eng_N1_limit_clb(oat, 0, altitude, true, false, false)
-    local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
-    local density = get_density_ratio(ref_alt)
+    local N1 = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
+    local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
+    local density = get_density_ratio(altitude)
 
     local thrust_per_engine = predict_engine_thrust(mach, density, oat_pred, altitude, N1)
 
@@ -222,6 +225,20 @@ local function predict_climb_thrust_net_avail(ias,altitude)
     local drag = predict_drag(density, tas, mach, 0)
 
     return thrust_per_engine * 2 - drag
+end
+
+local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end_spd)
+    local ref_alt = (end_alt+begin_alt)/2
+    local ref_spd = (end_spd+begin_spd)/2
+    local oat = get(OTA)
+    local oat_pred = predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
+    local N1 = eng_N1_limit_clb(oat_pred, 0, ref_alt, true, false, false)
+    local density = get_density_ratio(ref_alt)
+    local _, tas, mach = convert_to_eas_tas_mach(ref_spd, ref_alt)
+
+    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())
+    return fuel_consumption
+
 end
 
 -------------------------------------------------------------------------------
@@ -249,27 +266,29 @@ local function vertical_profile_takeoff_update()
 
     FMGS_sys.data.pred.takeoff.gdot = compute_green_dot(total_to_weight, rwy_alt)
 
-    if not FMGS_sys.perf.takeoff.v2 then
+    local _,_,v2 = FMGS_perf_get_v_speeds()
+
+    if not v2 then
         return nil
     end
 
     local fuel_consumption
 
     -- Initial climb, from rwy altitude + 30 to 400
-    FMGS_sys.data.pred.takeoff.ROC_init, fuel_consumption = get_ROC_after_TO(rwy_alt, FMGS_sys.perf.takeoff.v2, total_to_weight)
+    FMGS_sys.data.pred.takeoff.ROC_init, fuel_consumption = get_ROC_after_TO(rwy_alt, v2, total_to_weight)
     FMGS_sys.data.pred.takeoff.time_to_400ft = (400-30) / FMGS_sys.data.pred.takeoff.ROC_init * 60
-    FMGS_sys.data.pred.takeoff.dist_to_400ft = FMGS_sys.data.pred.takeoff.time_to_400ft * FMGS_sys.perf.takeoff.v2 / 3600
+    FMGS_sys.data.pred.takeoff.dist_to_400ft = FMGS_sys.data.pred.takeoff.time_to_400ft * v2 / 3600
     fuel_consumed = fuel_consumed + fuel_consumption * FMGS_sys.data.pred.takeoff.time_to_400ft
 
     -- Acceleration at 400ft
-    local time,dist,fuel_consumption = get_time_dist_from_V2_to_VSRS(rwy_alt+400, FMGS_sys.perf.takeoff.v2, total_to_weight)
+    local time,dist,fuel_consumption = get_time_dist_from_V2_to_VSRS(rwy_alt+400, v2, total_to_weight)
     FMGS_sys.data.pred.takeoff.time_to_sec_climb = time
     FMGS_sys.data.pred.takeoff.dist_to_sec_climb = dist
     fuel_consumed = fuel_consumed + fuel_consumption * time
 
     -- Second part of the initial climb to takeoff acceleration altitude
     local acc_alt = FMGS_get_takeoff_acc()
-    time,dist,fuel_consumption = get_time_dist_from_VSRS_to_VACC(rwy_alt+400, FMGS_sys.perf.takeoff.acc, FMGS_sys.perf.takeoff.v2+10, total_to_weight)
+    time,dist,fuel_consumption = get_time_dist_from_VSRS_to_VACC(rwy_alt+400, FMGS_perf_get_current_takeoff_acc(), v2+10, total_to_weight)
     FMGS_sys.data.pred.takeoff.time_to_vacc = time
     FMGS_sys.data.pred.takeoff.dist_to_vacc = dist
     fuel_consumed = fuel_consumed + fuel_consumption * time
@@ -277,23 +296,149 @@ local function vertical_profile_takeoff_update()
     return fuel_consumed
 end
 
+local function get_target_speed_climb(altitude)
+    -- This function does not consider  the initial climb part or
+    -- restrictions
+    if altitude < FMGS_sys.data.init.alt_speed_limit_climb[2] then
+        return FMGS_sys.data.init.alt_speed_limit_climb[1], nil
+    end
+
+    -- Otherwise it depends on the cost index
+    local cost_index = FMGS_init_get_cost_idx()
+    if not cost_index then
+        cost_index = 0 -- Cost index default to zero
+    end
+
+    -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
+    local optimal_speed = math.min(340,0.645 * cost_index + 308)
+    local optimal_mach  = math.min(0.8, 0.765 + 0.001683333 * cost_index - 0.00007895833 * cost_index^2 + 0.000001828125 * cost_index^3 - 1.822917e-8*cost_index^4 + 6.510417e-11*cost_index^5)
+    return optimal_speed, optimal_mach
+end
+
 function vertical_profile_climb_update()
+
+    ----------------------------------------------------
+    -- README
+    ----------------------------------------------------
+    -- There's a pdf on Discord's dev server with the
+    -- flowchar of this function
+    ----------------------------------------------------
 
     local PERC_ACCELERATION = 0.6   -- (1-this) is the energy left for climbing when speed target is not matched
 
-    local curr_altitude = FMGS_sys.perf.takeoff.acc
-    local curr_spd      = FMGS_sys.perf.takeoff.v2+10
+    -- Compute the initial weight as the takeoff weight - the fuel consumed at takeoff and initial climb
+    local curr_weight = ( FMGS_sys.data.init.weights.zfw
+                        + FMGS_sys.data.init.weights.block_fuel
+                        - FMGS_sys.data.init.weights.taxi_fuel) * 1000
+                        - FMGS_sys.data.pred.takeoff.total_fuel_kgs
 
-    for i, leg in ipairs(the_big_array) do
-        if i > last_clb_idx then
+    assert(curr_weight > FMGS_sys.data.init.weights.zfw)
+
+    local _,_,v2 = FMGS_perf_get_v_speeds()
+
+    local cruise_alt = FMGS_sys.data.init.crz_fl
+
+    local curr_alt      = FMGS_perf_get_current_takeoff_acc()
+    local curr_spd      = v2+10
+    local curr_mach     = 0 -- It doesn't matter at the beginning to compute the mach
+    local curr_dist     = 0
+    local A = 0 -- Horizontal acceleration
+    local thrust_available = nil -- Will be set the first loop
+    local skip_dist_reset = false
+
+    local Q = QUANTUM_BASE_IN_SEC    -- This may be reduced if the leg is too short
+    local i = 1
+    local max_clb_point = last_clb_idx
+    local total_legs = #the_big_array
+
+    -- We need to modify both i and max_clb_point, so for is no good here
+    while i <= max_clb_point do
+
+        if not skip_dist_reset then
+            curr_dist     = 0
+        end
+        skip_dist_reset = false
+        -- Reset variables
+        Q = QUANTUM_BASE_IN_SEC
+        A = 0
+
+        thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt)
+        local leg = the_big_array[i]
+        if not leg then
+            logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "max_clb_point=", max_clb_point)
+        end
+        local D = leg.computed_distance
+        assert(D)   -- At this point, the distance should be already computed
+
+        local target_speed, target_mach = get_target_speed_climb(curr_alt)
+
+        -- Be sure the target speed is ok with the possible constraint
+        if leg.cstr_speed_type == CIFP_CSTR_SPD_BELOW or leg.cstr_speed_type == CIFP_CSTR_SPD_AT then
+            target_speed = math.min(target_speed, leg.cstr_speed)
+        end
+
+        -- If needed, let's compute the time to reach the target speed (in this case we are accelerating)
+        if math.abs(target_speed - curr_spd) > 1 and (not target_mach or math.abs(target_mach - curr_mach) > 0.005) then
+            -- In this case we need to accelerate and climb at the same time
+            local thrust_for_acceleration = thrust_available * 0.6
+            thrust_available = thrust_available - thrust_for_acceleration   -- This is the thurst dedicate to climb
+
+            A = thrust_available / curr_weight -- [m/s2]
+            Q = 1   -- Reduce the quantum to increase the precision of the speed change
+        end
+
+        -- Rate of climb at the beginning of the leg
+        local VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(curr_spd)) -- [fpm]
+        local _, TAS, new_mach = convert_to_eas_tas_mach(curr_spd, curr_alt)
+        local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+
+
+        Q = math.min(Q, D/m_to_nm(kts_to_ms(GS)))   -- [s]
+        Q = math.min(Q, (cruise_alt-curr_alt)/VS * 60)  -- [s]
+
+        local new_alt  = curr_alt + Q * VS / 60                  -- in [feet]
+        local new_spd  = curr_spd + ms_to_kts(Q * A)             -- in [kts]
+        
+        -- If any, enforce the altitude constraint
+        new_alt = math.min(new_alt, leg.pred.prop_clb_cstr)
+
+        -- Let's scompute the fuel consumption in this period
+        local fuel_consump = compute_fuel_consumption_climb(curr_alt, new_alt, curr_spd, new_spd)   --[kg/s]
+        curr_weight = curr_weight - fuel_consump * Q    -- [kg]
+
+        -- Ok, update the values
+        curr_mach = new_mach
+        curr_alt  = new_alt
+        curr_spd  = new_spd
+        curr_dist = curr_dist + m_to_nm(kts_to_ms(GS)) * Q  -- in [nm]
+
+        if curr_alt >= cruise_alt then
             break
         end
-        local thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_altitude)
-        
-        -- First of all I compute the climb to the next segment ignoring the
-        -- altitude constraint
 
+        if curr_dist >= D then
+            leg.pred.altitude = new_alt
+            leg.pred.ias      = new_spd
+            leg.pred.mach     = new_mach
+
+            if i < total_legs then
+                -- We didn't reach the TOC, so let's be sure the next wpt is
+                -- predicted as a climb
+                if not the_big_array[i+1].pred.is_climb then
+                    the_big_array[i+1].pred.is_climb = true
+                    max_clb_point = max_clb_point + 1
+                end
+            end
+
+            -- Goto the next WPTs
+        else
+            skip_dist_reset = true
+            i = i - 1
+        end
+        i = i + 1
     end
+
+    -- TODO Add T/C or whatever
 
 end
 
@@ -312,10 +457,15 @@ function vertical_profile_update()
         return
     end
 
+    if not FMGS_sys.data.init.crz_fl then
+        -- We need also the Cruise FL...
+        return
+    end
+
     -- Ok, we have everything, let's go!
     local fuel_consumed = vertical_profile_takeoff_update() -- In Kgs
     FMGS_sys.data.pred.takeoff.total_fuel_kgs = fuel_consumed
-    if not fuel_consumed then
+    if not fuel_consumed or fuel_consumed > FMGS_sys.data.init.weights.block_fuel*1000 then
         return -- Cannot make any other prediction
     end
 
@@ -323,3 +473,11 @@ function vertical_profile_update()
     vertical_profile_climb_update()
 
 end
+
+
+FMGS_sys.pred_debug = { -- Just for debugging
+
+    get_big_array = function()
+        return the_big_array
+    end
+}
