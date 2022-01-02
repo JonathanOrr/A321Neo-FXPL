@@ -236,12 +236,12 @@
 {6a771f16-ea3a-4801-af88-78f66bd80e34} event:/Cabin
 {312f3339-8227-4aad-abe3-026feb4c99dd} event:/Engine
 {3174bcfe-2ec2-43cb-ad20-5bd4580dd09f} event:/Engine Start N2 L
+{66185964-896d-41e8-9cd1-888005fad3fe} event:/ExtEngine
 {ec37d174-e026-4081-8076-06e902e2dd2c} event:/Flaps
 {63e912cd-1eb2-4b29-aa2f-747df9f8ce6e} event:/Packs
 {f2c03dad-b3a1-476b-b501-78711ec701c3} event:/Rush
 {b9efac07-a24d-4962-bd2b-6a15a00944ab} event:/Slats
 {9bffc29f-9703-4b8f-9db3-63de2b32710a} event:/Transformer
-{66185964-896d-41e8-9cd1-888005fad3fe} event:/ExtEngine
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
