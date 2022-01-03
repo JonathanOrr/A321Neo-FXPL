@@ -66,9 +66,16 @@ initialize()
 
 local function update_engine_model_per(eng)
     local elev_feet = get(Elevation_m) * 3.28084
+    if elev_feet > 50000 then
+        -- Many parameters are off over this altitude, I'm sorry, engine failed
+        ENG.dyn[eng].n1 = 0
+        ENG.dyn[eng].is_avail = false
+    end
+    elev_feet = math.min(50000, elev_feet)  -- Model produces invalid data if the altitude is too high
     local m = get(Flightmodel_mach)
     m = m ~= m and 0 or m   -- Sometimes we get spurious NaN here
-    
+    m = math.min(0.95, m)   -- Model may produce invalid data in supersonic range (shouldn't the plane destroy at this speed?)
+
     local inputs = {
         throttle = eng == 1 and get(Override_eng_1_lever) or get(Override_eng_2_lever),
         alt_feet = elev_feet,
