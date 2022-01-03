@@ -37,6 +37,7 @@ include('engines/n1_modes.lua')
 include('engines/leap1a.lua')
 include('engines/pw1133g.lua')
 include('engines/model/xp_interface.lua')
+include('FMGS/functions.lua')
 
 -- engine states, simple ones right now for debugging, introduced for more flexible abnormals later
 -- TODO TBD use string values? --> NO! Use integers = faster
@@ -1134,6 +1135,26 @@ local function update_oil_qty()
 
 end
 
+local function is_soft_ga_activable()
+    if not ENG.dyn[1].is_avail or not ENG.dyn[2].is_avail then
+        return false    -- All engines must be operative
+    end
+
+    if get(Flaps_internal_config) < 1 then
+        return false    -- Flaps should be extended
+    end
+
+    if get(Any_wheel_on_ground) == 1 then
+        return false    -- Aircraft must be still in air
+    end
+
+    if adirs_how_many_adrs_work() <= 1 or adirs_get_avg_alt() >= 16000 or adirs_get_avg_alt() >= FMGS_get_go_around_thrust_reduction() then
+        return false    -- Altitude condition error
+    end
+
+    return true -- Ok, activable
+end
+
 local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
 
     local ai_wing_oper = get(AI_wing_L_operating) + get(AI_wing_R_operating) > 0
@@ -1164,7 +1185,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
         -- than 3 seconds, then SOFT GA is enabled until it's back to TOGA or CLB
         -- Also, both engines must be available
         -- Further details here: https://safetyfirst.airbus.com/introduction-to-the-soft-go-around-function/
-        elseif (ENG.dyn[engine].n1_mode == 7 or get(TIME) - last_time_toga[engine] < 3) and ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
+        elseif (ENG.dyn[engine].n1_mode == 7 or get(TIME) - last_time_toga[engine] < 3) and is_soft_ga_activable() then
             ENG.dyn[engine].n1_mode = 7 -- SOFT GA
             
             -- In this case we replace the MCT value

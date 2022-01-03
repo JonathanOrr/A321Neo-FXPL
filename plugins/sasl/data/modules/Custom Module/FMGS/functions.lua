@@ -941,6 +941,14 @@ function FMGS_get_landing_vls()
     return FMGS_sys.perf.landing.vls
 end
 
+function FMGS_get_go_around_thrust_reduction()
+    if FMGS_sys.perf.go_around.user_thr_red then
+        return FMGS_sys.perf.go_around.user_thr_red
+    else
+        return FMGS_sys.perf.go_around.thr_red
+    end
+end
+
 
 -------------------------------------------------------------------------------
 -- Predictions
