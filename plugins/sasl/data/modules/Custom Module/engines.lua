@@ -108,7 +108,7 @@ local already_back_to_norm = false -- This is used to check continuous ignition
 local time_current_startup = { -1, -1}  -- time current engine start attempt has been made, resetted on shutdown
 local last_time_toga = {0,0} -- Time point where thrust levers are set to TOGA
 
-local already_started_eng = {false, false}
+local failing_data = {{FF_1_state = false, delay_start = nil, FF_2_state = false}, {FF_1_state = false, delay_start = nil, FF_2_state = false}}
 
 local oil_gulp_timer = {0,0}  -- for timer based oil gulping implementation
 local initial_oil_qty = {0,0} -- initial oil qty on engine start
@@ -1261,27 +1261,50 @@ function update_engine_type()
 end
 
 local function update_failing_eng(x)
-    local eng_ms    = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
-    local n2_below  = ENG.dyn[x].n2 < 62
-    local not_avail = not ENG.dyn[x].is_avail
-    local eng_st    = already_started_eng[x]
-    local no_fire_pb= (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
+    local eng_ms      = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
+    local eng_fire_pb = (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 1
 
-    if eng_ms and n2_below and eng_st and no_fire_pb and not_avail then
-        ENG.dyn[x].is_failed = true
+    -- local failing_data = {{FF_1_state = false, delay_start = nil, FF_2_state = false}, {FF_1_state = false, delay_start = nil, FF_2_state = false}
+
+    -- Check Discord dev server for logic
+
+    local n1_above  = ENG.dyn[x].n1 >= ENG.dyn[x].n1_idle
+    local n2_above  = ENG.dyn[x].n2 >= 58
+
+    -- FF 2 SET part
+    if n1_above or n2_above then
+        if not failing_data[x].delay_start then
+            failing_data[x].delay_start = get(TIME)
+        else
+            if get(TIME) - failing_data[x].delay_start > 3 then
+                failing_data[x].FF_2_state = true
+            end
+        end
+    else
+        failing_data[x].delay_start = nil
     end
-    
-    if not n2_below then
-        already_started_eng[x] = true
-        ENG.dyn[x].is_failed = false
+
+    -- FF 2 RESET part
+    if not eng_ms or eng_fire_pb then
+        failing_data[x].FF_2_state = false
     end
+
+    -- FF 1 SET part
+    local A_condition = not n1_above or not n2_above
+    local B_condition = failing_data[x].FF_2_state
+    if eng_ms and not eng_fire_pb and A_condition and B_condition then
+        failing_data[x].FF_1_state = true
+    end
+
+    -- FF 1 RESET part
+    if n1_above or n2_above then
+        failing_data[x].FF_1_state = false
+    end
+
+    ENG.dyn[x].is_failed = failing_data[x].FF_1_state
 
 end
 local function update_failing()
-    
-    if get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF then
-        already_started_eng = {false, false}
-    end
     
     update_failing_eng(1)
     update_failing_eng(2)
