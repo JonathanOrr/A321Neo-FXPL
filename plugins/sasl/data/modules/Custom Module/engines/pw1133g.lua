@@ -209,10 +209,10 @@ function configure_pw1133g()
             perc_penalty_AI_bleed     = 0.03,   -- See thrust_penalty_computation
             thr_mach_barrier          = 0.4,
             thr_k_coeff = {
-                            {    -0.010  ,   -0.0025 },
+                            {    0  ,   -0.0025 },
                             { -0.3, -0.595 },
                             { 0.005, -0.03 },
-                            { 0.89,      1 },
+                            { 0.90,      1 },
                           },
             thr_alt_penalty = {1, 0.7},
             thr_alt_limit   = 11000,
