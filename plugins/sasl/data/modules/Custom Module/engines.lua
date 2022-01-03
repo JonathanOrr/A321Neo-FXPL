@@ -93,7 +93,7 @@ local eng_EGT_off = {EGT_MAGIC,EGT_MAGIC}  -- used during startup and shutdown, 
 
 local slow_start_time_requested = false
 local igniter_eng = {0,0}
-local starter_valve_eng = {0,0}
+local starter_valve_eng = {false,false}
 local windmill_min_speed = {250 + math.random()*30, 250 + math.random()*30}
 
 -- Engine startup cooling stuffs
@@ -587,7 +587,7 @@ local function perform_crank_procedure(eng, wet_cranking)
         -- Dry cranking
         eng_FF_off[eng] = 0
     end
-    starter_valve_eng[eng] = 1 -- during cranking the starter valve is open
+    starter_valve_eng[eng] = true -- during cranking the starter valve is open
 end
 
 local function perform_starting_procedure_follow_n2(eng)
@@ -598,10 +598,10 @@ local function perform_starting_procedure_follow_n2(eng)
 
     if igniter_eng[eng] == 0 and not eng_manual_switch[eng] and eng_N2_off[eng] > ENG.data.startup.ign_on_n2 then
         igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
-        starter_valve_eng[eng] = 1
+        starter_valve_eng[eng] = true
     elseif eng_manual_switch[eng] then
         igniter_eng[eng] = 3  -- Manual start uses both igniters
-        starter_valve_eng[eng] = 1 -- TODO is valve open on manual start?
+        starter_valve_eng[eng] = true -- TODO is valve open on manual start?
     end
 
     ENG.dyn[eng].cranking = true -- Need for bleed air computation, see packs.lua, TODO bleed PSI seems to be to high currently
@@ -689,7 +689,7 @@ local function perform_starting_procedure_follow_n1(eng)
     end
 
     if eng_N2 > ENG.data.startup.sav_close_n2 then  -- SAV close at a slightly different point in time than IGN off
-        starter_valve_eng[eng] = 0
+        starter_valve_eng[eng] = false
     end
 end
 
@@ -949,7 +949,7 @@ local function update_startup()
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
         igniter_eng[1] = 0
-        starter_valve_eng[1] = 0
+        starter_valve_eng[1] = false
     end
     if not ENG.dyn[2].is_avail and require_cooldown[2] then    -- Turn off the engine
         ENG.dyn[2].start_fsm_state = FSM_SHUTDOWN
@@ -964,7 +964,7 @@ local function update_startup()
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
         igniter_eng[2] = 0
-        starter_valve_eng[2] = 0
+        starter_valve_eng[2] = false
     end
 
 end
