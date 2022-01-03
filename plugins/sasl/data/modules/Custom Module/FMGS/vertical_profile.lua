@@ -342,14 +342,33 @@ function vertical_profile_climb_update()
     local curr_spd      = v2+10
     local curr_mach     = 0 -- It doesn't matter at the beginning to compute the mach
     local curr_dist     = 0
+    local curr_time     = 0
     local A = 0 -- Horizontal acceleration
     local thrust_available = nil -- Will be set the first loop
     local skip_dist_reset = false
 
     local Q = QUANTUM_BASE_IN_SEC    -- This may be reduced if the leg is too short
-    local i = 1
+    local i = 0
     local max_clb_point = last_clb_idx
     local total_legs = #the_big_array
+
+    -- First, let's understand where we are considering the initial climb
+    curr_time =
+        FMGS_sys.data.pred.takeoff.time_to_400ft+
+        FMGS_sys.data.pred.takeoff.time_to_sec_climb+ 
+        FMGS_sys.data.pred.takeoff.time_to_vacc
+
+    local traveled_nm = 
+        FMGS_sys.data.pred.takeoff.dist_to_400ft    +
+        FMGS_sys.data.pred.takeoff.dist_to_sec_climb+
+        FMGS_sys.data.pred.takeoff.dist_to_vacc
+    
+    while traveled_nm > 0 do
+        i = i + 1
+        traveled_nm = traveled_nm - the_big_array[i].computed_distance
+    end
+
+    curr_dist = traveled_nm + the_big_array[i].computed_distance
 
     -- We need to modify both i and max_clb_point, so for is no good here
     while i <= max_clb_point do
@@ -378,13 +397,18 @@ function vertical_profile_climb_update()
         end
 
         -- If needed, let's compute the time to reach the target speed (in this case we are accelerating)
-        if math.abs(target_speed - curr_spd) > 1 and (not target_mach or math.abs(target_mach - curr_mach) > 0.005) then
+        if target_speed - curr_spd > 1 and (not target_mach or target_mach - curr_mach > 0.005) then
             -- In this case we need to accelerate and climb at the same time
             local thrust_for_acceleration = thrust_available * 0.6
             thrust_available = thrust_available - thrust_for_acceleration   -- This is the thurst dedicate to climb
 
             A = thrust_available / curr_weight -- [m/s2]
             Q = 1   -- Reduce the quantum to increase the precision of the speed change
+        end
+
+        if target_mach and curr_mach - target_mach > 0.005 then
+            A = -0.1
+            thrust_available = thrust_available - (A * curr_weight)   -- Reduce speed to remain in valid mach when climbing
         end
 
         -- Rate of climb at the beginning of the leg
@@ -400,8 +424,9 @@ function vertical_profile_climb_update()
         local new_spd  = curr_spd + ms_to_kts(Q * A)             -- in [kts]
         
         -- If any, enforce the altitude constraint
-        new_alt = math.min(new_alt, leg.pred.prop_clb_cstr)
-
+        if leg.pred.prop_clb_cstr then
+            new_alt = math.min(new_alt, leg.pred.prop_clb_cstr)
+        end
         -- Let's scompute the fuel consumption in this period
         local fuel_consump = compute_fuel_consumption_climb(curr_alt, new_alt, curr_spd, new_spd)   --[kg/s]
         curr_weight = curr_weight - fuel_consump * Q    -- [kg]
@@ -411,6 +436,7 @@ function vertical_profile_climb_update()
         curr_alt  = new_alt
         curr_spd  = new_spd
         curr_dist = curr_dist + m_to_nm(kts_to_ms(GS)) * Q  -- in [nm]
+        curr_time = curr_time + Q
 
         if curr_alt >= cruise_alt then
             break
@@ -420,6 +446,8 @@ function vertical_profile_climb_update()
             leg.pred.altitude = new_alt
             leg.pred.ias      = new_spd
             leg.pred.mach     = new_mach
+            leg.pred.time     = curr_time
+            leg.pred.vs       = VS
 
             if i < total_legs then
                 -- We didn't reach the TOC, so let's be sure the next wpt is
