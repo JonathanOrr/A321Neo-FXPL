@@ -224,6 +224,8 @@ local function predict_climb_thrust_net_avail(ias,altitude)
     -- let's remove the drag now
     local drag = predict_drag(density, tas, mach, 0)
 
+    print("TD", thrust_per_engine, drag)
+
     return thrust_per_engine * 2 - drag
 end
 
@@ -370,8 +372,11 @@ function vertical_profile_climb_update()
 
     curr_dist = traveled_nm + the_big_array[i].computed_distance
 
+    local runs = 0  -- Just for debugging the performance
+
     -- We need to modify both i and max_clb_point, so for is no good here
     while i <= max_clb_point do
+        runs = runs + 1
 
         if not skip_dist_reset then
             curr_dist     = 0
@@ -382,6 +387,7 @@ function vertical_profile_climb_update()
         A = 0
 
         thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt)
+        print("INIT THRUST", thrust_available, curr_spd,curr_alt)
         local leg = the_big_array[i]
         if not leg then
             logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "max_clb_point=", max_clb_point)
@@ -406,23 +412,44 @@ function vertical_profile_climb_update()
             Q = 1   -- Reduce the quantum to increase the precision of the speed change
         end
 
-        if target_mach and curr_mach - target_mach > 0.005 then
-            A = -0.1
-            thrust_available = thrust_available - (A * curr_weight)   -- Reduce speed to remain in valid mach when climbing
+        local new_alt, new_spd, new_mach, GS, VS
+        local emergency_out = 0 -- This counter is to exit in case of an infinite loop (shouldn't happen, but, you know...)
+        repeat
+            emergency_out = emergency_out + 1
+            if emergency_out > 1000 then
+                break
+            end
+            if new_mach then
+                local ACC_MACH_REDUCTION = 0.005    -- Reduction of acceleration to stay in mach limits
+                                                    -- This affects only the loop number and precision of
+                                                    -- the accelerations
+                A = A - ACC_MACH_REDUCTION
+                thrust_available = thrust_available - (-ACC_MACH_REDUCTION * curr_weight)   -- Reduce speed to remain in valid mach when climbing
+                print(emergency_out, new_mach, ">", target_mach)
+            end
+
+            local _, TAS, _ = convert_to_eas_tas_mach(curr_spd, curr_alt)
+            -- Rate of climb at the beginning of the leg
+            VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(curr_spd)) -- [fpm]
+            if VS < 100 then
+                print(VS, thrust_available, curr_weight, curr_spd)
+            end
+            GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+
+            Q = math.min(Q, D/m_to_nm(kts_to_ms(GS)))   -- [s]
+            Q = math.min(Q, (cruise_alt-curr_alt)/VS * 60)  -- [s]
+
+            new_alt  = curr_alt + Q * VS / 60                  -- in [feet]
+            new_spd  = curr_spd + ms_to_kts(Q * A)             -- in [kts]
+            local _, _, _new_mach = convert_to_eas_tas_mach(new_spd, new_alt)
+            new_mach = _new_mach
+            
+        until (not target_mach or new_mach < target_mach)
+
+        if emergency_out > 1000 then
+            logWarning("Emergency exit from repeat-until loop in vertical profile. This is no good.")
         end
 
-        -- Rate of climb at the beginning of the leg
-        local VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(curr_spd)) -- [fpm]
-        local _, TAS, new_mach = convert_to_eas_tas_mach(curr_spd, curr_alt)
-        local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
-
-
-        Q = math.min(Q, D/m_to_nm(kts_to_ms(GS)))   -- [s]
-        Q = math.min(Q, (cruise_alt-curr_alt)/VS * 60)  -- [s]
-
-        local new_alt  = curr_alt + Q * VS / 60                  -- in [feet]
-        local new_spd  = curr_spd + ms_to_kts(Q * A)             -- in [kts]
-        
         -- If any, enforce the altitude constraint
         if leg.pred.prop_clb_cstr then
             new_alt = math.min(new_alt, leg.pred.prop_clb_cstr)
@@ -467,7 +494,9 @@ function vertical_profile_climb_update()
     end
 
     -- TODO Add T/C or whatever
+    table.insert(the_big_array, i, {name="T/C", pred={altitude=cruise_alt, ias=curr_spd,mach=curr_mach,time=curr_time, vs=0}})
 
+    print("Found T/C in " .. runs .. " steps")
 end
 
 
