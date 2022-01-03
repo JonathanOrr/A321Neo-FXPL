@@ -39,12 +39,12 @@ function THIS_PAGE:render_dest(mcdu_data)
         arr_id = arr_id .. (sibl and rwy.sibl_name or rwy.name)
     end
     local trip_time = (FMGS_perf_get_pred_trip_time() and FMGS_perf_get_pred_trip_time() or "----")
-    self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8).. trip_time, MCDU_LARGE)
 
     local trip_dist_num = FMGS_perf_get_pred_trip_dist()
     local trip_dist = trip_dist_num and math.ceil(trip_dist_num) or "----"
     local efob = (FMGS_perf_get_pred_trip_efob() and FMGS_perf_get_pred_trip_efob() or "----")
-    self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6, MCDU_LARGE))
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6), MCDU_LARGE)
 
 end
 

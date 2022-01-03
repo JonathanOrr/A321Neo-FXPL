@@ -111,13 +111,13 @@ local function draw_climb()
         return
     end
     for i, l in ipairs(legs) do
-        sasl.gl.drawText(Font_B612MONO_regular, 10, 480-i*18, i .. ") " .. (l.id or l.name or "[UNKN]") 
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 480-i*18, Aft_string_fill(i .. ")", " ", 4) .. Aft_string_fill((l.id or l.name or "[SID/STAR]"), " ", 12) 
         .. "   CLB? " .. (l.pred.is_climb and "Y" or "N")
         .. "   DES? " .. (l.pred.is_descent and "Y" or "N")
         .. "   IAS=" .. (l.pred.ias and math.ceil(l.pred.ias) or "N/A")
-        .. "   ALT=" .. (l.pred.altitude and math.floor(l.pred.altitude) or "N/A")
-        .. "   MACH=" .. (l.pred.mach and Round(l.pred.mach,2) or "N/A")
-        .. "   VS=" .. (l.pred.vs and math.floor(l.pred.vs) or "N/A")
+        .. "   ALT=" .. Aft_string_fill(""..(l.pred.altitude and math.floor(l.pred.altitude) or "N/A"), " ", 6)
+        .. "   MACH=" .. (l.pred.mach and Round_fill(l.pred.mach,2) or "N/A ")
+        .. "   VS=" .. Aft_string_fill(""..(l.pred.vs and math.floor(l.pred.vs) or "N/A"), " ", 7)
         .. "   TIME(s)=" .. (l.pred.time and math.floor(l.pred.time) or "N/A")
         , 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
