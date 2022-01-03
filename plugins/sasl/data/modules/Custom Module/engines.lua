@@ -121,7 +121,7 @@ local function engine_create_state()
     return  {   n1=0,                   -- N1   [%] -- Use ENG.data.fan_n1_rpm_max to get RPM
                 n2=0,                   -- N2   [%]
                 nfan=0,                 -- NFAN [%] -- Use ENG.data.fan_n1_rpm_max to get RPM (use N1 really!)
-                egt=0,                  -- EGT  [°C]
+                egt=EGT_MAGIC,          -- EGT  [°C]
                 ff=0,                   -- Fuel flow [kg/s] (not /hour!) 
                 oil_qty=0,              -- Oil qty [oil units (see fcom)]
                 oil_press=0,            -- Oil Pressure [psi]
@@ -368,6 +368,7 @@ local function update_egt()
         if eng_EGT_off[1] > current_egt and get(Engine_1_master_switch) == 0 then eng_EGT_off[1] = current_egt end  -- workaround to avoid jump up
         if current_egt == EGT_MAGIC then
             ENG.dyn[1].egt = get(OTA)
+            eng_EGT_off[1] = get(OTA)
         else
             ENG.dyn[1].egt = eng_EGT_off[1]
         end
@@ -384,6 +385,7 @@ local function update_egt()
         if eng_EGT_off[2] > current_egt and get(Engine_2_master_switch) == 0  then eng_EGT_off[2] = current_egt end -- workaround to avoid jump up
         if current_egt == EGT_MAGIC then
             ENG.dyn[2].egt = get(OTA) -- display OAT in case A/C has just been initialized
+            eng_EGT_off[2] = get(OTA)
         else
             ENG.dyn[2].egt = eng_EGT_off[2]
         end
