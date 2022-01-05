@@ -62,6 +62,10 @@ function configure_pw1133g()
             return FF_kgh / 3600
         end,
 
+        min_n1_idle = function(air_density_ratio)
+            return math.min(45, math.max(19.5,-123.0940 * air_density_ratio ^ 3 + 245.5489 * air_density_ratio^2 - 182.9221 * air_density_ratio + 80.0591))
+        end,
+
         oil = {
             qty_max = 22,               -- [QT] oil qty gauge shows a computed value which is about 1/2 actual just to have similar annunciations regardless engine type
             qty_min = 14,               -- [QT] currently unused?! randomness of initial qty is coded in update_engine_type()

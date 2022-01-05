@@ -270,17 +270,14 @@ local function cooling_time(time_since_last_shutdown)
     return Math_clamp(time_cool, 0, 90) -- limit from direct start to 90 seconds cooling max  TODO engine type specific values
 end
 
-local function min_n1(altitude)
-    return 5.577955*math.log(0.03338352*altitude+23.66644)+1.724586
-end
 
 local function update_n1_minimum()
     -- WARNING! Mininmum N1 affects the controllers and the engine model, pay attention!
 
-    local curr_altitude = get(Elevation_m) * 3.28084
-    local comp_min_n1 = min_n1(curr_altitude) 
-                      + ((AI_sys.comp[ANTIICE_ENG_1].valve_status
-                          or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
+    local comp_min_n1 = ENG.data.min_n1_idle(get(Weather_Sigma))
+    comp_min_n1 = comp_min_n1 
+                + ((AI_sys.comp[ANTIICE_ENG_1].valve_status
+                or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
     comp_min_n1 = comp_min_n1 + (AI_sys.comp[ANTIICE_WING_L].valve_status and N1_INC_AI_WING or 0) + (AI_sys.comp[ANTIICE_WING_R].valve_status and N1_INC_AI_WING or 0)
 
     local curr_n1_idle_L = ENG.dyn[1].n1_idle
