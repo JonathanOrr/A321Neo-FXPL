@@ -56,7 +56,8 @@ function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
 
     local T_ratio = k1 + k2 + k3_k4
 
-    local alt_ratio_exp = (altitude_m > ENG.data.model.thr_alt_limit) and ENG.data.model.thr_alt_penalty[1] or ENG.data.model.thr_alt_penalty[2]
+    local alt_ratio_exp = Math_rescale(ENG.data.model.thr_alt_limit, ENG.data.model.thr_alt_penalty[1], ENG.data.model.thr_alt_limit+1000, ENG.data.model.thr_alt_penalty[2], altitude_m)
+
     local alt_ratio = sigma^alt_ratio_exp
 
     T_ratio = T_ratio * alt_ratio

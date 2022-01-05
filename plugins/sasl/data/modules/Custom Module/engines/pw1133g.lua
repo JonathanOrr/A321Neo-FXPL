@@ -207,12 +207,17 @@ function configure_pw1133g()
             perc_penalty_AI_engine    = 0.012,  -- See thrust_penalty_computation
             perc_penalty_AI_wing      = 0.058,  -- See thrust_penalty_computation
             perc_penalty_AI_bleed     = 0.03,   -- See thrust_penalty_computation
+
+            -- MEGA-WARNING: You CANNOT randomly change the following parameters without
+            --               PLOTTING the values of `thrust_main_equation`
+            --               if they don't match, step change in the engine thrust WILL occur
+            --               with very bad consequences.
             thr_mach_barrier          = 0.4,
             thr_k_coeff = {
-                            {    0  ,   -0.0025 },
+                            {    -0.010  ,   -0.0025 },
                             { -0.3, -0.595 },
                             { 0.005, -0.03 },
-                            { 0.90,      1 },
+                            { 1.06,  1.322 },
                           },
             thr_alt_penalty = {1, 0.7},
             thr_alt_limit   = 11000,
