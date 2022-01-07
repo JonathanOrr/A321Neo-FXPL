@@ -28,17 +28,18 @@ function thrust_takeoff_computation(FN0, oat, crit_temp)
 end
 
 function thrust_penalty_computation(AI_engine, AI_wing, bleed, T_actual)
-    AI_engine = AI_engine * ENG.data.model.perc_penalty_AI_engine
-    AI_wing   = AI_wing   * ENG.data.model.perc_penalty_AI_wing
-    bleed     = bleed     * ENG.data.model.perc_penalty_AI_bleed
 
-    return T_actual * (AI_engine+AI_wing+bleed)
+    AI_engine = AI_engine * (ENG.data.model.perc_penalty_AI_engine * T_actual + ENG.data.model.k_penalty_AI_engine)
+    AI_wing   = AI_wing   * (ENG.data.model.perc_penalty_AI_wing   * T_actual + ENG.data.model.k_penalty_AI_wing)
+    bleed     = bleed     * (ENG.data.model.perc_penalty_AI_bleed  * T_actual + ENG.data.model.k_penalty_AI_bleed)
+
+    return AI_engine+AI_wing+bleed
 end
 
 function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
     local l1,l2,l3,l4
 
-    if mach > ENG.data.model.thr_mach_barrier then
+    if mach <= ENG.data.model.thr_mach_barrier then
         l1 = ENG.data.model.thr_k_coeff[1][1]
         l2 = ENG.data.model.thr_k_coeff[2][1]
         l3 = ENG.data.model.thr_k_coeff[3][1]
@@ -59,8 +60,7 @@ function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
     local alt_ratio_exp = Math_rescale(ENG.data.model.thr_alt_limit, ENG.data.model.thr_alt_penalty[1], ENG.data.model.thr_alt_limit+1000, ENG.data.model.thr_alt_penalty[2], altitude_m)
 
     local alt_ratio = sigma^alt_ratio_exp
-
-    T_ratio = T_ratio * alt_ratio
+    T_ratio = math.min(1, T_ratio * alt_ratio)
     local T_max = T_takeoff * T_ratio
     local T_actual_th = T_max * throttle
 

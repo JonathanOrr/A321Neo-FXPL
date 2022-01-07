@@ -211,27 +211,33 @@ function configure_pw1133g()
 
         },
         model = {
-            n1_thrust_non_linearity   = 0.5,    -- It must be strictly 0 < x <= 1
+            n1_thrust_non_linearity   = 0.55,   -- It must be strictly 0 < x <= 1
                                                 -- 1 means that the relation between
                                                 -- thrust and n1 is linear
-            coeff_to_thrust_crit_temp = 0.0075, -- See thrust_takeoff_computation
-            perc_penalty_AI_engine    = 0.012,  -- See thrust_penalty_computation
-            perc_penalty_AI_wing      = 0.058,  -- See thrust_penalty_computation
-            perc_penalty_AI_bleed     = 0.03,   -- See thrust_penalty_computation
 
-            -- MEGA-WARNING: You CANNOT randomly change the following parameters without
+            coeff_to_thrust_crit_temp = 0.0075, -- See thrust_takeoff_computation
+            perc_penalty_AI_engine    = 0.012,  -- [%] See thrust_penalty_computation
+            perc_penalty_AI_wing      = 0.058,  -- [%] See thrust_penalty_computation
+            perc_penalty_AI_bleed     = 0.032,  -- [%] See thrust_penalty_computation
+            k_penalty_AI_engine       = 100  ,  -- [N] See thrust_penalty_computation
+            k_penalty_AI_wing         = 2000,   -- [N] See thrust_penalty_computation
+            k_penalty_AI_bleed        = 2000,   -- [N] See thrust_penalty_computation
+
+            -- MEGA-WARNING: You **MUST NOT** randomly change the following parameters without
             --               PLOTTING the values of `thrust_main_equation`
-            --               if they don't match, step change in the engine thrust WILL occur
-            --               with very bad consequences.
-            thr_mach_barrier          = 0.4,
-            thr_k_coeff = {
-                            {    -0.010  ,   -0.0025 },
-                            { -0.3, -0.595 },
-                            { 0.005, -0.03 },
-                            { 1.06,  1.322 },
+            --               if they don't match, step change in the engine thrust **WILL**
+            --               occur with very bad consequences.
+            thr_mach_barrier          = 0.43,
+            thr_k_coeff = {                     -- First column is the coefficients when
+                                                -- the Mach is below thr_mach_barrier
+                            { 0,      -0.0014 },
+                            { -0.595, -0.5 },
+                            { -0.0061, 0 },
+                            { 1,      0.949 },
                           },
-            thr_alt_penalty = {1, 0.7},
-            thr_alt_limit   = 11000,
+
+            thr_alt_penalty = {0.7, 1}, -- Below/Above tropopause thrust ratio
+            thr_alt_limit   = 11000,    -- Considered tropopause (TODO: shouldn't we use the XP datarefs?)
             CG_vert_displacement = 1.0287,  -- in meters
             CG_lat_displacement = 5.75,     -- in meters
         }

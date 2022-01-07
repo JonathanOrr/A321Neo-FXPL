@@ -34,7 +34,7 @@ end
 function update_thrust_penalty(engine_state, inputs)
     -- inputs: AI_wing_on, AI_engine_on, bleed_ratio
 
-    local T_penalty = thrust_penalty_computation(inputs.AI_engine_on and 1 or 0, inputs.AI_wing_on and 1 or 0, inputs.bleed_ratio, engine_state.T_max)
+    local T_penalty = thrust_penalty_computation(inputs.AI_engine_on and 1 or 0, inputs.AI_wing_on and 1 or 0, inputs.bleed_ratio, engine_state.T_actual_th)
     engine_state.T_penalty = T_penalty
 end
 
