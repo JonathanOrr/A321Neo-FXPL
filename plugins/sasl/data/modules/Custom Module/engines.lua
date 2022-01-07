@@ -274,11 +274,27 @@ end
 local function update_n1_minimum()
     -- WARNING! Mininmum N1 affects the controllers and the engine model, pay attention!
 
+    -- Engine idle is computed as the maximum of:
+    -- - A minimal constant value necessary to run the elec generator and keep the burner on
+    -- - The IDLE APPROACH N1, if IDLE APPROACH N1 is active
+    -- - The MIN IDLE N1, computed as the N1 providing a constant thrust under various ambiental
+    --   conditions and bleed extraction
+
+    local idle_appr = 0
+    if get(Any_wheel_on_ground) == 0 and adirs_how_many_adrs_work() > 0 then
+        if get(Gear_handle) == 1 or get(Flaps_internal_config) >= 4 then
+            idle_appr = ENG.data.min_n1_approach_idle(adirs_get_avg_alt(), get(OTA))
+        end
+    end
+
     local comp_min_n1 = ENG.data.min_n1_idle(get(Weather_Sigma))
     comp_min_n1 = comp_min_n1 
                 + ((AI_sys.comp[ANTIICE_ENG_1].valve_status
                 or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
     comp_min_n1 = comp_min_n1 + (AI_sys.comp[ANTIICE_WING_L].valve_status and N1_INC_AI_WING or 0) + (AI_sys.comp[ANTIICE_WING_R].valve_status and N1_INC_AI_WING or 0)
+
+    print(comp_min_n1, idle_appr)
+    comp_min_n1 = math.max(comp_min_n1, idle_appr, ENG.data.min_n1_idle_hard)
 
     local curr_n1_idle_L = ENG.dyn[1].n1_idle
     local curr_n1_idle_R = ENG.dyn[2].n1_idle
@@ -1145,7 +1161,7 @@ local function is_soft_ga_activable()
         return false    -- Aircraft must be still in air
     end
 
-    if adirs_how_many_adrs_work() <= 1 or adirs_get_avg_alt() >= 16000 or adirs_get_avg_alt() >= FMGS_get_go_around_thrust_reduction() then
+    if adirs_how_many_adrs_work() < 1 or adirs_get_avg_alt() >= 16000 or adirs_get_avg_alt() >= FMGS_get_go_around_thrust_reduction() then
         return false    -- Altitude condition error
     end
 

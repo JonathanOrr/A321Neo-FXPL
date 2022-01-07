@@ -39,7 +39,7 @@ function configure_pw1133g()
         end,
         
         n2_to_n1_fun = function(n2)
-            -- Needed for startup procedure
+            -- Needed for startup procedure and min_n1_approach_idle
             -- MUST BE the inverse of n1_to_n2_fun
             return math.exp((n2 + 2.6492) / 22.1036)
         end,
@@ -62,8 +62,15 @@ function configure_pw1133g()
             return FF_kgh / 3600
         end,
 
+        min_n1_idle_hard = 18.5,
         min_n1_idle = function(air_density_ratio)
             return math.min(45, math.max(19.5,-123.0940 * air_density_ratio ^ 3 + 245.5489 * air_density_ratio^2 - 182.9221 * air_density_ratio + 80.0591))
+        end,
+        min_n1_approach_idle = function(altitude_ft, oat)
+            -- Based on another engine, needs fix
+            local base_n2 = 59
+            local min_n2 = (base_n2 + 8) + 0.12 * oat + 0.6/1000 * altitude_ft
+            return ENG.data.n2_to_n1_fun(min_n2)
         end,
 
         oil = {
