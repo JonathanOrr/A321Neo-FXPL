@@ -1234,10 +1234,18 @@ local function update_n1_mode_and_limits()
     -- We have to compute all the values for each detent even if we are not in that mode, this is
     -- because in AT_PID_functions we have to compute the previous detent value to make the 
     -- throttle position monotonic and linearly increasing
-    set(Eng_N1_max_detent_toga, eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-    set(Eng_N1_max_detent_mct, eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-    set(Eng_N1_max_detent_clb, eng_N1_limit_clb(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-    set(Eng_N1_max_detent_flex, eng_N1_limit_flex(get(Eng_N1_flex_temp), get(OTA), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
+    local N1_to_limit    = eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    local N1_mct_limit   = eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    N1_mct_limit = math.min(N1_mct_limit, N1_to_limit)
+    local N1_clb_limit   = eng_N1_limit_clb(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    N1_clb_limit = math.min(N1_clb_limit, N1_mct_limit)
+    local N1_flx_limit   = eng_N1_limit_flex(get(Eng_N1_flex_temp), get(OTA), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    N1_flx_limit = math.min(N1_flx_limit, N1_clb_limit)
+
+    set(Eng_N1_max_detent_toga, N1_to_limit) 
+    set(Eng_N1_max_detent_mct, N1_mct_limit)
+    set(Eng_N1_max_detent_clb, N1_clb_limit)
+    set(Eng_N1_max_detent_flex, N1_flx_limit)
     
 
     update_n1_mode_and_limits_per_engine(get(Cockpit_throttle_lever_L), 1)

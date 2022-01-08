@@ -49,7 +49,7 @@ local function cap_integral_limit(n1, int_sum)
 
     -- plot BEFORE change these values
     bottom_limit = n1^2/9000
-    bottom_limit = math.max(0.05, bottom_limit)
+    bottom_limit = math.max(0.055, bottom_limit)
     up_limit = n1^2/6500+0.04
     up_limit = math.max(0.025, up_limit)
     int_sum = math.min(int_sum, up_limit)
