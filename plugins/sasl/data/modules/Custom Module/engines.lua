@@ -293,7 +293,6 @@ local function update_n1_minimum()
                 or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
     comp_min_n1 = comp_min_n1 + (AI_sys.comp[ANTIICE_WING_L].valve_status and N1_INC_AI_WING or 0) + (AI_sys.comp[ANTIICE_WING_R].valve_status and N1_INC_AI_WING or 0)
 
-    print(comp_min_n1, idle_appr)
     comp_min_n1 = math.max(comp_min_n1, idle_appr, ENG.data.min_n1_idle_hard)
 
     local curr_n1_idle_L = ENG.dyn[1].n1_idle

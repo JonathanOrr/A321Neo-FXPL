@@ -64,7 +64,8 @@ function configure_pw1133g()
 
         min_n1_idle_hard = 18.5,
         min_n1_idle = function(air_density_ratio)
-            return math.min(45, math.max(19.5,-123.0940 * air_density_ratio ^ 3 + 245.5489 * air_density_ratio^2 - 182.9221 * air_density_ratio + 80.0591))
+            -- WARNING: Beaware that changing this will change the descent performance!
+            return math.min(34,math.max(19.5,-20 * air_density_ratio + 34))
         end,
         min_n1_approach_idle = function(altitude_ft, oat)
             -- Based on another engine, needs fix
@@ -222,6 +223,10 @@ function configure_pw1133g()
             k_penalty_AI_engine       = 100  ,  -- [N] See thrust_penalty_computation
             k_penalty_AI_wing         = 2000,   -- [N] See thrust_penalty_computation
             k_penalty_AI_bleed        = 2000,   -- [N] See thrust_penalty_computation
+            penalty_AI_bleed_f  = function(air_density_ratio)
+                local thrust_penalty = (-0.01092801+19.20246*air_density_ratio-41.18029*air_density_ratio^2+38.44175*air_density_ratio^3-12.65178*air_density_ratio^4) * 1000
+                return thrust_penalty
+            end,
 
             -- MEGA-WARNING: You **MUST NOT** randomly change the following parameters without
             --               PLOTTING the values of `thrust_main_equation`

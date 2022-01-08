@@ -27,11 +27,11 @@ function thrust_takeoff_computation(FN0, oat, crit_temp)
     end
 end
 
-function thrust_penalty_computation(AI_engine, AI_wing, bleed, T_actual)
+function thrust_penalty_computation(air_density_ratio, AI_engine, AI_wing, bleed, T_actual)
 
     AI_engine = AI_engine * (ENG.data.model.perc_penalty_AI_engine * T_actual + ENG.data.model.k_penalty_AI_engine)
     AI_wing   = AI_wing   * (ENG.data.model.perc_penalty_AI_wing   * T_actual + ENG.data.model.k_penalty_AI_wing)
-    bleed     = bleed     * (ENG.data.model.perc_penalty_AI_bleed  * T_actual + ENG.data.model.k_penalty_AI_bleed)
+    bleed = bleed * ENG.data.model.penalty_AI_bleed_f(air_density_ratio)
 
     return AI_engine+AI_wing+bleed
 end
