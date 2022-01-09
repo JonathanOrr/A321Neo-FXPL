@@ -39,7 +39,7 @@ end
 
 function update_thrust_spooling(engine_state, inputs)
     -- inputs: oat, alt_feet, engine_is_available
-    local N1_base_max = eng_N1_limit_takeoff_clean(inputs.oat, inputs.alt_feet)
+    local N1_base_max = eng_N1_limit_takeoff_clean(inputs.oat, inputs.tat, inputs.alt_feet)
 
     local T_desired = engine_state.T_actual_th
     local T_max     = engine_state.T_max

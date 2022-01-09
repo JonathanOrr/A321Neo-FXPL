@@ -22,7 +22,7 @@ local yaw_moment = globalPropertyf("sim/flightmodel/forces/N_prop")
 local total_eng_forces = globalPropertyf("sim/flightmodel/forces/faxil_prop")
 
 function eng_model_enforce_n1(eng, n1)
-    local N1_max = eng_N1_limit_takeoff_clean(get(OTA), get(ACF_elevation) * 3.28084)
+    local N1_max = eng_N1_limit_takeoff_clean(get(OTA), get(OTA), get(ACF_elevation) * 3.28084)
     ENG.model_state[eng].N1_spooled = n1
 
     local T_ratio = (n1 / N1_max)^(1/ENG.data.model.n1_thrust_non_linearity)
@@ -80,6 +80,7 @@ local function update_engine_model_per(eng)
         throttle = eng == 1 and get(Override_eng_1_lever) or get(Override_eng_2_lever),
         alt_feet = elev_feet,
         oat = get(OTA),
+        tat = get(TAT),
         mach = m,
         sigma = get(Weather_Sigma),
         AI_wing_on = AI_sys.comp[eng == 1 and ANTIICE_WING_L or ANTIICE_WING_R].valve_status,
