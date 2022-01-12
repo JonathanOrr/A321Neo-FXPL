@@ -32,7 +32,9 @@ function eng_model_enforce_n1(eng, n1)
     local inputs = {
         oat = get(OTA),
         alt_feet = get(Elevation_m),
-        mach = get(Flightmodel_mach)
+        mach = get(Flightmodel_mach),
+        throttle=0,
+        sigma=get(Weather_Sigma)
     }
     update_thrust_secondary(ENG.model_state[eng], inputs)
 

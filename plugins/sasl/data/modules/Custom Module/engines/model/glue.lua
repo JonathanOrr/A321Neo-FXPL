@@ -58,7 +58,7 @@ function update_thrust_secondary(engine_state, inputs)
 
     local altitude_m = inputs.alt_feet * 0.3048
     local isa_diff   = inputs.oat - thrust_ISA_temp(altitude_m)
-    engine_state.FF  = ENG.data.n1_to_FF(engine_state.N1_spooled, inputs.alt_feet, inputs.mach, isa_diff)
+    engine_state.FF  = ENG.data.FF_function(inputs.throttle, inputs.sigma)
 
     engine_state.FF = math.max(0,engine_state.FF)
 end
