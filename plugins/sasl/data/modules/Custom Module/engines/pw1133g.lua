@@ -241,7 +241,7 @@ function configure_pw1133g()
                             { 1,      0.949 },
                           },
 
-            thr_alt_penalty = {0.7, 1}, -- Below/Above tropopause thrust ratio
+            thr_alt_penalty = {0.7, 0.84}, -- Below/Above tropopause thrust ratio
             thr_alt_limit   = 11000,    -- Considered tropopause (TODO: shouldn't we use the XP datarefs?)
             CG_vert_displacement = 1.0287,  -- in meters
             CG_lat_displacement = 5.75,     -- in meters
