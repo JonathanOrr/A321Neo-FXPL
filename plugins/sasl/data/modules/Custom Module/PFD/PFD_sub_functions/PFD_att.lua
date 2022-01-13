@@ -22,7 +22,7 @@ local function draw_trim_flag(PFD_table)
 
     if (ALL_SPLR_FAIL and not FCTL.AIL.STAT.L.controlled and not FCTL.AIL.STAT.R.controlled) or
        (not FCTL.ELEV.STAT.L.controlled and not FCTL.ELEV.STAT.R.controlled) then
-        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawText(Font_ECAMfont, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         return
     end
 
@@ -200,11 +200,11 @@ function PFD_draw_att(PFD_table)
     local RA_color = RA_sys.single_RA_user(PFD_table.RA_sensor) > 400 and ECAM_GREEN or ECAM_ORANGE
         if RA_sys.single_RA_user(PFD_table.RA_sensor) <= 2500 then
         if RA_sys.single_RA_user(PFD_table.RA_sensor) > 50 then
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center,  -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_ECAMfont, 0, -225, ATT_x_center, ATT_y_center,  -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         elseif RA_sys.single_RA_user(PFD_table.RA_sensor) >= 10 then
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_ECAMfont, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         else
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_ECAMfont, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         end
     end
     --terminate masked drawing

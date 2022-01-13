@@ -146,21 +146,21 @@ local function draw_hyd_letters()
 end
 
 local function draw_spoilers()
-    sasl.gl.drawWideLine(203, 736, 203, 744, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(201, 736, 359, 753, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(358, 753, 358, 761, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(203, 736, 203, 744, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(201, 736, 359, 753, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(358, 753, 358, 761, 3, ECAM_GREY)
 
-    sasl.gl.drawWideLine(698, 736, 698, 744, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(699, 736, 541, 753, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(543, 753, 543, 761, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(698, 736, 698, 744, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(699, 736, 541, 753, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(543, 753, 543, 761, 3, ECAM_GREY)
 
-    sasl.gl.drawWideLine(145, 814, 145, 822, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(143, 822, 356, 858, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(356, 850, 356, 859, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(145, 814, 145, 822, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(143, 822, 356, 858, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(356, 850, 356, 859, 3, ECAM_GREY)
 
-    sasl.gl.drawWideLine(756, 814, 756, 822, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(757, 822, 544, 858, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(545, 850, 545, 859, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(756, 814, 756, 822, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(757, 822, 544, 858, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(545, 850, 545, 859, 3, ECAM_GREY)
 
     sasl.gl.drawText(AirbusDUFont, 450, 738, "SPD BRK", 29, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
@@ -405,13 +405,13 @@ local function draw_elevator_index()
 end
 
 local function draw_pitch_trim()
-    sasl.gl.drawWideLine(316, 402, 360, 425, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(317, 371, 317, 402, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(317, 372, 400, 382, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(316, 402, 360, 425, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(317, 371, 317, 402, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(317, 372, 400, 382, 3, ECAM_GREY)
 
-    sasl.gl.drawWideLine(584, 402, 540, 425, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(583, 371, 583, 402, 3, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(583, 372, 500, 382, 3, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(584, 402, 540, 425, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(583, 371, 583, 402, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(583, 372, 500, 382, 3, ECAM_GREY)
 
     sasl.gl.drawText(AirbusDUFont, 417, 465, "PITCH TRIM", 29, true, false, TEXT_ALIGN_CENTER, get(FAILURE_FCTL_THS_MECH) == 0 and ECAM_WHITE or ECAM_ORANGE)
 
@@ -504,8 +504,8 @@ local function draw_flt_computers()
         get(ELAC_2_status) == 1 and (FCDC_1_ok or FCDC_2_ok) and ECAM_GREEN or ECAM_ORANGE,
     }
     local ELAC_box_cl = {
-        get(ELAC_1_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
-        get(ELAC_2_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
+        get(ELAC_1_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
+        get(ELAC_2_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
     }
 
     sasl.gl.drawText(AirbusDUFont, 292, 632, "ELAC", 25, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
@@ -530,8 +530,8 @@ local function draw_flt_computers()
         get(SEC_2_status) == 1 and (FCDC_1_ok or FCDC_2_ok) and ECAM_GREEN or ECAM_ORANGE,
     }
     local SEC_box_cl = {
-        get(SEC_1_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
-        get(SEC_2_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_LINE_GREY,
+        get(SEC_1_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
+        get(SEC_2_status) == 0 and (FCDC_1_ok or FCDC_2_ok) and ECAM_ORANGE or ECAM_GREY,
     }
 
     sasl.gl.drawText(AirbusDUFont, 501, 632, "SEC",  25, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)

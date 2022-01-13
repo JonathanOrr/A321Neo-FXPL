@@ -110,7 +110,7 @@ MessageGroup_SPD_BRK_STILL_OUT = {
     is_active = function()
         local limit_1 = ENG.dyn[1].n1_idle + 5
         local limit_2 = ENG.dyn[2].n1_idle + 5
-        return get(Speedbrake_handle_ratio) > 0.05 and (ENG.dyn[1].n1 > limit_1 or ENG.dyn[2].n1 > limit_2)
+        return get(SPDBRK_HANDLE_RATIO) > 0.05 and (ENG.dyn[1].n1 > limit_1 or ENG.dyn[2].n1 > limit_2)
     end,
 
     is_inhibited = function()
