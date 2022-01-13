@@ -833,6 +833,25 @@ local function perform_cooling(eng)
     
 end
 
+local function update_startup_case3(eng, req_cooldown)
+    -- CASE 3: Engine is off
+    if not ENG.dyn[eng].is_avail and req_cooldown then    -- Turn off the engine
+        ENG.dyn[eng].start_fsm_state = FSM_SHUTDOWN
+        -- Set N2 to zero
+        local n2_target = get(IAS) > 50 and get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
+        eng_N2_off[eng] = Set_linear_anim_value(ENG.dyn[eng].n2, n2_target or 0 , 0, ENG.data.max_n2, 1)
+        eng_model_enforce_n2(eng, eng_N2_off[eng])
+
+        -- Set EGT and FF to zero
+        if eng_EGT_off[eng] == EGT_MAGIC then eng_EGT_off[eng] = ENG.dyn[eng].egt end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
+        local egt_speed = math.min(10, (eng_EGT_off[eng]-get(OTA))/20)
+        eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], get(OTA), -50, 1500, egt_speed)
+        eng_FF_off[eng] = 0
+        igniter_eng[eng] = 0
+        starter_valve_eng[eng] = false
+    end
+
+end
 
 local function update_startup()
 
@@ -870,7 +889,7 @@ local function update_startup()
     set(EWD_engine_cooling, 0, 1)
     set(EWD_engine_cooling, 0, 2)
 
-    -- CASE 1: IGNITION
+    -- CASE 1/1: IGNITION
     if get(Engine_mode_knob) == 1 then
 
         -- ENG 1
@@ -919,7 +938,7 @@ local function update_startup()
             require_cooldown[2] = false
         end
         
-    -- CASE 2: manually selected CRANK
+    -- CASE 1/2: manually selected CRANK
     elseif get(Engine_mode_knob) == -1 then -- Crank
         if eng_manual_switch[1] and does_engine_1_can_start_or_crank then
             perform_crank_procedure(1, get(Engine_1_master_switch) == 1)
@@ -929,7 +948,7 @@ local function update_startup()
             perform_crank_procedure(2, get(Engine_2_master_switch) == 1)
             require_cooldown[2] = false
         end
-    -- CASE 3: Master Switch protection
+    -- CASE 1/3: Master Switch protection
     else
         if not ENG.dyn[1].is_avail and fast_restart_1 and get(Engine_1_master_switch) then
             perform_starting_procedure(1, get(All_on_ground) == 0)
@@ -942,36 +961,8 @@ local function update_startup()
     end
     
     -- CASE 3: No ignition, no crank, engine is off or shutting down
-    if not ENG.dyn[1].is_avail  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
-        ENG.dyn[1].start_fsm_state = FSM_SHUTDOWN
-        -- Set N2 to zero
-        local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
-        eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, ENG.data.max_n2, 1)
-        
-        -- Set FF to zero, drop EGT and N1 TODO check drop behavior based on SIM videos
-        if eng_EGT_off[1] == EGT_MAGIC then eng_EGT_off[1] = ENG.dyn[1].egt end -- otherwise in auto start case we will have a big jump since eng_EGT_off is not set before
-        local egt_speed = math.min(10, (eng_EGT_off[1]-get(OTA))/100)
-        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, egt_speed)
-        eng_FF_off[1] = 0
-        eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
-        igniter_eng[1] = 0
-        starter_valve_eng[1] = false
-    end
-    if not ENG.dyn[2].is_avail and require_cooldown[2] then    -- Turn off the engine
-        ENG.dyn[2].start_fsm_state = FSM_SHUTDOWN
-        -- Set N2 to zero
-        local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
-        eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, ENG.data.max_n2, 1)
-        
-        -- Set EGT and FF to zero
-        if eng_EGT_off[2] == EGT_MAGIC then eng_EGT_off[2] = ENG.dyn[2].egt end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
-        local egt_speed = math.min(10, (eng_EGT_off[2]-get(OTA))/20)
-        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, egt_speed)
-        eng_FF_off[2] = 0
-        eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
-        igniter_eng[2] = 0
-        starter_valve_eng[2] = false
-    end
+    update_startup_case3(1, require_cooldown[1])
+    update_startup_case3(2, require_cooldown[2])
 
 end
 
