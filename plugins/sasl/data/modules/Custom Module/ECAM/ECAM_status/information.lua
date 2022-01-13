@@ -21,7 +21,8 @@ local inf_messages = {
             return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
       end },
     { text="WHEN L/G DN : DIRECT LAW", cond=function() 
-            return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
+            return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW or
+                   (not RA_sys.Sensors[1].Valid or get(RA_1_status) == 0) and (not RA_sys.Sensors[2].Valid or get(RA_2_status) == 0)
       end },
     { text="DIRECT LAW", cond=function() 
             return get(FBW_total_control_law) == FBW_DIRECT_LAW
@@ -61,17 +62,8 @@ local inf_messages = {
            (ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT)
     end },
 
-    { text="BOTH PFD ON SAME FAC", cond=function() return
-       (
-           (get(FAC_1_status) == 0 and get(FAC_2_status) == 0) and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_BELOW_80_KTS or
-           get(FAILURE_ADR[2]) == 1 and get(FAILURE_ADR[3]) == 1 or 
-           get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[3]) == 1 or
-           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
-           get(DC_ess_bus_pwrd) == 0)
-           and not 
-           (
-              get(FAILURE_FCTL_FAC_1) == 1 and get(FAILURE_FCTL_FAC_2) == 1
-           )
+    { text="BOTH PFD ON SAME FAC", cond=function()
+       return false
     end },
 
     { text="FMS PRED UNRELIABLE", cond=function() return
@@ -231,7 +223,7 @@ end },
            get(FAILURE_radioalt_cap) == 1
        ) and not
        (
-              get(FAILURE_FCTL_FAC_1) == 1 and get(FAILURE_FCTL_FAC_2) == 1
+              false
        )
     end },
 
@@ -266,8 +258,8 @@ end },
             get(FAILURE_ADR[1]) == 1 or get(FAILURE_ADR[2]) == 1 or get(FAILURE_ADR[3]) == 1 or
             adirs_pfds_disagree_on_ias() or
             get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
-            not FBW.fctl.surfaces.rud.trim.controlled --fcom 4423
-            or not FBW.fctl.surfaces.rud.lim.controlled --fcom 4429
+            not FCTL.RUD.STAT.controlled --fcom 4423
+            or not FCTL.RUD.STAT.controlled --fcom 4429
            )
            and not
            -- Put CAT2 conditions here
@@ -275,7 +267,7 @@ end },
            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) or-- IT DOES NOT APPEAR ON DUAL HYD LOW PR
            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_B_low_air) or
            get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) or
-           get(FAILURE_FCTL_FAC_1) == 1 and get(FAILURE_FCTL_FAC_2) == 1 --fcom 4412
+           false --fcom 4412
            )
     end },
 

@@ -9,20 +9,20 @@ local function draw_trim_flag(PFD_table)
         return
     end
 
-    local ALL_SPLR_FAIL = not FBW.fctl.SPLR.STAT.L[1].controlled and
-                          not FBW.fctl.SPLR.STAT.L[2].controlled and
-                          not FBW.fctl.SPLR.STAT.L[3].controlled and
-                          not FBW.fctl.SPLR.STAT.L[4].controlled and
-                          not FBW.fctl.SPLR.STAT.L[5].controlled and
-                          not FBW.fctl.SPLR.STAT.R[1].controlled and
-                          not FBW.fctl.SPLR.STAT.R[2].controlled and
-                          not FBW.fctl.SPLR.STAT.R[3].controlled and
-                          not FBW.fctl.SPLR.STAT.R[4].controlled and
-                          not FBW.fctl.SPLR.STAT.R[5].controlled
+    local ALL_SPLR_FAIL = not FCTL.SPLR.STAT.L[1].controlled and
+                          not FCTL.SPLR.STAT.L[2].controlled and
+                          not FCTL.SPLR.STAT.L[3].controlled and
+                          not FCTL.SPLR.STAT.L[4].controlled and
+                          not FCTL.SPLR.STAT.L[5].controlled and
+                          not FCTL.SPLR.STAT.R[1].controlled and
+                          not FCTL.SPLR.STAT.R[2].controlled and
+                          not FCTL.SPLR.STAT.R[3].controlled and
+                          not FCTL.SPLR.STAT.R[4].controlled and
+                          not FCTL.SPLR.STAT.R[5].controlled
 
-    if (ALL_SPLR_FAIL and not FBW.fctl.AIL.STAT.L.controlled and not FBW.fctl.AIL.STAT.R.controlled) or
-       (not FBW.fctl.ELEV.STAT.L.controlled and not FBW.fctl.ELEV.STAT.R.controlled) then
-        sasl.gl.drawText(Font_ECAMfont, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, true, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    if (ALL_SPLR_FAIL and not FCTL.AIL.STAT.L.controlled and not FCTL.AIL.STAT.R.controlled) or
+       (not FCTL.ELEV.STAT.L.controlled and not FCTL.ELEV.STAT.R.controlled) then
+        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         return
     end
 
@@ -118,7 +118,7 @@ function PFD_draw_att(PFD_table)
     end
 
     --tailstrike arrow(TOGO GA and GS < 50)
-    if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 and get(EWD_flight_phase) == PHASE_FINAL then
+    if get(All_on_ground) == 0 and RA_sys.single_RA_user(PFD_table.RA_sensor) < 400 and get(EWD_flight_phase) == PHASE_FINAL then
         SASL_rotated_center_img_center_aligned(
             PFD_tailstrike_arrow,
             ATT_x_center,
@@ -139,7 +139,7 @@ function PFD_draw_att(PFD_table)
         2870,
         779,
         90 - adirs_get_roll(PFD_table.Screen_ID),
-        Math_clamp(Math_rescale_no_lim(0, -187 + adirs_get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + adirs_get_pitch(PFD_table.Screen_ID) * 10, get(PFD_table.RA_ALT)), -366, 0),
+        Math_clamp(Math_rescale_no_lim(0, -187 + adirs_get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + adirs_get_pitch(PFD_table.Screen_ID) * 10, RA_sys.single_RA_user(PFD_table.RA_sensor)), -366, 0),
         -779/2,
         ECAM_WHITE
     )
@@ -197,14 +197,14 @@ function PFD_draw_att(PFD_table)
     draw_SI_trapezoid(PFD_table)
 
     --RA ALT (TODO LACKING DH logic waiting for MCDU)
-    local RA_color = get(PFD_table.RA_ALT) > 400 and ECAM_GREEN or ECAM_ORANGE
-        if get(PFD_table.RA_ALT) <= 2500 then
-        if get(PFD_table.RA_ALT) > 50 then
-            SASL_drawText_rotated(Font_ECAMfont, 0, -225, ATT_x_center, ATT_y_center,  -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 10), 42, true, false, TEXT_ALIGN_CENTER, RA_color)
-        elseif get(PFD_table.RA_ALT) >= 10 then
-            SASL_drawText_rotated(Font_ECAMfont, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 5), 42, true, false, TEXT_ALIGN_CENTER, RA_color)
+    local RA_color = RA_sys.single_RA_user(PFD_table.RA_sensor) > 400 and ECAM_GREEN or ECAM_ORANGE
+        if RA_sys.single_RA_user(PFD_table.RA_sensor) <= 2500 then
+        if RA_sys.single_RA_user(PFD_table.RA_sensor) > 50 then
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center,  -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+        elseif RA_sys.single_RA_user(PFD_table.RA_sensor) >= 10 then
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         else
-            SASL_drawText_rotated(Font_ECAMfont, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT)), 42, true, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         end
     end
     --terminate masked drawing
@@ -226,8 +226,8 @@ function PFD_draw_att(PFD_table)
 
     --sidesitck position indicator
     if PFD_table.PFD_aircraft_in_air_timer <= 0.5 and get(EWD_flight_phase) >= PHASE_1ST_ENG_ON then
-        local total_roll = get(Capt_sidestick_roll) + get(Fo_sidestick_roll)
-        local total_pitch = get(Capt_sidestick_pitch) + get(Fo_sidestick_pitch)
+        local total_roll = get(CAPT_SSTICK_X) + get(FO_SSTICK_X)
+        local total_pitch = get(CAPT_SSTICK_Y) + get(FO_SSTICK_Y)
 
         SASL_draw_img_center_aligned(PFD_sidestick_box,   ATT_x_center, ATT_y_center, 329, 269, {1,1,1})
         SASL_draw_img_center_aligned(PFD_sidestick_cross, ATT_x_center + Math_rescale(-1, -164, 1, 164, total_roll), ATT_y_center + Math_rescale(-1, -134, 1, 134, total_pitch), 61, 63, {1,1,1})

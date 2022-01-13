@@ -32,7 +32,7 @@ MessageGroup_GND_SPEEDBRAKES = {
     -- Method to check if this message group is active
     is_active = function(self)
         -- Not showed when any memo is active
-        return get(Speedbrake_handle_ratio) < 0 and get(EWD_is_to_memo_showed) == 0 and get(EWD_is_ldg_memo_showed) == 0
+        return get(SPDBRK_HANDLE_RATIO) < 0 and get(EWD_is_to_memo_showed) == 0 and get(EWD_is_ldg_memo_showed) == 0
     end,
 
     -- Method to check if this message is currently inhibithed
@@ -71,7 +71,7 @@ MessageGroup_GND_SPLRS_NOT_ARMED = {
     sd_page = nil,
 
     is_active = function()
-        return get(Speedbrake_handle_ratio) >= 0 and get(Gear_handle) > 0 and get(Capt_ra_alt_ft) <= 500 and get(EWD_flight_phase) == PHASE_FINAL
+        return get(SPDBRK_HANDLE_RATIO) >= 0 and get(Gear_handle) > 0 and get(Capt_ra_alt_ft) <= 500 and get(EWD_flight_phase) == PHASE_FINAL
     end,
 
     is_inhibited = function()
@@ -337,7 +337,7 @@ MessageGroup_FCTL_LR_ELEV_FAULT_DOUBLE = {
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return not FBW.fctl.ELEV.STAT.L.controlled and not FBW.fctl.ELEV.STAT.R.controlled
+        return not FCTL.ELEV.STAT.L.controlled and not FCTL.ELEV.STAT.R.controlled
     end,
 
     is_inhibited = function()
@@ -540,7 +540,7 @@ MessageGroup_FCTL_GND_SPLR_5_FAULT = {
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(SEC_2_status) == 0 and get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) >= 2
+        return false --get(SEC_2_status) == 0 and get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) >= 2
     end,
 
     is_inhibited = function()
@@ -572,28 +572,28 @@ MessageGroup_FCTL_GND_SPLR_1234_FAULT = {
                 return "      GND SPLR 1+2 FAULT"
             end,
             color = function() return COL_CAUTION end,
-            is_active = function() return get(SEC_3_status) == 0 and get(SEC_1_status) == 1 and get(SEC_2_status) == 1 end
+            is_active = function() return false end --get(SEC_3_status) == 0 and get(SEC_1_status) == 1 and get(SEC_2_status) == 1 end
         },
         {
             text = function()
                 return "      GND SPLR 3+4 FAULT"
             end,
             color = function() return COL_CAUTION end,
-            is_active = function() return get(SEC_1_status) == 0 and get(SEC_3_status) == 1 and get(SEC_2_status) == 1 end
+            is_active = function() return false end --get(SEC_1_status) == 0 and get(SEC_3_status) == 1 and get(SEC_2_status) == 1 end
         },
         {
             text = function()
                 return "      GND SPLR FAULT"
             end,
             color = function() return COL_CAUTION end,
-            is_active = function() return get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 end
+            is_active = function() return false end--get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 end
         }
     },
 
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(SEC_3_status) == 0 or get(SEC_1_status) == 0
+        return false --get(SEC_3_status) == 0 or get(SEC_1_status) == 0
     end,
 
     is_inhibited = function()

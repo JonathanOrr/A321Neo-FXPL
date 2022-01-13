@@ -117,7 +117,7 @@ function PFD_draw_alt_tape(PFD_table)
         sasl.gl.drawTexture(PFD_alt_box_bgd, size[1]/2+217, size[2]/2-48, 127, 83, {1,1,1})
 
         --draw tapes that goes though the box here(e.g RA ALT)
-        sasl.gl.drawRectangle(size[1]/2+296, size[2]/2-244, 14, Math_clamp(Math_rescale_no_lim(0, 236, 500, 26, get(PFD_table.RA_ALT)), 0, 473), ECAM_RED)
+        sasl.gl.drawRectangle(size[1]/2+296, size[2]/2-244, 14, Math_clamp(Math_rescale_no_lim(0, 236, 500, 26, RA_sys.single_RA_user(PFD_table.RA_sensor)), 0, 473), ECAM_RED)
         draw_alt_digits(PFD_table)
 
         if adirs_is_gps_alt_visible(PFD_table.Screen_ID) then

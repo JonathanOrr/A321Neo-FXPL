@@ -32,9 +32,9 @@ function Show_hide_packs_debug()
   Packs_debug_window:setIsVisible(not Packs_debug_window:isVisible())
 end
 
-function Show_hide_FBW_UI()
+--[[function Show_hide_FBW_UI()
   SSS_FBW_UI:setIsVisible(not SSS_FBW_UI:isVisible())
-end
+end]]--
 
 function Show_hide_PID_UI()
   PID_UI_window:setIsVisible(not PID_UI_window:isVisible())
@@ -208,7 +208,7 @@ sasl.appendMenuSeparator(Menu_main)
 -- DEBUG submenu
 Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
 Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
-ShowHideFBWUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW UI", Show_hide_FBW_UI)
+--ShowHideFBWUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW UI", Show_hide_FBW_UI)
 ShowHidePIDUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide PID UI", Show_hide_PID_UI)
 ShowHideADIRSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ADIRS Debug", Show_hide_ADIRS_debug)
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)

@@ -255,10 +255,7 @@ local proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0, 
         cond = function()
-            return
-            get(FAILURE_FCTL_FAC_1) == 1 and
-            get(FAILURE_FCTL_FAC_2) == 1 or
-            not FBW.fctl.surfaces.rud.lim.controlled
+            return not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -268,8 +265,6 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            get(FAILURE_FCTL_FAC_1) == 1 and --fcom 4412
-            get(FAILURE_FCTL_FAC_2) == 1 or
             get(FAILURE_ENG_REV_FAULT, 1) == 1 or --fcom 5056
             get(FAILURE_ENG_REV_FAULT, 2) == 1 or
             get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[2]) == 1 or
@@ -284,7 +279,7 @@ local proc_messages = {
         indent_lvl = 0,
         cond = function()
             return
-            not FBW.fctl.surfaces.rud.lim.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -294,7 +289,7 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            not FBW.fctl.surfaces.rud.lim.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -304,7 +299,7 @@ local proc_messages = {
         indent_lvl = 0,
         cond = function()
             return
-            not FBW.fctl.surfaces.rud.lim.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -314,7 +309,7 @@ local proc_messages = {
         indent_lvl = 1, 
         cond = function()
             return
-            not FBW.fctl.surfaces.rud.lim.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     
@@ -641,7 +636,6 @@ local proc_messages = {
             (get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1) or
             get(FAILURE_FCTL_SEC_1) == 1 or
             get(FAILURE_FCTL_SEC_2) == 1 or
-            get(FAILURE_FCTL_SEC_3) == 1 or
             G_is_low_pressure() and B_is_low_pressure() or
             triple_adr_failure()
         end

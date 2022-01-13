@@ -62,9 +62,6 @@ FAILURE_IR_ATT[1] = createGlobalPropertyi("a321neo/failures/adirs/ir_1_att", 0, 
 FAILURE_IR_ATT[2] = createGlobalPropertyi("a321neo/failures/adirs/ir_2_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
 FAILURE_IR_ATT[3] = createGlobalPropertyi("a321neo/failures/adirs/ir_3_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
 
-FAILURE_GPS_1 = createGlobalPropertyi("a321neo/failures/adirs/gps_1", 0, false, true, false) -- 0: OK, 1: FAILED
-FAILURE_GPS_2 = createGlobalPropertyi("a321neo/failures/adirs/gps_2", 0, false, true, false) -- 0: OK, 1: FAILED
-
 FAILURE_SENSOR_AOA_CAPT = createGlobalPropertyi("a321neo/failures/adirs/aoa_capt", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_SENSOR_AOA_FO   = createGlobalPropertyi("a321neo/failures/adirs/aoa_fo", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_SENSOR_AOA_STBY = createGlobalPropertyi("a321neo/failures/adirs/aoa_stby", 0, false, true, false) -- 0: OK, 1: FAILED
@@ -90,6 +87,14 @@ FAILURE_IR3_ATT_ROLL_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir3_rol
 FAILURE_IR1_HDG_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir1_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_IR2_HDG_ERR   = createGlobalPropertyi("a321neo/failures/adirs/ir2_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_IR3_HDG_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir3_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_GPS_1 = createGlobalPropertyi("a321neo/failures/adirs/gps_1", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_GPS_2 = createGlobalPropertyi("a321neo/failures/adirs/gps_2", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_RA_1_FAIL = createGlobalPropertyi("a321neo/failures/nav/ra_1_fail", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_RA_2_FAIL = createGlobalPropertyi("a321neo/failures/nav/ra_2_fail", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_RA_1_ERR  = createGlobalPropertyi("a321neo/failures/nav/ra_1_erroneous", 0, false, true, false) -- 0: OK, 1: ERRONEOUS
+FAILURE_RA_2_ERR  = createGlobalPropertyi("a321neo/failures/nav/ra_2_erroneous", 0, false, true, false) -- 0: OK, 1: ERRONEOUS
 
 FAILURE_HYD_Y_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/Y_E_overheat", 0, false, true, false) -- Yellow Elec pump 0: normal 1: overheat
 FAILURE_HYD_B_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/B_E_overheat", 0, false, true, false) -- Blue Elec pump 0: normal 1: overheat
@@ -145,11 +150,8 @@ FAILURE_FCTL_SFCC_1 =        createGlobalPropertyi("a321neo/failures/fctl/sfcc_1
 FAILURE_FCTL_SFCC_2 =        createGlobalPropertyi("a321neo/failures/fctl/sfcc_2", 0, false, true, false)--slats flaps computer 2 failure
 FAILURE_FCTL_ELAC_1 =        createGlobalPropertyi("a321neo/failures/fctl/elac_1", 0, false, true, false)--elevator aileron computer 1 failure
 FAILURE_FCTL_ELAC_2 =        createGlobalPropertyi("a321neo/failures/fctl/elac_2", 0, false, true, false)--elevator aileron computer 2 failure
-FAILURE_FCTL_FAC_1 =         createGlobalPropertyi("a321neo/failures/fctl/fac_1", 0, false, true, false)--flight augmentation computer 1 failure
-FAILURE_FCTL_FAC_2 =         createGlobalPropertyi("a321neo/failures/fctl/fac_2", 0, false, true, false)--flight augmentation computer 2 failure
 FAILURE_FCTL_SEC_1 =         createGlobalPropertyi("a321neo/failures/fctl/sec_1", 0, false, true, false)--spoiler elevator computer 1 failure
 FAILURE_FCTL_SEC_2 =         createGlobalPropertyi("a321neo/failures/fctl/sec_2", 0, false, true, false)--spoiler elevator computer 2 failure
-FAILURE_FCTL_SEC_3 =         createGlobalPropertyi("a321neo/failures/fctl/sec_3", 0, false, true, false)--spoiler elevator computer 3 failure
 FAILURE_FCTL_LAIL =          createGlobalPropertyi("a321neo/failures/fctl/l_aileron", 0, false, true, false)--jam l aileron
 FAILURE_FCTL_RAIL =          createGlobalPropertyi("a321neo/failures/fctl/r_aileron", 0, false, true, false)--jam r aileron
 FAILURE_FCTL_LSPOIL_1 =      createGlobalPropertyi("a321neo/failures/fctl/l_spoiler_1", 0, false, true, false)--jam l spoiler 1
@@ -164,15 +166,15 @@ FAILURE_FCTL_RSPOIL_4 =      createGlobalPropertyi("a321neo/failures/fctl/r_spoi
 FAILURE_FCTL_RSPOIL_5 =      createGlobalPropertyi("a321neo/failures/fctl/r_spoiler_5", 0, false, true, false)--jam r spoiler 5
 FAILURE_FCTL_LELEV =         createGlobalPropertyi("a321neo/failures/fctl/l_elevator", 0, false, true, false)--jam l elevator
 FAILURE_FCTL_RELEV =         createGlobalPropertyi("a321neo/failures/fctl/r_elevator", 0, false, true, false)--jam r elevator
-FAILURE_FCTL_THS_MOT_1 =     createGlobalPropertyi("a321neo/failures/fctl/ths_motor_1", 0, false, true, false)--jam eletrical ths motor
-FAILURE_FCTL_THS_MOT_2 =     createGlobalPropertyi("a321neo/failures/fctl/ths_motor_2", 0, false, true, false)--jam eletrical ths motor
-FAILURE_FCTL_THS_MOT_3 =     createGlobalPropertyi("a321neo/failures/fctl/ths_motor_3", 0, false, true, false)--jam eletrical ths motor
+FAILURE_FCTL_THS_MOT_1 =     createGlobalPropertyi("a321neo/failures/fctl/ths_motor_1", 0, false, true, false)--break eletrical ths motor
+FAILURE_FCTL_THS_MOT_2 =     createGlobalPropertyi("a321neo/failures/fctl/ths_motor_2", 0, false, true, false)--break eletrical ths motor
+FAILURE_FCTL_THS_MOT_3 =     createGlobalPropertyi("a321neo/failures/fctl/ths_motor_3", 0, false, true, false)--break eletrical ths motor
 FAILURE_FCTL_THS_MECH =      createGlobalPropertyi("a321neo/failures/fctl/ths_mechanical", 0, false, true, false)--jam mechanical ths deflection
-FAILURE_FCTL_RUDDER_LIM_MOT_1 =   createGlobalPropertyi("a321neo/failures/fctl/rudder_limit_motor_1", 0, false, true, false)--jam rudder trim
-FAILURE_FCTL_RUDDER_LIM_MOT_2 =   createGlobalPropertyi("a321neo/failures/fctl/rudder_limit_motor_2", 0, false, true, false)--jam rudder trim
-FAILURE_FCTL_RUDDER_TRIM_MOT_1 =   createGlobalPropertyi("a321neo/failures/fctl/rudder_trim_motor_1", 0, false, true, false)--jam rudder trim
-FAILURE_FCTL_RUDDER_TRIM_MOT_2 =   createGlobalPropertyi("a321neo/failures/fctl/rudder_trim_motor_2", 0, false, true, false)--jam rudder trim
-FAILURE_FCTL_RUDDER_MECH =   createGlobalPropertyi("a321neo/failures/fctl/rudder_mechanical", 0, false, true, false)--jam mechanical rudder deflection
+FAILURE_FCTL_RUDTRIM_MOT_1 = createGlobalPropertyi("a321neo/failures/fctl/rudder_trim_motor_1", 0, false, true, false)--break eletrical rudder trim motor
+FAILURE_FCTL_RUDTRIM_MOT_2 = createGlobalPropertyi("a321neo/failures/fctl/rudder_trim_motor_2", 0, false, true, false)--break eletrical rudder trim motor
+FAILURE_FCTL_BPS =           createGlobalPropertyi("a321neo/failures/fctl/bps", 0, false, true, false)--break backup power supply
+FAILURE_FCTL_BCM =           createGlobalPropertyi("a321neo/failures/fctl/bcm", 0, false, true, false)--break backup control module
+FAILURE_FCTL_RUDDER =        createGlobalPropertyi("a321neo/failures/fctl/rudder", 0, false, true, false)--jam mechanical rudder deflection
 
 FAILURE_FUEL = createGlobalPropertyia("a321neo/failures/fuel/pumps", 8)
 FAILURE_FUEL_X_FEED = createGlobalPropertyi("a321neo/failures/fuel/x_feed_valve", 0, false, true, false)--x feed valve

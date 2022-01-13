@@ -54,8 +54,6 @@ local failures_data = {
             {name="IR1 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[1] },
             {name="IR2 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[2] },
             {name="IR3 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[3] },
-            {name="GPS 1\nFAULT",  status=false, dataref=FAILURE_GPS_1 },
-            {name="GPS 2\nFAULT",  status=false, dataref=FAILURE_GPS_2 },
             
             {name="AOA CAPT\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_CAPT },
             {name="AOA FO\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_FO },
@@ -81,6 +79,13 @@ local failures_data = {
             {name="IR2 HDG\nERRONEOUS",  status=false, dataref=FAILURE_IR2_HDG_ERR },            
             {name="IR3 HDG\nERRONEOUS",  status=false, dataref=FAILURE_IR3_HDG_ERR },            
             
+            {name="GPS 1\nFAULT",  status=false, dataref=FAILURE_GPS_1 },
+            {name="GPS 2\nFAULT",  status=false, dataref=FAILURE_GPS_2 },
+            
+            {name="RA 1\nFAULT",  status=false, dataref=FAILURE_RA_1_FAIL },
+            {name="RA 2\nFAULT",  status=false, dataref=FAILURE_RA_2_FAIL },
+            {name="RA 1\nERRONEOUS",  status=false, dataref=FAILURE_RA_1_ERR },
+            {name="RA 2\nERRONEOUS",  status=false, dataref=FAILURE_RA_2_ERR },
         }
     },
     {
@@ -153,11 +158,8 @@ local failures_data = {
             {name="SFCC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_2 },
             {name="ELAC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_ELAC_1 },
             {name="ELAC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_ELAC_2 },
-            {name="FAC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_FAC_1 },
-            {name="FAC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_FAC_2 },
             {name="SEC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_SEC_1 },
             {name="SEC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_SEC_2 },
-            {name="SEC 3\nFAILURE", status=false, dataref=FAILURE_FCTL_SEC_3 },
             {name="L AILERON\nSTUCK", status=false, dataref=FAILURE_FCTL_LAIL },
             {name="R AILERON\nSTUCK", status=false, dataref=FAILURE_FCTL_RAIL },
             {name="L SPOILER 1\nSTUCK", status=false, dataref=FAILURE_FCTL_LSPOIL_1 },
@@ -176,11 +178,11 @@ local failures_data = {
             {name="THS MOTOR 2\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_2 },
             {name="THS MOTOR 3\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_3 },
             {name="THS\nSTUCK", status=false, dataref=FAILURE_FCTL_THS_MECH },
-            {name="RUD LIM\nMOT 1 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_LIM_MOT_1 },
-            {name="RUD LIM\nMOT 2 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_LIM_MOT_2 },
-            {name="RUD TRIM\nMOT 1 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM_MOT_1 },
-            {name="RUD TRIM\nMOT 2 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM_MOT_2 },
-            {name="RUDDER MECH\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_MECH },
+            {name="RUD TRIM MOT\n1 FAILURE", status=false, dataref=FAILURE_FCTL_RUDTRIM_MOT_1 },
+            {name="RUD TRIM MOT\n2 FAILURE", status=false, dataref=FAILURE_FCTL_RUDTRIM_MOT_2 },
+            {name="BPS\nFAILURE", status=false, dataref=FAILURE_FCTL_BPS },
+            {name="BCM\nFAILURE", status=false, dataref=FAILURE_FCTL_BCM },
+            {name="RUDDER\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER },
         }
     },
     {

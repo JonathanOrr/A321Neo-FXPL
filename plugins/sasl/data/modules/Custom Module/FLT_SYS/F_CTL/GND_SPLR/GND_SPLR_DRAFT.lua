@@ -1,0 +1,5 @@
+--[[complete extention--
+((SPDBRK_NOT_RETRACKED and CONF_3_OR_FULL) or GND_SPLR_ARMED) and (((ONE_THRST_LVR_REV and OTHER_LVR_AT_OR_ABV_IDLE_BLW_MCT) or BOTH_THRST_LVR_IN_REV) and BOTH_MLG_COMPRESSED)
+
+--partial extention--
+]]

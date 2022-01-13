@@ -16,8 +16,6 @@
 -- Short description: ECAM file for the WHEEL page 
 -------------------------------------------------------------------------------
 
-
-
 --colors
 local ll_brake_temp_color = {1.0, 1.0, 1.0}
 local l_brake_temp_color = {1.0, 1.0, 1.0}
@@ -218,32 +216,32 @@ local function draw_wheel_page_spoilers()
     local spoiler_track_length = 22
 
     local l_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.L[1].controlled,
-        FBW.fctl.SPLR.STAT.L[2].controlled,
-        FBW.fctl.SPLR.STAT.L[3].controlled,
-        FBW.fctl.SPLR.STAT.L[4].controlled,
-        FBW.fctl.SPLR.STAT.L[5].controlled,
+        FCTL.SPLR.STAT.L[1].controlled,
+        FCTL.SPLR.STAT.L[2].controlled,
+        FCTL.SPLR.STAT.L[3].controlled,
+        FCTL.SPLR.STAT.L[4].controlled,
+        FCTL.SPLR.STAT.L[5].controlled,
     }
     local r_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.R[1].controlled,
-        FBW.fctl.SPLR.STAT.R[2].controlled,
-        FBW.fctl.SPLR.STAT.R[3].controlled,
-        FBW.fctl.SPLR.STAT.R[4].controlled,
-        FBW.fctl.SPLR.STAT.R[5].controlled,
+        FCTL.SPLR.STAT.R[1].controlled,
+        FCTL.SPLR.STAT.R[2].controlled,
+        FCTL.SPLR.STAT.R[3].controlled,
+        FCTL.SPLR.STAT.R[4].controlled,
+        FCTL.SPLR.STAT.R[5].controlled,
     }
     local l_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.L[1].data_avail,
-        FBW.fctl.SPLR.STAT.L[2].data_avail,
-        FBW.fctl.SPLR.STAT.L[3].data_avail,
-        FBW.fctl.SPLR.STAT.L[4].data_avail,
-        FBW.fctl.SPLR.STAT.L[5].data_avail,
+        FCTL.SPLR.STAT.L[1].data_avail,
+        FCTL.SPLR.STAT.L[2].data_avail,
+        FCTL.SPLR.STAT.L[3].data_avail,
+        FCTL.SPLR.STAT.L[4].data_avail,
+        FCTL.SPLR.STAT.L[5].data_avail,
     }
     local r_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.R[1].data_avail,
-        FBW.fctl.SPLR.STAT.R[2].data_avail,
-        FBW.fctl.SPLR.STAT.R[3].data_avail,
-        FBW.fctl.SPLR.STAT.R[4].data_avail,
-        FBW.fctl.SPLR.STAT.R[5].data_avail,
+        FCTL.SPLR.STAT.R[1].data_avail,
+        FCTL.SPLR.STAT.R[2].data_avail,
+        FCTL.SPLR.STAT.R[3].data_avail,
+        FCTL.SPLR.STAT.R[4].data_avail,
+        FCTL.SPLR.STAT.R[5].data_avail,
     }
 
     local l_spoiler_dataref = {
@@ -253,7 +251,6 @@ local function draw_wheel_page_spoilers()
         L_SPLR_4,
         L_SPLR_5,
     }
-
     local r_spoiler_dataref = {
         R_SPLR_1,
         R_SPLR_2,
@@ -263,58 +260,68 @@ local function draw_wheel_page_spoilers()
     }
 
     local spoiler_track_x_y = {
-        {44,  819},
-        {100, 810},
-        {156, 801},
-        {212, 791},
-        {269, 782},
+        {43, 826},
+        {100, 818},
+        {157, 810},
+        {214, 802},
+        {271, 794},
     }
 
     local spoiler_arrow_x_y = {
-        {55, 819},
-        {111, 810},
-        {167, 801},
-        {223, 791},
-        {280, 782},
+        {54, 826},
+        {111, 818},
+        {168, 810},
+        {225, 802},
+        {282, 794},
     }
 
     local spoiler_num_x_y = {
-        {54,  824},
-        {111, 815},
-        {167, 806},
-        {223, 796},
-        {280, 787},
+        {54, 830},
+        {111, 822},
+        {168, 814},
+        {225, 806},
+        {282, 798},
     }
 
     for i = 1, num_of_spoilers do
         if l_spoilers_data_avail[i] then
             if get(l_spoiler_dataref[i]) > 2.5 then
-                SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
-            else
-                if not l_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_ECAMfont, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                if l_spoilers_avail[i] then
+                    sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+33, 3, ECAM_GREEN)
                 end
+                sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 - spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+30, 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 - spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+30, 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+32, size[1]/2 - spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+32, 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            end
+
+            if not l_spoilers_avail[i] then
+                sasl.gl.drawText(AirbusDUFont, size[1]/2 - spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], i, 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
             end
         else
-            sasl.gl.drawText(Font_ECAMfont, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(AirbusDUFont, size[1]/2 - spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], "X", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
         if r_spoilers_data_avail[i] then
             if get(r_spoiler_dataref[i]) > 2.5 then
-                SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
-            else
-                if not r_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_ECAMfont, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                if r_spoilers_avail[i] then
+                    sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+33, 3, ECAM_GREEN)
                 end
+                sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 + spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+30, 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 + spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+30, 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+32, size[1]/2 + spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+32, 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            end
+
+            if not r_spoilers_avail[i] then
+                sasl.gl.drawText(AirbusDUFont, size[1]/2 + spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], i, 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
             end
         else
-            sasl.gl.drawText(Font_ECAMfont, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(AirbusDUFont, size[1]/2 + spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], "X", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
 
         if l_spoilers_data_avail[i] then
-            sasl.gl.drawWideLine(size[1]/2 - spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 - spoiler_track_x_y[i][1] - spoiler_track_length, spoiler_track_x_y[i][2], 2.5, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            sasl.gl.drawWideLine(size[1]/2 - spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 - spoiler_track_x_y[i][1] - spoiler_track_length, spoiler_track_x_y[i][2], 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
         end
         if r_spoilers_data_avail[i] then
-            sasl.gl.drawWideLine(size[1]/2 + spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 + spoiler_track_x_y[i][1] + spoiler_track_length, spoiler_track_x_y[i][2], 2.5, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            sasl.gl.drawWideLine(size[1]/2 + spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 + spoiler_track_x_y[i][1] + spoiler_track_length, spoiler_track_x_y[i][2], 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
         end
     end
 end

@@ -117,9 +117,8 @@ local appr_proc_messages = {
                 elec_in_emer_config() or
                 (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
-                get(FAILURE_FCTL_SEC_1) == 1 and
-                get(FAILURE_FCTL_SEC_2) == 1 and
-                get(FAILURE_FCTL_SEC_3) == 1 or
+                (get(FAILURE_FCTL_SEC_1) == 1 and
+                get(FAILURE_FCTL_SEC_2) == 1) or
                 stabliser_is_jammed() or
                 Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
                 not Y_is_low_level() and not B_is_low_level() or
@@ -302,9 +301,8 @@ local appr_proc_messages = {
                 elec_in_emer_config()
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
                 (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) or
-                get(FAILURE_FCTL_SEC_1) == 1 and
-                get(FAILURE_FCTL_SEC_2) == 1 and
-                get(FAILURE_FCTL_SEC_3) == 1 or
+                (get(FAILURE_FCTL_SEC_1) == 1 and
+                get(FAILURE_FCTL_SEC_2) == 1) or
                 spdbrk_2_or_3_and_4_fault() or
                 spoilers_are_fucked() or
                 stabliser_is_jammed() or

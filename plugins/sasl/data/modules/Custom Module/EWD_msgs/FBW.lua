@@ -446,20 +446,12 @@ MessageGroup_FBW_FLAPS_FAULT = {
 local Message_FBW_SEC_123_FAULT = {
     text = function()
         local N = ""
-        if get(FAILURE_FCTL_SEC_1) == 1 and get(FAILURE_FCTL_SEC_2) == 1 and get(FAILURE_FCTL_SEC_3) == 1 then
-            N = "1+2+3"
-        elseif get(FAILURE_FCTL_SEC_1) == 1 and get(FAILURE_FCTL_SEC_2) == 1 then
+        if get(FAILURE_FCTL_SEC_1) == 1 and get(FAILURE_FCTL_SEC_2) == 1 then
             N = "1+2"
-        elseif get(FAILURE_FCTL_SEC_3) == 1 and get(FAILURE_FCTL_SEC_2) == 1 then
-            N = "2+3"
-        elseif get(FAILURE_FCTL_SEC_3) == 1 and get(FAILURE_FCTL_SEC_1) == 1 then
-            N = "1+3"
         elseif get(FAILURE_FCTL_SEC_1) == 1 then
             N = "1"
         elseif get(FAILURE_FCTL_SEC_2) == 1 then
             N = "2"
-        elseif get(FAILURE_FCTL_SEC_3) == 1 then
-            N = "3"
         end
         return "      SEC " .. N .. " FAULT"
     end,
@@ -503,22 +495,6 @@ Message_FBW_SEC_2_RESET = {
     end
 }
 
-Message_FBW_SEC_3_RESET = {
-    status = 0,
-    text = function() return " - SEC 3......OFF THEN ON" end,
-    color = function() return COL_ACTIONS end,
-    is_active = function()
-        if Message_FBW_SEC_3_RESET.status == 0 and PB.ovhd.flt_ctl_sec_3.status_bottom then
-            Message_FBW_SEC_3_RESET.status = 1
-        end
-        if Message_FBW_SEC_3_RESET.status == 1 and not PB.ovhd.flt_ctl_sec_3.status_bottom then
-            Message_FBW_SEC_3_RESET.status = 2
-        end
-        return Message_FBW_SEC_3_RESET.status < 2 and get(FAILURE_FCTL_SEC_3) == 1
-    end
-}
-
-
 MessageGroup_FBW_SEC_123_FAULT = {
 
     shown = false,
@@ -536,7 +512,6 @@ MessageGroup_FBW_SEC_123_FAULT = {
         Message_FBW_SEC_123_FAULT,
         Message_FBW_SEC_1_RESET,
         Message_FBW_SEC_2_RESET,
-        Message_FBW_SEC_3_RESET,
         {
             text = function() return " . IF UNSUCCESSFUL:" end,
             color = function() return COL_REMARKS end,
@@ -552,18 +527,13 @@ MessageGroup_FBW_SEC_123_FAULT = {
             color = function() return COL_ACTIONS end,
             is_active = function() return get(FAILURE_FCTL_SEC_2) == 1 and not PB.ovhd.flt_ctl_sec_2.status_bottom end
         },
-        {
-            text = function() return "   - SEC 3............OFF" end,
-            color = function() return COL_ACTIONS end,
-            is_active = function() return get(FAILURE_FCTL_SEC_3) == 1 and not PB.ovhd.flt_ctl_sec_3.status_bottom end
-        }
     },
 
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
         -- First of all reset the booelans
-        return get(FAILURE_FCTL_SEC_1) == 1 or get(FAILURE_FCTL_SEC_2) == 1 or get(FAILURE_FCTL_SEC_3) == 1
+        return get(FAILURE_FCTL_SEC_1) == 1 or get(FAILURE_FCTL_SEC_2) == 1
     end,
 
     is_inhibited = function()

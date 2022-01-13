@@ -1483,7 +1483,7 @@ local Message_RUD_TRIM_REV = {
     color = function() return COL_ACTIONS end,
     is_active = function()
         return get(All_on_ground) == 0 and (get(FAILURE_ENG_REV_UNLOCK, 1) + get(FAILURE_ENG_REV_UNLOCK, 2) == 1) and (
-              (get(FAILURE_ENG_REV_UNLOCK, 1) == 1 and get(Rudder_trim_target_angle) < 19) or (get(FAILURE_ENG_REV_UNLOCK, 2) == 1 and get(Rudder_trim_target_angle) > -19))
+              (get(FAILURE_ENG_REV_UNLOCK, 1) == 1 and get(RUD_TRIM_ANGLE) < 19) or (get(FAILURE_ENG_REV_UNLOCK, 2) == 1 and get(RUD_TRIM_ANGLE) > -19))
     end
 }
 
