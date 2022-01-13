@@ -4,9 +4,8 @@ RA_sys.Sensors = {
         Valid = true,
         Source_dataref = Capt_ra_alt_ft,
         Status_dataref = RA_1_status,
-        Erroneous_rand_float = math.random(),
-        Erroneous_amount = math.random(-100, 100),
         Erroneous_dataref = FAILURE_RA_1_ERR,
+        Last_erroneous_time = 0,
         Failure_dataref = FAILURE_RA_1_FAIL,
         Power = function ()
             return get(AC_bus_1_pwrd) == 1
@@ -17,9 +16,8 @@ RA_sys.Sensors = {
         Valid = true,
         Source_dataref = Fo_ra_alt_ft,
         Status_dataref = RA_2_status,
-        Erroneous_rand_float = math.random(),
-        Erroneous_amount = math.random(-100, 100),
         Erroneous_dataref = FAILURE_RA_2_ERR,
+        Last_erroneous_time = 0,
         Failure_dataref = FAILURE_RA_2_FAIL,
         Power = function ()
             return get(AC_bus_2_pwrd) == 1
@@ -44,10 +42,14 @@ local function compute_RA_sensor_status(sensors)
         if get(sensors[i].Erroneous_dataref) ~= 1 then
             sensors[i].ALT_FT = sensor_ra
         else
-            if sensors[i].Erroneous_rand_float >= 0.80 then-- -6 ft occurs commonly in real life
-                sensors[i].ALT_FT = -6
-            else--use randomized erroneous values instead
-                sensors[i].ALT_FT = sensor_ra + sensors[i].Erroneous_amount
+            if get(TIME) - sensors[i].Last_erroneous_time > 0.25 then
+                if get(All_on_ground) == 1 then
+                    sensors[i].ALT_FT = sensor_ra - 50 * math.random()
+                    sensors[i].Last_erroneous_time = get(TIME)
+                else
+                    sensors[i].ALT_FT = sensor_ra * math.random()
+                    sensors[i].Last_erroneous_time = get(TIME)
+                end
             end
         end
     end
