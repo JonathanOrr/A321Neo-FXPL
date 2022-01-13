@@ -147,3 +147,8 @@ function eng_model_get_NFAN(eng)
     local state = ENG.model_state[eng]
     return state and state.NFAN or 0
 end
+
+function eng_model_get_EGT(eng)
+    local state = ENG.model_state[eng]
+    return state and state.EGT or 0
+end
