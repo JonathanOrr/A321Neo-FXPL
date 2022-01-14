@@ -39,7 +39,7 @@ local function COMPUTE_SPLR_1_GRD_DEF()
        get(ELAC_2_status) == 1 and
        get(Left_gear_on_ground) == 1 and get(Right_gear_on_ground) == 1 and
        ((get(Wheel_status_LGCIU_1) == 1 and get(Wheel_status_LGCIU_2) == 1) or
-       (get(Capt_ra_alt_ft) < 10 and get(Fo_ra_alt_ft) < 10)) then
+       RA_sys.all_RA_user() < 10) then
         FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_DEF[1] = 6
     else
         FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_DEF[1] = 0

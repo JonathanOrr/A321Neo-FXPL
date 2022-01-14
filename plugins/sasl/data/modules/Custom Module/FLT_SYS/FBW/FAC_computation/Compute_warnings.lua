@@ -5,8 +5,8 @@ local function SPEED_SPEED_SPEED()
 
     if get(FBW_total_control_law) ~= FBW_NORMAL_LAW or
        get(Flaps_internal_config) <= 2 or
-       get(Capt_ra_alt_ft) < 100 or get(Fo_ra_alt_ft) < 100 or
-       get(Capt_ra_alt_ft) > 2000 or get(Fo_ra_alt_ft) > 2000 or
+       RA_sys.all_RA_user() < 100 or
+       RA_sys.all_RA_user() > 2000 or
        get(Cockpit_throttle_lever_L) >= THR_TOGA_START or get(Cockpit_throttle_lever_R) >= THR_TOGA_START or
        adirs_get_avg_ias() > get(VLS) and adirs_get_avg_ias_trend() >= 0 then--missing AFLOOR
         speed_speed_speed_time = 0
@@ -32,7 +32,7 @@ end
 local function STALL_STALL()
     set(GPWS_mode_stall, 0)
     --stall warning (needs to be further comfirmed)
-    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and (get(Capt_ra_alt_ft) + get(Fo_ra_alt_ft)) / 2 < 1500) or
+    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and RA_sys.all_RA_user() < 1500) or
        get(Any_wheel_on_ground) == 1 or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then
         return

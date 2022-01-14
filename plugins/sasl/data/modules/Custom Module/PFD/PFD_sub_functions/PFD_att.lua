@@ -36,7 +36,7 @@ local function draw_stall_flag(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
 
-    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and (get(Capt_ra_alt_ft) + get(Fo_ra_alt_ft)) / 2 < 1500) or
+    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and RA_sys.single_RA_user(PFD_table.RA_sensor) < 1500) or
        get(Any_wheel_on_ground) == 1 or
        adirs_is_att_ok(PFD_table.Screen_ID) == false or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 or

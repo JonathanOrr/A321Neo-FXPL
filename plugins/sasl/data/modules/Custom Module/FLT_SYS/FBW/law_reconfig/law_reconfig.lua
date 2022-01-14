@@ -20,48 +20,48 @@ function FBW_law_reconfiguration(var_table)
         --ALT(NO PROTECTION), DIRECT, ALT
         {
             {adirs_how_many_adrs_work() >= 2 and adirs_adr_params_disagree(), "DOUBLE ADR NOT SELF DETECTED (IAS/MACH) DISAGREE"},
-            {adirs_how_many_adrs_work() == 0, "TRIPLE ADR FAILURE"},
-            {get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0, "DOUBLE SFCC SLAT CHANNEL FAILURE"},
+            {adirs_how_many_adrs_work() == 0,                                 "TRIPLE ADR FAILURE"},
+            {get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0,             "DOUBLE SFCC SLAT CHANNEL FAILURE"},
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450, "DOUBLE HYD FAILURE (G+B)"},
         },
 
         --ALT(REDUCED PROTECTION), DIRECT, ALT
         {
-            {adirs_how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
-            {adirs_how_many_aoa_working() >= 2 and adirs_aoa_disagree(), "DOUBLE NOT SELF DETECTED ADR FAILURE OR AOA DISAGREE"},
-            {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0, "DOUBLE ELAC FAILURE"},
-            {not FCTL.AIL.STAT.L.controlled and not FCTL.AIL.STAT.R.controlled, "DOUBLE AILERON FAILURE"},
-            {not FCTL.THS.STAT.controlled and not FCTL.THS.STAT.mechanical, "THS JAMMED"},
-            {get(ELAC_2_status) == 0 and get(Hydraulic_B_press) < 1450, "ELAC 2 + BLUE HYD FAILURE"},
-            {get(ELAC_1_status) == 0 and get(Hydraulic_G_press) < 1450, "ELAC 1 + GREEN HYD FAILURE"},
-            {get(ELAC_1_status) == 0 and get(Hydraulic_Y_press) < 1450, "ELAC 1 + YELLOW HYD FAILURE"},
+            {adirs_how_many_adrs_work() == 1,                                    "DOUBLE SELF DETECTED ADR FAILURE"},
+            {adirs_how_many_aoa_working() >= 2 and adirs_aoa_disagree(),         "DOUBLE NOT SELF DETECTED ADR FAILURE OR AOA DISAGREE"},
+            {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0,                "DOUBLE ELAC FAILURE"},
+            {not FCTL.AIL.STAT.L.controlled and not FCTL.AIL.STAT.R.controlled,  "DOUBLE AILERON FAILURE"},
+            {not FCTL.THS.STAT.controlled and not FCTL.THS.STAT.mechanical,      "THS JAMMED"},
+            {get(ELAC_2_status) == 0 and get(Hydraulic_B_press) < 1450,          "ELAC 2 + BLUE HYD FAILURE"},
+            {get(ELAC_1_status) == 0 and get(Hydraulic_G_press) < 1450,          "ELAC 1 + GREEN HYD FAILURE"},
+            {get(ELAC_1_status) == 0 and get(Hydraulic_Y_press) < 1450,          "ELAC 1 + YELLOW HYD FAILURE"},
             {not FCTL.ELEV.STAT.L.controlled or not FCTL.ELEV.STAT.R.controlled, "ONE ELEVATOR FAILURE"},
             --MSSING SIDESTICK FAILURE
-            {adirs_how_many_irs_fully_work() == 1, "DOUBLE SELF DETECTED IR FAILURE"},
-            {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450, "DOUBLE HYD FAILURE (G+Y)"},
-            {ALL_SPLR_FAIL, "ALL SPOILERS FAILURE"},
-            {get(SEC_1_status) == 0 and get(SEC_2_status) == 0, "DOUBLE SEC FAILURE"},
+            {adirs_how_many_irs_fully_work() == 1,                               "DOUBLE SELF DETECTED IR FAILURE"},
+            {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450,    "DOUBLE HYD FAILURE (G+Y)"},
+            {ALL_SPLR_FAIL,                                                      "ALL SPOILERS FAILURE"},
+            {get(SEC_1_status) == 0 and get(SEC_2_status) == 0,                  "DOUBLE SEC FAILURE"},
         },
 
         --DIRECT, DIRECT, DIRECT
         {
-            {adirs_how_many_irs_fully_work() >= 2 and adirs_ir_disagree(), "DOUBLE NOT SELF DECTED IR FAILURE/DISAGREE"},
+            {adirs_how_many_irs_fully_work() >= 2 and adirs_ir_disagree(),                           "DOUBLE NOT SELF DECTED IR FAILURE/DISAGREE"},
             {FBW.FLT_computer.ELAC[1].IR_reset_pending or FBW.FLT_computer.ELAC[2].IR_reset_pending, "AWAITING ELAC 1 + 2 RESET FOR NOT SELF DECTED IR FAILURE/DISAGREE"},
-            {adirs_how_many_irs_fully_work() == 0, "TRIPLE IR FAILURE"}
+            {adirs_how_many_irs_fully_work() == 0,                                                   "TRIPLE IR FAILURE"}
         },
 
         --DIRECT, DIRECT, ALT
         {
-            {((get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0) or (get(SEC_1_status) == 0 and get(SEC_2_status) == 0)) and get(Flaps_internal_config) >= 3, "LGCIU 1 + 2 OR SEC 1 + 2 + 3 FAILURE AND FLAPS >= CONFIG 2"},
+            {(not RA_sys.Sensors[1].Valid and not RA_sys.Sensors[2].Valid) and ((get(SEC_1_status) == 0 and get(SEC_2_status) == 0) or (get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0)) and get(Flaps_internal_config) >= 3, "RA 1+2 FAILURE and GEAR DN OR LGCIU 1 + 2 OR SEC 1 + 2 FAILURE AND FLAPS >= CONFIG 2"},
         },
     }
 
     local abdnormal_condition = {
-        (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -10)       and not adirs_aoa_disagree() and adirs_how_many_aoa_working() ~= 0                     and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)       and adirs_how_many_adrs_work() ~= 0 and not adirs_adr_params_disagree()                and get(Any_wheel_on_ground) == 0,
-        adirs_get_avg_mach() > 0.91                                   and adirs_how_many_adrs_work() ~= 0 and not adirs_adr_params_disagree()                and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30) and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125) and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -10)     and not adirs_aoa_disagree() and adirs_how_many_aoa_working() ~= 0                     and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)     and adirs_how_many_adrs_work() ~= 0 and not adirs_adr_params_disagree()                and get(Any_wheel_on_ground) == 0,
+        adirs_get_avg_mach() > 0.91                                 and adirs_how_many_adrs_work() ~= 0 and not adirs_adr_params_disagree()                and get(Any_wheel_on_ground) == 0,
     }
 
     --TIMER--

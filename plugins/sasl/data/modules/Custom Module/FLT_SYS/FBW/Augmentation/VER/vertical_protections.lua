@@ -49,7 +49,7 @@ FBW.vertical.protections = {
                         ),
                         15,
                         MAX_PITCH,
-                        (get(Capt_ra_alt_ft) + get(Fo_ra_alt_ft)) / 2
+                        RA_sys.all_RA_user()
                     ),
                     get(FBW_vertical_rotation_mode_ratio)
                 )

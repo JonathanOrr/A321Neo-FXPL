@@ -55,7 +55,7 @@ function FBW_normal_mode_transition(table)
 
     --LATERAL MODES---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     --ground mode --> flight mode
-    if (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or (get(Capt_ra_alt_ft) > 50 or get(Fo_ra_alt_ft) > 50) then
+    if (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or RA_sys.all_RA_user() > 50 then
         set(FBW_lateral_flight_mode_ratio,  Set_linear_anim_value(get(FBW_lateral_flight_mode_ratio), 1, 0, 1, 1 / lateral_flight_mode_transition_time))
     end
 
@@ -84,7 +84,7 @@ function FBW_normal_mode_transition(table)
     end
 
     --Rotation mode --> flight mode
-    if (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or (get(Capt_ra_alt_ft) > 50 or get(Fo_ra_alt_ft) > 50) then
+    if (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or RA_sys.all_RA_user() > 50 then
         if table.In_air_timer >= rotation_mode_duration_s then
             set(FBW_vertical_rotation_mode_ratio, Set_linear_anim_value(get(FBW_vertical_rotation_mode_ratio), 0, 0, 1, 1 / vertical_flight_mode_transition_time))
         end
@@ -96,7 +96,7 @@ function FBW_normal_mode_transition(table)
     end
 
     --flight mode --> flare mode
-    if (get(Cockpit_throttle_lever_L) < THR_MCT_START and get(Cockpit_throttle_lever_R) < THR_MCT_START) and (get(Capt_ra_alt_ft) < flare_mode_transition_RA or get(Fo_ra_alt_ft) < flare_mode_transition_RA) and (adirs_get_vs(PFD_CAPT) <= 0 or adirs_get_vs(PFD_FO) <= 0) and get(Any_wheel_on_ground) == 0 and get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) ~= 0 then
+    if (get(Cockpit_throttle_lever_L) < THR_MCT_START and get(Cockpit_throttle_lever_R) < THR_MCT_START) and RA_sys.all_RA_user() < flare_mode_transition_RA and adirs_get_avg_vs() <= 0 and get(Any_wheel_on_ground) == 0 and get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) ~= 0 then
         set(FBW_vertical_flare_mode_ratio, Set_linear_anim_value(get(FBW_vertical_flare_mode_ratio), 1, 0, 1, 1 / vertical_flare_mode_transition_time))
     end
 
@@ -106,7 +106,7 @@ function FBW_normal_mode_transition(table)
     end
 
     --flare mode --> rotation mode or flight mode
-    if get(FBW_vertical_flare_mode_ratio) ~= 0 and (get(Capt_ra_alt_ft) > flare_mode_transition_RA or get(Fo_ra_alt_ft) > flare_mode_transition_RA) or (get(FBW_vertical_ground_mode_ratio) ~= 0 and (get(Cockpit_throttle_lever_L) >= THR_CLB_START or get(Cockpit_throttle_lever_R) >= THR_CLB_START)) then
+    if get(FBW_vertical_flare_mode_ratio) ~= 0 and RA_sys.all_RA_user() > flare_mode_transition_RA or (get(FBW_vertical_ground_mode_ratio) ~= 0 and (get(Cockpit_throttle_lever_L) >= THR_CLB_START or get(Cockpit_throttle_lever_R) >= THR_CLB_START)) then
         set(FBW_vertical_flare_mode_ratio, Set_linear_anim_value(get(FBW_vertical_flare_mode_ratio), 0, 0, 1, 1 / vertical_flare_mode_transition_time))
     end
 
@@ -155,7 +155,7 @@ function FBW_alternate_mode_transition(table)
 
     --VERTICAL MODES--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     --ground mode --> flight mode
-    if get(FBW_vertical_ground_mode_ratio) ~= 0 and (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or (get(Capt_ra_alt_ft) > 50 or get(Fo_ra_alt_ft) > 50) then
+    if get(FBW_vertical_ground_mode_ratio) ~= 0 and (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or RA_sys.all_RA_user() > 50 then
         set(FBW_vertical_ground_mode_ratio, Set_linear_anim_value(get(FBW_vertical_ground_mode_ratio), 0, 0, 1, 1 / vertical_ground_mode_transition_time))
         set(FBW_vertical_flight_mode_ratio, Math_approx_value(Math_clamp_lower(1 - get(FBW_vertical_ground_mode_ratio), 0), 0.001, 0))
     end
