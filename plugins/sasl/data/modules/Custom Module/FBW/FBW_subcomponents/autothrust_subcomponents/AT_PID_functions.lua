@@ -88,6 +88,7 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         set(Override_eng_1_lever, controlled_T_L)
     else
         L_PID_array.Actual_output = 0
+        L_PID_array.Integral_sum  = 0 -- Avoid integral bump on start
         set(Override_eng_1_lever, 0)
     end
 
@@ -100,6 +101,7 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         set(Override_eng_2_lever, controlled_T_R)
     else
         R_PID_array.Actual_output = 0
+        R_PID_array.Integral_sum  = 0 -- Avoid integral bump on start
         set(Override_eng_2_lever, 0)
     end
 
