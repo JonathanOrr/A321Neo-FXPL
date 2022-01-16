@@ -65,7 +65,7 @@ Packs_debug_window = contextWindow {
   };
 }
 
-SSS_FBW_UI = contextWindow {
+--[[SSS_FBW_UI = contextWindow {
   name = "SSS FBW UI";
   position = { 50 , 250 , 975 , 600};
   noBackground = true ;
@@ -77,7 +77,7 @@ SSS_FBW_UI = contextWindow {
   components = {
     FBW_UI {position = { 0 , 0 , 1000 , 600 }}
   };
-}
+}]]
 
 ECAM_debug_window = contextWindow {
   name = "ECAM DEBUG";

@@ -615,6 +615,10 @@ function adirs_get_avg_track()
     return voter("track", is_ir_valid)
 end
 
+function adirs_get_avg_gs()
+    return voter("gs", is_ir_valid)
+end
+
 function adirs_get_avg_vpath()
     return adirs_get_avg_pitch() - adirs_get_avg_aoa()
 end

@@ -367,8 +367,6 @@ VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
 TAT = globalProperty("sim/weather/temperature_le_c")
 Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
-Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
-Fo_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
 TAS_ms = globalProperty("sim/flightmodel/position/true_airspeed")
@@ -408,6 +406,12 @@ Fo_Track       = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag
 
 Wind_SPD     = globalProperty("sim/cockpit2/gauges/indicators/wind_speed_kts")
 Wind_HDG     = globalProperty("sim/cockpit2/gauges/indicators/wind_heading_deg_mag")
+
+--RA system datarefs--
+Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
+Fo_ra_alt_ft =   globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot")
+RA_1_status =    createGlobalPropertyi("a321neo/dynamics/nav/ra/ra_1_status", 0, false, true, false)--RA 1 sensor status
+RA_2_status =    createGlobalPropertyi("a321neo/dynamics/nav/ra/ra_2_status", 0, false, true, false)--RA 2 sensor status
 
 -- ISIS datarefs
 ISIS_IAS      = createGlobalPropertyf("a321neo/dynamics/isis/ias", 0, false, true, false)
@@ -533,8 +537,6 @@ Print_mixed_fac_input =                 createGlobalPropertyi("a321neo/dynamics/
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 Debug_FBW_ABN_LAW_RESET = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/abnormal_law_reset", 0, false, true, false)
 --customizations
-Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
-Trim_wheel_smoothing_on = 	  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 FBW_mode_transition_version = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/mode_transition_version", 0, false, true, false)--0 slower transitions and flare mode at 100RA(default on newer aircraft), 1 faster transitions and flare mode at 50RA
 --inputs--
 Sidesitck_dual_input = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/sidesitck_dual_input", 0, false, true, false)
@@ -543,24 +545,31 @@ Priority_left =  createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/pri
 Priority_right = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/priority_right", 0, false, true, false)
 Capt_sidestick_disabled = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/capt_sidestick_disabled", 0, false, true, false)
 Fo_sidestick_disabled =   createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/fo_sidestick_disabled", 0, false, true, false)
-Capt_Roll =  globalProperty("sim/joystick/yoke_roll_ratio")
-Capt_Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
-Fo_Roll =  globalProperty("sim/cockpit2/weapons/gun_offset_heading_ratio")
-Fo_Pitch = globalProperty("sim/cockpit2/weapons/gun_offset_pitch_ratio")
-Yaw =   globalProperty("sim/joystick/yoke_heading_ratio")
-AUTOFLT_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_roll", 0, false, true, false)
-AUTOFLT_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_pitch", 0, false, true, false)
-AUTOFLT_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_yaw", 0, false, true, false)
-Capt_sidestick_roll =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_roll", 0, false, true, false)
-Capt_sidestick_pitch =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_pitch", 0, false, true, false)
-Fo_sidestick_roll =     createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_roll", 0, false, true, false)
-Fo_sidestick_pitch =    createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_pitch", 0, false, true, false)
-Total_sidestick_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_roll", 0, false, true, false)
-Total_sidestick_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_pitch", 0, false, true, false)
+
+XP_CAPT_X = globalProperty("sim/joystick/yoke_roll_ratio")
+XP_CAPT_Y = globalProperty("sim/joystick/yoke_pitch_ratio")
+XP_FO_X   = globalProperty("sim/cockpit2/weapons/gun_offset_heading_ratio")
+XP_FO_Y   = globalProperty("sim/cockpit2/weapons/gun_offset_pitch_ratio")
+XP_YAW    = globalProperty("sim/joystick/yoke_heading_ratio")
+
+AUTOFLT_OUTPUT_P       = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/P", 0, false, true, false)
+AUTOFLT_OUTPUT_Q       = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/Q", 0, false, true, false)
+AUTOFLT_OUTPUT_C_STAR  = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/C_STAR", 0, false, true, false)
+AUTOFLT_OUTPUT_VS      = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/VS", 0, false, true, false)
+AUTOFLT_OUTPUT_R       = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/R", 0, false, true, false)
+AUTOFLT_OUTPUT_PHI_DOT = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/PHI_DOT", 0, false, true, false)
+
+CAPT_SSTICK_X =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_roll", 0, false, true, false)
+CAPT_SSTICK_Y =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_pitch", 0, false, true, false)
+FO_SSTICK_X =     createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_roll", 0, false, true, false)
+FO_SSTICK_Y =    createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_pitch", 0, false, true, false)
+TOT_SSTICK_X =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_roll", 0, false, true, false)
+TOT_SSTICK_Y = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_pitch", 0, false, true, false)
+
 Total_input_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_roll", 0, false, true, false)
 Total_input_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_pitch", 0, false, true, false)
 Total_input_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_yaw", 0, false, true, false)
-Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
+SPDBRK_HANDLE_RATIO = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 --outputs--
 FBW_roll_output =  createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_roll_output", 0, false, true, false)
 FBW_pitch_output = createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_pitch_output", 0, false, true, false)
@@ -646,16 +655,17 @@ FBW_LAF_DEGRADED_SPLR_5 = createGlobalPropertyi("a321neo/dynamics/FBW/system_sta
 --flight computers status
 ELAC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_1_status", 1, false, true, false)--elevator aileron computer(protection outputs)
 ELAC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_2_status", 1, false, true, false)
-FAC_1_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_1_status",  1, false, true, false)--flight augmentation computer(speeds calculations)
-FAC_2_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_2_status",  1, false, true, false)
-SEC_1_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_1_status",  1, false, true, false)--spolier and elevator computer
-SEC_2_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_2_status",  1, false, true, false)
-SEC_3_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_3_status",  1, false, true, false)
+FAC_1_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_1_status",  1, false, true, false)--flight augmentation computer(speeds calculations)
+FAC_2_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_2_status",  1, false, true, false)
+SEC_1_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_1_status",  1, false, true, false)--spolier and elevator computer
+SEC_2_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_2_status",  1, false, true, false)
+BCM_status    =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/bcm_status",    1, false, true, false)
 SFCC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sfcc_1_status", 1, false, true, false)--slats flaps control computer
 SFCC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sfcc_2_status", 1, false, true, false)
 FCDC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fcdc_1_status", 1, false, true, false)--slats flaps control computer
 FCDC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fcdc_2_status", 1, false, true, false)
 --ailerons
+AIL_Droop = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/aileron_droop_angle", 0, false, true, false)
 L_aileron = globalProperty("sim/flightmodel/controls/wing3l_ail1def") -- -25 deg up 25 deg down
 R_aileron = globalProperty("sim/flightmodel/controls/wing3r_ail1def") -- -25 deg up 25 deg down
 --spoilers
@@ -681,45 +691,44 @@ R_SPLR_3 = globalProperty("sim/flightmodel2/wing/speedbrake2_deg[3]")
 R_SPLR_4 = globalProperty("sim/flightmodel/controls/wing2r_spo1def")
 R_SPLR_5 = globalProperty("sim/flightmodel/controls/wing2r_spo2def")
 --high lift devices
-Slat_alpha_locked =     createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slat_alpha_locked", 0, false, true, false)
-Flaps_handle_ratio = 	globalProperty("sim/cockpit2/controls/flap_ratio")
+Slat_alpha_locked =          createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slat_alpha_locked", 0, false, true, false)
+Flaps_handle_ratio = 	     globalProperty("sim/cockpit2/controls/flap_ratio")
 Flaps_handle_position_anim = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
-Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position_status", 0, false, true, false)--0, 1, 2, 3, full
-Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
-Slats_predeploy_ratio = createGlobalPropertyf("a321neo/dynamics/surfaces/slats_pre_deploy_ratio") -- 0 --> 1
-Slats =                 globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
-Left_outboard_flaps =   globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 14, 3 = 21, 4 = 25
-Left_inboard_flaps =    globalProperty("sim/flightmodel/controls/wing1l_fla1def")
-Right_inboard_flaps =   globalProperty("sim/flightmodel/controls/wing1r_fla1def")
-Right_outboard_flaps =  globalProperty("sim/flightmodel/controls/wing2r_fla2def")
-Slats_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_ecam_amber", 0, false, true, false)--slats indication on the ecam is amber
-Slats_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
-Flaps_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
-Flaps_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
-Flaps_deployed_angle =  createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 14, 21, 25
+Flaps_handle_position =      createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position_status", 0, false, true, false)--0, 1, 2, 3, full
+Flaps_internal_config =      createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
+Slats_predeploy_ratio =      createGlobalPropertyf("a321neo/dynamics/surfaces/slats_pre_deploy_ratio") -- 0 --> 1
+Slats =                      globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
+Left_outboard_flaps =        globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 14, 3 = 21, 4 = 25
+Left_inboard_flaps =         globalProperty("sim/flightmodel/controls/wing1l_fla1def")
+Right_inboard_flaps =        globalProperty("sim/flightmodel/controls/wing1r_fla1def")
+Right_outboard_flaps =       globalProperty("sim/flightmodel/controls/wing2r_fla2def")
+Slats_ecam_amber = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_ecam_amber", 0, false, true, false)--slats indication on the ecam is amber
+Slats_in_transit = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
+Flaps_ecam_amber = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
+Flaps_in_transit = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
+Flaps_deployed_angle =       createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 14, 21, 25
 --hstabs
 THS_range_limited =   createGlobalPropertyi("a321neo/dynamics/FBW/controls/ths_trim_range_limited", 0, false, true, false)
 THS_limit_def =       createGlobalPropertyf("a321neo/dynamics/FBW/controls/ths_trim_limit_deflection", 0, false, true, false)
 Human_pitch_trim =    createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_pitch_trim", 0, false, true, false)
 Digital_THS_def_tgt = createGlobalPropertyf("a321neo/dynamics/FBW/controls/digital_ths_deflection", 0, false, true, false)
-THS_DEF = createGlobalPropertyf("a321neo/dynamics/FBW/controls/THS_deflection", 0, false, true, false)
-THS_CURR_SPD = createGlobalPropertyf("a321neo/dynamics/FBW/controls/THS_current_speed", 0, false, true, false)
-XP_THS_ratio = globalProperty("sim/flightmodel2/controls/elevator_trim")
-Max_THS_up = globalProperty("sim/aircraft/controls/acf_hstb_trim_up")--13.5 deggrees
-Max_THS_dn = globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")--4 degrees
-L_elevator = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators 17 deg down -30 deg up
-R_elevator = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators 17 deg down -30 deg up
+THS_DEF =             createGlobalPropertyf("a321neo/dynamics/FBW/controls/THS_deflection", 0, false, true, false)
+THS_CURR_SPD =        createGlobalPropertyf("a321neo/dynamics/FBW/controls/THS_current_speed", 0, false, true, false)
+XP_THS_ratio =        globalProperty("sim/flightmodel2/controls/elevator_trim")
+Max_THS_up =          globalProperty("sim/aircraft/controls/acf_hstb_trim_up")--13.5 deggrees
+Max_THS_dn =          globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")--4 degrees
+L_elevator =          globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators 17 deg down -30 deg up
+R_elevator =          globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators 17 deg down -30 deg up
 --vstabs
-Human_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_rudder_trim", 0, false, true, false)-- -1 trim left, 0 no action, 1 trim right
-Rudder_trim_target_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_target_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
-Rudder_trim_actual_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_actual_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
+Human_rudder_trim =     createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_rudder_trim", 0, false, true, false)-- -1 trim left, 0 no action, 1 trim right
+RUD_TRIM_ANGLE =        createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
 Resetting_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/resetting_rudder_trim", 0, false, true, false)-- 0 no action, 1 resetting
-Rudder_btm =   globalProperty("sim/flightmodel/controls/vstab1_rud1def")--rudder 30 deg left -30 deg right
-Rudder_top =   globalProperty("sim/flightmodel/controls/vstab2_rud2def")--rudder 30 deg left -30 deg right
-Rudder_total = createGlobalPropertyf("a321neo/dynamics/FBW/surfaces/total_rudder_def", 0, false, true, false)-- left rudder 30 deg left -30 deg right
-Rudder_travel_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/rudder_travel_limit", 25, false, true, false)--25 degrees in augmented mode, 30 degrees in mechanical mode
-Max_beta_demand_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/max_SI_demand_lim", 25, false, true, false)--from 15 degrees to 2 degrees
-Rudder_pedal_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_pedals_angle", 0, false, true, false)  -- -20, 0, 20
+Rudder_btm =            globalProperty("sim/flightmodel/controls/vstab1_rud1def")--rudder 25 deg left -25 deg right
+Rudder_top =            globalProperty("sim/flightmodel/controls/vstab2_rud2def")--rudder 25 deg left -25 deg right
+Rudder_total =          createGlobalPropertyf("a321neo/dynamics/FBW/surfaces/total_rudder_def", 0, false, true, false)-- left rudder 25 deg left -25 deg right
+Rudder_travel_lim =     createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/rudder_travel_limit", 25, false, true, false)--25 degrees to 2.9 degrees
+Max_beta_demand_lim =   createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/max_beta_demand_lim", 25, false, true, false)--from 15 degrees to 2 degrees
+Rudder_pedal_angle =    createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_pedals_angle", 0, false, true, false)  -- -20, 0, 20
 
 
 -- Fuel

@@ -245,11 +245,8 @@ Capt_sidestick_pb = sasl.createCommand("a321neo/cockpit/FBW/capt_sidestick_pb", 
 Fo_sidestick_pb =   sasl.createCommand("a321neo/cockpit/FBW/fo_sidestick_pb", "First officer sidestick pushbutton")
 Toggle_ELAC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_elac_1", "toggle ELAC 1")
 Toggle_ELAC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_elac_2", "toggle ELAC 2")
-Toggle_FAC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_fac_1", "toggle FAC 1")
-Toggle_FAC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_fac_2", "toggle FAC 2")
 Toggle_SEC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_1", "toggle SEC 1")
 Toggle_SEC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_2", "toggle SEC 2")
-Toggle_SEC_3 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_3", "toggle SEC 3")
 --elevator
 XP_trim_up = sasl.findCommand("sim/flight_controls/pitch_trim_up")
 XP_trim_dn = sasl.findCommand("sim/flight_controls/pitch_trim_down")

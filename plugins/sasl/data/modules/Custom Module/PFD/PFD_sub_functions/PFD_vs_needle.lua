@@ -20,15 +20,15 @@ local function draw_needle(PFD_table)
     if adirs_get_vs(PFD_table.Screen_ID) > 6000 then
         needle_color = ECAM_ORANGE
     end
-    if get(PFD_table.RA_ALT) >= 2500 then
+    if RA_sys.single_RA_user(PFD_table.RA_sensor) >= 2500 then
         if adirs_get_vs(PFD_table.Screen_ID) < -6000 then
             needle_color = ECAM_ORANGE
         end
-    elseif 1000 <= get(PFD_table.RA_ALT) and get(PFD_table.RA_ALT) < 2500 then
+    elseif 1000 <= RA_sys.single_RA_user(PFD_table.RA_sensor) and RA_sys.single_RA_user(PFD_table.RA_sensor) < 2500 then
         if adirs_get_vs(PFD_table.Screen_ID) < -2000 then
             needle_color = ECAM_ORANGE
         end
-    elseif get(PFD_table.RA_ALT) < 1000 then
+    elseif RA_sys.single_RA_user(PFD_table.RA_sensor) < 1000 then
         if adirs_get_vs(PFD_table.Screen_ID) < -1200 then
             needle_color = ECAM_ORANGE
         end
