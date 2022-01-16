@@ -364,45 +364,36 @@ local function update_nfan()
 
 end
 
-
-local function update_egt()
-    local eng_1_n1 = ENG.dyn[1].n1
-    if eng_1_n1 > ENG_N1_LL_IDLE then
+local function update_egt_engine(eng)
+    local eng_n1 = ENG.dyn[eng].n1
+    if eng_n1 > ENG_N1_LL_IDLE then
         -- engine avail, also in the first phase of shutdown, since N1 then is about 1% above IDLE constant
-        local computed_egt = ENG.data.n1_to_egt_fun(eng_1_n1, get(OTA))
-        computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 1) * get(eng_1_n1)/90 * math.random())
-        computed_egt = computed_egt + egt_eng_1_offset + random_pool_1*2 -- Let's add a bit of randomness
-        ENG.dyn[1].egt = Set_linear_anim_value(ENG.dyn[1].egt, computed_egt, -50, 1500, 50)
+        local computed_egt = eng_model_get_EGT(eng)
+        computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, eng) * get(eng_n1)/90 * math.random())
+        computed_egt = computed_egt + (eng == 1 and egt_eng_1_offset or egt_eng_2_offset) + (eng == 1 and random_pool_1 or random_pool_2) * 2 -- Let's add a bit of randomness
+        if ENG.dyn[eng].egt == EGT_MAGIC then
+            ENG.dyn[eng].egt = get(OTA)
+        end
+        ENG.dyn[eng].egt = Set_linear_anim_value(ENG.dyn[eng].egt, computed_egt, -50, 1500, 50)
     else
         -- engine off, starting or shutting down
         -- TODO switching to this else branch lead to small jump to higher EGT value (about 30-40 °C) if no auto-start
         -- last eng_EGT_off value seems to be from last row of startup.n1 table currently
-        local current_egt = ENG.dyn[1].egt
-        if eng_EGT_off[1] > current_egt and get(Engine_1_master_switch) == 0 then eng_EGT_off[1] = current_egt end  -- workaround to avoid jump up
+        local current_egt = ENG.dyn[eng].egt
+        if eng_EGT_off[eng] > current_egt and get(Engine_1_master_switch) == 0 then eng_EGT_off[eng] = current_egt end  -- workaround to avoid jump up
         if current_egt == EGT_MAGIC then
-            ENG.dyn[1].egt = get(OTA)
-            eng_EGT_off[1] = get(OTA)
+            ENG.dyn[eng].egt = get(OTA)
+            eng_EGT_off[eng] = get(OTA)
         else
-            ENG.dyn[1].egt = eng_EGT_off[1]
+            ENG.dyn[eng].egt = eng_EGT_off[eng]
         end
     end
+end
 
-    local eng_2_n1 = ENG.dyn[2].n1
-    if eng_2_n1 > ENG_N1_LL_IDLE then
-        local computed_egt = ENG.data.n1_to_egt_fun(eng_2_n1, get(OTA))
-        computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 2) * get(eng_1_n1)/90 * math.random())
-        computed_egt = computed_egt + egt_eng_2_offset + random_pool_2*2 -- Let's add a bit of randomness
-        ENG.dyn[2].egt = Set_linear_anim_value(ENG.dyn[2].egt, computed_egt, -50, 1500, 50)
-    else
-        local current_egt = ENG.dyn[2].egt
-        if eng_EGT_off[2] > current_egt and get(Engine_2_master_switch) == 0  then eng_EGT_off[2] = current_egt end -- workaround to avoid jump up
-        if current_egt == EGT_MAGIC then
-            ENG.dyn[2].egt = get(OTA) -- display OAT in case A/C has just been initialized
-            eng_EGT_off[2] = get(OTA)
-        else
-            ENG.dyn[2].egt = eng_EGT_off[2]
-        end
-    end
+local function update_egt()
+
+    update_egt_engine(1)
+    update_egt_engine(2)
 
 end
 
@@ -842,6 +833,25 @@ local function perform_cooling(eng)
     
 end
 
+local function update_startup_case3(eng, req_cooldown)
+    -- CASE 3: Engine is off
+    if not ENG.dyn[eng].is_avail and req_cooldown then    -- Turn off the engine
+        ENG.dyn[eng].start_fsm_state = FSM_SHUTDOWN
+        -- Set N2 to zero
+        local n2_target = get(IAS) > 50 and get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
+        eng_N2_off[eng] = Set_linear_anim_value(ENG.dyn[eng].n2, n2_target or 0 , 0, ENG.data.max_n2, 1)
+        eng_model_enforce_n2(eng, eng_N2_off[eng])
+
+        -- Set EGT and FF to zero
+        if eng_EGT_off[eng] == EGT_MAGIC then eng_EGT_off[eng] = ENG.dyn[eng].egt end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
+        local egt_speed = math.min(10, (eng_EGT_off[eng]-get(OTA))/20)
+        eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], get(OTA), -50, 1500, egt_speed)
+        eng_FF_off[eng] = 0
+        igniter_eng[eng] = 0
+        starter_valve_eng[eng] = false
+    end
+
+end
 
 local function update_startup()
 
@@ -879,7 +889,7 @@ local function update_startup()
     set(EWD_engine_cooling, 0, 1)
     set(EWD_engine_cooling, 0, 2)
 
-    -- CASE 1: IGNITION
+    -- CASE 1/1: IGNITION
     if get(Engine_mode_knob) == 1 then
 
         -- ENG 1
@@ -928,7 +938,7 @@ local function update_startup()
             require_cooldown[2] = false
         end
         
-    -- CASE 2: manually selected CRANK
+    -- CASE 1/2: manually selected CRANK
     elseif get(Engine_mode_knob) == -1 then -- Crank
         if eng_manual_switch[1] and does_engine_1_can_start_or_crank then
             perform_crank_procedure(1, get(Engine_1_master_switch) == 1)
@@ -938,7 +948,7 @@ local function update_startup()
             perform_crank_procedure(2, get(Engine_2_master_switch) == 1)
             require_cooldown[2] = false
         end
-    -- CASE 3: Master Switch protection
+    -- CASE 1/3: Master Switch protection
     else
         if not ENG.dyn[1].is_avail and fast_restart_1 and get(Engine_1_master_switch) then
             perform_starting_procedure(1, get(All_on_ground) == 0)
@@ -951,36 +961,8 @@ local function update_startup()
     end
     
     -- CASE 3: No ignition, no crank, engine is off or shutting down
-    if not ENG.dyn[1].is_avail  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
-        ENG.dyn[1].start_fsm_state = FSM_SHUTDOWN
-        -- Set N2 to zero
-        local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
-        eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, ENG.data.max_n2, 1)
-        
-        -- Set FF to zero, drop EGT and N1 TODO check drop behavior based on SIM videos
-        if eng_EGT_off[1] == EGT_MAGIC then eng_EGT_off[1] = ENG.dyn[1].egt end -- otherwise in auto start case we will have a big jump since eng_EGT_off is not set before
-        local egt_speed = math.min(10, (eng_EGT_off[1]-get(OTA))/100)
-        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, egt_speed)
-        eng_FF_off[1] = 0
-        eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
-        igniter_eng[1] = 0
-        starter_valve_eng[1] = false
-    end
-    if not ENG.dyn[2].is_avail and require_cooldown[2] then    -- Turn off the engine
-        ENG.dyn[2].start_fsm_state = FSM_SHUTDOWN
-        -- Set N2 to zero
-        local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
-        eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, ENG.data.max_n2, 1)
-        
-        -- Set EGT and FF to zero
-        if eng_EGT_off[2] == EGT_MAGIC then eng_EGT_off[2] = ENG.dyn[2].egt end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
-        local egt_speed = math.min(10, (eng_EGT_off[2]-get(OTA))/20)
-        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, egt_speed)
-        eng_FF_off[2] = 0
-        eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
-        igniter_eng[2] = 0
-        starter_valve_eng[2] = false
-    end
+    update_startup_case3(1, require_cooldown[1])
+    update_startup_case3(2, require_cooldown[2])
 
 end
 
@@ -1234,10 +1216,18 @@ local function update_n1_mode_and_limits()
     -- We have to compute all the values for each detent even if we are not in that mode, this is
     -- because in AT_PID_functions we have to compute the previous detent value to make the 
     -- throttle position monotonic and linearly increasing
-    set(Eng_N1_max_detent_toga, eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-    set(Eng_N1_max_detent_mct, eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-    set(Eng_N1_max_detent_clb, eng_N1_limit_clb(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-    set(Eng_N1_max_detent_flex, eng_N1_limit_flex(get(Eng_N1_flex_temp), get(OTA), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
+    local N1_to_limit    = eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    local N1_mct_limit   = eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    N1_mct_limit = math.min(N1_mct_limit, N1_to_limit)
+    local N1_clb_limit   = eng_N1_limit_clb(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    N1_clb_limit = math.min(N1_clb_limit, N1_mct_limit)
+    local N1_flx_limit   = eng_N1_limit_flex(get(Eng_N1_flex_temp), get(OTA), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper)
+    N1_flx_limit = math.min(N1_flx_limit, N1_clb_limit)
+
+    set(Eng_N1_max_detent_toga, N1_to_limit) 
+    set(Eng_N1_max_detent_mct, N1_mct_limit)
+    set(Eng_N1_max_detent_clb, N1_clb_limit)
+    set(Eng_N1_max_detent_flex, N1_flx_limit)
     
 
     update_n1_mode_and_limits_per_engine(get(Cockpit_throttle_lever_L), 1)

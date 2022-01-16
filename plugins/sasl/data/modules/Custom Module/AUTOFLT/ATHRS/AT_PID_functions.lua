@@ -44,13 +44,14 @@ end
 
 
 local function cap_integral_limit(n1, int_sum)
-    local up_limit = 1
-    local bottom_limit = 0.12
+    local up_limit  =   1
+    local bottom_limit  =   0
 
-    bottom_limit = 0.64*(n1-13.5)/100
-    bottom_limit = math.max(0.035, bottom_limit)
-    up_limit = math.log(n1/100+0.11)+1.02
-    up_limit = math.max(0.15, up_limit)
+    -- plot BEFORE change these values
+    bottom_limit = n1^2/9000
+    bottom_limit = math.max(0.055, bottom_limit)
+    up_limit = n1^2/6500+0.04
+    up_limit = math.max(0.025, up_limit)
     int_sum = math.min(int_sum, up_limit)
     int_sum = math.max(int_sum, bottom_limit)
     return int_sum
@@ -77,13 +78,6 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         N1_target_R = get(ATHR_desired_N1, 2)
     end
 
---    local sigma = get(Weather_Sigma)
---    local air_density_coeff = 1
---    if sigma > 1 then
---        air_density_coeff = (sigma-1) ^ 2.9 + 1
---    else
---        air_density_coeff = -(-sigma+1) ^ 2.9 + 1
---    end
 
     local L_error = (N1_target_L - ENG.dyn[1].n1)
     local controlled_T_L = SSS_PID_BP_LIM(L_PID_array, L_error)
@@ -94,6 +88,7 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         set(Override_eng_1_lever, controlled_T_L)
     else
         L_PID_array.Actual_output = 0
+        L_PID_array.Integral_sum  = 0 -- Avoid integral bump on start
         set(Override_eng_1_lever, 0)
     end
 
@@ -106,6 +101,7 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         set(Override_eng_2_lever, controlled_T_R)
     else
         R_PID_array.Actual_output = 0
+        R_PID_array.Integral_sum  = 0 -- Avoid integral bump on start
         set(Override_eng_2_lever, 0)
     end
 

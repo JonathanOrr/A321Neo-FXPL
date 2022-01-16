@@ -39,7 +39,7 @@ end
 
 function update_thrust_spooling(engine_state, inputs)
     -- inputs: oat, alt_feet, engine_is_available
-    local N1_base_max = eng_N1_limit_takeoff_clean(inputs.oat, inputs.alt_feet)
+    local N1_base_max = eng_N1_limit_takeoff_clean(inputs.oat, inputs.tat, inputs.alt_feet)
 
     local T_desired = engine_state.T_actual_th
     local T_max     = engine_state.T_max
@@ -54,11 +54,11 @@ function update_thrust_secondary(engine_state, inputs)
     -- inputs: oat, alt_feet, mach
     engine_state.N2   = ENG.data.n1_to_n2_fun(engine_state.N1_spooled)
     engine_state.NFAN = ENG.data.n1_to_nfan(engine_state.N1_spooled)
-    engine_state.EGT  = ENG.data.n1_to_egt_fun(engine_state.N1_spooled, inputs.oat)
+    engine_state.EGT  = math.max(inputs.oat, ENG.data.n1_to_egt_fun(engine_state.N1_spooled, inputs.oat))
 
     local altitude_m = inputs.alt_feet * 0.3048
     local isa_diff   = inputs.oat - thrust_ISA_temp(altitude_m)
-    engine_state.FF  = ENG.data.n1_to_FF(engine_state.N1_spooled, inputs.alt_feet, inputs.mach, isa_diff)
+    engine_state.FF  = ENG.data.FF_function(inputs.throttle, inputs.sigma)
 
     engine_state.FF = math.max(0,engine_state.FF)
 end

@@ -54,6 +54,8 @@ function configure_pw1133g()
         end,
 
         n1_to_FF = function(n1, alt_feet, mach, ISA_diff)
+            -- This is used ONLY for predictions, not for actual engine model
+            -- TODO: Can we link this with the real FF function?
             local FF_kgh =  146.727863052605 + 0.0261181684784363 * alt_feet + 11.5349714362869 * n1 -2975.15872221267 * mach
             -0.00118985331744109 * alt_feet * n1 + 0.00789909488873666 * alt_feet * mach + 7.6073360167464e-05 * alt_feet * ISA_diff
             +80.7328342498208 * n1 * mach -0.0747796055618955 * n1 * ISA_diff -7.14050794839843 * mach * ISA_diff
@@ -62,10 +64,14 @@ function configure_pw1133g()
             return FF_kgh / 3600
         end,
 
+        FF_function = function(throttle, density_ratio)
+            return (110+throttle*2865*0.93*math.sqrt(density_ratio)) / 3600   -- In kg/s
+        end,
+
         min_n1_idle_hard = 18.5,
         min_n1_idle = function(air_density_ratio)
             -- WARNING: Beaware that changing this will change the descent performance!
-            return math.min(34,math.max(19.5,-20 * air_density_ratio + 34))
+            return math.min(34,math.max(18.7,-20 * air_density_ratio + 34))
         end,
         min_n1_approach_idle = function(altitude_ft, oat)
             -- Based on another engine, needs fix
@@ -241,7 +247,7 @@ function configure_pw1133g()
                             { 1,      0.949 },
                           },
 
-            thr_alt_penalty = {0.7, 1}, -- Below/Above tropopause thrust ratio
+            thr_alt_penalty = {0.7, 0.84}, -- Below/Above tropopause thrust ratio
             thr_alt_limit   = 11000,    -- Considered tropopause (TODO: shouldn't we use the XP datarefs?)
             CG_vert_displacement = 1.0287,  -- in meters
             CG_lat_displacement = 5.75,     -- in meters
