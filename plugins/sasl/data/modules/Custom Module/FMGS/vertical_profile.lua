@@ -153,10 +153,18 @@ end
 -- Initial climb segments
 -------------------------------------------------------------------------------
 
+local function get_takeoff_N1()
+    if get(Eng_N1_flex_temp) == 0 then
+        return eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), true, false, false)
+    else
+        return eng_N1_limit_flex(get(Eng_N1_flex_temp), get(OTA), get(Capt_Baro_Alt), true, false, false)
+    end
+end
+
 local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     -- This is the climb from rwy alt to rwy_alt + 400
 
-    local N1 = get(Eng_N1_flex_temp) == 0 and get(Eng_N1_max_detent_toga) or get(Eng_N1_max_detent_flex)
+    local N1 = get_takeoff_N1()
     local oat = get(OTA)
     local density = get(Weather_Sigma)
     local _, tas, mach = convert_to_eas_tas_mach(v2, rwy_alt+200)   -- Let's use +200 to stay in the middle
@@ -171,7 +179,7 @@ local function get_time_dist_from_V2_to_VSRS(rwy_alt, v2, takeoff_weight)
     local ref_alt = rwy_alt+400
     local oat = get(OTA)
     local density = get_density_ratio(ref_alt)
-    local N1 = get(Eng_N1_flex_temp) == 0 and get(Eng_N1_max_detent_toga) or get(Eng_N1_max_detent_flex)
+    local N1 = get_takeoff_N1()
     local _, tas, mach = convert_to_eas_tas_mach(v2, ref_alt)
     local thrust = predict_engine_thrust(mach, density, oat, ref_alt, N1) * 2
     local drag   = predict_drag(density, tas, mach, 0)
@@ -202,7 +210,7 @@ local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, we
 end
 
 local function get_time_dist_from_VSRS_to_VACC(begin_alt, end_alt, speed, weight)
-    local N1 = get(Eng_N1_flex_temp) == 0 and get(Eng_N1_max_detent_toga) or get(Eng_N1_max_detent_flex)
+    local N1 = get_takeoff_N1()
 
     local time, dist, fuel = get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, speed, weight)
 
