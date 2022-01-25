@@ -118,7 +118,8 @@ local function draw_climb()
         .. "   ALT=" .. Aft_string_fill(""..(l.pred.altitude and math.floor(l.pred.altitude) or "N/A"), " ", 6)
         .. "   MACH=" .. (l.pred.mach and Round_fill(l.pred.mach,2) or "N/A ")
         .. "   VS=" .. Aft_string_fill(""..(l.pred.vs and math.floor(l.pred.vs) or "N/A"), " ", 7)
-        .. "   TIME(s)=" .. (l.pred.time and math.floor(l.pred.time) or "N/A")
+        .. "   TIME(s)=" .. Aft_string_fill(""..(l.pred.time and math.floor(l.pred.time) or "N/A"), " ", 7)
+        .. "   FUEL(kg)=" .. (l.pred.fuel and math.floor(l.pred.fuel) or "N/A")
         , 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
 end

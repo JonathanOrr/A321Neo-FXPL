@@ -170,7 +170,7 @@ local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     local _, tas, mach = convert_to_eas_tas_mach(v2, rwy_alt+200)   -- Let's use +200 to stay in the middle
     local thrust = predict_engine_thrust(mach, density, oat, rwy_alt+200, N1) * 2
     local drag   = predict_drag(density, tas, mach, 5)
-    fuel_consumption = ENG.data.n1_to_FF(N1, rwy_alt, mach, oat-Temperature_get_ISA())
+    fuel_consumption = ENG.data.n1_to_FF(N1, rwy_alt, mach, oat-Temperature_get_ISA())*2
     return compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
 end
 
@@ -182,12 +182,12 @@ local function get_time_dist_from_V2_to_VSRS(rwy_alt, v2, takeoff_weight)
     local N1 = get_takeoff_N1()
     local _, tas, mach = convert_to_eas_tas_mach(v2, ref_alt)
     local thrust = predict_engine_thrust(mach, density, oat, ref_alt, N1) * 2
-    local drag   = predict_drag(density, tas, mach, 0)
+    local drag   = predict_drag(density, tas, mach, 1)
     local acc = (thrust - drag) / takeoff_weight    -- Acceleration in m/s2
 
     local time = kts_to_ms(10) / acc -- 10 knots
     local dist = 0.5 * acc * (time^2) + kts_to_ms(v2) * time
-    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())
+    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())*2
     return time, m_to_nm(dist), fuel_consumption  -- Time, dist, fuel
 end
 
@@ -198,14 +198,14 @@ local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, we
     local ota_pred = predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
     local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
     local thrust = predict_engine_thrust(mach, density, ota_pred, ref_alt, N1) * 2
-    local drag   = predict_drag(density, tas, mach, 0)
+    local drag   = predict_drag(density, tas, mach, 1)
     local vs = compute_vs(thrust,drag, weight, tas)
 
     local time = (end_alt-begin_alt) / vs * 60 -- seconds
 
     local gs = tas_to_gs(tas, vs, 0, 0)    -- TODO Wind
 
-    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())
+    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())*2
     return time, gs * time / 3600, fuel_consumption
 end
 
@@ -230,9 +230,7 @@ local function predict_climb_thrust_net_avail(ias,altitude)
     local thrust_per_engine = predict_engine_thrust(mach, density, oat_pred, altitude, N1)
 
     -- let's remove the drag now
-    local drag = predict_drag(density, tas, mach, 0)
-
-    print("TD", thrust_per_engine, drag)
+    local drag = predict_drag(density, tas, mach, 1)
 
     return thrust_per_engine * 2 - drag
 end
@@ -246,7 +244,7 @@ local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end
     local density = get_density_ratio(ref_alt)
     local _, tas, mach = convert_to_eas_tas_mach(ref_spd, ref_alt)
 
-    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())
+    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())*2
     return fuel_consumption
 
 end
@@ -381,6 +379,7 @@ function vertical_profile_climb_update()
     curr_dist = traveled_nm + the_big_array[i].computed_distance
 
     local runs = 0  -- Just for debugging the performance
+    local total_fuel_cons = FMGS_sys.data.pred.takeoff.total_fuel_kgs
 
     -- We need to modify both i and max_clb_point, so for is no good here
     while i <= max_clb_point do
@@ -395,7 +394,7 @@ function vertical_profile_climb_update()
         A = 0
 
         thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt)
-        print("INIT THRUST", thrust_available, curr_spd,curr_alt)
+
         local leg = the_big_array[i]
         if not leg then
             logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "max_clb_point=", max_clb_point)
@@ -433,15 +432,11 @@ function vertical_profile_climb_update()
                                                     -- the accelerations
                 A = A - ACC_MACH_REDUCTION
                 thrust_available = thrust_available - (-ACC_MACH_REDUCTION * curr_weight)   -- Reduce speed to remain in valid mach when climbing
-                print(emergency_out, new_mach, ">", target_mach)
             end
 
             local _, TAS, _ = convert_to_eas_tas_mach(curr_spd, curr_alt)
             -- Rate of climb at the beginning of the leg
             VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(curr_spd)) -- [fpm]
-            if VS < 100 then
-                print(VS, thrust_available, curr_weight, curr_spd)
-            end
             GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
 
             Q = math.min(Q, D/m_to_nm(kts_to_ms(GS)))   -- [s]
@@ -464,6 +459,7 @@ function vertical_profile_climb_update()
         end
         -- Let's scompute the fuel consumption in this period
         local fuel_consump = compute_fuel_consumption_climb(curr_alt, new_alt, curr_spd, new_spd)   --[kg/s]
+        total_fuel_cons = total_fuel_cons + fuel_consump * Q
         curr_weight = curr_weight - fuel_consump * Q    -- [kg]
 
         -- Ok, update the values
@@ -482,6 +478,7 @@ function vertical_profile_climb_update()
             leg.pred.ias      = new_spd
             leg.pred.mach     = new_mach
             leg.pred.time     = curr_time
+            leg.pred.fuel     = total_fuel_cons
             leg.pred.vs       = VS
 
             if i < total_legs then
@@ -501,10 +498,7 @@ function vertical_profile_climb_update()
         i = i + 1
     end
 
-    -- TODO Add T/C or whatever
-    table.insert(the_big_array, i, {name="T/C", pred={altitude=cruise_alt, ias=curr_spd,mach=curr_mach,time=curr_time, vs=0}})
-
-    print("Found T/C in " .. runs .. " steps")
+    table.insert(the_big_array, i, {name="T/C", pred={altitude=cruise_alt, ias=curr_spd,mach=curr_mach,time=curr_time, fuel=total_fuel_cons, vs=0}})
 end
 
 
