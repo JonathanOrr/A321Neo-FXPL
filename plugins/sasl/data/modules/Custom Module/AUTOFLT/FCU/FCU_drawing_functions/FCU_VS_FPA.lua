@@ -3,11 +3,11 @@ local function draw_vs_fpa_mode_indication()
     local CENTER_Y = size[2] / 2
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 0 then
-        sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 15, CENTER_Y - 10, "V/S", 28, false, false, TEXT_ALIGN_LEFT, LED_TEXT_CL)
+        sasl.gl.drawText(Font_ECAMfont, CENTER_X + 15, CENTER_Y - 10, "V/S", 28, false, false, TEXT_ALIGN_LEFT, LED_TEXT_CL)
     end
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 15, CENTER_Y - 35, "FPA", 28, false, false, TEXT_ALIGN_LEFT, LED_TEXT_CL)
+        sasl.gl.drawText(Font_ECAMfont, CENTER_X + 15, CENTER_Y - 35, "FPA", 28, false, false, TEXT_ALIGN_LEFT, LED_TEXT_CL)
     end
 end
 
@@ -16,11 +16,11 @@ local function draw_top_text()
     local CENTER_Y = size[2] / 2
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 0 then
-        sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 465, CENTER_Y + 20, "V/S", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+        sasl.gl.drawText(Font_ECAMfont, CENTER_X + 465, CENTER_Y + 20, "V/S", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
     end
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_HDGVS_or_TRKFPA) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 525, CENTER_Y + 20, "FPA", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+        sasl.gl.drawText(Font_ECAMfont, CENTER_X + 525, CENTER_Y + 20, "FPA", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
     end
 end
 

@@ -3,11 +3,11 @@ local function draw_top_text()
     local CENTER_Y = size[2] / 2
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_SPD_or_MACH) == 0 then
-        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 525, CENTER_Y + 20, "SPD",  28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 525, CENTER_Y + 20, "SPD",  28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
     end
 
     if get(Cockpit_annnunciators_test) == 1 or get(AUTOFLT_FCU_SPD_or_MACH) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 460, CENTER_Y + 20, "MACH", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
+        sasl.gl.drawText(Font_ECAMfont, CENTER_X - 460, CENTER_Y + 20, "MACH", 28, false, false, TEXT_ALIGN_CENTER, LED_TEXT_CL)
     end
 end
 

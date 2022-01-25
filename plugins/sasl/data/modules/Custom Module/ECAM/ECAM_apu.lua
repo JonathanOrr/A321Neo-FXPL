@@ -40,31 +40,31 @@ end
 local function draw_apu_page_bgd()
     sasl.gl.drawArc (248, 231 , 77, 80 , 7 , 207 , ECAM_WHITE)
     sasl.gl.drawArc (248, 431 , 77, 80 , 31 , 183 , ECAM_WHITE)
-    sasl.gl.drawWideLine(325, 243, 340, 243, 4, ECAM_ORANGE)
-    sasl.gl.drawWideLine(313, 472, 321, 479, 4, ECAM_ORANGE)
-    sasl.gl.drawWideLine(213, 300, 218, 294, 4, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 198, 198, "0", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 288, 273, "10", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 226, 281, "7", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 297, 464, "10", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 198, 396, "0", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(325, 243, 340, 243, 3, ECAM_ORANGE)
+    sasl.gl.drawWideLine(313, 472, 321, 479, 3, ECAM_ORANGE)
+    sasl.gl.drawWideLine(213, 300, 218, 294, 3, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 198, 198, "0", 21, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 288, 273, "10", 21, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 226, 281, "7", 21, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 297, 464, "10", 21, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 198, 396, "0", 21, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
-    drawTextCentered(Font_ECAMfont, 396, 455, "N", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 396, 419, "%", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 396, 260, "EGT", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 396, 223, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 396, 455, "N", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 396, 419, "%", 30, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 396, 260, "EGT", 30, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 396, 223, "°C", 30, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    drawTextCentered(Font_ECAMfont, 710, 678, "BLEED", 27, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 747, 642, "PSI", 23, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawWideLine(711, 699, 711, 716, 4, ECAM_GREEN)
-    drawTextCentered(Font_ECAMfont, 450, 870, "APU", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(409, 850, 490, 850, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 710, 678, "BLEED", 27, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 747, 642, "PSI", 23, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawWideLine(711, 699, 711, 716, 3, ECAM_GREEN)
+    drawTextCentered(Font_ECAMfont, 450, 870, "APU", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(409, 850, 490, 850, 3, ECAM_WHITE)
 
-    Sasl_DrawWideFrame(641, 627, 135, 72, 4, 0, ECAM_LINE_GREY)
+    Sasl_DrawWideFrame(641, 627, 135, 72, 3, 0, ECAM_GREY)
 
-    sasl.gl.drawWideLine(801, 517, 801, 563, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(112, 563, 801, 563, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(112, 517, 112, 563, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(801, 517, 801, 563, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(112, 563, 801, 563, 3, ECAM_GREY)
+    sasl.gl.drawWideLine(112, 517, 112, 563, 3, ECAM_GREY)
 end
 
 local function round_to_5(value)
@@ -79,32 +79,32 @@ function draw_apu_page()
     --avail--  TODO what happens in cooling phase to generator, bleed and AVAIL?
     local apu_avail = get(Apu_avail)
     if  apu_avail == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+300, "AVAIL", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2+300, "AVAIL", 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
     --low pressure--
     if get(Apu_fuel_source) == 0 and get(Apu_master_button_state) == 1  then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-10, "FUEL LO PR", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+200, size[2]/2-10, "FUEL LO PR", 36, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     --flap open
     if get(APU_flap) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-130, "FLAP OPEN", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+200, size[2]/2-130, "FLAP OPEN", 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
     -- APU Generator - online or failed - show values
     if get(Ecam_apu_gen_state) >= 2 then
         local color_amps = (-ELEC_sys.generators[3].curr_amps > 261) and ECAM_ORANGE or ECAM_GREEN
         local load_val = math.abs(math.floor(ELEC_sys.generators[3].curr_amps/261*100))
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, load_val, 23, false, false, TEXT_ALIGN_RIGHT, color_amps)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-235, size[2]/2+257, load_val, 23, true, false, TEXT_ALIGN_RIGHT, color_amps)
 
         local color_volt = (ELEC_sys.generators[3].curr_voltage < 105 or ELEC_sys.generators[3].curr_voltage > 120) and ECAM_ORANGE or ECAM_GREEN
         local voltage_val = math.floor(ELEC_sys.generators[3].curr_voltage)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+224, voltage_val, 23, false, false, TEXT_ALIGN_RIGHT, color_volt)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-235, size[2]/2+224, voltage_val, 23, true, false, TEXT_ALIGN_RIGHT, color_volt)
 
         local color_hz = (ELEC_sys.generators[3].curr_hz < 385 or ELEC_sys.generators[3].curr_hz > 410) and ECAM_ORANGE or ECAM_GREEN
         local hz_val = math.floor(ELEC_sys.generators[3].curr_hz)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, hz_val, 23, false, false, TEXT_ALIGN_RIGHT, color_hz)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-235, size[2]/2+192, hz_val, 23, true, false, TEXT_ALIGN_RIGHT, color_hz)
 
         -- if AC1 bus is powered by APU Generator
         if ELEC_sys.buses.ac1_powered_by == GEN_APU then
@@ -115,9 +115,9 @@ function draw_apu_page()
 
     --apu bleed-- display of XX depends only on ADR status, not on bleed switch according videos
     if ADIRS_sys[ADIRS_1].adr_status ~= ADR_STATUS_ON or ADIRS_sys[ADIRS_2].adr_status ~= ADR_STATUS_ON or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1)  then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, "XX", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+265, size[2]/2+187, "XX", 26, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, math.floor(get(Apu_bleed_psi)), 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+265, size[2]/2+187, math.floor(get(Apu_bleed_psi)), 26, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         if get(Apu_bleed_xplane) == 1 then
             sasl.gl.drawWideLine (size[1]/2+262, size[2]/2+318, size[1]/2+262, size[2]/2+345, 3, ECAM_GREEN )
             draw_triangle(size[1]/2+262, size[2]/2+370)
@@ -139,7 +139,7 @@ function draw_apu_page()
         end
         -- TODO draw N needle as line
         SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-23, 4, 80, Math_rescale_lim_lower(0, -120, 100, 55, apu_n), 0, 0, needle_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, math.floor(apu_n), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-180, size[2]/2-60, math.floor(apu_n), 30, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
         --EGT
         needle_color = ECAM_GREEN
@@ -165,13 +165,13 @@ function draw_apu_page()
         -- acc videos EGT is displayed in 5 degree steps and the needle also moves in steps
         apu_egt = round_to_5(apu_egt)
         SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-225, 4, 80, Math_rescale_lim_lower(0, -120, 1000, 40, apu_egt), 0, 0, needle_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260,apu_egt, 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-180, size[2]/2-260,apu_egt, 30, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-180, size[2]/2-60, "XX", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-180, size[2]/2-260, "XX", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     if get(FAILURE_ENG_APU_LOW_OIL_P) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+115, size[2]/2-200, "LOW OIL\nLEVEL", 40, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+115, size[2]/2-200, "LOW OIL\nLEVEL", 40, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
 end

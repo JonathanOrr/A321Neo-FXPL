@@ -20,15 +20,15 @@ local function draw_needle(PFD_table)
     if adirs_get_vs(PFD_table.Screen_ID) > 6000 then
         needle_color = ECAM_ORANGE
     end
-    if get(PFD_table.RA_ALT) >= 2500 then
+    if RA_sys.single_RA_user(PFD_table.RA_sensor) >= 2500 then
         if adirs_get_vs(PFD_table.Screen_ID) < -6000 then
             needle_color = ECAM_ORANGE
         end
-    elseif 1000 <= get(PFD_table.RA_ALT) and get(PFD_table.RA_ALT) < 2500 then
+    elseif 1000 <= RA_sys.single_RA_user(PFD_table.RA_sensor) and RA_sys.single_RA_user(PFD_table.RA_sensor) < 2500 then
         if adirs_get_vs(PFD_table.Screen_ID) < -2000 then
             needle_color = ECAM_ORANGE
         end
-    elseif get(PFD_table.RA_ALT) < 1000 then
+    elseif RA_sys.single_RA_user(PFD_table.RA_sensor) < 1000 then
         if adirs_get_vs(PFD_table.Screen_ID) < -1200 then
             needle_color = ECAM_ORANGE
         end
@@ -38,7 +38,7 @@ local function draw_needle(PFD_table)
     local VS_box_x_pos = #VS_string == 2 and size[1]/2+410 or size[1]/2+391
     local VS_box_y_pos = (adirs_get_vs(PFD_table.Screen_ID) >= 0 and size[2]/2-0 or size[2]/2-36) + Table_interpolate(vs_needle_outter_anim, adirs_get_vs(PFD_table.Screen_ID))
     local VS_box_margin = 4
-    local VS_box_width, VS_box_height = sasl.gl.measureText (Font_AirbusDUL, VS_string, 30, false, false)
+    local VS_box_width, VS_box_height = sasl.gl.measureText (Font_ECAMfont, VS_string, 30, false, false)
     VS_box_width, VS_box_height = VS_box_width + VS_box_margin * 2, VS_box_height + VS_box_margin * 2
     if math.abs(adirs_get_vs(PFD_table.Screen_ID)) >= 200 then
         sasl.gl.drawRectangle(
@@ -49,7 +49,7 @@ local function draw_needle(PFD_table)
             ECAM_BLACK
         )
         sasl.gl.drawText(
-            Font_AirbusDUL,
+            Font_ECAMfont,
             VS_box_x_pos - VS_box_margin + VS_box_width / 2,
             VS_box_y_pos - VS_box_margin + VS_box_height / 2 - 10,
             VS_string,
@@ -81,18 +81,16 @@ function PFD_draw_vs_needle(PFD_table)
     end
 
     if adirs_is_vs_ok(PFD_table.Screen_ID) == false then
-        sasl.gl.drawTexture(PFD_vs_mask, 831, 155, 53, 575, PFD_TAPE_GREY)
-        sasl.gl.drawTexture(PFD_vs_shader, 831, 372, 53, 357, {1,1,1,PFD_SHADE_INTENSITY}) --The shader, ask Henrick if you don't know what is this
+        sasl.gl.drawTexture(PFD_vs_mask, 831, 155, 53, 575, ECAM_GREY)
         
         if PFD_table.VS_blink_now == true then
-            sasl.gl.drawText(Font_AirbusDUL_vert, size[1]/2+392, size[2]/2-10, "V/S", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont_vert, size[1]/2+392, size[2]/2-10, "V/S", 42, true, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
 
         return
     end
 
     sasl.gl.drawTexture(PFD_vs_bgd, 831, 155, 53, 575, ECAM_WHITE)
-    sasl.gl.drawTexture(PFD_vs_shader, 831, 372, 53, 357, {1,1,1,PFD_SHADE_INTENSITY}) --The shader, ask Henrick if you don't know what is this
 
     draw_needle(PFD_table)
 end

@@ -16,8 +16,6 @@
 -- Short description: ECAM file for the WHEEL page 
 -------------------------------------------------------------------------------
 
-
-
 --colors
 local ll_brake_temp_color = {1.0, 1.0, 1.0}
 local l_brake_temp_color = {1.0, 1.0, 1.0}
@@ -44,10 +42,10 @@ local function draw_brakes_and_tires()
     local RR_temp = math.floor(get(RR_brakes_temp)) - math.floor(get(RR_brakes_temp)) % 5
 
    
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360+26, size[2]/2-75, LL_temp, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200+26, size[2]/2-75, L_temp,  30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200+26, size[2]/2-75, R_temp,  30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360+26, size[2]/2-75, RR_temp, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-360+26, size[2]/2-75, LL_temp, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-200+26, size[2]/2-75, L_temp,  30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+200+26, size[2]/2-75, R_temp,  30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+360+26, size[2]/2-75, RR_temp, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     
     --tire press
     if get(Wheel_status_TPIU) == 1 then
@@ -59,32 +57,32 @@ local function draw_brakes_and_tires()
         local NL_psi  = math.floor(get(NL_tire_psi)) - math.floor(get(NL_tire_psi)) % 5
         local NR_psi = math.floor(get(NR_tire_psi)) - math.floor(get(NR_tire_psi)) % 5
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360+26, size[2]/2-165, LL_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200+26, size[2]/2-165, L_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200+26, size[2]/2-165, R_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360+26, size[2]/2-165, RR_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80+26, size[2]/2+175, NL_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-80+26, size[2]/2+175, NR_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-360+26, size[2]/2-165, LL_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-200+26, size[2]/2-165, L_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+200+26, size[2]/2-165, R_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+360+26, size[2]/2-165, RR_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+80+26, size[2]/2+175, NL_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-80+26, size[2]/2+175, NR_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-360, size[2]/2-165, "XX", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-200, size[2]/2-165, "XX", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+200, size[2]/2-165, "XX", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+360, size[2]/2-165, "XX", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
         
     --brakes indications
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-165, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+280, size[2]/2-165, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-120, "1", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-120, "2", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-120, "3", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-120, "4", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+175, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-280, size[2]/2-75, "°C", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-280, size[2]/2-120, "REL", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-280, size[2]/2-165, "PSI", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+280, size[2]/2-75, "°C", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+280, size[2]/2-120, "REL", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+280, size[2]/2-165, "PSI", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-360, size[2]/2-120, "1", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-200, size[2]/2-120, "2", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+200, size[2]/2-120, "3", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+360, size[2]/2-120, "4", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2+175, "PSI", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
 
     --upper arcs
@@ -126,22 +124,22 @@ local function draw_nsw_steering()
         local is_Y_ok = get(Hydraulic_Y_press) >= 1450
         local color = is_Y_ok and ECAM_GREEN or ECAM_ORANGE
         sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2-152, size[2]/2+96, 25, 29, {1, 1, 1})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+100, "Y", 30, false, false, TEXT_ALIGN_CENTER, color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+100, "N/W STEERING", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-140, size[2]/2+100, "Y", 30, true, false, TEXT_ALIGN_CENTER, color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2+100, "N/W STEERING", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
 
 local function draw_brake_modes()
 
     if get(Brakes_mode) == 3 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-50, size[2]/2+30, "ANTI SKID", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-50, size[2]/2+30, "ANTI SKID", 36, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         if get(FAILURE_GEAR_BSCU1) == 1 then
             sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2+65, size[2]/2+26, 25, 29, {1, 1, 1})
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+79, size[2]/2+30, "1", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+79, size[2]/2+30, "1", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
         if get(FAILURE_GEAR_BSCU2) == 1 then
             sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2+100, size[2]/2+26, 25, 29, {1, 1, 1})
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+113, size[2]/2+30, "2", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+113, size[2]/2+30, "2", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
     end
 
@@ -151,40 +149,40 @@ local function draw_brake_modes()
         local hyd_color = get(Hydraulic_G_press) >= 1450 and ECAM_GREEN or ECAM_ORANGE
         local norm_brake_color = get(Brakes_mode) == 1 and ECAM_GREEN or ECAM_ORANGE
         sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2-124, size[2]/2-34, 25, 29, {1, 1, 1})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-111, size[2]/2-29, "G", 30, false, false, TEXT_ALIGN_CENTER, hyd_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-30, "NORM BRK", 36, false, false, TEXT_ALIGN_CENTER, norm_brake_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-111, size[2]/2-29, "G", 30, true, false, TEXT_ALIGN_CENTER, hyd_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2-30, "NORM BRK", 36, true, false, TEXT_ALIGN_CENTER, norm_brake_color)
     end
 
     if altn_brk_display_cond or get(Brakes_mode) == 2 or get(Brakes_mode) == 3 or get(FAILURE_GEAR_AUTOBRAKES) == 1 then
         local hyd_color = get(Hydraulic_Y_press) >= 1450 and ECAM_GREEN or ECAM_ORANGE
         local altn_brake_color = altn_brk_display_cond and ECAM_ORANGE or ECAM_GREEN
         sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2-124, size[2]/2-103, 25, 29, {1, 1, 1})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-111, size[2]/2-98, "Y", 30, false, false, TEXT_ALIGN_CENTER, hyd_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-100, "ALTN BRK", 36, false, false, TEXT_ALIGN_CENTER, altn_brake_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-111, size[2]/2-98, "Y", 30, true, false, TEXT_ALIGN_CENTER, hyd_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2-100, "ALTN BRK", 36, true, false, TEXT_ALIGN_CENTER, altn_brake_color)
 
         if get(Hydraulic_Y_press) >= 1450 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+12, size[2]/2-140, "ACCU PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+12, size[2]/2-140, "ACCU PRESS", 32, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
             sasl.gl.drawWideLine(size[1]/2-110, size[2]/2-103, size[1]/2-110, size[2]/2-130, 2, ECAM_GREEN)
             sasl.gl.drawWideLine(size[1]/2-110, size[2]/2-130, size[1]/2-100, size[2]/2-130, 2, ECAM_GREEN)
             sasl.gl.drawWidePolyLine( {size[1]/2-100, size[2]/2-120, size[1]/2-100, size[2]/2-140, size[1]/2-90, size[2]/2-130, size[1]/2-100, size[2]/2-120 }, 2, ECAM_GREEN)
         elseif get(Brakes_accumulator) > 0.5 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+30, size[2]/2-140, "ACCU ONLY", 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+30, size[2]/2-140, "ACCU ONLY", 32, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
             sasl.gl.drawWideLine(size[1]/2-60, size[2]/2-130, size[1]/2-75, size[2]/2-130, 2, ECAM_GREEN)
             sasl.gl.drawWideLine(size[1]/2-75, size[2]/2-130, size[1]/2-75, size[2]/2-120, 2, ECAM_GREEN)
             sasl.gl.drawWidePolyLine( {size[1]/2-67, size[2]/2-120, size[1]/2-83, size[2]/2-120, size[1]/2-75, size[2]/2-108, size[1]/2-67, size[2]/2-120 }, 2, ECAM_GREEN)
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+12, size[2]/2-140, "ACCU PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+12, size[2]/2-140, "ACCU PRESS", 32, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
 
     end
 
 
     if get(FAILURE_GEAR_AUTOBRAKES) == 1 or get(Brakes_mode) > 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-220, "AUTO BRK", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2-220, "AUTO BRK", 36, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     elseif get(Wheel_autobrake_status) ~= 0 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-220, "AUTO BRK", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)        
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2-220, "AUTO BRK", 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)        
         local text = get(Wheel_autobrake_status) == 1 and "LO" or (get(Wheel_autobrake_status) == 2 and "MED" or "MAX")
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-260, text, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2-260, text, 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
 end
@@ -218,32 +216,32 @@ local function draw_wheel_page_spoilers()
     local spoiler_track_length = 22
 
     local l_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.L[1].controlled,
-        FBW.fctl.SPLR.STAT.L[2].controlled,
-        FBW.fctl.SPLR.STAT.L[3].controlled,
-        FBW.fctl.SPLR.STAT.L[4].controlled,
-        FBW.fctl.SPLR.STAT.L[5].controlled,
+        FCTL.SPLR.STAT.L[1].controlled,
+        FCTL.SPLR.STAT.L[2].controlled,
+        FCTL.SPLR.STAT.L[3].controlled,
+        FCTL.SPLR.STAT.L[4].controlled,
+        FCTL.SPLR.STAT.L[5].controlled,
     }
     local r_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.R[1].controlled,
-        FBW.fctl.SPLR.STAT.R[2].controlled,
-        FBW.fctl.SPLR.STAT.R[3].controlled,
-        FBW.fctl.SPLR.STAT.R[4].controlled,
-        FBW.fctl.SPLR.STAT.R[5].controlled,
+        FCTL.SPLR.STAT.R[1].controlled,
+        FCTL.SPLR.STAT.R[2].controlled,
+        FCTL.SPLR.STAT.R[3].controlled,
+        FCTL.SPLR.STAT.R[4].controlled,
+        FCTL.SPLR.STAT.R[5].controlled,
     }
     local l_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.L[1].data_avail,
-        FBW.fctl.SPLR.STAT.L[2].data_avail,
-        FBW.fctl.SPLR.STAT.L[3].data_avail,
-        FBW.fctl.SPLR.STAT.L[4].data_avail,
-        FBW.fctl.SPLR.STAT.L[5].data_avail,
+        FCTL.SPLR.STAT.L[1].data_avail,
+        FCTL.SPLR.STAT.L[2].data_avail,
+        FCTL.SPLR.STAT.L[3].data_avail,
+        FCTL.SPLR.STAT.L[4].data_avail,
+        FCTL.SPLR.STAT.L[5].data_avail,
     }
     local r_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.R[1].data_avail,
-        FBW.fctl.SPLR.STAT.R[2].data_avail,
-        FBW.fctl.SPLR.STAT.R[3].data_avail,
-        FBW.fctl.SPLR.STAT.R[4].data_avail,
-        FBW.fctl.SPLR.STAT.R[5].data_avail,
+        FCTL.SPLR.STAT.R[1].data_avail,
+        FCTL.SPLR.STAT.R[2].data_avail,
+        FCTL.SPLR.STAT.R[3].data_avail,
+        FCTL.SPLR.STAT.R[4].data_avail,
+        FCTL.SPLR.STAT.R[5].data_avail,
     }
 
     local l_spoiler_dataref = {
@@ -253,7 +251,6 @@ local function draw_wheel_page_spoilers()
         L_SPLR_4,
         L_SPLR_5,
     }
-
     local r_spoiler_dataref = {
         R_SPLR_1,
         R_SPLR_2,
@@ -263,58 +260,68 @@ local function draw_wheel_page_spoilers()
     }
 
     local spoiler_track_x_y = {
-        {44,  819},
-        {100, 810},
-        {156, 801},
-        {212, 791},
-        {269, 782},
+        {43, 826},
+        {100, 818},
+        {157, 810},
+        {214, 802},
+        {271, 794},
     }
 
     local spoiler_arrow_x_y = {
-        {55, 819},
-        {111, 810},
-        {167, 801},
-        {223, 791},
-        {280, 782},
+        {54, 826},
+        {111, 818},
+        {168, 810},
+        {225, 802},
+        {282, 794},
     }
 
     local spoiler_num_x_y = {
-        {54,  824},
-        {111, 815},
-        {167, 806},
-        {223, 796},
-        {280, 787},
+        {54, 830},
+        {111, 822},
+        {168, 814},
+        {225, 806},
+        {282, 798},
     }
 
     for i = 1, num_of_spoilers do
         if l_spoilers_data_avail[i] then
             if get(l_spoiler_dataref[i]) > 2.5 then
-                SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
-            else
-                if not l_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                if l_spoilers_avail[i] then
+                    sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+33, 3, ECAM_GREEN)
                 end
+                sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 - spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+30, 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 - spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+30, 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 - spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+32, size[1]/2 - spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+32, 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            end
+
+            if not l_spoilers_avail[i] then
+                sasl.gl.drawText(AirbusDUFont, size[1]/2 - spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], i, 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
             end
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(AirbusDUFont, size[1]/2 - spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], "X", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
         if r_spoilers_data_avail[i] then
             if get(r_spoiler_dataref[i]) > 2.5 then
-                SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
-            else
-                if not r_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                if r_spoilers_avail[i] then
+                    sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+33, 3, ECAM_GREEN)
                 end
+                sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 + spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+30, 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2]+54, size[1]/2 + spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+30, 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+                sasl.gl.drawWideLine(size[1]/2 + spoiler_arrow_x_y[i][1]-10, spoiler_arrow_x_y[i][2]+32, size[1]/2 + spoiler_arrow_x_y[i][1]+10, spoiler_arrow_x_y[i][2]+32, 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            end
+
+            if not r_spoilers_avail[i] then
+                sasl.gl.drawText(AirbusDUFont, size[1]/2 + spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], i, 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
             end
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(AirbusDUFont, size[1]/2 + spoiler_num_x_y[i][1] + 2, spoiler_num_x_y[i][2], "X", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
 
         if l_spoilers_data_avail[i] then
-            sasl.gl.drawWideLine(size[1]/2 - spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 - spoiler_track_x_y[i][1] - spoiler_track_length, spoiler_track_x_y[i][2], 2.5, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            sasl.gl.drawWideLine(size[1]/2 - spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 - spoiler_track_x_y[i][1] - spoiler_track_length, spoiler_track_x_y[i][2], 3, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
         end
         if r_spoilers_data_avail[i] then
-            sasl.gl.drawWideLine(size[1]/2 + spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 + spoiler_track_x_y[i][1] + spoiler_track_length, spoiler_track_x_y[i][2], 2.5, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            sasl.gl.drawWideLine(size[1]/2 + spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 + spoiler_track_x_y[i][1] + spoiler_track_length, spoiler_track_x_y[i][2], 3, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
         end
     end
 end
@@ -358,8 +365,8 @@ local function draw_wheel_bgd()
     sasl.gl.drawWideLine(900-49, 900-333, 900-77, 900-333, 4,ECAM_WHITE)
     sasl.gl.drawWideLine(900-250, 900-333, 900-278, 900-333, 4,ECAM_WHITE)
     sasl.gl.drawWideLine(900-338, 900-185, 900-365, 900-185, 4,ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 89, 900-172, "WHEEL", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(22, 900-191, 158, 900-191, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 89, 900-172, "WHEEL", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(22, 900-191, 158, 900-191, 3, ECAM_WHITE)
 end
 
 function draw_wheel_page()

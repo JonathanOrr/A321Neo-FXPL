@@ -49,9 +49,9 @@ local function draw_fuel_usage()
     local fuel_usage_1 = math.floor(get(Ecam_fuel_usage_1))
     local fuel_usage_2 = math.floor(get(Ecam_fuel_usage_2))
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 760, fuel_usage_1, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 760, fuel_usage_1, 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 760, fuel_usage_2, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 760, fuel_usage_2, 36, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
 end
 
@@ -88,11 +88,11 @@ local function draw_oil_qt_press_temp_eng_1()
         local oil_qty_1 = ENG.dyn[1].oil_qty 
         local eng_1_oil_color = pulse_green(oil_qty_1 < ENG.data.display.oil_qty_advisory)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-153, 625, math.floor(oil_qty_1) .. "." , 36,
-                         false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-153, 625, math.floor(oil_qty_1) .. "." , 36,
+                         true, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-136, 625, math.floor((oil_qty_1%1)*10), 28,
-                        false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-136, 625, math.floor((oil_qty_1%1)*10), 28,
+                        true, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
         ------------------------------------------------------------------------------------
         -- ENG 1 OIL PRESS
@@ -111,8 +111,8 @@ local function draw_oil_qt_press_temp_eng_1()
         elseif params.eng1_oil_press < press_amber_limit then
             eng_1_oil_color = ECAM_ORANGE
         end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-165, 525, params.eng1_oil_press, 36,
-                     false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-152, 525, params.eng1_oil_press, 36,
+                     true, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
         ------------------------------------------------------------------------------------
         -- ENG 1 OIL TEMP
@@ -122,13 +122,13 @@ local function draw_oil_qt_press_temp_eng_1()
             eng_1_oil_color = ECAM_ORANGE
         end
         local temp = math.floor(params.eng1_oil_temp) - math.floor(params.eng1_oil_temp)%5
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455,temp ,36,
-                     false, false, TEXT_ALIGN_CENTER, eng_1_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 455,temp ,36,
+                     true, false, TEXT_ALIGN_CENTER, eng_1_oil_color)
 
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 625, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 525, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 625, "XX" , 36, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 525, "XX" , 36, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 455, "XX" , 36, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 end
 
@@ -140,10 +140,10 @@ local function draw_oil_qt_press_temp_eng_2()
         local oil_qty_2 = ENG.dyn[2].oil_qty 
         local eng_2_oil_color = pulse_green(oil_qty_2 < ENG.data.display.oil_qty_advisory)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+223, 625, math.floor(oil_qty_2) .. "." , 36,
-                        false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+240, 625, math.floor((oil_qty_2%1)*10), 28,
-                        false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+223, 625, math.floor(oil_qty_2) .. "." , 36,
+                        true, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+240, 625, math.floor((oil_qty_2%1)*10), 28,
+                        true, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
         ------------------------------------------------------------------------------------
         -- ENG 2 OIL PRESS
@@ -162,8 +162,8 @@ local function draw_oil_qt_press_temp_eng_2()
             eng_2_oil_color = ECAM_ORANGE
         end
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+213, 525, params.eng2_oil_press ,36,
-                        false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+226, 525, params.eng2_oil_press ,36,
+                        true, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
         ------------------------------------------------------------------------------------
         -- ENG 2 OIL TEMP
@@ -173,12 +173,12 @@ local function draw_oil_qt_press_temp_eng_2()
             eng_2_oil_color = ECAM_ORANGE
         end
         local temp = math.floor(params.eng2_oil_temp) - math.floor(params.eng2_oil_temp)%5
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, temp ,36,
-                        false, false, TEXT_ALIGN_CENTER, eng_2_oil_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 455, temp ,36,
+                        true, false, TEXT_ALIGN_CENTER, eng_2_oil_color)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 625, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 525, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 625, "XX" , 36, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 525, "XX" , 36, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 455, "XX" , 36, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 end
 
@@ -197,58 +197,58 @@ local function draw_vibrations()
 
         local eng1_vib1_color = params.eng1_vib_n1 > ENG.data.vibrations.max_n1_nominal and ECAM_ORANGE or ECAM_GREEN
         local eng1_vib2_color = params.eng1_vib_n2 > ENG.data.vibrations.max_n2_nominal and ECAM_ORANGE or ECAM_GREEN
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 385, math.floor(params.eng1_vib_n1) .. "." , 36,
-                     false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 385, math.floor((params.eng1_vib_n1%1)*10), 28,
-                        false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 350, math.floor(params.eng1_vib_n2) .. "." , 36,
-                         false, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 350, math.floor((params.eng1_vib_n2%1)*10), 28,
-                        false, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-175, 385, math.floor(params.eng1_vib_n1) .. "." , 36,
+                     true, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-155, 385, math.floor((params.eng1_vib_n1%1)*10), 28,
+                        true, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-175, 350, math.floor(params.eng1_vib_n2) .. "." , 36,
+                         true, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-155, 350, math.floor((params.eng1_vib_n2%1)*10), 28,
+                        true, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 385, "XX" , 36,
-                     false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 350, "XX" , 36,
-                         false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 385, "XX" , 36,
+                     true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 350, "XX" , 36,
+                         true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 
     if xx_statuses[2] and get(AC_bus_1_pwrd) == 1 then
         local eng2_vib1_color = params.eng2_vib_n1 > ENG.data.vibrations.max_n1_nominal and ECAM_ORANGE or ECAM_GREEN
         local eng2_vib2_color = params.eng2_vib_n2 > ENG.data.vibrations.max_n2_nominal and ECAM_ORANGE or ECAM_GREEN
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 385, math.floor(params.eng2_vib_n1) .. "." , 36,
-                        false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, 385, math.floor((params.eng2_vib_n1%1)*10) , 28,
-                        false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 350, math.floor(params.eng2_vib_n2) .. "." , 36,
-                        false, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, 350, math.floor((params.eng2_vib_n2%1)*10) , 28,
-                        false, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+200, 385, math.floor(params.eng2_vib_n1) .. "." , 36,
+                        true, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+220, 385, math.floor((params.eng2_vib_n1%1)*10) , 28,
+                        true, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+200, 350, math.floor(params.eng2_vib_n2) .. "." , 36,
+                        true, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+220, 350, math.floor((params.eng2_vib_n2%1)*10) , 28,
+                        true, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 385, "XX" , 36,
-                        false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 350, "XX" , 36,
-                        false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 385, "XX" , 36,
+                        true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 350, "XX" , 36,
+                        true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 end
 
 local function draw_special()
 
     if get(FAILURE_ENG_1_FUEL_CLOG) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 720, "CLOG" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 720, "CLOG" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if get(FAILURE_ENG_2_FUEL_CLOG) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 720, "CLOG" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 720, "CLOG" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if get(FAILURE_ENG_1_OIL_CLOG) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 490, "CLOG" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-187, 490, "CLOG" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if get(FAILURE_ENG_2_OIL_CLOG) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 490, "CLOG" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+187, 490, "CLOG" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
 
@@ -271,20 +271,20 @@ end
 local function draw_bleed_psi()
     local bleed_1_press_color = get(L_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
     local bleed_2_press_color = get(R_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_1_press_color)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_2_press_color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, true, false, TEXT_ALIGN_CENTER, bleed_1_press_color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, true, false, TEXT_ALIGN_CENTER, bleed_2_press_color)
 end
 
 local function draw_valve_and_ignition()
     if xx_statuses[1] then
         -- igniter indications A/B
         if get(Ecam_eng_igniter_eng_1) % 2 == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-202, 250, "A" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-202, 250, "A" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
         if get(Ecam_eng_igniter_eng_1) >= 2 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-177, 250, "B" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-177, 250, "B" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
         -- starter valve
         SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, ENG.dyn[1].starter_valve and 2 or 1, ECAM_GREEN)
@@ -292,12 +292,12 @@ local function draw_valve_and_ignition()
     if xx_statuses[2] then
         -- igniter indications A/B
         if get(Ecam_eng_igniter_eng_2) % 2 == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+180, 250, "A" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+180, 250, "A" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
         if get(Ecam_eng_igniter_eng_2) >= 2 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+205, 250, "B" , 36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+205, 250, "B" , 36,
+                     true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
         -- starter valve
         SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, ENG.dyn[2].starter_valve and 2 or 1, ECAM_GREEN)
@@ -382,34 +382,34 @@ local function draw_oil_qty_and_pressure_gauges()
 end
 
 local function draw_eng_bgd()
-    sasl.gl.drawWideLine(338, 157+205   , 368   ,   160+205     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(338, 157+242   , 368   ,   160+242     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(338, 157+326   , 368   ,   160+326     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(338, 157+620   , 368   ,   160+620     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(900-338, 157+205   , 900-368   ,   160+205     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(900-338, 157+242   , 900-368   ,   160+242     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(900-338, 157+326   , 900-368   ,   160+326     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(900-338, 157+620   , 900-368   ,   160+620     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(338, 157+205   , 368   ,   160+205     , 4, ECAM_GREY)
+    sasl.gl.drawWideLine(338, 157+242   , 368   ,   160+242     , 4, ECAM_GREY)
+    sasl.gl.drawWideLine(338, 157+326   , 368   ,   160+326     , 4, ECAM_GREY)
+    sasl.gl.drawWideLine(338, 157+620   , 368   ,   160+620     , 4, ECAM_GREY)
+    sasl.gl.drawWideLine(900-338, 157+205   , 900-368   ,   160+205     , 4, ECAM_GREY)
+    sasl.gl.drawWideLine(900-338, 157+242   , 900-368   ,   160+242     , 4, ECAM_GREY)
+    sasl.gl.drawWideLine(900-338, 157+326   , 900-368   ,   160+326     , 4, ECAM_GREY)
+    sasl.gl.drawWideLine(900-338, 157+620   , 900-368   ,   160+620     , 4, ECAM_GREY)
 
-    drawTextCentered(Font_ECAMfont, 450, 789, "F.USED", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 450, 751, "KG", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 450, 688, "OIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 450, 636, "QT", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 450, 535, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 450, 478, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 450, 398, "VIB N1", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 450+30, 360, "N2", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 789, "F.USED", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 751, "KG", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 688, "OIL", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 636, "QT", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 542, "PSI", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 479, "°C", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 398, "VIB N1", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450+30, 360, "N2", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     if(ignition_section_visible()) then
-        sasl.gl.drawWideLine(338, 157       , 368   ,   160         , 4, ECAM_LINE_GREY)
-        sasl.gl.drawWideLine(900-338, 157       , 900-368   ,   160         , 4, ECAM_LINE_GREY)
-        drawTextCentered(Font_ECAMfont, 450, 258, "IGN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        drawTextCentered(Font_ECAMfont, 450, 150, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawWideLine(338, 157       , 368   ,   160         , 4, ECAM_GREY)
+        sasl.gl.drawWideLine(900-338, 157       , 900-368   ,   160         , 4, ECAM_GREY)
+        drawTextCentered(Font_ECAMfont, 450, 258, "IGN", 26, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        drawTextCentered(Font_ECAMfont, 450, 150, "PSI", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end
     -- TODO NAC temperature advisory threshold reached - draw engine nacelle temperature indication instead of startup section of cause since
     -- position is the same
 
-    drawTextCentered(Font_ECAMfont, 93, 870, "ENGINE", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(8, 850, 176, 850, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 93, 870, "ENGINE", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(8, 850, 176, 850, 3, ECAM_WHITE)
 end
 
 function draw_eng_page()

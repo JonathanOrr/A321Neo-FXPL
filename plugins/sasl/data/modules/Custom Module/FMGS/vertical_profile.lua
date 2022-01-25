@@ -16,7 +16,7 @@
 -- Short description: Vertical profile computation
 -------------------------------------------------------------------------------
 
-include("FBW/FBW_subcomponents/FBW_SYS/FAC_computation/common_functions.lua");
+include("FLT_SYS/FBW/FAC_computation/common_functions.lua");
 include("FMGS/predictors/engine_thrust.lua")
 include("FMGS/predictors/drag.lua")
 include("libs/speed_helpers.lua")

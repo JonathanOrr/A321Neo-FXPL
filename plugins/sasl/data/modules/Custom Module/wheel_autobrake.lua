@@ -129,7 +129,7 @@ end
 
 local function is_autobrake_braking()
 
-    if get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 then
+    if get(SEC_1_status) + get(SEC_2_status) < 2 then
         return false    -- Cannot autobrake if at least 2 sec available
     end
     

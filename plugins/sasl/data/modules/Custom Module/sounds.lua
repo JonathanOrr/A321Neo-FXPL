@@ -33,6 +33,7 @@ local BLOWER_SELF_TEST_TIME   = 8
 local Sounds_elec_bus_delayed = createGlobalPropertyf("a321neo/sounds/elec_bus_delayed", 0, false, true, false)
 local Sounds_blower_volume    = createGlobalPropertyf("a321neo/sounds/blower_volume", 0, false, true, false)    -- 0: OFF, 0.5: NORMAL, 1: TEST
 local Sounds_extract_delayed  = createGlobalPropertyf("a321neo/sounds/extract_delayed", 0, false, true, false)
+local Sounds_packs_ratio_total  = createGlobalPropertyf("a321neo/sounds/packs_ratio_total", 0, false, true, false)
 
 -------------------------------------------------------------------------------
 -- Global variables
@@ -57,6 +58,8 @@ local function thrust_rush()
 
     set(SOUND_rush_L , get(Throttle_blue_dot, 1) - ENG.dyn[1].n1)
     set(SOUND_rush_R , get(Throttle_blue_dot, 2) - ENG.dyn[2].n1)
+    set(SOUND_eng_N1, ENG.dyn[1].n1, 1)
+    set(SOUND_eng_N1, ENG.dyn[2].n1, 2)
 end
 
 local function reverser_drfs()
@@ -148,6 +151,10 @@ local function update_extract()
 
 end
 
+local function update_packs()
+    set(Sounds_packs_ratio_total, get(L_pack_Flow_value)/2 + get(R_pack_Flow_value)/2 )
+end
+
 local function gpws_sounds()
     set(GPWS_at_least_one_triggered, 1)
 
@@ -170,4 +177,5 @@ function update()
     gpws_sounds()
     thrust_rush()
     reverser_drfs()
+    update_packs()
 end

@@ -27,7 +27,7 @@ function PFD_draw_FMA(fma_table)
                         line_1_y_pos,
                         fma_table[i][j].text_line_1,
                         34,
-                        false,
+                        true,
                         false,
                         TEXT_ALIGN_CENTER,
                         fma_table[i][j].text_color
@@ -40,7 +40,7 @@ function PFD_draw_FMA(fma_table)
                             fma_table[i][j].position[2] + 1 * fma_table[i][j].size[2] / 4 - line_1_text_height / 2,
                             fma_table[i][j].text_line_2,
                             34,
-                            false,
+                            true,
                             false,
                             TEXT_ALIGN_CENTER,
                             fma_table[i][j].text_color
@@ -69,8 +69,8 @@ function PFD_draw_FMA(fma_table)
         end
     end
 
-    sasl.gl.drawWideLine(185, 900, 185, 762, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(375, 900, 375, 762, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(580, 900, 580, 762, 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(755, 900, 755, 762, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(185, 900, 185, 762, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(375, 900, 375, 762, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(580, 900, 580, 762, 4, ECAM_GREY)
+    sasl.gl.drawWideLine(755, 900, 755, 762, 4, ECAM_GREY)
 end

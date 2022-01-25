@@ -2,33 +2,33 @@
 local function PFD_draw_ils(PFD_table)
 
     if PFD_table.ILS_data.is_valid then -- ILS name
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-445, size[2]/2-380, PFD_table.ILS_data.id, 34, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-445, size[2]/2-380, PFD_table.ILS_data.id, 34, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
     else -- ILS flag
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-445, size[2]/2-380, "ILS" .. PFD_table.Screen_ID, 34, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-445, size[2]/2-380, "ILS" .. PFD_table.Screen_ID, 34, true, false, TEXT_ALIGN_LEFT, ECAM_RED)
         return
     end
 
     -- Draw frequency
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-445, size[2]/2-410, math.floor(PFD_table.ILS_data.frequency) .. ".", 34, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
-   sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-410, Round(PFD_table.ILS_data.frequency % 1, 2) * 100, 30, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-445, size[2]/2-410, math.floor(PFD_table.ILS_data.frequency) .. ".", 34, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+   sasl.gl.drawText(Font_ECAMfont, size[1]/2-360, size[2]/2-410, Round(PFD_table.ILS_data.frequency % 1, 2) * 100, 30, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
 
 end
 
 local function PFD_draw_dme(PFD_table)
     if not PFD_table.DME_data.is_valid then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-445, size[2]/2-440, "DME" .. PFD_table.Screen_ID, 34, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-445, size[2]/2-440, "DME" .. PFD_table.Screen_ID, 34, true, false, TEXT_ALIGN_LEFT, ECAM_RED)
         return
     end
     
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-325, size[2]/2-440, "NM", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-325, size[2]/2-440, "NM", 28, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-445, size[2]/2-440, math.floor(PFD_table.DME_data.value), 34, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-445, size[2]/2-440, math.floor(PFD_table.DME_data.value), 34, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
     
     local offset = PFD_table.DME_data.value < 10 and 20 or 0
     if PFD_table.DME_data.value < 20 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-405-offset, size[2]/2-440, ".", 34, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-405-offset, size[2]/2-440, ".", 34, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-382-offset, size[2]/2-440, math.floor((PFD_table.DME_data.value%1) * 10), 30, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-382-offset, size[2]/2-440, math.floor((PFD_table.DME_data.value%1) * 10), 30, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
     
     end
     
@@ -87,7 +87,7 @@ local function PFD_draw_markers(PFD_table)
         local period = 0.5
         local perc   = 0.75
         if time % period <= perc * period then
-            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "OM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            sasl.gl.drawText(Font_ECAMfont, 600, 150, "OM", 38, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
         end
     end
     if  get(Marker_MM_over) == 1 then
@@ -97,10 +97,10 @@ local function PFD_draw_markers(PFD_table)
         local perc2  = 0.32
         local perc3  = 0.82
         if time <= perc1 * period then
-            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "MM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, 600, 150, "MM", 38, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
         end
         if time > perc2 * period and time <= perc3 * period then
-            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "MM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, 600, 150, "MM", 38, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
         end
 
     end
@@ -109,14 +109,14 @@ local function PFD_draw_markers(PFD_table)
         local period = 0.25
         local perc   = 0.5
         if time % period <= perc * period then
-            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "IM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            sasl.gl.drawText(Font_ECAMfont, 600, 150, "IM", 38, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
         end
     end
 end
 
 local function PFD_draw_extras(PFD_table)
     -- TODO ADD GLS
-    sasl.gl.drawText(Font_AirbusDUL, 550, 210, "ILS", 42, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    sasl.gl.drawText(Font_ECAMfont, 550, 210, "ILS", 42, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
 end
 
 function PFD_draw_LS(PFD_table)

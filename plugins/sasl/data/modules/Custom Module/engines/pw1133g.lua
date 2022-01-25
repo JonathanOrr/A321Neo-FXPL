@@ -38,6 +38,12 @@ function configure_pw1133g()
             return n1 / 3.0625
         end,
         
+        n2_to_n1_fun = function(n2)
+            -- Needed for startup procedure and min_n1_approach_idle
+            -- MUST BE the inverse of n1_to_n2_fun
+            return math.exp((n2 + 2.6492) / 22.1036)
+        end,
+
         n1_to_egt_fun = function(n1, oat)
             return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (oat-6) *2
         end,
@@ -48,12 +54,30 @@ function configure_pw1133g()
         end,
 
         n1_to_FF = function(n1, alt_feet, mach, ISA_diff)
+            -- This is used ONLY for predictions, not for actual engine model
+            -- TODO: Can we link this with the real FF function?
             local FF_kgh =  146.727863052605 + 0.0261181684784363 * alt_feet + 11.5349714362869 * n1 -2975.15872221267 * mach
             -0.00118985331744109 * alt_feet * n1 + 0.00789909488873666 * alt_feet * mach + 7.6073360167464e-05 * alt_feet * ISA_diff
             +80.7328342498208 * n1 * mach -0.0747796055618955 * n1 * ISA_diff -7.14050794839843 * mach * ISA_diff
             +3.61693670778034e-07 * alt_feet^2 + 0.0734051071819252 * n1^2 -2515.81613588608 * mach^2
             +0.228108903034049 * ISA_diff^2
             return FF_kgh / 3600
+        end,
+
+        FF_function = function(throttle, density_ratio)
+            return (110+throttle*2865*0.93*math.sqrt(density_ratio)) / 3600   -- In kg/s
+        end,
+
+        min_n1_idle_hard = 18.5,
+        min_n1_idle = function(air_density_ratio)
+            -- WARNING: Beaware that changing this will change the descent performance!
+            return math.min(34,math.max(18.7,-20 * air_density_ratio + 34))
+        end,
+        min_n1_approach_idle = function(altitude_ft, oat)
+            -- Based on another engine, needs fix
+            local base_n2 = 59
+            local min_n2 = (base_n2 + 8) + 0.12 * oat + 0.6/1000 * altitude_ft
+            return ENG.data.n2_to_n1_fun(min_n2)
         end,
 
         oil = {
@@ -79,10 +103,11 @@ function configure_pw1133g()
 
         startup = {
             n2 = {
-                -- n2_start: start point after which the element is considered
+                -- n2_start: time point after which the element is considered
                 -- n2_increase_per_sec: N2 is increasing this value each second
                 -- fuel_flow: the fuel flow to use in this phase (static)
                 -- egt: the value for EGT at the beginning of this phase (it will increase towards the next value)
+                -- NOTE: this is valid starts after cranking (>=~10 N1)!
                 {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   egt=0}, -- egt 0 lead to OAT in display
                 {n2_start = 10,   n2_increase_per_sec = 1.5, fuel_flow = 0,    egt=0},
                 {n2_start = 16.2, n2_increase_per_sec = 1.5, fuel_flow = 120,  egt=0}, -- EGT can increase only with fuel
@@ -193,22 +218,37 @@ function configure_pw1133g()
 
         },
         model = {
-            n1_thrust_non_linearity   = 0.5,    -- It must be strictly 0 < x <= 1
+            n1_thrust_non_linearity   = 0.55,   -- It must be strictly 0 < x <= 1
                                                 -- 1 means that the relation between
                                                 -- thrust and n1 is linear
+
             coeff_to_thrust_crit_temp = 0.0075, -- See thrust_takeoff_computation
-            perc_penalty_AI_engine    = 0.012,  -- See thrust_penalty_computation
-            perc_penalty_AI_wing      = 0.058,  -- See thrust_penalty_computation
-            perc_penalty_AI_bleed     = 0.03,   -- See thrust_penalty_computation
-            thr_mach_barrier          = 0.4,
-            thr_k_coeff = {
-                            {    0  ,   -0.0025 },
-                            { -0.3, -0.595 },
-                            { 0.005, -0.03 },
-                            { 0.90,      1 },
+            perc_penalty_AI_engine    = 0.012,  -- [%] See thrust_penalty_computation
+            perc_penalty_AI_wing      = 0.058,  -- [%] See thrust_penalty_computation
+            perc_penalty_AI_bleed     = 0.032,  -- [%] See thrust_penalty_computation
+            k_penalty_AI_engine       = 100  ,  -- [N] See thrust_penalty_computation
+            k_penalty_AI_wing         = 2000,   -- [N] See thrust_penalty_computation
+            k_penalty_AI_bleed        = 2000,   -- [N] See thrust_penalty_computation
+            penalty_AI_bleed_f  = function(air_density_ratio)
+                local thrust_penalty = (-0.01092801+19.20246*air_density_ratio-41.18029*air_density_ratio^2+38.44175*air_density_ratio^3-12.65178*air_density_ratio^4) * 1000
+                return thrust_penalty
+            end,
+
+            -- MEGA-WARNING: You **MUST NOT** randomly change the following parameters without
+            --               PLOTTING the values of `thrust_main_equation`
+            --               if they don't match, step change in the engine thrust **WILL**
+            --               occur with very bad consequences.
+            thr_mach_barrier          = 0.43,
+            thr_k_coeff = {                     -- First column is the coefficients when
+                                                -- the Mach is below thr_mach_barrier
+                            { 0,      -0.0014 },
+                            { -0.595, -0.5 },
+                            { -0.0061, 0 },
+                            { 1,      0.949 },
                           },
-            thr_alt_penalty = {1, 0.7},
-            thr_alt_limit   = 11000,
+
+            thr_alt_penalty = {0.7, 0.84}, -- Below/Above tropopause thrust ratio
+            thr_alt_limit   = 11000,    -- Considered tropopause (TODO: shouldn't we use the XP datarefs?)
             CG_vert_displacement = 1.0287,  -- in meters
             CG_lat_displacement = 5.75,     -- in meters
         }

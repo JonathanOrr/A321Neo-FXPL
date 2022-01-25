@@ -159,8 +159,8 @@ local function draw_ranges(data)
     --if data.config.range > 0 then
         local ext_range = get_range_in_nm(data)
         local int_range = ext_range / 2
-        sasl.gl.drawText(Font_AirbusDUL, 250, 250, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, 350, 350, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 250, 250, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 350, 350, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     --end
 
 end
@@ -236,7 +236,7 @@ local function draw_poi_array(data, poi, texture, color)
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
     
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
-        sasl.gl.drawText(Font_AirbusDUL, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
     end
     
     return modified, poi

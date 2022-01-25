@@ -17,8 +17,8 @@ local image_symbols = {
 
 local function draw_common_gs_and_tas(data)
     -- Fixed elements
-    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-50, "GS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 160, size[2]-50, "TAS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 20, size[2]-50, "GS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 160, size[2]-50, "TAS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     
     local gs_value = "---"
     
@@ -33,8 +33,8 @@ local function draw_common_gs_and_tas(data)
     end
 
     
-    sasl.gl.drawText(Font_AirbusDUL, 130, size[2]-50, gs_value, 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, 290, size[2]-50, tas_value, 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, 130, size[2]-50, gs_value, 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, 290, size[2]-50, tas_value, 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
 end
 
@@ -47,7 +47,7 @@ end
 
 local function draw_common_wind(data)
     -- Fixed element
-    sasl.gl.drawText(Font_AirbusDUL, 85, size[2]-90, "/", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 85, size[2]-90, "/", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
     local txt_direction = "---"
     local txt_speed = "---"
@@ -56,8 +56,8 @@ local function draw_common_wind(data)
         txt_direction = leading_zeros_int(math.floor(data.inputs.wind_direction), 3)
         txt_speed = math.floor(data.inputs.wind_speed)
     end
-    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-90, txt_direction, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, 110, size[2]-90, txt_speed, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, 20, size[2]-90, txt_direction, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, 110, size[2]-90, txt_speed, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
 
     draw_common_wind_arrow(data)
 
@@ -92,10 +92,10 @@ local function draw_common_chrono(data)
         chrono_text = minutes .. "'" .. seconds .. "\"" 
     end
     
-    sasl.gl.drawText(Font_AirbusDUL, 30, 115, chrono_text, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, 30, 115, chrono_text, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     if show_upper_H then
         -- Draw the H between hours and minutes
-        sasl.gl.drawText(Font_AirbusDUL, 74, 125, "H", 24, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, 74, 125, "H", 24, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 end
 
@@ -130,20 +130,20 @@ local function draw_common_nav_stations_single(data, id)
         sasl.gl.drawTexture(sym_image, x+15*m-10, 35, 48/1.5,82/1.5, {1,1,1})
     end
     
-    sasl.gl.drawText(Font_AirbusDUL, x+40*m, 85, text, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)
+    sasl.gl.drawText(Font_ECAMfont, x+40*m, 85, text, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)
 
     --- Extra symbol
     if data.nav[id].correction == ND_NAV_CORRECTION_CORR then
-        sasl.gl.drawText(Font_AirbusDUL, x+120*m, 85, "CORR", 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_MAGENTA)
+        sasl.gl.drawText(Font_ECAMfont, x+120*m, 85, "CORR", 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_MAGENTA)
     elseif data.nav[id].correction == ND_NAV_CORRECTION_MAG then
-        sasl.gl.drawText(Font_AirbusDUL, x+120*m, 85, "MAG", 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_ORANGE)    
+        sasl.gl.drawText(Font_ECAMfont, x+120*m, 85, "MAG", 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_ORANGE)    
     elseif data.nav[id].correction == ND_NAV_CORRECTION_TRUE then
-        sasl.gl.drawText(Font_AirbusDUL, x+120*m, 85, "TRUE", 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, x+120*m, 85, "TRUE", 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
     
     -- Second line
     if data.nav[id].identifier ~= "" then
-        sasl.gl.drawText(Font_AirbusDUL, x+40*m, 55, data.nav[id].identifier, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)
+        sasl.gl.drawText(Font_ECAMfont, x+40*m, 55, data.nav[id].identifier, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)
     else
         local freq_str = ""
         if data.nav[id].selector == ND_SEL_VOR then
@@ -151,7 +151,7 @@ local function draw_common_nav_stations_single(data, id)
         else
             freq_str = math.floor(data.nav[id].frequency)
         end
-        sasl.gl.drawText(Font_AirbusDUL, x+40*m, 55, freq_str, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)    
+        sasl.gl.drawText(Font_ECAMfont, x+40*m, 55, freq_str, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)    
     end
     --- Extra symbol
     local tuned_symbol = ""
@@ -162,7 +162,7 @@ local function draw_common_nav_stations_single(data, id)
     end
     
     if tuned_symbol ~= "" then
-        sasl.gl.drawText(Font_AirbusDUL, x+150*m, 55, tuned_symbol, 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, x+150*m, 55, tuned_symbol, 22, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_WHITE)
         sasl.gl.drawWideLine(x+151*m, 50, x+161*m, 50, 2, ECAM_WHITE)
     end
 
@@ -170,15 +170,15 @@ local function draw_common_nav_stations_single(data, id)
 
         -- Third line
         if data.nav[id].dme_invalid then
-            sasl.gl.drawText(Font_AirbusDUL, x+40*m, 20, "DME " .. id, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, x+40*m, 20, "DME " .. id, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_RED)
         else
             local integer    = data.nav[id].dme_computed and math.floor(data.nav[id].dme_distance) or "--"
             local fractional = data.nav[id].dme_computed and math.floor((data.nav[id].dme_distance%1)*10) or "-"
 
-            sasl.gl.drawText(Font_AirbusDUL, x+90*m, 20, integer..".", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
-            sasl.gl.drawText(Font_AirbusDUL, x+18+90*m, 20, fractional, 22, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
+            sasl.gl.drawText(Font_ECAMfont, x+90*m, 20, integer..".", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
+            sasl.gl.drawText(Font_ECAMfont, x+18+90*m, 20, fractional, 22, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
 
-            sasl.gl.drawText(Font_AirbusDUL, x+30+90*m, 20, "NM", 22, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            sasl.gl.drawText(Font_ECAMfont, x+30+90*m, 20, "NM", 22, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
         end
     end    
 end
@@ -211,8 +211,8 @@ local function draw_common_messages_bottom_1(data)
         assert(false) -- This should not happen
     end
     
-    Sasl_DrawWideFrame(200, 55, size[2]-400, 35, 2, 0, ECAM_HIGH_GREY)
-    sasl.gl.drawText(Font_AirbusDUL, 450, 61, text, 34, false, false, TEXT_ALIGN_CENTER, color)
+    Sasl_DrawWideFrame(200, 55, size[2]-400, 35, 2, 0, ECAM_GREY)
+    sasl.gl.drawText(Font_ECAMfont, 450, 61, text, 34, false, false, TEXT_ALIGN_CENTER, color)
     
 end
 
@@ -253,8 +253,8 @@ local function draw_common_messages_bottom_2(data)
 
     if color ~= nil then
         Draw_LCD_backlight(200, 20, size[2]-400, 35, 0.5, 1, get(Capt_ND_brightness_act))
-        Sasl_DrawWideFrame(200, 20, size[2]-400, 35, 2, 0, ECAM_HIGH_GREY)
-        sasl.gl.drawText(Font_AirbusDUL, 450, 26, text, 34, false, false, TEXT_ALIGN_CENTER, color)
+        Sasl_DrawWideFrame(200, 20, size[2]-400, 35, 2, 0, ECAM_GREY)
+        sasl.gl.drawText(Font_ECAMfont, 450, 26, text, 34, false, false, TEXT_ALIGN_CENTER, color)
     end
 end
 
@@ -310,41 +310,41 @@ local function draw_common_messages_center(data)
     end
     
     if color ~= nil then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 530, text, 48, false, false, TEXT_ALIGN_CENTER, color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, 530, text, 48, false, false, TEXT_ALIGN_CENTER, color)
     end
 
     if data.config.mode == ND_MODE_VOR then
         if data.misc.vor_failure then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 482, "VOR", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2, 482, "VOR", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
     end
 
 
     if data.config.mode == ND_MODE_ILS then
         if data.misc.loc_failure then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 500, "LOC", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2, 500, "LOC", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
 
         if data.misc.gs_failure then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+48, "G", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2,    "/", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2-48, "S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-50, size[2]/2+48, "G", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-50, size[2]/2,    "/", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-50, size[2]/2-48, "S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
     end
     
     if data.misc.windshear_pred_fail then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-120, size[2]/2-170, "PRED W/S", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)    
+        sasl.gl.drawText(Font_ECAMfont, size[1]-120, size[2]/2-170, "PRED W/S", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)    
     end
 
 end
 
 local function draw_common_messages_top(data)
     if not data.inputs.is_heading_valid then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 612, "HDG", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, 612, "HDG", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
     
     if data.misc.hdg_discrepancy then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 670, "CHECK HDG", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, 670, "CHECK HDG", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     
     local other_side = data.id == ND_CAPT and "FO" or "CAPT" 
@@ -361,16 +361,16 @@ local function draw_common_messages_top(data)
     end
 
     if text ~= "" then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 803, text, 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, 803, text, 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
 
 local function draw_common_rwy_and_true(data)
     if data.misc.sid_or_app_visible then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]-40, data.misc.sid_or_app_text, 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)    
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]-40, data.misc.sid_or_app_text, 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)    
     end
     if data.inputs.is_true_heading_showed then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]-70, "TRUE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]-70, "TRUE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end
     
     if data.inputs.is_true_heading_boxed_showed then
@@ -401,13 +401,13 @@ local function draw_common_oans_info(data)
     
     local oans_airport = data.oans.displayed_apt
     if oans_airport ~= nil then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, oans_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, oans_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-30, size[2]-40, oans_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-30, size[2]-75, oans_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         
         data.oans.displayed_apt.distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, oans_airport.lat, oans_airport.lon)
         if data.oans.displayed_apt.distance >= 5 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-70, size[2]-110, math.floor(data.oans.displayed_apt.distance), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-110, "NM", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-70, size[2]-110, math.floor(data.oans.displayed_apt.distance), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-30, size[2]-110, "NM", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
         end
     end
 end
@@ -428,16 +428,16 @@ local function draw_common_terrain_numbers(data)
         end
 
         if get(GPWS_pred_terr_pull) == 1 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 190, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 165, "AHEAD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-55, 190, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-55, 165, "AHEAD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         elseif get(GPWS_pred_terr) == 1 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 190, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 165, "AHEAD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-55, 190, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-55, 165, "AHEAD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 165, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]-55, 165, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
         end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-40, 140, max_alt, 24, false, false, TEXT_ALIGN_CENTER, data.terrain.max_altitude_tile_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-40, 115, min_alt, 24, false, false, TEXT_ALIGN_CENTER, data.terrain.min_altitude_tile_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-40, 140, max_alt, 24, false, false, TEXT_ALIGN_CENTER, data.terrain.max_altitude_tile_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-40, 115, min_alt, 24, false, false, TEXT_ALIGN_CENTER, data.terrain.min_altitude_tile_color)
 
         Sasl_DrawWideFrame(size[1]-65, 137, 50, 23, 2, 0, {1., 1., 0})
         Sasl_DrawWideFrame(size[1]-65, 112, 50, 23, 2, 0, {1., 1., 0})

@@ -77,7 +77,7 @@ end
 
 local function draw_reset_button()
     sasl.gl.drawRectangle(0, 0, 100, 50, white)
-    drawTextCentered(Font_AirbusDUL, 50, 25, "RESET", 24, false, false, TEXT_ALIGN_CENTER, black)
+    drawTextCentered(Font_ECAMfont, 50, 25, "RESET", 24, false, false, TEXT_ALIGN_CENTER, black)
 end
 
 local function draw_crosshair()
@@ -130,18 +130,18 @@ local function draw_backgrounds()
             for i=x_lower_bound, x_upper_bound do
                 local x = coords_parser_x(i)
                 local y = coords_parser_y(j)
-                drawTextCentered(Font_AirbusDUL, x + 10, y + 25, j..","..i, text_size, false, false, TEXT_ALIGN_LEFT, lightgrey)
+                drawTextCentered(Font_ECAMfont, x + 10, y + 25, j..","..i, text_size, false, false, TEXT_ALIGN_LEFT, lightgrey)
             end
         end
     else
         for i=x_lower_bound, x_upper_bound do
             if i%2 == 0 then
-                drawTextCentered(Font_AirbusDUL, coords_parser_x(i) + 10, 25, i, 16, true, false, TEXT_ALIGN_LEFT, lightgrey)
+                drawTextCentered(Font_ECAMfont, coords_parser_x(i) + 10, 25, i, 16, true, false, TEXT_ALIGN_LEFT, lightgrey)
             end
         end
         for i=y_lower_bound, y_upper_bound do
             if i%2 == 0 then
-                drawTextCentered(Font_AirbusDUL, 10, coords_parser_y(i) + 25, i, 16, true, false, TEXT_ALIGN_LEFT, lightgrey)
+                drawTextCentered(Font_ECAMfont, 10, coords_parser_y(i) + 25, i, 16, true, false, TEXT_ALIGN_LEFT, lightgrey)
             end
         end
     end
@@ -186,7 +186,7 @@ function ND_FLIGHTPATH_drawarc(lat,lon,radius,start,arc,dash_or_not) --x y in la
 
     --Hints for drawing, not actual path
     SASL_draw_needle(x,y, real_rad, start, 3, ECAM_BLUE)
-    drawTextCentered(Font_AirbusDUL, (2*x + real_rad * math.cos(math.rad(start)))/2 ,(2*y + real_rad * math.sin(math.rad(start)))/2 - math.min(Round(Math_rescale_no_lim(5, 24, 10, 12, displayable_latitude)),24),
+    drawTextCentered(Font_ECAMfont, (2*x + real_rad * math.cos(math.rad(start)))/2 ,(2*y + real_rad * math.sin(math.rad(start)))/2 - math.min(Round(Math_rescale_no_lim(5, 24, 10, 12, displayable_latitude)),24),
      radius.."NM", Round(Math_rescale_no_lim(5, 16, 10, 9, displayable_latitude),0), true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 end
 
@@ -225,7 +225,7 @@ function ND_FLIGHTPATH_drawfix(lat,lon,wpt_name)
     y = coords_parser_y(y)
     local size_px = 6
     sasl.gl.drawConvexPolygon( {x-size_px,y,x,y+size_px,x+size_px,y,x,y-size_px} ,  false ,  2 , ECAM_GREEN )
-    drawTextCentered(Font_AirbusDUL, x + 12, y, wpt_name, 19, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    drawTextCentered(Font_ECAMfont, x + 12, y, wpt_name, 19, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
 end
 
 -----------------------------------------LOOPS

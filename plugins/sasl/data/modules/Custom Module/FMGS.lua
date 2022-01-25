@@ -164,6 +164,12 @@ FMGS_sys.perf = {
         user_vapp = nil,
         landing_config = 4, -- 3 is 3, 4 is full
         vls = 138
+    },
+    go_around = {
+        thr_red = 1500,
+        thr_acc = 1500,
+        user_thr_red = nil,
+        user_thr_acc = nil
     }
 }
 

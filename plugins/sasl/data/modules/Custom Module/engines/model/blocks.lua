@@ -27,18 +27,19 @@ function thrust_takeoff_computation(FN0, oat, crit_temp)
     end
 end
 
-function thrust_penalty_computation(AI_engine, AI_wing, bleed, T_actual)
-    AI_engine = AI_engine * ENG.data.model.perc_penalty_AI_engine
-    AI_wing   = AI_wing   * ENG.data.model.perc_penalty_AI_wing
-    bleed     = bleed     * ENG.data.model.perc_penalty_AI_bleed
+function thrust_penalty_computation(air_density_ratio, AI_engine, AI_wing, bleed, T_actual)
 
-    return T_actual * (AI_engine+AI_wing+bleed)
+    AI_engine = AI_engine * (ENG.data.model.perc_penalty_AI_engine * T_actual + ENG.data.model.k_penalty_AI_engine)
+    AI_wing   = AI_wing   * (ENG.data.model.perc_penalty_AI_wing   * T_actual + ENG.data.model.k_penalty_AI_wing)
+    bleed = bleed * ENG.data.model.penalty_AI_bleed_f(air_density_ratio)
+
+    return AI_engine+AI_wing+bleed
 end
 
 function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
     local l1,l2,l3,l4
 
-    if mach > ENG.data.model.thr_mach_barrier then
+    if mach <= ENG.data.model.thr_mach_barrier then
         l1 = ENG.data.model.thr_k_coeff[1][1]
         l2 = ENG.data.model.thr_k_coeff[2][1]
         l3 = ENG.data.model.thr_k_coeff[3][1]
@@ -56,10 +57,10 @@ function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
 
     local T_ratio = k1 + k2 + k3_k4
 
-    local alt_ratio_exp = (altitude_m > ENG.data.model.thr_alt_limit) and ENG.data.model.thr_alt_penalty[1] or ENG.data.model.thr_alt_penalty[2]
-    local alt_ratio = sigma^alt_ratio_exp
+    local alt_ratio_exp = Math_rescale(ENG.data.model.thr_alt_limit, ENG.data.model.thr_alt_penalty[1], ENG.data.model.thr_alt_limit+1000, ENG.data.model.thr_alt_penalty[2], altitude_m)
 
-    T_ratio = T_ratio * alt_ratio
+    local alt_ratio = sigma^alt_ratio_exp
+    T_ratio = math.min(1, T_ratio * alt_ratio)
     local T_max = T_takeoff * T_ratio
     local T_actual_th = T_max * throttle
 
@@ -67,7 +68,16 @@ function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
 end
 
 local function thrust_spool_derivative(n1)
-    return math.max(0.5,-21.639 + 1.256 * n1 - 0.010391 * n1^2);
+    -- Interpolated from here: https://www.youtube.com/watch?v=7gIgC5BH82o
+    -- TODO: This should be different per engine type (but we have no data other
+    -- than that video)
+    if n1 < 25 then
+        n1 = 25
+    elseif n1 > 81 then
+        n1 = 81
+    end
+    local base = 331.81 - 40.378 * n1 + 1.8311 * n1^2 -0.038558 * n1^3 + 0.00038644 * n1 ^4 -1.4955e-06 * n1^5;
+    return base;
 end
 
 local function delay_thrust(eng_state, thrust_target, T_max, N1_base_max)
@@ -103,6 +113,7 @@ function thrust_spool(eng_state, T_desired, T_penalty, T_max, N1_base_max, engin
         N1_spooled = math.max(18.5, N1_spooled) -- N1 cannot be lower than 18.5 if the engine is running 
     else
         if N1_spooled <= 15 then
+            -- Engine is shutdowning...
             N1_spooled = Set_linear_anim_value(eng_state.N1_spooled, 0, 0, 100, 1)
         end
     end

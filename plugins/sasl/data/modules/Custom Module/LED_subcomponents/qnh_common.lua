@@ -124,9 +124,9 @@ end
 
 function draw_lcd(data)
     if data.mode == MODE_QNH then
-        sasl.gl.drawText(Font_AirbusDUL, 120, 63, "QNH", 26, false, false, TEXT_ALIGN_CENTER, LED_cl)
+        sasl.gl.drawText(Font_ECAMfont, 120, 63, "QNH", 26, false, false, TEXT_ALIGN_CENTER, LED_cl)
     elseif data.mode == MODE_QFE then
-        sasl.gl.drawText(Font_AirbusDUL, 60, 63, "QFE", 26, false, false, TEXT_ALIGN_CENTER, LED_cl)
+        sasl.gl.drawText(Font_ECAMfont, 60, 63, "QFE", 26, false, false, TEXT_ALIGN_CENTER, LED_cl)
     else
         Draw_green_LED_num_and_letter_lc(20, 10, "Std ", 4, 60, TEXT_ALIGN_LEFT, 0.2, 1, 1)
     end
