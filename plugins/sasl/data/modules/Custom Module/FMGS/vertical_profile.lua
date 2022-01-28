@@ -23,6 +23,7 @@ include("libs/speed_helpers.lua")
 include('libs/air_helpers.lua')
 
 local EARTH_GRAVITY = 9.80665
+local QUANTUM_BASE_IN_SEC_CLB = 20  -- Predictions are build with this maximum granularity (lower is possible)
 local QUANTUM_BASE_IN_SEC = 60  -- Predictions are build with this maximum granularity (lower is possible)
 
 -------------------------------------------------------------------------------
@@ -170,7 +171,7 @@ local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     local _, tas, mach = convert_to_eas_tas_mach(v2, rwy_alt+200)   -- Let's use +200 to stay in the middle
     local thrust = predict_engine_thrust(mach, density, oat, rwy_alt+200, N1) * 2
     local drag   = predict_drag(density, tas, mach, 5)
-    fuel_consumption = ENG.data.n1_to_FF(N1, rwy_alt, mach, oat-Temperature_get_ISA())*2
+    fuel_consumption = ENG.data.n1_to_FF(1, density)*2
     return compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
 end
 
@@ -187,7 +188,7 @@ local function get_time_dist_from_V2_to_VSRS(rwy_alt, v2, takeoff_weight)
 
     local time = kts_to_ms(10) / acc -- 10 knots
     local dist = 0.5 * acc * (time^2) + kts_to_ms(v2) * time
-    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())*2
+    fuel_consumption = ENG.data.n1_to_FF(1, density)*2
     return time, m_to_nm(dist), fuel_consumption  -- Time, dist, fuel
 end
 
@@ -205,7 +206,7 @@ local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, we
 
     local gs = tas_to_gs(tas, vs, 0, 0)    -- TODO Wind
 
-    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())*2
+    fuel_consumption = ENG.data.n1_to_FF(1, density)*2
     return time, gs * time / 3600, fuel_consumption
 end
 
@@ -230,7 +231,9 @@ local function predict_climb_thrust_net_avail(ias,altitude)
     local thrust_per_engine = predict_engine_thrust(mach, density, oat_pred, altitude, N1)
 
     -- let's remove the drag now
-    local drag = predict_drag(density, tas, mach, 1)
+    local drag = predict_drag(density, ias, mach, 3)
+
+    print(density, ias, mach, thrust_per_engine, drag)
 
     return thrust_per_engine * 2 - drag
 end
@@ -244,7 +247,7 @@ local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end
     local density = get_density_ratio(ref_alt)
     local _, tas, mach = convert_to_eas_tas_mach(ref_spd, ref_alt)
 
-    fuel_consumption = ENG.data.n1_to_FF(N1, ref_alt, mach, oat-Temperature_get_ISA())*2
+    fuel_consumption = ENG.data.n1_to_FF(N1/get_takeoff_N1(), density)*2
     return fuel_consumption
 
 end
@@ -355,7 +358,7 @@ function vertical_profile_climb_update()
     local thrust_available = nil -- Will be set the first loop
     local skip_dist_reset = false
 
-    local Q = QUANTUM_BASE_IN_SEC    -- This may be reduced if the leg is too short
+    local Q = QUANTUM_BASE_IN_SEC_CLB    -- This may be reduced if the leg is too short
     local i = 0
     local max_clb_point = last_clb_idx
     local total_legs = #the_big_array
