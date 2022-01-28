@@ -65,7 +65,8 @@ function configure_pw1133g()
         end,
 
         FF_function = function(throttle, density_ratio)
-            return (110+throttle*2865*0.93*math.sqrt(density_ratio)) / 3600   -- In kg/s
+            local ffkgh = 110+throttle*2865*0.93*math.sqrt(density_ratio)+(1500*density_ratio-500)*(throttle)
+            return ffkgh / 3600 -- In kg/s
         end,
 
         min_n1_idle_hard = 18.5,
