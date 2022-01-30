@@ -356,7 +356,7 @@ function vertical_profile_climb_update()
     local curr_time     = 0
     local A = 0 -- Horizontal acceleration
     local thrust_available = nil -- Will be set the first loop
-    local skip_dist_reset = false
+    local skip_dist_reset = true
 
     local Q = QUANTUM_BASE_IN_SEC_CLB    -- This may be reduced if the leg is too short
     local i = 0
@@ -375,6 +375,8 @@ function vertical_profile_climb_update()
         FMGS_sys.data.pred.takeoff.dist_to_vacc
     
     while traveled_nm > 0 do
+    
+    while traveled_nm > 0 do    -- How many WPTs we overflown during takeoff phase?
         i = i + 1
         traveled_nm = traveled_nm - the_big_array[i].computed_distance
     end
@@ -389,11 +391,14 @@ function vertical_profile_climb_update()
         runs = runs + 1
 
         if not skip_dist_reset then
+            -- If we enter here, it means that the previous loop cycle ended
+            -- with the end of the waypoin, so we have to go to the next and,
+            -- therefore, reset the current_distance.
             curr_dist     = 0
         end
         skip_dist_reset = false
         -- Reset variables
-        Q = QUANTUM_BASE_IN_SEC
+        Q = QUANTUM_BASE_IN_SEC_CLB
         A = 0
 
         thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt,curr_weight)
@@ -419,7 +424,7 @@ function vertical_profile_climb_update()
             local thrust_for_acceleration = thrust_available * 0.6
             thrust_available = thrust_available - thrust_for_acceleration   -- This is the thurst dedicate to climb
 
-            A = thrust_available / curr_weight -- [m/s2]
+            A = thrust_for_acceleration / curr_weight -- [m/s2]
             Q = 1   -- Reduce the quantum to increase the precision of the speed change
         end
 
@@ -431,7 +436,7 @@ function vertical_profile_climb_update()
                 break
             end
             if new_mach then
-                local ACC_MACH_REDUCTION = 0.005    -- Reduction of acceleration to stay in mach limits
+                local ACC_MACH_REDUCTION = 0.001    -- Reduction of acceleration to stay in mach limits
                                                     -- This affects only the loop number and precision of
                                                     -- the accelerations
                 A = A - ACC_MACH_REDUCTION
@@ -440,7 +445,8 @@ function vertical_profile_climb_update()
 
             local _, TAS, _ = convert_to_eas_tas_mach(curr_spd, curr_alt)
             -- Rate of climb at the beginning of the leg
-            VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(curr_spd)) -- [fpm]
+            -- ROC = excess_power_force / weight_force * tas
+            VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
             GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
 
             Q = math.min(Q, D/m_to_nm(kts_to_ms(GS)))   -- [s]
