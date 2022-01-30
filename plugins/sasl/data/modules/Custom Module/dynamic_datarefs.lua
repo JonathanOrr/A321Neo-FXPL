@@ -306,6 +306,8 @@ Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reve
 Eng_fan_angle   = createGlobalPropertyfa("a321neo/dynamics/engines/fan_angle", 2) -- For blender model 0-359
 Eng_is_starting = createGlobalPropertyia("a321neo/dynamics/engines/is_starting", 2) -- For FMOD boolean 1/0
 
+Eng_FF = globalProperty("sim/flightmodel/engine/ENGN_FF_")
+
 -- Engine startup config stuff
 ENG_config_cooling_time = createGlobalPropertyi("a321neo/config/eng/initial_cooling", 0, false, true, false)
 ENG_config_egt_drop = createGlobalPropertyi("a321neo/config/eng/pw1100_egt_drop", 0, false, true, false)
