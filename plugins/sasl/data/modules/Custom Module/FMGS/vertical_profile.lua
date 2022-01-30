@@ -170,7 +170,7 @@ local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     local density = get(Weather_Sigma)
     local _, tas, mach = convert_to_eas_tas_mach(v2, rwy_alt+200)   -- Let's use +200 to stay in the middle
     local thrust = predict_engine_thrust(mach, density, oat, rwy_alt+200, N1) * 2
-    local drag   = predict_drag(density, tas, mach, 5)
+    local drag   = predict_drag(density, tas, mach, takeoff_weight)
     fuel_consumption = ENG.data.n1_to_FF(1, density)*2
     return compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
 end
@@ -183,7 +183,7 @@ local function get_time_dist_from_V2_to_VSRS(rwy_alt, v2, takeoff_weight)
     local N1 = get_takeoff_N1()
     local _, tas, mach = convert_to_eas_tas_mach(v2, ref_alt)
     local thrust = predict_engine_thrust(mach, density, oat, ref_alt, N1) * 2
-    local drag   = predict_drag(density, tas, mach, 1)
+    local drag   = predict_drag(density, tas, mach, takeoff_weight)
     local acc = (thrust - drag) / takeoff_weight    -- Acceleration in m/s2
 
     local time = kts_to_ms(10) / acc -- 10 knots
@@ -199,7 +199,7 @@ local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, we
     local ota_pred = predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
     local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
     local thrust = predict_engine_thrust(mach, density, ota_pred, ref_alt, N1) * 2
-    local drag   = predict_drag(density, tas, mach, 1)
+    local drag   = predict_drag(density, tas, mach, weight)
     local vs = compute_vs(thrust,drag, weight, tas)
 
     local time = (end_alt-begin_alt) / vs * 60 -- seconds
@@ -222,7 +222,7 @@ end
 -- Climb
 -------------------------------------------------------------------------------
 
-local function predict_climb_thrust_net_avail(ias,altitude)
+local function predict_climb_thrust_net_avail(ias,altitude, weight)
     local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
     local N1 = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
     local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
@@ -231,7 +231,7 @@ local function predict_climb_thrust_net_avail(ias,altitude)
     local thrust_per_engine = predict_engine_thrust(mach, density, oat_pred, altitude, N1)
 
     -- let's remove the drag now
-    local drag = predict_drag(density, ias, mach, 3)
+    local drag = predict_drag(density, tas, mach, weight)
 
     print(density, ias, mach, thrust_per_engine, drag)
 
@@ -396,7 +396,8 @@ function vertical_profile_climb_update()
         Q = QUANTUM_BASE_IN_SEC
         A = 0
 
-        thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt)
+        thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt,curr_weight)
+
 
         local leg = the_big_array[i]
         if not leg then

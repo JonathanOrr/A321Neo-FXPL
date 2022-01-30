@@ -27,18 +27,16 @@ local last_time = 0
 
 local filewrite
 
-local eng_thrust = globalProperty("sim/flightmodel/engine/POINT_thrust[1]")
 local drag_dr = globalProperty("sim/flightmodel/forces/drag_path_axis")
 
 local function write_drag_data()
+    local eng_thrust = ENG.model_state[1].T_actual_spool + ENG.model_state[2].T_actual_spool
     local mach = get(Capt_Mach)
     local density = get(Weather_Sigma)
-    local N1 = get(Eng_1_N1)
     local eng_thr = get(eng_thrust)
     local tas = get(TAS_ms)
-    local drag = get(drag_dr)
 
-    filewrite:write(drag .. "," .. (eng_thr*2) .. "," .. density .. "," .. tas .. "," .. mach .. "," .. get(Alpha).."," .. get(Capt_IAS_trend) .. "," .. get(Capt_VVI) .. "\n")
+    filewrite:write(eng_thr .. "," .. density .. "," .. tas .. "," .. mach .. "," .. get(Capt_IAS_trend) .. "," .. get(Capt_VVI) .. "\n")
 end
 
 function update()
