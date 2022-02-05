@@ -12,14 +12,12 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
-local thr_red = 2340
-local acceleration = 2340
 
 local THIS_PAGE = MCDU_Page:new({id=302})
 
 function THIS_PAGE:render(mcdu_data)
-    
-    self:set_title(mcdu_data, "   TAKE OFF")
+
+    self:set_title(mcdu_data, "  TAKE OFF",ECAM_WHITE)
 
     --change later, load and read drfs here
 
@@ -29,24 +27,30 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     local a,b,c = FMGS_perf_get_v_speeds()
     local vspd_displayed = {a, b, c} -- v1 vr v2
-    self:set_line(mcdu_data, MCDU_LEFT, 1, vspd_displayed[1] == nil and "___" or vspd_displayed[1], MCDU_LARGE, vspd_displayed[1] == nil and ECAM_ORANGE or ECAM_BLUE)
-    self:set_line(mcdu_data, MCDU_LEFT, 2, vspd_displayed[2] == nil and "___" or vspd_displayed[2], MCDU_LARGE, vspd_displayed[2] == nil and ECAM_ORANGE or ECAM_BLUE)
-    self:set_line(mcdu_data, MCDU_LEFT, 3, vspd_displayed[3] == nil and "___" or vspd_displayed[3], MCDU_LARGE, vspd_displayed[3] == nil and ECAM_ORANGE or ECAM_BLUE)
 
+    if FMGS_get_phase() < FMGS_PHASE_TAKEOFF then
+        self:set_line(mcdu_data, MCDU_LEFT, 1, vspd_displayed[1] == nil and "___" or vspd_displayed[1], MCDU_LARGE, vspd_displayed[1] == nil and ECAM_ORANGE or ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 2, vspd_displayed[2] == nil and "___" or vspd_displayed[2], MCDU_LARGE, vspd_displayed[2] == nil and ECAM_ORANGE or ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 3, vspd_displayed[3] == nil and "___" or vspd_displayed[3], MCDU_LARGE, vspd_displayed[3] == nil and ECAM_ORANGE or ECAM_BLUE)
+    else
+        self:set_line(mcdu_data, MCDU_LEFT, 1, vspd_displayed[1] == nil and "---" or vspd_displayed[1], MCDU_LARGE, vspd_displayed[1] == nil and ECAM_WHITE or ECAM_GREEN)
+        self:set_line(mcdu_data, MCDU_LEFT, 2, vspd_displayed[2] == nil and "---" or vspd_displayed[2], MCDU_LARGE, vspd_displayed[2] == nil and ECAM_WHITE or ECAM_GREEN)
+        self:set_line(mcdu_data, MCDU_LEFT, 3, vspd_displayed[3] == nil and "---" or vspd_displayed[3], MCDU_LARGE, vspd_displayed[3] == nil and ECAM_WHITE or ECAM_GREEN)
+    end
     ----------
     --  L4  --
     ----------
     if FMGS_perf_get_trans_alt() then
-        self:set_line(mcdu_data, MCDU_LEFT, 4, FMGS_perf_get_user_trans_alt() == nil and mcdu_format_force_to_small(FMGS_perf_get_trans_alt()) or FMGS_perf_get_user_trans_alt(), MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 4, FMGS_perf_get_user_trans_alt() == nil and mcdu_format_force_to_small(FMGS_perf_get_trans_alt()) or FMGS_perf_get_user_trans_alt(), MCDU_LARGE, FMGS_get_phase() >= FMGS_PHASE_TAKEOFF and ECAM_GREEN or ECAM_BLUE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_format_force_to_small("[ ]"), MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_format_force_to_small("[ ]"), MCDU_LARGE, FMGS_get_phase() >= FMGS_PHASE_TAKEOFF and ECAM_GREEN or ECAM_BLUE)
     end
     ----------
     --  L5  --
     ----------
     local j, k = FMGS_get_takeoff_thrust_reduction()
     local q, r = FMGS_get_takeoff_acc()
-    self:set_line(mcdu_data, MCDU_LEFT, 5, " "..(k == nil and mcdu_format_force_to_small(j) or k) .."/".. (r == nil and mcdu_format_force_to_small(q) or r), MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_LEFT, 5, " "..(k == nil and mcdu_format_force_to_small(j) or k) .."/".. (r == nil and mcdu_format_force_to_small(q) or r), MCDU_LARGE,FMGS_get_phase() >= FMGS_PHASE_TAKEOFF and ECAM_GREEN or ECAM_BLUE)
 
     ----------
     --  L6  --
@@ -76,23 +80,53 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --  R2  --
     ----------
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, 2, mcdu_format_force_to_small("[M]").."      ", MCDU_LARGE, ECAM_WHITE)
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, 2, (FMGS_get_takeoff_shift() == nil and "[   ]*" or FMGS_get_takeoff_shift()), MCDU_LARGE, ECAM_BLUE)
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, 2, mcdu_format_force_to_small("[M]").."     ", MCDU_LARGE, ECAM_WHITE)
+
+    if FMGS_get_phase() < FMGS_PHASE_TAKEOFF then
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, 2, (FMGS_get_takeoff_shift() == nil and "[  ]*" or FMGS_get_takeoff_shift()), MCDU_LARGE, ECAM_BLUE)
+    else
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, 2, (FMGS_get_takeoff_shift() == nil and "" or FMGS_get_takeoff_shift()), MCDU_LARGE, ECAM_GREEN)
+    end
 
     ----------
     --  R3  --
     ----------
     local flaps_ths = {FMGS_get_takeoff_flaps(), FMGS_get_takeoff_ths()}
-    self:set_line(mcdu_data, MCDU_RIGHT, 3, (flaps_ths[1] == nil and "[]" or flaps_ths[1]).."/"..(flaps_ths[2] == nil and "[   ]" or (flaps_ths[2] < 0 and ("DN"..Round_fill(-flaps_ths[2],1)) or ("UP"..Round_fill(flaps_ths[2],1)) )), MCDU_LARGE, ECAM_BLUE)
+    local flaps_displayed = (flaps_ths[1] == nil and "[]" or flaps_ths[1]) -- FORMATING THE STRING FOR DISPLAY
+    local trim_displayed = (flaps_ths[2] == nil and "[   ]" or (flaps_ths[2] < 0 and ("DN"..Round_fill(-flaps_ths[2],1)) or ("UP"..Round_fill(flaps_ths[2],1)) ))
+
+    if FMGS_get_phase() < FMGS_PHASE_TAKEOFF then
+
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, flaps_displayed.."      ", MCDU_LARGE, ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, "/     ", MCDU_LARGE, ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, trim_displayed, MCDU_LARGE, ECAM_BLUE)
+
+    elseif FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then -- If we are taking off, check if there is a user input. if yes, green. if no, blank.
+        if flaps_ths[1] ~= nil then 
+            self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, flaps_displayed.."      ", MCDU_LARGE, ECAM_GREEN)
+            self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, "/     ", MCDU_LARGE, ECAM_GREEN)
+        else
+            self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, "", MCDU_LARGE, ECAM_BLUE)
+        end
+        if flaps_ths[2] ~= nil then 
+            self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, trim_displayed, MCDU_LARGE, ECAM_GREEN)
+        else
+            self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, "", MCDU_LARGE, ECAM_BLUE)
+        end
+    end
 
     ----------
     --  R4  --
     ----------
     local flex_temp = FMGS_get_takeoff_flex_temp()
-    self:set_line(mcdu_data, MCDU_RIGHT, 4, (flex_temp == nil and "[ ]°" or tostring(flex_temp).."°"), MCDU_LARGE, ECAM_BLUE)
+    if FMGS_get_phase() < FMGS_PHASE_TAKEOFF then
+        self:set_line(mcdu_data, MCDU_RIGHT, 4, (flex_temp == nil and "[ ]°" or tostring(flex_temp).."°"), MCDU_LARGE, ECAM_BLUE)
+    else
+        self:set_line(mcdu_data, MCDU_RIGHT, 4, (flex_temp == nil and "" or tostring(flex_temp).."°"), MCDU_LARGE, ECAM_GREEN)
+    end
 
     local f, g = FMGS_get_takeoff_eng_out_alt()
-    self:set_line(mcdu_data, MCDU_RIGHT, 5, g == nil and mcdu_format_force_to_small(f) or g, MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 5, g == nil and mcdu_format_force_to_small(f) or g, MCDU_LARGE, FMGS_get_phase() < FMGS_PHASE_TAKEOFF and ECAM_BLUE or ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "PHASE>", MCDU_LARGE, ECAM_WHITE)
     
     --SMALL LINES
@@ -117,10 +151,14 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:L1(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
+    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0}, false)
     input = tonumber(input)
     if input == nil then return end
-    if input > 100 and input <= 175 then
+    if input >= 90 and input <= 350 then
         FMGS_perf_set_v1(input)
     else
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
@@ -128,10 +166,14 @@ function THIS_PAGE:L1(mcdu_data)
 end
 
 function THIS_PAGE:L2(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
+    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0}, false)
     input = tonumber(input)
     if input == nil then return end
-    if input > 100 and input <= 175 then
+    if input >= 90 and input <= 350 then
         FMGS_perf_set_vr(input)
     else
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
@@ -139,46 +181,38 @@ function THIS_PAGE:L2(mcdu_data)
 end
 
 function THIS_PAGE:L3(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
+    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0}, false)
     input = tonumber(input)
     if input == nil then return end
-    if input > 100 and input <= 175 then
+    if input >= 90 and input <= 350 then
         FMGS_perf_set_v2(input)
     else
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
     end
 end
 
-function THIS_PAGE:L6(mcdu_data)
-
-end
-
-function THIS_PAGE:R2(mcdu_data)
-    if mcdu_data.clr then
-        FMGS_set_takeoff_shift(nil)
-        mcdu_data.clear_the_clear()
+function THIS_PAGE:L4(mcdu_data)
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
         return
     end
-    local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!","!"})
-    if input == nil then return end
-    input = tonumber(input)
-    if input > 0 and input <= 1000 then
-        FMGS_set_takeoff_shift(input)
-    else
-        mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
-    end
-end
-
-function THIS_PAGE:L4(mcdu_data)
     if mcdu_data.clr then
+        if FMGS_perf_get_user_trans_alt() == nil  then -- if there is already no user value but the user still tried to clear
+            mcdu_send_message(mcdu_data, "NOT ALLOWED")  
+        end
         FMGS_perf_set_user_trans_alt(nil)
         mcdu_data.clear_the_clear()
         return
     end
-    local input = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!","!!!","!!","!"})
+    local input = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!"}, false)
     if input == nil then return end
     input = tonumber(input)
-    if input >= 2000 and input <= 20000 then
+    if input >= 0 and input <= 39000 then
+        input = Round(input, -1)
         FMGS_perf_set_user_trans_alt(input)
     else
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
@@ -186,20 +220,30 @@ function THIS_PAGE:L4(mcdu_data)
 end
 
 function THIS_PAGE:L5(mcdu_data)
-
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
     if mcdu_data.clr then
+
+        local j, k = FMGS_get_takeoff_thrust_reduction() -- if there is already no user value but the user still tried to clear
+        local q, r = FMGS_get_takeoff_acc()
+        if k == nil and r == nil then
+            mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        end
         FMGS_set_takeoff_thrust_reduction(nil)
         FMGS_set_takeoff_acc(nil)
         mcdu_data.clear_the_clear()
         return
     end
 
-    local a,b = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!","!"},{"!!!!","!!!","!!","!"})
+    local a,b = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!"},{"!!!!!","!!!!"}, false)
     local entry_out_of_range_msg = false
 
     if a ~= nil then
         a = tonumber(a)           
-        if a > 500 and a <= 10000 then
+        if a > 0 and a <= 39000 then
+            a = Round(a, -1)
             FMGS_set_takeoff_thrust_reduction(a)
         else
             entry_out_of_range_msg = true
@@ -208,7 +252,8 @@ function THIS_PAGE:L5(mcdu_data)
 
     if b ~= nil then
         b = tonumber(b)        
-        if b > 500 and b <= 10000 then
+        if b > 0 and b <= 39000 then
+            b = Round(b, -1)
             FMGS_set_takeoff_acc(b)
         else
             entry_out_of_range_msg = true
@@ -220,14 +265,55 @@ function THIS_PAGE:L5(mcdu_data)
     end
 end
 
+function THIS_PAGE:L6(mcdu_data)
+    mcdu_send_message(mcdu_data, "TELL HENRICK TO CODE IT")
+end
+
+function THIS_PAGE:R2(mcdu_data)
+    -- TODO range of shift is 1 - rwy_length (see 22-20-50-30)
+
+    if mcdu_data.clr then
+        if FMGS_get_takeoff_shift() ~= nil then
+            FMGS_set_takeoff_shift(nil)
+            mcdu_data.clear_the_clear()
+        else
+            mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        end
+        return
+    end
+
+    local rwy_length = FMGS_dep_get_rwy(false)
+    if rwy_length then
+        rwy_length = rwy_length.distance
+    end
+
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF or rwy_length == nil then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED") -- user should enter departure runway first
+        return
+    end
+
+    local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!","!"}, false)
+    if input == nil then return end
+    input = tonumber(input)
+    if input > 0 and input <= rwy_length then
+        FMGS_set_takeoff_shift(input)
+    else
+        mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+    end
+end
+
 
 function THIS_PAGE:R3(mcdu_data)
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
     local entru_out_of_range_msg = false
     local a, b = mcdu_get_entry(mcdu_data, {"!"}, {"#####","###"}, false)
 
     if a ~= nil then
         a = tonumber(a)
-        local a_is_in_range = a > 0.9 and a < 4.1
+        local a_is_in_range = a > -0.1 and a < 4.1 -- 22-20-50-30 range is not limited
         if a_is_in_range then
             FMGS_set_takeoff_flaps(a)
         else
@@ -287,10 +373,17 @@ function THIS_PAGE:R3(mcdu_data)
 end
 
 function THIS_PAGE:R4(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"number", length = 2, dp = 0})
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
+    if mcdu_data.clr and FMGS_get_takeoff_flex_temp() ~= nil then
+        FMGS_set_takeoff_flex_temp(nil)
+    end
+    local input = mcdu_get_entry(mcdu_data, {"number", length = 2, dp = 0}, false)
     input = tonumber(input)
     if input == nil then return end
-    if input > 0 and input <= 80 then
+    if input > -99 and input <= 99 then
         FMGS_set_takeoff_flex_temp(input)
         set(Eng_N1_flex_temp, input)
     else
@@ -299,15 +392,23 @@ function THIS_PAGE:R4(mcdu_data)
 end
 
 function THIS_PAGE:R5(mcdu_data)
+    if FMGS_get_phase() >= FMGS_PHASE_TAKEOFF then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
     if mcdu_data.clr then
+        local a,b = FMGS_get_takeoff_eng_out_alt()
+        if b == nil then
+            mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        end
         FMGS_set_takeoff_eng_out_alt(nil)
         mcdu_data.clear_the_clear()
         return
     end
-    local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!","!"})
+    local input = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!"}, false)
     if input == nil then return end
     input = tonumber(input)
-    if input >= 500 and input <= 10000 then
+    if input >= 0 and input <= 39000 then
         FMGS_set_takeoff_eng_out_alt(input)
     else
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
