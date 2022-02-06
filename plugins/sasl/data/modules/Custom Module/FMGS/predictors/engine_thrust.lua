@@ -43,3 +43,23 @@ function predict_engine_thrust(mach, density, oat, altitude_feet, N1)
     local T_ratio = (N1/N1_base_max)^(1/ENG.data.model.n1_thrust_non_linearity)
     return (T_max-T_penalty) * T_ratio
 end
+
+
+function predict_engine_N1(mach, density, oat, altitude_feet, thrust)
+
+    -- First of all, let's get the maximum thrust at this altitude/temperature/etc.
+    -- If the engine is set as TOGA
+    local thrust_N = ENG.data.max_thrust * 4.44822
+    local crit_temp  = ENG.data.modes.toga_penalties.temp_function(altitude_feet)
+    local T_takeoff = thrust_takeoff_computation(thrust_N, oat, crit_temp)
+    local _, T_max = thrust_main_equation(mach, T_takeoff, 0, ENG.data.bypass_ratio, density, altitude_feet*0.3048)
+    local T_penalty = thrust_penalty_computation(density, 0, 0, 2/3, T_max)
+
+    -- Now let's scale down on the requested N1
+    local T_ratio = thrust / (T_max-T_penalty)
+    local N1_base_max = eng_N1_limit_takeoff_clean(oat, oat, altitude_feet)
+
+    local N1 = T_ratio^ENG.data.model.n1_thrust_non_linearity * N1_base_max
+
+    return N1
+end

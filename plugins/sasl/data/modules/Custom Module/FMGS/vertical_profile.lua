@@ -259,6 +259,25 @@ local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end
 end
 
 -------------------------------------------------------------------------------
+-- Cruise
+-------------------------------------------------------------------------------
+local function predict_cruise_N1_at_alt(ias,altitude, weight)
+    local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
+    local N1_max = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
+    local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
+    local density = get_density_ratio(altitude)
+    local drag = predict_drag(density, tas, mach, weight)
+
+
+    local N1_per_engine = predict_engine_N1(mach, density, oat_pred, altitude, drag/2)
+
+    local fuel_consumption = ENG.data.n1_to_FF(N1_per_engine/get_takeoff_N1(), density)*2
+
+    return N1_per_engine, fuel_consumption
+
+end
+
+-------------------------------------------------------------------------------
 -- Main functions
 -------------------------------------------------------------------------------
 local function vertical_profile_reset()
@@ -398,7 +417,7 @@ function vertical_profile_climb_update()
     local runs = 0  -- Just for debugging the performance
     local total_fuel_cons = FMGS_sys.data.pred.takeoff.total_fuel_kgs
 
-    -- We need to modify both i and max_clb_point, so for is no good here
+    -- We need to modify both i and max_clb_point, so `for` is no good here
     while i <= max_clb_point do
         runs = runs + 1
 
@@ -529,6 +548,8 @@ function vertical_profile_climb_update()
                 file_debug:write("Leg " .. i .. "-th: finished", "\n")
             end
 
+            -- We finally reached the end of the leg, so let's update its predictions
+
             leg.pred.altitude = new_alt
             leg.pred.ias      = new_spd
             leg.pred.mach     = new_mach
@@ -540,6 +561,14 @@ function vertical_profile_climb_update()
                 -- We didn't reach the TOC, so let's be sure the next wpt is
                 -- predicted as a climb
                 if not the_big_array[i+1].pred.is_climb then
+                    if the_big_array[i+1].pred.is_descent then
+                        -- Very bad here, we cannot climb to the cruise FLZ, we have no
+                        -- sufficient time/space, break everything
+                        if DEBUG_TO_FILE then
+                            file_debug:write("Leg " .. i .. "-th: end of space", "\n")
+                        end
+                        return nil, nil, nil
+                    end
                     the_big_array[i+1].pred.is_climb = true
                     max_clb_point = max_clb_point + 1
                 end
@@ -557,9 +586,45 @@ function vertical_profile_climb_update()
         i = i + 1
     end
 
-    table.insert(the_big_array, i, {name="T/C", pred={altitude=cruise_alt, ias=curr_spd,mach=curr_mach,time=curr_time, fuel=total_fuel_cons, vs=0}})
+    table.insert(the_big_array, i, {name="T/C", pred={altitude=cruise_alt, ias=curr_spd,mach=curr_mach,time=curr_time, fuel=total_fuel_cons, vs=0, dist_prev_wpt=curr_dist}})
+
+    return total_fuel_cons, i+1
 end
 
+local function vertical_profile_cruise_update(idx_next_wpt)
+    local TC = the_big_array[idx_next_wpt-1]
+    local i = idx_next_wpt
+    local curr_alt      = TC.pred.altitude
+    local curr_spd      = TC.pred.ias
+    local curr_mach     = TC.pred.mach
+    local curr_dist     = TC.pred.dist_prev_wpt
+    local curr_time     = TC.pred.time
+    local curr_fuel     = TC.pred.fuel
+
+    local leg = the_big_array[i]
+    if not leg then
+        logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "max_clb_point=", max_clb_point)
+    end 
+
+    if curr_dist > leg.computed_distance then
+        -- This may happen if we reached the TC and the same time the next waypoint. In that case, the
+        -- previous function does not update the idx next wpt, so we have to do that
+        leg.pred.altitude = curr_alt
+        leg.pred.ias      = curr_spd
+        leg.pred.mach     = curr_mach
+        leg.pred.time     = curr_time
+        leg.pred.fuel     = curr_fuel
+        leg.pred.vs       = 0
+        i = i + 1
+    end
+
+    while i <= first_des_idx do
+
+        local dist_to_travel = leg.computed_distance - curr_dist
+
+        i = i + 1
+    end
+end
 
 function vertical_profile_update()
 
@@ -593,7 +658,12 @@ function vertical_profile_update()
     end
 
     prepare_the_common_big_array()
-    vertical_profile_climb_update()
+    FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_climb_update()
+    if not FMGS_sys.data.pred.climb.total_fuel_kgs then
+        -- Error, like cruise FL is too high
+        return  -- Cannot make any other prediction
+    end
+    FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_cruise_update()
 
 end
 
