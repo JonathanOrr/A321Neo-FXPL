@@ -258,6 +258,26 @@ local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end
 
 end
 
+local function get_target_speed_climb(altitude)
+    -- This function does not consider  the initial climb part or
+    -- restrictions
+    if altitude < FMGS_sys.data.init.alt_speed_limit_climb[2] then
+        return FMGS_sys.data.init.alt_speed_limit_climb[1], nil
+    end
+
+    -- Otherwise it depends on the cost index
+    local cost_index = FMGS_init_get_cost_idx()
+    if not cost_index then
+        cost_index = 0 -- Cost index default to zero
+    end
+
+    -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
+    local optimal_speed = math.min(340,0.645 * cost_index + 308)
+    local optimal_mach  = math.min(0.8, 0.765 + 0.001683333 * cost_index - 0.00007895833 * cost_index^2 + 0.000001828125 * cost_index^3 - 1.822917e-8*cost_index^4 + 6.510417e-11*cost_index^5)
+    return optimal_speed, optimal_mach
+end
+
+
 -------------------------------------------------------------------------------
 -- Cruise
 -------------------------------------------------------------------------------
@@ -277,10 +297,37 @@ local function predict_cruise_N1_at_alt(ias,altitude, weight)
 
 end
 
-local function mach_at_cruise(alt_feet, cost_idx, gross_weight)
-    return math.min(0.80,alt_feet*(7.5000e-06-8.2500e-06 * cost_idx/100) + 0.4875 + 0.3368 * cost_idx / 100 
-           + (2.3500e-06-2.5000e-06 *cost_idx/100) * gross_weight -0.1592 +0.2075 * cost_idx/100);
+local function mach_at_cruise(alt_feet, gross_weight)
+    local cost_index = FMGS_init_get_cost_idx()
+    if not cost_index then
+        cost_index = 0 -- Cost index default to zero
+    end
+    return math.min(0.80,alt_feet*(7.5000e-06-8.2500e-06 * cost_index/100) + 0.4875 + 0.3368 * cost_index / 100 
+           + (2.3500e-06-2.5000e-06 *cost_index/100) * gross_weight -0.1592 +0.2075 * cost_index/100);
 end
+
+-------------------------------------------------------------------------------
+-- Descent
+-------------------------------------------------------------------------------
+local function get_target_speed_descent(altitude)
+    -- This function does not consider  the initial climb part or
+    -- restrictions
+    if altitude < FMGS_sys.data.init.alt_speed_limit_descent[2] then
+        return FMGS_sys.data.init.alt_speed_limit_descent[1], nil
+    end
+
+    -- Otherwise it depends on the cost index
+    local cost_index = FMGS_init_get_cost_idx()
+    if not cost_index then
+        cost_index = 0 -- Cost index default to zero
+    end
+
+    -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
+    local optimal_speed = -0.0003333333333 * cost_index^3 + 0.0308928571429* cost_index^2 +0.7869047619048 * cost_index + 252.1142857142856
+    local optimal_mach  = -0.000003392857143 * cost_index * cost_index + 0.000716428571429 * cost_index + 0.764485714285714
+    return optimal_speed, optimal_mach
+end
+
 
 -------------------------------------------------------------------------------
 -- Main functions
@@ -335,25 +382,6 @@ local function vertical_profile_takeoff_update()
     fuel_consumed = fuel_consumed + fuel_consumption * time
 
     return fuel_consumed
-end
-
-local function get_target_speed_climb(altitude)
-    -- This function does not consider  the initial climb part or
-    -- restrictions
-    if altitude < FMGS_sys.data.init.alt_speed_limit_climb[2] then
-        return FMGS_sys.data.init.alt_speed_limit_climb[1], nil
-    end
-
-    -- Otherwise it depends on the cost index
-    local cost_index = FMGS_init_get_cost_idx()
-    if not cost_index then
-        cost_index = 0 -- Cost index default to zero
-    end
-
-    -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
-    local optimal_speed = math.min(340,0.645 * cost_index + 308)
-    local optimal_mach  = math.min(0.8, 0.765 + 0.001683333 * cost_index - 0.00007895833 * cost_index^2 + 0.000001828125 * cost_index^3 - 1.822917e-8*cost_index^4 + 6.510417e-11*cost_index^5)
-    return optimal_speed, optimal_mach
 end
 
 function vertical_profile_climb_update()
