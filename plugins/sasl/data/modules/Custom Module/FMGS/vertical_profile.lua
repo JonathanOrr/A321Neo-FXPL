@@ -277,6 +277,11 @@ local function predict_cruise_N1_at_alt(ias,altitude, weight)
 
 end
 
+local function mach_at_cruise(alt_feet, cost_idx, gross_weight)
+    return math.min(0.80,alt_feet*(7.5000e-06-8.2500e-06 * cost_idx/100) + 0.4875 + 0.3368 * cost_idx / 100 
+           + (2.3500e-06-2.5000e-06 *cost_idx/100) * gross_weight -0.1592 +0.2075 * cost_idx/100);
+end
+
 -------------------------------------------------------------------------------
 -- Main functions
 -------------------------------------------------------------------------------
