@@ -281,7 +281,7 @@ end
 -------------------------------------------------------------------------------
 -- Cruise
 -------------------------------------------------------------------------------
-local function predict_cruise_N1_at_alt(ias,altitude, weight)
+local function predict_cruise_N1_at_alt_ias(ias,altitude, weight)
     local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
     local N1_max = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
     local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
@@ -297,6 +297,22 @@ local function predict_cruise_N1_at_alt(ias,altitude, weight)
 
 end
 
+local function predict_cruise_N1_at_alt_M(M, altitude, weight)
+    local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
+    local N1_max = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
+    local tas = convert_to_tas(M, altitude)
+    local density = get_density_ratio(altitude)
+    local drag = predict_drag(density, tas, M, weight)
+
+
+    local N1_per_engine = predict_engine_N1(M, density, oat_pred, altitude, drag/2)
+
+    local fuel_consumption = ENG.data.n1_to_FF(N1_per_engine/get_takeoff_N1(), density)*2
+
+    return N1_per_engine, fuel_consumption
+
+end
+
 local function mach_at_cruise(alt_feet, gross_weight)
     local cost_index = FMGS_init_get_cost_idx()
     if not cost_index then
@@ -304,6 +320,27 @@ local function mach_at_cruise(alt_feet, gross_weight)
     end
     return math.min(0.80,alt_feet*(7.5000e-06-8.2500e-06 * cost_index/100) + 0.4875 + 0.3368 * cost_index / 100 
            + (2.3500e-06-2.5000e-06 *cost_index/100) * gross_weight -0.1592 +0.2075 * cost_index/100);
+end
+
+local function approx_TOD_distance()  -- This is a very rough prediction, but it's ok for just the weight
+
+    local total_legs = #the_big_array
+    local toc_to_rwy_dist = 0
+    for i=last_clb_idx,total_legs do
+        local leg = the_big_array[i]
+        toc_to_rwy_dist = toc_to_rwy_dist + (leg.computed_distance or 0)
+    end
+
+    -- we need about 100 nm at FL390 to reach 0 ft so...
+    local cruise_alt = FMGS_sys.data.init.crz_fl
+    local appprox_descent_nm = cruise_alt / 39000 * 100
+
+    toc_to_rwy_dist = toc_to_rwy_dist - appprox_descent_nm
+    if toc_to_rwy_dist <= 0 then
+        return nil  -- Too close
+    end
+
+    return toc_to_rwy_dist
 end
 
 -------------------------------------------------------------------------------
@@ -663,12 +700,49 @@ local function vertical_profile_cruise_update(idx_next_wpt)
         i = i + 1
     end
 
-    while i <= first_des_idx do
+    -- So, we don't knwo where the TOD is at beginning, therefore, we have
+    -- to estimate the distance to it. We will update later after descent is
+    -- made the final part of the cruise segment if needed.
+    -- NOTE: we have to compute the cruise (even if approx) before the descent
+    -- or we won't know the weight at TOD!
 
-        local dist_to_travel = leg.computed_distance - curr_dist
+    local max_dist = approx_TOD_distance()
+
+    while i <= first_des_idx do
+        if curr_dist >= max_dist then
+            -- See comment above max_dist 
+            break
+        end
+
+        leg = the_big_array[i]
+        D = leg.computed_distance
+
+        local dist_to_travel = D - curr_dist
+        local managed_mach = mach_at_cruise(cruise_alt, curr_weight)
+        local N1, FF = predict_cruise_N1_at_alt_M(managed_mach, cruise_alt, curr_weight)
+
+        local TAS = convert_to_tas(managed_mach, cruise_alt)
+        local GS = tas_to_gs(TAS, 0, 0, 0)    -- TODO: Put wind here
+
+        local time_to_travel = dist_to_travel / m_to_nm(kts_to_ms(GS))
+
+        leg.pred.altitude = cruise_alt
+        leg.pred.mach = managed_mach
+        leg.pred.time = curr_time + time_to_travel
+        leg.pred.fuel = curr_fuel + FF * time_to_travel
+        leg.pred.vs   = 0
+
+        curr_weight = curr_weight - FF * time_to_travel
+        curr_dist = 0
 
         i = i + 1
     end
+end
+
+local function vertical_profile_descent_update()
+    -- For the descent phase we have to go back, so we start from the runways threshold and we climb up
+    
+
 end
 
 function vertical_profile_update()
@@ -708,7 +782,12 @@ function vertical_profile_update()
         -- Error, like cruise FL is too high
         return  -- Cannot make any other prediction
     end
-    FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_cruise_update()
+
+    vertical_profile_descent_update()
+
+
+    FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_cruise_update(idx_next_wpt)
+
 
 end
 
