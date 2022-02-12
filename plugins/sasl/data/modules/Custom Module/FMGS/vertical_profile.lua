@@ -418,7 +418,6 @@ function vertical_profile_climb_update()
 
     local Q = QUANTUM_BASE_IN_SEC_CLB    -- This may be reduced if the leg is too short
     local i = 0
-    local max_clb_point = last_clb_idx
     local total_legs = #the_big_array
 
     -- First, let's understand where we are considering the initial climb
@@ -450,8 +449,8 @@ function vertical_profile_climb_update()
     local runs = 0  -- Just for debugging the performance
     local total_fuel_cons = FMGS_sys.data.pred.takeoff.total_fuel_kgs
 
-    -- We need to modify both i and max_clb_point, so `for` is no good here
-    while i <= max_clb_point do
+    -- We need to modify both i and last_clb_idx, so `for` is no good here
+    while i <= last_clb_idx do
         runs = runs + 1
 
         if not skip_dist_reset then
@@ -475,10 +474,10 @@ function vertical_profile_climb_update()
 
         local leg = the_big_array[i]
         if not leg then
-            logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "max_clb_point=", max_clb_point)
+            logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "last_clb_idx=", last_clb_idx)
         end
-        local D = leg.computed_distance
-        assert(D)   -- At this point, the distance should be already computed
+        local D = leg.computed_distance or 0 -- At this point, the distance should be already computed
+                                             -- but a bit of defensive programming is not bad
 
         local target_speed, target_mach = get_target_speed_climb(curr_alt)
 
@@ -603,7 +602,7 @@ function vertical_profile_climb_update()
                         return nil, nil, nil
                     end
                     the_big_array[i+1].pred.is_climb = true
-                    max_clb_point = max_clb_point + 1
+                    last_clb_idx = last_clb_idx + 1
                 end
             end
 
@@ -619,7 +618,17 @@ function vertical_profile_climb_update()
         i = i + 1
     end
 
-    table.insert(the_big_array, i, {name="T/C", pred={altitude=cruise_alt, ias=curr_spd,mach=curr_mach,time=curr_time, fuel=total_fuel_cons, vs=0, dist_prev_wpt=curr_dist}})
+    table.insert(the_big_array, i, {name="T/C", 
+                                    pred={
+                                           altitude=cruise_alt,
+                                           ias=curr_spd,
+                                           mach=curr_mach,
+                                           time=curr_time,
+                                           fuel=total_fuel_cons,
+                                           vs=0,
+                                           dist_prev_wpt=curr_dist,
+                                           weight=curr_weight
+                                        }})
 
     return total_fuel_cons, i+1
 end
@@ -627,19 +636,22 @@ end
 local function vertical_profile_cruise_update(idx_next_wpt)
     local TC = the_big_array[idx_next_wpt-1]
     local i = idx_next_wpt
-    local curr_alt      = TC.pred.altitude
+    local cruise_alt = FMGS_sys.data.init.crz_fl
     local curr_spd      = TC.pred.ias
     local curr_mach     = TC.pred.mach
     local curr_dist     = TC.pred.dist_prev_wpt
     local curr_time     = TC.pred.time
     local curr_fuel     = TC.pred.fuel
+    local curr_weight   = TC.pred.weight
 
     local leg = the_big_array[i]
     if not leg then
-        logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "max_clb_point=", max_clb_point)
+        logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "last_clb_idx=", last_clb_idx)
     end 
 
-    if curr_dist > leg.computed_distance then
+    local D = leg.computed_distance or 0 -- At this point, the distance should be already computed
+
+    if curr_dist > D then
         -- This may happen if we reached the TC and the same time the next waypoint. In that case, the
         -- previous function does not update the idx next wpt, so we have to do that
         leg.pred.altitude = curr_alt
