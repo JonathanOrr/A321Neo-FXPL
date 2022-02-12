@@ -115,6 +115,15 @@ function convert_to_eas_tas_mach(cas, alt)
     return ms_to_kts(eas), ms_to_kts(tas), M
 end
 
+function convert_to_tas(M, alt)
+    alt = alt / feet_per_metre
+
+    local lss = lss(alt)
+    local tas = M * lss
+
+    return ms_to_kts(tas)
+end
+
 
 -- return in [kts]
 -- inputs: tas [kts], vs [fpm], v_wind [kts], d_wind [deg, relative]
