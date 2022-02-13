@@ -746,6 +746,21 @@ end
 local function vertical_profile_descent_update()
     -- For the descent phase we have to go back, so we start from the runways threshold and we climb up
     
+    -- This function implements the Continuous Descent Approach (CDA)
+
+    -- Steps (reversed):
+    -- 1st step: from runway to 1000ft AGL. Speed stabilized to Vapp, we assume the ° provided by the approach phase or 3° if not available
+    -- 2nd step: from 1000ft to selection of flaps full: VLS
+    -- 3rd step: from flaps full to flaps3: to VLS
+    -- 4th step: from flaps3 to flaps2: to VLS
+    -- 5th step: from flaps2 to flaps1: to VLS
+    -- 6th step: from flaps1 to decel point: green dot speed
+    -- 7th step: from decel point to speed limit (FL100): transition to 250 kts
+    -- 8th step: from speed limit (FL100) to CRZ FL: ECON DES MACH / ECON DES SPD
+
+    -- Functions we need:
+    -- FBW.FAC_COMPUTATION.Extract_vs1g = function(gross_weight, config, gear_down)
+    -- VLS = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(gross_weight, 4 or 5, true)
 
 end
 

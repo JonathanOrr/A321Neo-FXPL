@@ -18,7 +18,10 @@ local function draw_vprof_menu()
     sasl.gl.drawText(Font_B612MONO_regular, 40+(7/2*BTN_WIDTH), size[2]-72, "Descent", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
     sasl.gl.drawFrame (50+BTN_WIDTH*4, size[2]-85, BTN_WIDTH, BTN_HEIGHT, curr_subpage == 5 and UI_GREEN or UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 50+(9/2*BTN_WIDTH), size[2]-72, "Key WPTs", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 50+(9/2*BTN_WIDTH), size[2]-72, "Appr&Land", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+
+    sasl.gl.drawFrame (60+BTN_WIDTH*5, size[2]-85, BTN_WIDTH, BTN_HEIGHT, curr_subpage == 6 and UI_GREEN or UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 60+(11/2*BTN_WIDTH), size[2]-72, "Key WPTs", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
 end
 
@@ -201,6 +204,63 @@ local function draw_key_wpts()
 
 end
 
+local function draw_apprland_static()
+    -- RWY
+    sasl.gl.drawWideLine(900,190,1000,190,5,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 950, 200, "RWY", 16, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+
+    -- 1000 ft
+    sasl.gl.drawWideLine(900,190,800,240,2,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 810, 250, "1000ft AGL", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawWideLine(800,240,800,180,2,{.3,.3,.3})
+
+    -- Flaps FULL
+    sasl.gl.drawWideLine(800,240,700,290,2,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 710, 300, "FLAPS FULL", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawWideLine(700,290,700,180,2,{.3,.3,.3})
+
+    -- Flaps 3
+    sasl.gl.drawWideLine(600,340,700,290,2,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 610, 350, "FLAPS 3", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawWideLine(600,340,600,180,2,{.3,.3,.3})
+
+    -- FDP
+    sasl.gl.drawWideLine(600,340,500,390,2,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 510, 400, "FDP", 14, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    sasl.gl.drawWideLine(500,390,500,180,2,{.4,.2,.4})
+
+    -- Flaps 2
+    sasl.gl.drawWideLine(500,390,400,420,2,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 410, 430, "FLAPS 2", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawWideLine(400,420,400,180,2,{.3,.3,.3})
+
+    -- Flaps 1
+    sasl.gl.drawWideLine(300,450,400,420,2,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 310, 460, "FLAPS 1", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawWideLine(300,450,300,180,2,{.3,.3,.3})
+    
+    -- DECEL
+    sasl.gl.drawWideLine(300,450,200,480,2,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 210, 490, "DECEL", 14, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    sasl.gl.drawWideLine(200,480,200,180,2,{.4,.2,.4})
+
+    sasl.gl.drawWideLine(200,480,160,500,2,UI_WHITE)
+
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 160, "SPD (kts) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 140, "ALT (feet):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 110, "TIME (sec):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 90,  "FUEL (kg) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 70,  "DIST (nm) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+
+
+end
+local function draw_apprland_dynamic()
+end
+local function draw_apprland()
+    draw_apprland_static()
+    draw_apprland_dynamic()
+end
+
 function draw_vprof()
     draw_vprof_menu()
     if curr_subpage == 1 then
@@ -212,6 +272,8 @@ function draw_vprof()
     elseif curr_subpage == 4 then
         draw_descent()
     elseif curr_subpage == 5 then
+        draw_apprland()
+    elseif curr_subpage == 6 then
         draw_key_wpts()
     end
 end
