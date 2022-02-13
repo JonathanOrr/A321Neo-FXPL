@@ -15,6 +15,42 @@
 
 include('libs/speed_helpers.lua')
 
+local function drag_coefficient_gear(tas)
+    return math.max(1,Math_rescale_no_lim(180, 1.62, 240, 1.84, tas))
+end
+
+local function drag_coefficient_flaps(pos, tas)
+    if pos == 1 then    -- 1
+        return 1    -- Slats seem to have basically no effect on the drag
+    elseif pos == 2 then    -- 1 + f
+        return math.max(1,Math_rescale_no_lim(180, 1.19, 200, 1.29, tas))
+    elseif pos == 3 then    -- 2
+        return math.max(1,Math_rescale_no_lim(180, 1.31, 200, 1.50, tas))
+    elseif pos == 4 then    -- 3
+        return math.max(1,Math_rescale_no_lim(180, 1.60, 200, 1.90, tas))
+    elseif pos == 5 then    -- FULL
+        return math.max(1,Math_rescale_no_lim(180, 1.87, 200, 2.26, tas))
+    end
+end
+
+
+function predict_drag_w_gf(density_ratio, tas, mach, weight, flap_conf, is_gear_open)
+    local base_drag = predict_drag(density_ratio, tas, mach, weight)
+
+    local gear_contrib = 0
+    local flap_contrib = 0
+
+    if flap_conf > 0 then
+        flap_contrib = base_drag * drag_coefficient_flaps(flap_conf, tas) - base_drag
+    end 
+
+    if is_gear_open then
+        gear_contrib = base_drag * drag_coefficient_gear(tas) - base_drag
+    end
+
+    return gear_contrib + flap_contrib
+end
+
 function predict_drag(density_ratio, tas, mach, weight)
 
     local k_intercept    = 85181.2225251811

@@ -173,7 +173,7 @@ local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     local density = get(Weather_Sigma)
     local _, tas, mach = convert_to_eas_tas_mach(v2, rwy_alt+200)   -- Let's use +200 to stay in the middle
     local thrust = predict_engine_thrust(mach, density, oat, rwy_alt+200, N1) * 2
-    local drag   = predict_drag(density, tas, mach, takeoff_weight)
+    local drag   = predict_drag_w_gf(density, tas, mach, takeoff_weight, FMGS_sys.perf.flaps or 2, true)
     fuel_consumption = ENG.data.n1_to_FF(1, density)*2
     return compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
 end
