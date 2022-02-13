@@ -258,7 +258,16 @@ local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end
 
 end
 
-local function get_target_speed_climb(altitude)
+local function get_target_mach_cruise(alt_feet, gross_weight)
+    local cost_index = FMGS_init_get_cost_idx()
+    if not cost_index then
+        cost_index = 0 -- Cost index default to zero
+    end
+    return math.min(0.80,alt_feet*(7.5000e-06-8.2500e-06 * cost_index/100) + 0.4875 + 0.3368 * cost_index / 100 
+           + (2.3500e-06-2.5000e-06 *cost_index/100) * gross_weight -0.1592 +0.2075 * cost_index/100);
+end
+
+local function get_target_speed_climb(altitude, gross_weight)
     -- This function does not consider  the initial climb part or
     -- restrictions
     if altitude < FMGS_sys.data.init.alt_speed_limit_climb[2] then
@@ -274,6 +283,8 @@ local function get_target_speed_climb(altitude)
     -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
     local optimal_speed = math.min(340,0.645 * cost_index + 308)
     local optimal_mach  = math.min(0.8, 0.765 + 0.001683333 * cost_index - 0.00007895833 * cost_index^2 + 0.000001828125 * cost_index^3 - 1.822917e-8*cost_index^4 + 6.510417e-11*cost_index^5)
+    local cruise_mach = get_target_mach_cruise(altitude, gross_weight)
+    optimal_mach = math.min(optimal_mach, cruise_mach)
     return optimal_speed, optimal_mach
 end
 
@@ -311,15 +322,6 @@ local function predict_cruise_N1_at_alt_M(M, altitude, weight)
 
     return N1_per_engine, fuel_consumption
 
-end
-
-local function mach_at_cruise(alt_feet, gross_weight)
-    local cost_index = FMGS_init_get_cost_idx()
-    if not cost_index then
-        cost_index = 0 -- Cost index default to zero
-    end
-    return math.min(0.80,alt_feet*(7.5000e-06-8.2500e-06 * cost_index/100) + 0.4875 + 0.3368 * cost_index / 100 
-           + (2.3500e-06-2.5000e-06 *cost_index/100) * gross_weight -0.1592 +0.2075 * cost_index/100);
 end
 
 local function approx_TOD_distance()  -- This is a very rough prediction, but it's ok for just the weight
@@ -516,7 +518,7 @@ function vertical_profile_climb_update()
         local D = leg.computed_distance or 0 -- At this point, the distance should be already computed
                                              -- but a bit of defensive programming is not bad
 
-        local target_speed, target_mach = get_target_speed_climb(curr_alt)
+        local target_speed, target_mach = get_target_speed_climb(curr_alt, curr_weight)
 
         -- Be sure the target speed is ok with the possible constraint
         if leg.cstr_speed_type == CIFP_CSTR_SPD_BELOW or leg.cstr_speed_type == CIFP_CSTR_SPD_AT then
@@ -657,6 +659,8 @@ function vertical_profile_climb_update()
 
     table.insert(the_big_array, i, {name="T/C", 
                                     pred={
+                                           is_toc = true,
+                                           is_climb = true,
                                            altitude=cruise_alt,
                                            ias=curr_spd,
                                            mach=curr_mach,
@@ -718,7 +722,7 @@ local function vertical_profile_cruise_update(idx_next_wpt)
         D = leg.computed_distance
 
         local dist_to_travel = D - curr_dist
-        local managed_mach = mach_at_cruise(cruise_alt, curr_weight)
+        local managed_mach = get_target_mach_cruise(cruise_alt, curr_weight)
         local N1, FF = predict_cruise_N1_at_alt_M(managed_mach, cruise_alt, curr_weight)
 
         local TAS = convert_to_tas(managed_mach, cruise_alt)
