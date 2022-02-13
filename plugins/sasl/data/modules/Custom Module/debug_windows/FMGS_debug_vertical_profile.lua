@@ -1,7 +1,7 @@
 
 local BTN_WIDTH  = 150
 local BTN_HEIGHT = 39
-local curr_subpage = 1
+local curr_subpage = 5
 
 local function draw_vprof_menu()
 
@@ -10,6 +10,16 @@ local function draw_vprof_menu()
 
     sasl.gl.drawFrame (20+BTN_WIDTH, size[2]-85, BTN_WIDTH, BTN_HEIGHT, curr_subpage == 2 and UI_GREEN or UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 20+(3/2*BTN_WIDTH), size[2]-72, "Climb", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+
+    sasl.gl.drawFrame (30+BTN_WIDTH*2, size[2]-85, BTN_WIDTH, BTN_HEIGHT, curr_subpage == 3 and UI_GREEN or UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 30+(5/2*BTN_WIDTH), size[2]-72, "Cruise", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+
+    sasl.gl.drawFrame (40+BTN_WIDTH*3, size[2]-85, BTN_WIDTH, BTN_HEIGHT, curr_subpage == 4 and UI_GREEN or UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 40+(7/2*BTN_WIDTH), size[2]-72, "Descent", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+
+    sasl.gl.drawFrame (50+BTN_WIDTH*4, size[2]-85, BTN_WIDTH, BTN_HEIGHT, curr_subpage == 5 and UI_GREEN or UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 50+(9/2*BTN_WIDTH), size[2]-72, "Key WPTs", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+
 end
 
 local function draw_takeoff_static()
@@ -104,24 +114,91 @@ local function draw_takeoff()
 
 end
 
+local function print_single_leg(i, l, is_green)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 480-i*18, Aft_string_fill(i .. ")", " ", 4) .. Aft_string_fill((l.id or l.name or "[SID/STAR]"), " ", 12) 
+    .. "   CLB? " .. (l.pred.is_climb and "Y" or "N")
+    .. "   DES? " .. (l.pred.is_descent and "Y" or "N")
+    .. "   IAS=" .. (l.pred.ias and math.ceil(l.pred.ias) or "N/A")
+    .. "   ALT=" .. Aft_string_fill(""..(l.pred.altitude and math.floor(l.pred.altitude) or "N/A"), " ", 6)
+    .. "   MACH=" .. (l.pred.mach and Round_fill(l.pred.mach,2) or "N/A ")
+    .. "   VS=" .. Aft_string_fill(""..(l.pred.vs and math.floor(l.pred.vs) or "N/A"), " ", 7)
+    .. "   TIME(s)=" .. Aft_string_fill(""..(l.pred.time and math.floor(l.pred.time) or "N/A"), " ", 7)
+    .. "   FUEL(kg)=" .. (l.pred.fuel and math.floor(l.pred.fuel) or "N/A")
+    , 12, false, false, TEXT_ALIGN_LEFT, is_green and ECAM_GREEN or ECAM_WHITE)
+end
+
 local function draw_climb()
     local legs = FMGS_sys.pred_debug.get_big_array()
     if not legs then
         sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
         return
+    else
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 30, "SID/STAR names are not available unless you open the F/PLN page on the MCDU.", 14, false, false, TEXT_ALIGN_LEFT, ECAM_YELLOW)
     end
+    local printed = 0
     for i, l in ipairs(legs) do
-        sasl.gl.drawText(Font_B612MONO_regular, 10, 480-i*18, Aft_string_fill(i .. ")", " ", 4) .. Aft_string_fill((l.id or l.name or "[SID/STAR]"), " ", 12) 
-        .. "   CLB? " .. (l.pred.is_climb and "Y" or "N")
-        .. "   DES? " .. (l.pred.is_descent and "Y" or "N")
-        .. "   IAS=" .. (l.pred.ias and math.ceil(l.pred.ias) or "N/A")
-        .. "   ALT=" .. Aft_string_fill(""..(l.pred.altitude and math.floor(l.pred.altitude) or "N/A"), " ", 6)
-        .. "   MACH=" .. (l.pred.mach and Round_fill(l.pred.mach,2) or "N/A ")
-        .. "   VS=" .. Aft_string_fill(""..(l.pred.vs and math.floor(l.pred.vs) or "N/A"), " ", 7)
-        .. "   TIME(s)=" .. Aft_string_fill(""..(l.pred.time and math.floor(l.pred.time) or "N/A"), " ", 7)
-        .. "   FUEL(kg)=" .. (l.pred.fuel and math.floor(l.pred.fuel) or "N/A")
-        , 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        if l.pred.is_climb then
+            printed = printed + 1
+            print_single_leg(printed, l, l.pred.is_toc)
+        end
     end
+end
+
+local function draw_cruise()
+    local legs = FMGS_sys.pred_debug.get_big_array()
+    if not legs then
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        return
+    end
+    local printed = 0
+    for i, l in ipairs(legs) do
+        if not l.pred.is_climb and not l.pred.is_descent then
+            printed = printed + 1
+            print_single_leg(printed, l)
+        end
+    end
+end
+
+local function draw_descent()
+    local legs = FMGS_sys.pred_debug.get_big_array()
+    if not legs then
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        return
+    else
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 30, "SID/STAR names are not available unless you open the F/PLN page on the MCDU.", 14, false, false, TEXT_ALIGN_LEFT, ECAM_YELLOW)
+    end
+    local printed = 0
+    for i, l in ipairs(legs) do
+        if l.pred.is_descent then
+            printed = printed + 1
+            print_single_leg(printed, l)
+        end
+    end
+end
+
+local function draw_key_wpts()
+    local legs = FMGS_sys.pred_debug.get_big_array()
+    if not legs then
+        sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        return
+    end
+
+    for i, l in ipairs(legs) do
+        if l.pred.is_toc then
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 450, "TOP OF CLIMB", 18, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 430, "Leg # " .. i, 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 410, "ALT  = " .. (l.pred.altitude and math.ceil(l.pred.altitude) or "N/A") .. " ft", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 390, "IAS  = " .. (l.pred.ias and math.ceil(l.pred.ias) or "N/A") .. " kts", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 370, "M    = " .. (l.pred.mach and Round(l.pred.mach,3) or "N/A"), 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            local t = l.pred.time
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 350, "TIME = " .. (t and math.floor(t/60) .. ":" .. math.floor(t%60) or "N/A") .. " (mm:ss)", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 330, "FUELc= " .. (l.pred.fuel and Round(l.pred.fuel,1) or "N/A") .. " Kg", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 310, "V/S  = " .. (l.pred.vs and Round(l.pred.vs,1) or "N/A") .. " feet/min", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 290, "Distance previous WPT = " .. (l.pred.dist_prev_wpt and Round(l.pred.dist_prev_wpt,1) or "N/A") .. " nm", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 10, 270, "Predicted weight      = " .. (l.pred.weight and math.ceil(l.pred.weight) or "N/A") .. " Kg", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+        end
+    end
+
 end
 
 function draw_vprof()
@@ -130,10 +207,17 @@ function draw_vprof()
         draw_takeoff()
     elseif curr_subpage == 2 then
         draw_climb()
+    elseif curr_subpage == 3 then
+        draw_cruise()
+    elseif curr_subpage == 4 then
+        draw_descent()
+    elseif curr_subpage == 5 then
+        draw_key_wpts()
     end
 end
 
 function update_vprof()
+
 end
 
 function vprof_change_page(n)

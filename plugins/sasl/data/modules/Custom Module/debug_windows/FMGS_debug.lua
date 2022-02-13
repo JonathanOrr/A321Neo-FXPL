@@ -113,6 +113,12 @@ local function mouse_down(x,y)
             vprof_change_page(1)
         elseif x >=20+BTN_WIDTH and x<=20+BTN_WIDTH*2 and y >= size[2]-85 and y <= size[2]-45 then
             vprof_change_page(2)
+        elseif x >=30+BTN_WIDTH*2 and x<=30+BTN_WIDTH*3 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(3)
+        elseif x >=40+BTN_WIDTH*3 and x<=40+BTN_WIDTH*4 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(4)
+        elseif x >=50+BTN_WIDTH*4 and x<=50+BTN_WIDTH*5 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(5)
         end
     end
 end
