@@ -123,7 +123,7 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --  R4  --
     ----------
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, 4,selected_data[3], MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, 4,selected_data[3] == nil and "" or selected_data[3], MCDU_LARGE, ECAM_GREEN)
     ----------
     --  R5  --
     ----------
