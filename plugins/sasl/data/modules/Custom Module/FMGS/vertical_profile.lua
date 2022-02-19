@@ -532,7 +532,7 @@ function vertical_profile_climb_update()
         -- If needed, let's compute the time to reach the target speed (in this case we are accelerating)
         if target_speed - curr_spd > 1 and (not target_mach or target_mach - curr_mach > 0.005) then
             -- In this case we need to accelerate and climb at the same time
-            local thrust_for_acceleration = thrust_available * 0.6
+            local thrust_for_acceleration = thrust_available * PERC_ACCELERATION
             thrust_available = thrust_available - thrust_for_acceleration   -- This is the thurst dedicate to climb
 
             A = thrust_for_acceleration / curr_weight -- [m/s2]
@@ -857,7 +857,16 @@ local function vertical_profile_descent_update_step234(weight, i_step)
         flaps_end   = 3
     end
     local gear = true -- i_step < 4
-    local V_START = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, flaps_start, gear)
+    local V_START
+    if i_step == 2 then
+        V_START = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, flaps_start, gear)
+    elseif i_step == 3 then
+        -- F speed
+        V_START = 1.22 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, 2, false)
+    elseif i_step == 4 then
+        -- S speed
+        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, 0, false)
+    end
     local V_END = FMGS_sys.data.pred.appr.steps[i_step-1].ias
     local V_AVG = (V_START+V_END)/2
     if V_START < V_END then
@@ -924,33 +933,78 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local fuel_consumption = ENG.data.n1_to_FF(N1_minimum/get_takeoff_N1(), density)*2
 
     -- I can now update the last waypoint
-    FMGS_sys.data.pred.appr.steps[i_step].time  = FMGS_sys.data.pred.appr.steps[1].time + time
-    FMGS_sys.data.pred.appr.steps[i_step].dist  = FMGS_sys.data.pred.appr.steps[1].dist + dist
-    FMGS_sys.data.pred.appr.steps[i_step].fuel  = FMGS_sys.data.pred.appr.steps[1].fuel + fuel_consumption * time
+    FMGS_sys.data.pred.appr.steps[i_step].time  = FMGS_sys.data.pred.appr.steps[i_step-1].time + time
+    FMGS_sys.data.pred.appr.steps[i_step].dist  = FMGS_sys.data.pred.appr.steps[i_step-1].dist + dist
+    FMGS_sys.data.pred.appr.steps[i_step].fuel  = FMGS_sys.data.pred.appr.steps[i_step-1].fuel + fuel_consumption * time
     FMGS_sys.data.pred.appr.steps[i_step].N1    = N1_minimum
     FMGS_sys.data.pred.appr.steps[i_step].ias   = ias
-    FMGS_sys.data.pred.appr.steps[i_step].alt   = 1000 + VS * time / 60
+    FMGS_sys.data.pred.appr.steps[i_step].alt   = FMGS_sys.data.pred.appr.steps[i_step-1].alt + VS * time / 60
     FMGS_sys.data.pred.appr.steps[i_step].vs    = VS
 
     return fuel_consumption * time
 end
 
-local function vertical_profile_descent_update_step4(weight)
-    local alt = FMGS_sys.data.pred.appr.steps[3].alt
-    local curr_dist = FMGS_sys.data.pred.appr.steps[3].dist;
+local function vertical_profile_descent_update_step567(weight, i_step)
+    local alt = FMGS_sys.data.pred.appr.steps[i_step-1].alt
 
-    local flaps_next_step = 2  -- TODO: flaps from perf appr page
-    local flaps_end   = 3 -- TODO: flaps from perf appr page
-    local V_NEXT_STEP = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, flaps_next_step, true)
-    local V_END = FMGS_sys.data.pred.appr.steps[3].ias
-    local V_AVG = (V_NEXT_STEP+V_END)/2
+    local flaps_start, flaps_end
+    if i_step == 5 then
+        flaps_end  = 3
+    elseif i_step == 6 then
+        flaps_end  = 2
+    elseif i_step == 7 then
+        flaps_end  = 0
+    end
+    local gear = false
+    local V_START
+    if i_step == 5 then
+        -- S speed
+        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, 0, false)
+    elseif i_step == 6 then
+        -- GDOT
+        V_START = compute_green_dot(weight, alt)
+    elseif i_step == 7 then
+        V_START = FMGS_sys.data.init.alt_speed_limit_descent[1]
+    end
 
-    -- Ok, now the landing slope
-    local angle = FMGS_sys.data.pred.appr.final_angle
+    local V_END = FMGS_sys.data.pred.appr.steps[i_step-1].ias
+    local V_AVG = (V_START+V_END)/2
 
+    local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, alt)
 
+    -- Time to compute the drag and therefore the thrust we need
+    local oat = get(OTA)    -- TODO Cannot use local
+    local density = get(Weather_Sigma)  -- TODO Cannot use local
+    local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
 
+    -- In this case I assume to be at idle...
+    local N1_minimum = predict_minimum_N1_engine(alt, oat, density, flaps_end, gear)
+    local thrust_idle = predict_engine_thrust(mach, density, oat, alt, N1_minimum) * 2
+    local fuel_consumption = ENG.data.n1_to_FF(N1_minimum/get_takeoff_N1(), density)*2
+
+    local net_force = thrust_idle - drag
+    local net_force_vertical = net_force * 0.4
+    local net_force_horizontal = net_force - net_force_vertical
+
+    local decel = net_force_horizontal / weight    -- Acceleration in m/s2
+    local time  = kts_to_ms(V_START-V_END) / decel
+    
+    local VS = ms_to_fpm(net_force_vertical / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
+    local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+    local dist = m_to_nm(kts_to_ms(GS) * time)
+
+    -- I can now update the last waypoint
+    FMGS_sys.data.pred.appr.steps[i_step].time  = FMGS_sys.data.pred.appr.steps[i_step-1].time + time
+    FMGS_sys.data.pred.appr.steps[i_step].dist  = FMGS_sys.data.pred.appr.steps[i_step-1].dist + dist
+    FMGS_sys.data.pred.appr.steps[i_step].fuel  = FMGS_sys.data.pred.appr.steps[i_step-1].fuel + fuel_consumption * time
+    FMGS_sys.data.pred.appr.steps[i_step].N1    = N1_minimum
+    FMGS_sys.data.pred.appr.steps[i_step].ias   = V_START
+    FMGS_sys.data.pred.appr.steps[i_step].alt   = FMGS_sys.data.pred.appr.steps[i_step-1].alt + VS * time / 60
+    FMGS_sys.data.pred.appr.steps[i_step].vs    = VS
+
+    return fuel_consumption * time
 end
+
 
 local function vertical_profile_descent_update(approx_weight_at_TOD)
     -- For the descent phase we have to go back, so we start from the runways threshold and we climb up
@@ -984,7 +1038,9 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
     curr_weight = curr_weight + vertical_profile_descent_update_step234(curr_weight, 2)
     curr_weight = curr_weight + vertical_profile_descent_update_step234(curr_weight, 3)
     curr_weight = curr_weight + vertical_profile_descent_update_step234(curr_weight, 4)
-
+    curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 5)
+    curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 6)
+    curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 7)
 
 end
 
