@@ -246,15 +246,27 @@ local function draw_apprland_static()
 
     sasl.gl.drawWideLine(200,480,160,500,2,UI_WHITE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 160, "SPD (kts) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 160, "IAS (kts) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 10, 140, "ALT (feet):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 110, "TIME (sec):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 90,  "FUEL (kg) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 70,  "DIST (nm) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 120, "V/S (fpm) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 90, "TIME (sec):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 70,  "FUEL (kg) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 50,  "DIST (nm) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
 
 
 end
 local function draw_apprland_dynamic()
+
+    for i,s in ipairs(FMGS_sys.data.pred.appr.steps) do
+        local left = size[1]-100-100*i
+        sasl.gl.drawText(Font_B612MONO_regular, left, 160, s.ias and math.ceil(s.ias) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 140, s.alt and math.ceil(s.alt) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 120, s.vs and math.ceil(s.vs) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 90, s.time and math.ceil(s.time) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 70,  s.fuel and math.ceil(s.fuel) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 50,  s.dist and Round(s.dist, 1) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    end
+
 end
 local function draw_apprland()
     draw_apprland_static()

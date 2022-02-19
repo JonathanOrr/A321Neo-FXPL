@@ -77,6 +77,12 @@ FMGS_sys.data = {
 
         climb = {
             total_fuel_kgs = nil
+        },
+
+        appr = {
+            steps = {
+                { fuel = nil, ias = nil, dist=nil, time=nil, alt=nil, vs=nil }
+            }
         }
     },
 
