@@ -80,8 +80,14 @@ FMGS_sys.data = {
         },
 
         appr = {
+            fdp_idx = nil,
+            fdp_dist_to_rwy = nil,
+            final_angle = 3,    -- Default to 3, always positive (descent angle)
             steps = {
-                { fuel = nil, ias = nil, dist=nil, time=nil, alt=nil, vs=nil }
+                {},
+                {},
+                {},
+                {}
             }
         }
     },

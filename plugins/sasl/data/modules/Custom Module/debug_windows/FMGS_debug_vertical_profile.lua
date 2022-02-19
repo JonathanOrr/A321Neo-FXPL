@@ -249,9 +249,10 @@ local function draw_apprland_static()
     sasl.gl.drawText(Font_B612MONO_regular, 10, 160, "IAS (kts) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 10, 140, "ALT (feet):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 10, 120, "V/S (fpm) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 90, "TIME (sec):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 70,  "FUEL (kg) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 50,  "DIST (nm) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 100, "N1 (%)    :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 70, "TIME (sec):", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 50,  "FUEL (kg) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 10, 30,  "DIST (nm) :", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
 
 
 end
@@ -262,10 +263,20 @@ local function draw_apprland_dynamic()
         sasl.gl.drawText(Font_B612MONO_regular, left, 160, s.ias and math.ceil(s.ias) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
         sasl.gl.drawText(Font_B612MONO_regular, left, 140, s.alt and math.ceil(s.alt) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
         sasl.gl.drawText(Font_B612MONO_regular, left, 120, s.vs and math.ceil(s.vs) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-        sasl.gl.drawText(Font_B612MONO_regular, left, 90, s.time and math.ceil(s.time) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-        sasl.gl.drawText(Font_B612MONO_regular, left, 70,  s.fuel and math.ceil(s.fuel) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-        sasl.gl.drawText(Font_B612MONO_regular, left, 50,  s.dist and Round(s.dist, 1) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 100, s.N1 and math.ceil(s.N1) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 70, s.time and math.ceil(s.time) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 50,  s.fuel and math.ceil(s.fuel) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, left, 30,  s.dist and Round(s.dist, 1) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
+
+    if FMGS_sys.data.pred.appr.fdp_idx then
+        local l = FMGS_arr_get_appr(false).legs[FMGS_sys.data.pred.appr.fdp_idx]
+        local name = (l.id or l.name or "-OPEN F/PLN PAGE-")
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 400, "[" .. name .. "]", 14, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 400, "[UKNWN]", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+    end
+
 
 end
 local function draw_apprland()

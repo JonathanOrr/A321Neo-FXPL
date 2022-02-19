@@ -747,41 +747,32 @@ local function vertical_profile_cruise_update(idx_next_wpt)
     return curr_weight
 end
 
-local function vertical_profile_descent_update_step1(approx_weight_at_TOD)
-    -- First of all, I need the approx weight at runway level, so let's take the one
-    -- at TOD and then use the tabular data to obtain an approximation
-    local weight_at_rwy = approx_weight_at_TOD - FMGS_sys.data.init.crz_fl / 50 -- TODO: Interpolation will work better here
+local function find_FDP()
 
-    -- The the rwy altitude
-    local rwy_alt = FMGS_sys.fpln.active.apts.arr.alt
+    -- Reset data
+    FMGS_sys.data.pred.appr.fdp_idx = nil
+    FMGS_sys.data.pred.appr.fdp_dist_to_rwy = nil
+    FMGS_sys.data.pred.appr.final_angle = 3
 
-    -- Then we need the Vapp speed
-    local flaps = 5  -- TODO: flaps from perf appr page
-    local VLS = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight_at_rwy, flaps, true)
-    local APPR_CORR = 5 -- TODO:
-    -- - 5kt if A/THR is ON
-    -- - 5kt if ice accretion (10kt instead of 5kt on A320 family when in CONF 3)
-    -- - 1/3 Headwind excluding gust
-    -- Cannot be < 5 or > 15
-    local VAPP = VLS + APPR_CORR
-
-    -- Ok, now the landing slope
+    -- And then recompute
     local cifp_appr = FMGS_arr_get_appr(false)
-    local angle = math.abs(cifp_appr.legs[1].vpath_angle / 100)
-    if angle < 0.5 then
-        angle = 3
+    for i,x in ipairs(cifp_appr.legs) do
+        if not FMGS_sys.data.pred.appr.fdp_idx then
+            if x.vpath_angle and x.vpath_angle > 0 then
+                FMGS_sys.data.pred.appr.fdp_idx = i
+                FMGS_sys.data.pred.appr.final_angle = math.abs(x.vpath_angle / 100)
+                FMGS_sys.data.pred.appr.fdp_dist_to_rwy = 0 
+            end
+        else
+            -- Ok let's compute the distance with the runway (we need this later)
+            FMGS_sys.data.pred.appr.fdp_dist_to_rwy = FMGS_sys.data.pred.appr.fdp_dist_to_rwy + (x.computed_distance or 0)
+        end
     end
 
-    -- Now I need the engine power needed to keep Vapp and slope
-    local _, TAS, mach = convert_to_eas_tas_mach(VAPP, rwy_alt)
-    -- Rate of climb at the beginning of the leg
-    -- ROC = excess_power_force / weight_force * tas
-    local VS = -ms_to_fpm(kts_to_ms(TAS) * math.sin(math.rad(angle)))
+end
 
-    -- fpm_to_ms(VS) = thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(TAS) -- [fpm]
-
-
-    local excess_thrust = fpm_to_ms(VS) * (weight_at_rwy * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
+local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt, TAS, mach, VS, flaps, gear)
+    local excess_thrust = fpm_to_ms(VS) * (init_weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
     -- Let's compute also the GS (we need this later)
     local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
@@ -789,12 +780,12 @@ local function vertical_profile_descent_update_step1(approx_weight_at_TOD)
     -- Time to compute the drag and therefore the thrust we need
     local oat = get(OTA)    -- TODO Cannot use local
     local density = get(Weather_Sigma)  -- TODO Cannot use local
-    local drag = predict_drag_w_gf(density, TAS, mach, weight_at_rwy, flaps, true)
+    local drag = predict_drag_w_gf(density, TAS, mach, init_weight, flaps, gear)
 
     local needed_thrust = math.max(0, drag + excess_thrust)
-    local N1_per_engine = predict_engine_N1(mach, density, oat, rwy_alt, needed_thrust/2)
+    local N1_per_engine = predict_engine_N1(mach, density, oat, init_alt, needed_thrust/2)
 
-    local N1_minimum = predict_minimum_N1_engine(rwy_alt, oat, density, flaps, true)
+    local N1_minimum = predict_minimum_N1_engine(init_alt, oat, density, flaps, gear)
 
     if N1_minimum > N1_per_engine then
         -- We have a limit due to engine N1 minimum, thus we have to reduce our vertical speed
@@ -805,15 +796,159 @@ local function vertical_profile_descent_update_step1(approx_weight_at_TOD)
 
     local fuel_consumption = ENG.data.n1_to_FF(N1_per_engine/get_takeoff_N1(), density)*2
 
+    return N1_per_engine, GS, fuel_consumption
+end
+
+local function compute_vapp(weight_at_rwy)
+    -- Then we need the Vapp speed
+    local flaps = 5  -- TODO: flaps from perf appr page
+    local VLS = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight_at_rwy, flaps, true)
+    local APPR_CORR = 5 -- TODO:
+    -- - 5kt if A/THR is ON
+    -- - 5kt if ice accretion (10kt instead of 5kt on A320 family when in CONF 3)
+    -- - 1/3 Headwind excluding gust
+    -- Cannot be < 5 or > 15
+    return VLS + APPR_CORR
+end
+
+local function vertical_profile_descent_update_step1(weight_at_rwy)
+
+    -- The the rwy altitude
+    local rwy_alt = FMGS_sys.fpln.active.apts.arr.alt
+
+    local flaps = 5  -- TODO: flaps from perf appr page
+    local VAPP = compute_vapp(weight_at_rwy)
+
+    -- Ok, now the landing slope
+    local angle = FMGS_sys.data.pred.appr.final_angle
+
+    -- Now I need the engine power needed to keep Vapp and slope
+    local _, TAS, mach = convert_to_eas_tas_mach(VAPP, rwy_alt)
+    -- Rate of climb at the beginning of the leg
+    -- ROC = excess_power_force / weight_force * tas
+    local VS = -ms_to_fpm(kts_to_ms(TAS) * math.sin(math.rad(angle)))
+
+    local N1, GS, fuel_consumption = vertical_profile_descent_update_step1_fuel(weight_at_rwy, rwy_alt, TAS, mach, VS, flaps, true)
+
     local time = 1000 / VS * 60;
 
     -- I can now update the last waypoint
     FMGS_sys.data.pred.appr.steps[1].time  = time
     FMGS_sys.data.pred.appr.steps[1].dist  = m_to_nm(kts_to_ms(GS) * time)
     FMGS_sys.data.pred.appr.steps[1].ias   = VAPP
+    FMGS_sys.data.pred.appr.steps[1].N1    = N1
     FMGS_sys.data.pred.appr.steps[1].fuel  = fuel_consumption * time
     FMGS_sys.data.pred.appr.steps[1].alt   = 1000
     FMGS_sys.data.pred.appr.steps[1].vs    = VS
+
+    return fuel_consumption * time
+end
+
+
+local function vertical_profile_descent_update_step234(weight, i_step)
+    local alt = FMGS_sys.data.pred.appr.steps[i_step-1].alt
+
+    local flaps_start, flaps_end
+    if i_step < 4 then
+        flaps_start = 6 - i_step  -- TODO: flaps from perf appr page
+        flaps_end   = 7 - i_step -- TODO: flaps from perf appr page
+    else
+        flaps_start = 3
+        flaps_end   = 3
+    end
+    local gear = true -- i_step < 4
+    local V_START = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, flaps_start, gear)
+    local V_END = FMGS_sys.data.pred.appr.steps[i_step-1].ias
+    local V_AVG = (V_START+V_END)/2
+    if V_START < V_END then
+        -- This is possible for i_step == 4
+        V_START = V_END
+        V_AVG   = V_START
+    end
+
+    -- Ok, now the landing slope
+    local angle = FMGS_sys.data.pred.appr.final_angle
+
+    -- Now I need the engine power needed to keep Vapp and slope
+    local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, alt)
+    -- Rate of climb at the beginning of the leg
+    -- ROC = excess_power_force / weight_force * tas
+    local VS = -ms_to_fpm(kts_to_ms(TAS) * math.sin(math.rad(angle)))
+    local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+
+    local excess_thrust = -fpm_to_ms(VS) * (weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
+
+    -- Time to compute the drag and therefore the thrust we need
+    local oat = get(OTA)    -- TODO Cannot use local
+    local density = get(Weather_Sigma)  -- TODO Cannot use local
+    local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
+
+    -- In this case I assume to be at idle...
+    local N1_minimum = predict_minimum_N1_engine(alt, oat, density, flaps_end, gear)
+    local thrust_idle = predict_engine_thrust(mach, density, oat, alt, N1_minimum) * 2
+    
+    local net_force_horizontal = thrust_idle - drag + excess_thrust
+    local decel = net_force_horizontal / weight    -- Acceleration in m/s2
+
+    if net_force_horizontal >= 0 then
+        -- TOO STEEP DESCENT
+        -- TODO advise pilots?
+        net_force_horizontal = 0
+
+        sasl.logWarning("Step " .. i_step .. " too steep descent: " .. decel )
+    end
+
+    local time
+    local dist
+    local ias
+    if i_step <= 3 then
+        time = kts_to_ms(V_START - V_END) / decel
+        dist = m_to_nm(kts_to_ms(GS) * time)
+        ias = V_START
+    elseif i_step == 4 then
+        local curr_dist   = -FMGS_sys.data.pred.appr.steps[3].dist
+        local target_dist = FMGS_sys.data.pred.appr.fdp_dist_to_rwy
+        time = -nm_to_m(math.max(0, target_dist - curr_dist)) / kts_to_ms(GS)
+        dist = curr_dist-target_dist
+        ias = ms_to_kts(kts_to_ms(V_END) + decel * time)
+        if ias > V_START then
+            -- We are descending too fast, we need to increase engines
+            ias = V_START
+            local decel_i_want = kts_to_ms(V_START-V_END) / time
+            local more_thrust_i_need = -(decel-decel_i_want) * weight
+            local new_thrust = thrust_idle + more_thrust_i_need
+            N1_minimum = predict_engine_N1(mach, density, oat, alt, new_thrust/2)
+        end
+    end
+
+    local fuel_consumption = ENG.data.n1_to_FF(N1_minimum/get_takeoff_N1(), density)*2
+
+    -- I can now update the last waypoint
+    FMGS_sys.data.pred.appr.steps[i_step].time  = FMGS_sys.data.pred.appr.steps[1].time + time
+    FMGS_sys.data.pred.appr.steps[i_step].dist  = FMGS_sys.data.pred.appr.steps[1].dist + dist
+    FMGS_sys.data.pred.appr.steps[i_step].fuel  = FMGS_sys.data.pred.appr.steps[1].fuel + fuel_consumption * time
+    FMGS_sys.data.pred.appr.steps[i_step].N1    = N1_minimum
+    FMGS_sys.data.pred.appr.steps[i_step].ias   = ias
+    FMGS_sys.data.pred.appr.steps[i_step].alt   = 1000 + VS * time / 60
+    FMGS_sys.data.pred.appr.steps[i_step].vs    = VS
+
+    return fuel_consumption * time
+end
+
+local function vertical_profile_descent_update_step4(weight)
+    local alt = FMGS_sys.data.pred.appr.steps[3].alt
+    local curr_dist = FMGS_sys.data.pred.appr.steps[3].dist;
+
+    local flaps_next_step = 2  -- TODO: flaps from perf appr page
+    local flaps_end   = 3 -- TODO: flaps from perf appr page
+    local V_NEXT_STEP = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, flaps_next_step, true)
+    local V_END = FMGS_sys.data.pred.appr.steps[3].ias
+    local V_AVG = (V_NEXT_STEP+V_END)/2
+
+    -- Ok, now the landing slope
+    local angle = FMGS_sys.data.pred.appr.final_angle
+
+
 
 end
 
@@ -824,20 +959,31 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
 
     -- Steps (reversed):
     -- 1st step: from runway to 1000ft AGL. Speed stabilized to Vapp, we assume the ° provided by the approach phase or 3° if not available
-    -- 2nd step: from 1000ft to selection of flaps full: VLS
+    -- 2nd step: from 1000ft to selection of flaps full: VLS    (if landing in conf 3 selected, ignore)
     -- 3rd step: from flaps full to flaps3: to VLS
-    -- 4th step: from flaps3 to flaps2: to VLS
-    -- 5th step: from flaps2 to flaps1: to VLS
-    -- 6th step: from flaps1 to decel point: green dot speed
-    -- 7th step: from decel point to speed limit (FL100): transition to 250 kts
-    -- 8th step: from speed limit (FL100) to CRZ FL: ECON DES MACH / ECON DES SPD
+    -- 4th step: from flaps3 to FDP intercept
+    -- 5th step: from FDP intercept to flaps2: to VLS
+    -- 6th step: from flaps2 to flaps1: to VLS
+    -- 7th step: from flaps1 to decel point: green dot speed
+    -- 8th step: from decel point to speed limit (FL100): transition to 250 kts
+    -- 9th step: from speed limit (FL100) to CRZ FL: ECON DES MACH / ECON DES SPD
 
-    -- Functions we need:
-    -- FBW.FAC_COMPUTATION.Extract_vs1g = function(gross_weight, config, gear_down)
-    -- 
 
-    -- Let's start...
-    vertical_profile_descent_update_step1(approx_weight_at_TOD)
+    -- First of all, I need the approx weight at runway level, so let's take the one
+    -- at TOD and then use the tabular data to obtain an approximation
+    local curr_weight = approx_weight_at_TOD - FMGS_sys.data.init.crz_fl / 50
+
+    -- Search for the FDP, which is defined as the first point in the CIFP having a 
+    -- constant angle
+    find_FDP()
+
+    -- We compute all the steps ignoring the horizontal position
+    -- we will update it later
+
+    curr_weight = curr_weight + vertical_profile_descent_update_step1(curr_weight)
+    curr_weight = curr_weight + vertical_profile_descent_update_step234(curr_weight, 2)
+    curr_weight = curr_weight + vertical_profile_descent_update_step234(curr_weight, 3)
+    curr_weight = curr_weight + vertical_profile_descent_update_step234(curr_weight, 4)
 
 
 end
