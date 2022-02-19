@@ -48,7 +48,7 @@ function predict_drag_w_gf(density_ratio, tas, mach, weight, flap_conf, is_gear_
         gear_contrib = base_drag * drag_coefficient_gear(tas) - base_drag
     end
 
-    return gear_contrib + flap_contrib
+    return base_drag + gear_contrib + flap_contrib
 end
 
 function predict_drag(density_ratio, tas, mach, weight)

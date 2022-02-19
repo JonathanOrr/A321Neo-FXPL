@@ -46,6 +46,14 @@ end
 
 
 function predict_engine_N1(mach, density, oat, altitude_feet, thrust)
+    -- NOTE: This function does not take into account minimum N1!
+    -- user predict_minimum_N1_engine when necessary
+
+
+    if thrust < 0 then
+        sasl.logWarning("engine_thrust.lua:predict_engine_N1: anomalous thrust input")
+        return 0
+    end
 
     -- First of all, let's get the maximum thrust at this altitude/temperature/etc.
     -- If the engine is set as TOGA
@@ -61,5 +69,15 @@ function predict_engine_N1(mach, density, oat, altitude_feet, thrust)
 
     local N1 = T_ratio^ENG.data.model.n1_thrust_non_linearity * N1_base_max
 
-    return N1
+    return math.max(0, N1)
+end
+
+function predict_minimum_N1_engine(altitude_feet, oat, density, flaps, is_gear_open)
+
+    -- Now let's check if the computed N1 is below the minimum:
+    local idle_appr = ENG.data.min_n1_approach_idle(altitude_feet, oat)
+    local comp_min_n1 = ENG.data.min_n1_idle(density)
+
+    return math.max(idle_appr, comp_min_n1, ENG.data.min_n1_idle_hard)
+
 end
