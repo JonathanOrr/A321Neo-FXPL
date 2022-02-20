@@ -949,6 +949,7 @@ local function vertical_profile_descent_update_step234(weight, i_step)
         -- S speed
         V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, 0, false)
     end
+
     local V_END = FMGS_sys.data.pred.appr.steps[i_step-1].ias
     local V_AVG = (V_START+V_END)/2
     if V_START < V_END then
@@ -998,7 +999,7 @@ local function vertical_profile_descent_update_step234(weight, i_step)
         ias = V_START
     elseif i_step == 4 then
         local curr_dist   = -FMGS_sys.data.pred.appr.steps[3].dist
-        local target_dist = FMGS_sys.data.pred.appr.fdp_dist_to_rwy
+        local target_dist = FMGS_sys.data.pred.appr.fdp_dist_to_rwy or curr_dist
         time = -nm_to_m(math.max(0, target_dist - curr_dist)) / kts_to_ms(GS)
         dist = curr_dist-target_dist
         ias = ms_to_kts(kts_to_ms(V_END) + decel * time)
@@ -1052,6 +1053,12 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     end
 
     local V_END = FMGS_sys.data.pred.appr.steps[i_step-1].ias
+
+
+    -- Comply with the speed constraint if possible
+    V_START = math.min(V_START, the_big_array[computed_des_idx-1].pred.prop_spd_cstr)
+    V_START = math.max(V_START, V_END)
+
     local V_AVG = (V_START+V_END)/2
 
     local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, alt)
