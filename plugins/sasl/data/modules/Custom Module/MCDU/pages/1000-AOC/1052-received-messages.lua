@@ -19,10 +19,17 @@ local THIS_PAGE = MCDU_Page:new({id=1052})
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "AOC RCVD MSGS")
 
+    if not mcdu_data.page_data[1052] then mcdu_data.page_data[1052] = {} end
+
+    mcdu_data.page_data[1052].scroll_offset = 0
+
     if #AOC_sys.msgs > 0 then
         for i=1, #AOC_sys.msgs do
-            self:set_line(mcdu_data, MCDU_LEFT, i, " "..AOC_sys.msgs[i].time.." "..(AOC_sys.msgs[i].opened == false and "NEW" or "VIEWED"), MCDU_SMALL, ECAM_GREEN)
-            self:set_line(mcdu_data, MCDU_LEFT, i, "<"..AOC_sys.msgs[i].title, MCDU_LARGE, ECAM_WHITE)
+            i = i + mcdu_data.page_data[1052].scroll_offset
+            if i <= #(AOC_sys.msgs) then
+                self:set_line(mcdu_data, MCDU_LEFT, i - mcdu_data.page_data[1052].scroll_offset, ""..AOC_sys.msgs[i].time.." "..(AOC_sys.msgs[i].opened == false and "NEW" or "VIEWED"), MCDU_SMALL, ECAM_GREEN)
+                self:set_line(mcdu_data, MCDU_LEFT, i - mcdu_data.page_data[1052].scroll_offset, "<"..AOC_sys.msgs[i].title, MCDU_LARGE, ECAM_WHITE)
+            end
         end
     end
 
@@ -30,35 +37,27 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 6, "<AOC MENU", MCDU_LARGE, ECAM_WHITE)
 end
 
-function THIS_PAGE:L1(mcdu_data)
-    if AOC_sys.msgs[1] == nil then return end
-    AOC_sys.msgs[1].opened = true
-    AOC_sys.reading_msg = 1
+function THIS_PAGE:left_keys(mcdu_data, key_number)
+    if AOC_sys.msgs[key_number+mcdu_data.page_data[1052].scroll_offset] == nil then return end
+    AOC_sys.msgs[key_number+mcdu_data.page_data[1052].scroll_offset].opened = true
+    AOC_sys.reading_msg = key_number+mcdu_data.page_data[1052].scroll_offset
     mcdu_open_page(mcdu_data, 1053)
+end
+
+function THIS_PAGE:L1(mcdu_data)
+    THIS_PAGE:left_keys(mcdu_data, 1)
 end
 function THIS_PAGE:L2(mcdu_data)
-    if AOC_sys.msgs[2] == nil then return end
-    AOC_sys.msgs[2].opened = true
-    AOC_sys.reading_msg = 2
-    mcdu_open_page(mcdu_data, 1053)
+    THIS_PAGE:left_keys(mcdu_data, 2)
 end
 function THIS_PAGE:L3(mcdu_data)
-    if AOC_sys.msgs[3] == nil then return end
-    AOC_sys.msgs[3].opened = true
-    AOC_sys.reading_msg = 3
-    mcdu_open_page(mcdu_data, 1053)
+    THIS_PAGE:left_keys(mcdu_data, 3)
 end
 function THIS_PAGE:L4(mcdu_data)
-    if AOC_sys.msgs[4] == nil then return end
-    AOC_sys.msgs[4].opened = true
-    AOC_sys.reading_msg = 4
-    mcdu_open_page(mcdu_data, 1053)
+    THIS_PAGE:left_keys(mcdu_data, 4)
 end
 function THIS_PAGE:L5(mcdu_data)
-    if AOC_sys.msgs[5] == nil then return end
-    AOC_sys.msgs[5].opened = true
-    AOC_sys.reading_msg = 5
-    mcdu_open_page(mcdu_data, 1053)
+    THIS_PAGE:left_keys(mcdu_data, 5)
 end
 
 function THIS_PAGE:L6(mcdu_data)

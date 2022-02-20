@@ -55,7 +55,125 @@ TCAS_sys = {}
 AOC_sys = {
     reading_msg = 0,
     msgs = {
-
+        {
+            message={
+                "MESSAGE 1",
+                "TO DO. THE DEED HAD ",
+                "ALREADY BEEN DONE AND ",
+                "THERE WAS NO GOING BACK ",
+                "IT NOW HAD BEEN BECOME ",
+                "A QUESTION OF HOW THEY ",
+                "WERE GOING TO BE ABLE",
+                "TO GET OUT OF THIS ",
+                "SITUATION AND ESCAPE ",
+            },
+            time=1234,
+            title="MESSAGE 1",
+            opened=false,
+            from_who = "SENDER"
+        },
+        {
+            message={
+                "MESSAGE 2",
+                "TO DO. THE DEED HAD ",
+                "ALREADY BEEN DONE AND ",
+                "THERE WAS NO GOING BACK ",
+                "IT NOW HAD BEEN BECOME ",
+                "A QUESTION OF HOW THEY ",
+                "WERE GOING TO BE ABLE",
+                "TO GET OUT OF THIS ",
+                "SITUATION AND ESCAPE ",
+            },
+            time=1234,
+            title="MESSAGE 2",
+            opened=false,
+            from_who = "SENDER"
+        },
+        {
+            message={
+                "MESSAGE 3",
+                "TO DO. THE DEED HAD ",
+                "ALREADY BEEN DONE AND ",
+                "THERE WAS NO GOING BACK ",
+                "IT NOW HAD BEEN BECOME ",
+                "A QUESTION OF HOW THEY ",
+                "WERE GOING TO BE ABLE",
+                "TO GET OUT OF THIS ",
+                "SITUATION AND ESCAPE ",
+            },
+            time=1234,
+            title="MESSAGE 3",
+            opened=false,
+            from_who = "SENDER"
+        },
+        {
+            message={
+                "MESSAGE 4",
+                "TO DO. THE DEED HAD ",
+                "ALREADY BEEN DONE AND ",
+                "THERE WAS NO GOING BACK ",
+                "IT NOW HAD BEEN BECOME ",
+                "A QUESTION OF HOW THEY ",
+                "WERE GOING TO BE ABLE",
+                "TO GET OUT OF THIS ",
+                "SITUATION AND ESCAPE ",
+            },
+            time=1234,
+            title="MESSAGE 4",
+            opened=false,
+            from_who = "SENDER"
+        },
+        {
+            message={
+                "MESSAGE 5",
+                "TO DO. THE DEED HAD ",
+                "ALREADY BEEN DONE AND ",
+                "THERE WAS NO GOING BACK ",
+                "IT NOW HAD BEEN BECOME ",
+                "A QUESTION OF HOW THEY ",
+                "WERE GOING TO BE ABLE",
+                "TO GET OUT OF THIS ",
+                "SITUATION AND ESCAPE ",
+            },
+            time=1234,
+            title="MESSAGE 5",
+            opened=false,
+            from_who = "SENDER"
+        },
+        {
+            message={
+                "MESSAGE 6",
+                "TO DO. THE DEED HAD ",
+                "ALREADY BEEN DONE AND ",
+                "THERE WAS NO GOING BACK ",
+                "IT NOW HAD BEEN BECOME ",
+                "A QUESTION OF HOW THEY ",
+                "WERE GOING TO BE ABLE",
+                "TO GET OUT OF THIS ",
+                "SITUATION AND ESCAPE ",
+            },
+            time=1234,
+            title="MESSAGE 6",
+            opened=false,
+            from_who = "SENDER"
+        },
+        {
+            message={
+                "MESSAGE 7",
+                "TO DO. THE DEED HAD ",
+                "ALREADY BEEN DONE AND ",
+                "THERE WAS NO GOING BACK ",
+                "IT NOW HAD BEEN BECOME ",
+                "A QUESTION OF HOW THEY ",
+                "WERE GOING TO BE ABLE",
+                "TO GET OUT OF THIS ",
+                "SITUATION AND ESCAPE ",
+            },
+            time=1234,
+            title="MESSAGE 7",
+            opened=false,
+            from_who = "SENDER"
+        },
     },
 }
 

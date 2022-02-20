@@ -23,6 +23,9 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 1, "<MESSAGES", MCDU_LARGE, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_LEFT, 1, " RECEIVED", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_LEFT, 1, "<MESSAGES", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, " RETURN TO", MCDU_SMALL, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, "<ATSU DLNK", MCDU_LARGE, ECAM_WHITE)
+
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "VATSIM ", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "ATIS REQ>", MCDU_LARGE, ECAM_WHITE)
