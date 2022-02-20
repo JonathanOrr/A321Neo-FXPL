@@ -94,61 +94,90 @@ local function prepare_the_common_big_array()
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_appr)
 
     -- Now I have to update the vertical constraints (CLIMB)
-    local last_alt_cstr = 999999 
+    local last_alt_cstr = 999999
+    local last_spd_cstr = 999
     if last_clb_idx and last_clb_idx > 0 then
         for i=last_clb_idx,1,-1  do
-            if    the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_BELOW
-               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_AT 
-               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW
+            local leg = the_big_array[i]
+            if not leg.pred then
+                leg.pred = {}
+            end
+
+            -- Altitude
+            if    leg.cstr_alt_type == CIFP_CSTR_ALT_BELOW
+               or leg.cstr_alt_type == CIFP_CSTR_ALT_AT 
+               or leg.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW
             then
                 -- If altitude is Below or At (or the block) take it for the climb
-                local alt = the_big_array[i].cstr_altitude1
-                if the_big_array[i].cstr_altitude1_fl then
+                local alt = leg.cstr_altitude1
+                if leg.cstr_altitude1_fl then
                     alt = alt * 100
                 end
                 if alt < last_alt_cstr then
                     last_alt_cstr = alt
                 end
             end
-            if not the_big_array[i].pred then
-                the_big_array[i].pred = {}
+
+            leg.pred.prop_clb_cstr = last_alt_cstr
+
+            -- Speed
+            if leg.cstr_speed_type == CIFP_CSTR_SPD_BELOW or leg.cstr_speed_type == CIFP_CSTR_SPD_AT then
+                local spd = leg.cstr_speed
+                if spd < last_spd_cstr then
+                    last_spd_cstr = spd
+                end
             end
-            the_big_array[i].pred.prop_clb_cstr = last_alt_cstr
+
+            leg.pred.prop_spd_cstr = last_spd_cstr
+
         end
     end
 
     -- Now I have to update the vertical constraints (DESCENT)
     local last_alt_cstr = 999999 
+    local last_spd_cstr = 999
     if first_des_idx and first_des_idx > 0 then
         for i=first_des_idx,#the_big_array  do
-            if    the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE
-               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_AT
+            local leg = the_big_array[i]
+
+            if    leg.cstr_alt_type == CIFP_CSTR_ALT_ABOVE
+               or leg.cstr_alt_type == CIFP_CSTR_ALT_AT
             then
                 -- If altitude is Above or At take it for the descent
-                local alt = the_big_array[i].cstr_altitude1
-                if the_big_array[i].cstr_altitude1_fl then
+                local alt = leg.cstr_altitude1
+                if leg.cstr_altitude1_fl then
                     alt = alt * 100
                 end
                 if alt < last_alt_cstr then
                     last_alt_cstr = alt
                 end
             end
-            if    the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND
-               or the_big_array[i].cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW
+            if    leg.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND
+               or leg.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW
             then
                 -- If altitude is Above or At take it for the descent
-                local alt = the_big_array[i].cstr_altitude2
-                if the_big_array[i].cstr_altitude2_fl then
+                local alt = leg.cstr_altitude2
+                if leg.cstr_altitude2_fl then
                     alt = alt * 100
                 end
                 if alt < last_alt_cstr then
                     last_alt_cstr = alt
                 end
             end
-            if not the_big_array[i].pred then
-                the_big_array[i].pred = {}
+            if not leg.pred then
+                leg.pred = {}
             end
             the_big_array[i].pred.prop_des_cstr = last_alt_cstr
+
+            -- Speed
+            if leg.cstr_speed_type == CIFP_CSTR_SPD_BELOW or leg.cstr_speed_type == CIFP_CSTR_SPD_AT then
+                local spd = leg.cstr_speed
+                if spd < last_spd_cstr then
+                    last_spd_cstr = spd
+                end
+            end
+
+            leg.pred.prop_spd_cstr = last_spd_cstr
         end
     end
 
@@ -522,9 +551,7 @@ function vertical_profile_climb_update()
         local target_speed, target_mach = get_target_speed_climb(curr_alt, curr_weight)
 
         -- Be sure the target speed is ok with the possible constraint
-        if leg.cstr_speed_type == CIFP_CSTR_SPD_BELOW or leg.cstr_speed_type == CIFP_CSTR_SPD_AT then
-            target_speed = math.min(target_speed, leg.cstr_speed)
-        end
+        target_speed = math.min(target_speed, leg.pred.prop_spd_cstr)
 
         if DEBUG_TO_FILE then
             file_debug:write("Leg " .. i .. "-th: target IAS is " .. target_speed .. "kts and target mach is " .. (target_mach and target_mach or 'NIL'), "\n")
@@ -1040,7 +1067,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local fuel_consumption = ENG.data.n1_to_FF(N1_minimum/get_takeoff_N1(), density)*2
 
     local net_force = thrust_idle - drag
-    local net_force_vertical = net_force * 0.4
+    local net_force_vertical = net_force * 0.4  -- TODO: This can be tuned to meet alt/speed constraints
     local net_force_horizontal = net_force - net_force_vertical
 
     local decel = net_force_horizontal / weight    -- Acceleration in m/s2
