@@ -34,6 +34,7 @@ local QUANTUM_BASE_IN_SEC = 60  -- Predictions are build with this maximum granu
 local the_big_array = nil   -- Contains all the legs regardless of type
 local last_clb_idx  = nil
 local first_des_idx = nil
+local computed_des_idx = nil    -- Last index of the descent that has been computed
 local file_debug = nil
 
 -------------------------------------------------------------------------------
@@ -811,6 +812,48 @@ local function compute_vapp(weight_at_rwy)
     return VLS + APPR_CORR
 end
 
+local function approach_backupdate_legs(begin_alt, VS, dist, mach, ias_start, ias_end, GS, fuel_consumption)
+
+    dist = - dist -- Fix dist sign
+
+    local next_wpt_dist
+
+    repeat
+        computed_des_idx = computed_des_idx - 1
+        next_wpt_dist  = the_big_array[computed_des_idx].computed_distance 
+        if the_big_array[computed_des_idx].pred.is_partial then
+            next_wpt_dist  = next_wpt_dist - the_big_array[computed_des_idx].pred.partial_dist
+        end
+        local this_wpt_time = nm_to_m(math.min(dist,next_wpt_dist)) / kts_to_ms(GS)
+
+        begin_alt = begin_alt - VS * this_wpt_time / 60
+        the_big_array[computed_des_idx].pred.altitude = begin_alt
+        the_big_array[computed_des_idx].pred.ias      = Math_lerp(ias_end, ias_start, next_wpt_dist / dist)
+        the_big_array[computed_des_idx].pred.mach     = mach
+        the_big_array[computed_des_idx].pred.vs       = VS
+
+        if the_big_array[computed_des_idx].pred.is_partial then
+            the_big_array[computed_des_idx].pred.time     = the_big_array[computed_des_idx].pred.time + this_wpt_time
+            the_big_array[computed_des_idx].pred.fuel     = the_big_array[computed_des_idx].pred.fuel + fuel_consumption*this_wpt_time
+        else
+            the_big_array[computed_des_idx].pred.time     = this_wpt_time
+            the_big_array[computed_des_idx].pred.fuel     = fuel_consumption*this_wpt_time
+        end
+
+        dist = dist - next_wpt_dist
+    until dist <= 0
+
+    if dist ~= 0 then
+        the_big_array[computed_des_idx].pred.is_partial = true
+        if not the_big_array[computed_des_idx].pred.partial_dist then
+            the_big_array[computed_des_idx].pred.partial_dist = 0
+        end
+        the_big_array[computed_des_idx].pred.partial_dist = the_big_array[computed_des_idx].pred.partial_dist + (next_wpt_dist + dist)
+        computed_des_idx = computed_des_idx + 1
+    end
+
+end
+
 local function vertical_profile_descent_update_step1(weight_at_rwy)
 
     -- The the rwy altitude
@@ -831,15 +874,27 @@ local function vertical_profile_descent_update_step1(weight_at_rwy)
     local N1, GS, fuel_consumption = vertical_profile_descent_update_step1_fuel(weight_at_rwy, rwy_alt, TAS, mach, VS, flaps, true)
 
     local time = 1000 / VS * 60;
-
+    local dist = m_to_nm(kts_to_ms(GS) * time)
     -- I can now update the last waypoint
     FMGS_sys.data.pred.appr.steps[1].time  = time
-    FMGS_sys.data.pred.appr.steps[1].dist  = m_to_nm(kts_to_ms(GS) * time)
+    FMGS_sys.data.pred.appr.steps[1].dist  = dist
     FMGS_sys.data.pred.appr.steps[1].ias   = VAPP
     FMGS_sys.data.pred.appr.steps[1].N1    = N1
     FMGS_sys.data.pred.appr.steps[1].fuel  = fuel_consumption * time
     FMGS_sys.data.pred.appr.steps[1].alt   = 1000
     FMGS_sys.data.pred.appr.steps[1].vs    = VS
+
+    -- Update the runway leg
+    computed_des_idx = #the_big_array -- rwy index
+    the_big_array[computed_des_idx].pred.altitude = rwy_alt
+    the_big_array[computed_des_idx].pred.ias      = VAPP
+    the_big_array[computed_des_idx].pred.mach     = mach
+    the_big_array[computed_des_idx].pred.time     = 0
+    the_big_array[computed_des_idx].pred.fuel     = 0
+    the_big_array[computed_des_idx].pred.vs       = VS
+
+    -- Update the other legs
+    approach_backupdate_legs(rwy_alt, VS, dist, mach, VAPP, VAPP, GS, fuel_consumption)
 
     return fuel_consumption * time
 end
@@ -941,6 +996,8 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     FMGS_sys.data.pred.appr.steps[i_step].alt   = FMGS_sys.data.pred.appr.steps[i_step-1].alt + VS * time / 60
     FMGS_sys.data.pred.appr.steps[i_step].vs    = VS
 
+    approach_backupdate_legs(FMGS_sys.data.pred.appr.steps[i_step-1].alt, VS, dist, mach, V_START, V_END, GS, fuel_consumption)
+
     return fuel_consumption * time
 end
 
@@ -1001,6 +1058,8 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     FMGS_sys.data.pred.appr.steps[i_step].ias   = V_START
     FMGS_sys.data.pred.appr.steps[i_step].alt   = FMGS_sys.data.pred.appr.steps[i_step-1].alt + VS * time / 60
     FMGS_sys.data.pred.appr.steps[i_step].vs    = VS
+
+    approach_backupdate_legs(FMGS_sys.data.pred.appr.steps[i_step-1].alt, VS, dist, mach, V_START, V_END, GS, fuel_consumption)
 
     return fuel_consumption * time
 end
