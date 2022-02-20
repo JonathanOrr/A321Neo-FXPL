@@ -263,7 +263,6 @@ function THIS_PAGE:Slew_Down(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    print(THIS_PAGE.sid_length / 4, THIS_PAGE.curr_page)
     if math.ceil(THIS_PAGE.sid_length / 4) <= THIS_PAGE.curr_page then
         MCDU_Page:Slew_Up(mcdu_data)
     else

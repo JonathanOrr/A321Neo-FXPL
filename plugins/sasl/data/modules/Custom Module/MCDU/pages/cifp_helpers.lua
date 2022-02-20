@@ -105,7 +105,6 @@ function cifp_alt_to_text(alt, in_fl, type)
     if in_fl then
         alt = alt * 100
     end
-    print(type, alt, FMGS_perf_get_current_trans_alt())
     if (type == 1 and alt > FMGS_perf_get_current_trans_alt()) 
        or (type == 2 and alt > FMGS_perf_get_current_landing_trans_alt())
        or type == 0 then
