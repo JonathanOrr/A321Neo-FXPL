@@ -51,6 +51,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW")
 addSearchPath(moduleDirectory .. "/Custom Module/MCDU/")
 addSearchPath(moduleDirectory .. "/Custom Module/AUTOFLT/")
+addSearchPath(moduleDirectory .. "/Custom Module/AOC_ATC/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 
 position = {0, 0, 4096, 4096}

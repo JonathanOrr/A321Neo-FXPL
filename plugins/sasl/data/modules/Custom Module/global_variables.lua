@@ -52,6 +52,12 @@ FMGS_sys = {}
 GPS_sys = {}
 RA_sys = {}
 TCAS_sys = {}
+AOC_sys = {
+    reading_msg = 0,
+    msgs = {
+
+    },
+}
 
  -- do NOT name anything else as "EFB", this is super important, used to store functions. See efb_prefrences.lua 
 EFB = {}
