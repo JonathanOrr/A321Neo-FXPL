@@ -16,6 +16,8 @@ include("libs/table.save.lua")
 
 local THIS_PAGE = MCDU_Page:new({id=1053})
 
+THIS_PAGE.current_page_number = 1
+
 function THIS_PAGE:render(mcdu_data)
 
     if not mcdu_data.page_data[1053] then mcdu_data.page_data[1053] = {} end
@@ -28,10 +30,9 @@ function THIS_PAGE:render(mcdu_data)
 
     mcdu_data.page_data[1053].number_of_lines = #(AOC_sys.msgs[reading_msg].message)
     mcdu_data.page_data[1053].number_of_pages = math.ceil((mcdu_data.page_data[1053].number_of_lines)/8)
-    mcdu_data.page_data[1053].current_page_number = 1
-    mcdu_data.page_data[1053].skip_lines = ((mcdu_data.page_data[1053].current_page_number)-1)*8
+    mcdu_data.page_data[1053].skip_lines = ((THIS_PAGE.current_page_number)-1)*8
 
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, (mcdu_data.page_data[1053].current_page_number).."/".. (mcdu_data.page_data[1053].number_of_pages), MCDU_SMALL, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, (THIS_PAGE.current_page_number).."/".. (mcdu_data.page_data[1053].number_of_pages), MCDU_SMALL, ECAM_WHITE)
 
     for i=1, mcdu_data.page_data[1053].number_of_lines - mcdu_data.page_data[1053].skip_lines do
         mcdu_line_number = Round(i/2 + 1, 0) -- make into pattern 1,2,2,3,3,4,4,5,5,6... etc
@@ -51,11 +52,11 @@ function THIS_PAGE:L6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Right(mcdu_data)
-    mcdu_data.page_data[1053].current_page_number = math.min(mcdu_data.page_data[1053].current_page_number + 1, mcdu_data.page_data[1053].number_of_pages)
+    THIS_PAGE.current_page_number = math.min(THIS_PAGE.current_page_number + 1, mcdu_data.page_data[1053].number_of_pages)
 end
 
 function THIS_PAGE:Slew_Left(mcdu_data)
-    mcdu_data.page_data[1053].current_page_number = math.max(mcdu_data.page_data[1053].current_page_number - 1, 1)
+    THIS_PAGE.current_page_number = math.max(THIS_PAGE.current_page_number - 1, 1)
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

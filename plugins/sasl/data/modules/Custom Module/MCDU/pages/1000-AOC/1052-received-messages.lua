@@ -16,19 +16,19 @@
 
 local THIS_PAGE = MCDU_Page:new({id=1052})
 
+THIS_PAGE.scroll_offset = 0
+
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "AOC RCVD MSGS")
 
     if not mcdu_data.page_data[1052] then mcdu_data.page_data[1052] = {} end
 
-    mcdu_data.page_data[1052].scroll_offset = 0
-
     if #AOC_sys.msgs > 0 then
         for i=1, #AOC_sys.msgs do
-            i = i + mcdu_data.page_data[1052].scroll_offset
+            i = i + THIS_PAGE.scroll_offset
             if i <= #(AOC_sys.msgs) then
-                self:set_line(mcdu_data, MCDU_LEFT, i - mcdu_data.page_data[1052].scroll_offset, ""..AOC_sys.msgs[i].time.." "..(AOC_sys.msgs[i].opened == false and "NEW" or "VIEWED"), MCDU_SMALL, ECAM_GREEN)
-                self:set_line(mcdu_data, MCDU_LEFT, i - mcdu_data.page_data[1052].scroll_offset, "<"..AOC_sys.msgs[i].title, MCDU_LARGE, ECAM_WHITE)
+                self:set_line(mcdu_data, MCDU_LEFT, i - THIS_PAGE.scroll_offset, ""..AOC_sys.msgs[i].time.." "..(AOC_sys.msgs[i].opened == false and "NEW" or "VIEWED"), MCDU_SMALL, ECAM_GREEN)
+                self:set_line(mcdu_data, MCDU_LEFT, i - THIS_PAGE.scroll_offset, "<"..AOC_sys.msgs[i].title, MCDU_LARGE, ECAM_WHITE)
             end
         end
     end
@@ -38,9 +38,9 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:left_keys(mcdu_data, key_number)
-    if AOC_sys.msgs[key_number+mcdu_data.page_data[1052].scroll_offset] == nil then return end
-    AOC_sys.msgs[key_number+mcdu_data.page_data[1052].scroll_offset].opened = true
-    AOC_sys.reading_msg = key_number+mcdu_data.page_data[1052].scroll_offset
+    if AOC_sys.msgs[key_number+THIS_PAGE.scroll_offset] == nil then return end
+    AOC_sys.msgs[key_number+THIS_PAGE.scroll_offset].opened = true
+    AOC_sys.reading_msg = key_number+THIS_PAGE.scroll_offset
     mcdu_open_page(mcdu_data, 1053)
 end
 
@@ -62,6 +62,16 @@ end
 
 function THIS_PAGE:L6(mcdu_data)
     mcdu_open_page(mcdu_data, 1050)
+end
+
+function THIS_PAGE:Slew_Down(mcdu_data)
+    THIS_PAGE.scroll_offset = math.max(THIS_PAGE.scroll_offset - 1, 0)
+end
+
+function THIS_PAGE:Slew_Up(mcdu_data)
+    if not(#(AOC_sys.msgs) - THIS_PAGE.scroll_offset <= 5) then
+        THIS_PAGE.scroll_offset = THIS_PAGE.scroll_offset + 1
+    end
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
