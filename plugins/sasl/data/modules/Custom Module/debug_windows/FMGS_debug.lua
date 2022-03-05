@@ -518,7 +518,7 @@ function update()
         if FMGS_sys.fpln.temp.apts.dep_cifp and FMGS_sys.fpln.temp.apts.arr_cifp then
             FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
             FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
-            FMGS_arr_set_appr(FMGS_sys.fpln.temp.apts.arr_cifp.apprs[9], FMGS_sys.fpln.temp.apts.arr.rwys[1], true)
+            FMGS_arr_set_appr(FMGS_sys.fpln.temp.apts.arr_cifp.apprs[8], FMGS_sys.fpln.temp.apts.arr.rwys[1], true)
             FMGS_arr_set_star(FMGS_sys.fpln.temp.apts.arr_cifp.stars[22])
             FMGS_reset_arr_via()
             FMGS_reset_arr_trans()

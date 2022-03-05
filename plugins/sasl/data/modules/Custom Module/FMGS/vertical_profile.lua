@@ -854,8 +854,9 @@ local function approach_backupdate_legs(begin_alt, VS, dist, mach, ias_start, ia
         local this_wpt_time = nm_to_m(math.min(dist,next_wpt_dist)) / kts_to_ms(GS)
 
         begin_alt = begin_alt - VS * this_wpt_time / 60
+        local ias = math.min(Math_lerp(ias_end, ias_start, next_wpt_dist / dist), FMGS_sys.data.init.alt_speed_limit_descent[1])
         the_big_array[computed_des_idx].pred.altitude = begin_alt
-        the_big_array[computed_des_idx].pred.ias      = Math_lerp(ias_end, ias_start, next_wpt_dist / dist)
+        the_big_array[computed_des_idx].pred.ias      = ias
         the_big_array[computed_des_idx].pred.mach     = mach
         the_big_array[computed_des_idx].pred.vs       = VS
 
@@ -1098,6 +1099,89 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     return fuel_consumption * time
 end
 
+local function vertical_profile_descent_update_step8(weight)
+    local curr_alt= FMGS_sys.data.pred.appr.steps[7].alt
+    local V_END   = FMGS_sys.data.pred.appr.steps[7].ias
+    local V_START = FMGS_sys.data.init.alt_speed_limit_descent[1]
+
+    local initial_dist_to_consider = 0
+    if the_big_array[computed_des_idx-1].pred.is_partial then
+        initial_dist_to_consider = the_big_array[computed_des_idx-1].pred.partial_dist
+    end
+
+    while curr_alt <= FMGS_sys.data.init.alt_speed_limit_descent[2] do
+
+        computed_des_idx = computed_des_idx - 1
+
+        -- Comply with the speed constraint if possible
+        V_START = math.min(V_START, the_big_array[computed_des_idx].pred.prop_spd_cstr)
+        V_START = math.max(V_START, V_END)
+
+        local V_AVG = (V_START+V_END)/2
+
+        local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, curr_alt)
+
+        -- Time to compute the drag and therefore the thrust we need
+        local oat = get(OTA)    -- TODO Cannot use local
+        local density = get(Weather_Sigma)  -- TODO Cannot use local
+        local drag = predict_drag_w_gf(density, TAS, mach, weight, 0, false)
+
+        -- In this case I assume to be at idle...
+        local N1_minimum = predict_minimum_N1_engine(curr_alt, oat, density, 0, false)
+        local thrust_idle = predict_engine_thrust(mach, density, oat, curr_alt, N1_minimum) * 2
+        local fuel_consumption = ENG.data.n1_to_FF(N1_minimum/get_takeoff_N1(), density)*2
+
+        local net_force = thrust_idle - drag
+
+
+        local dist_to_next_wpt = the_big_array[computed_des_idx].computed_distance - initial_dist_to_consider
+        initial_dist_to_consider = 0
+
+        local VS   = the_big_array[computed_des_idx+1].pred.vs
+        local time = 0
+        local GS   = tas_to_gs(TAS, 0, 0, 0) -- TODO: Put wind here
+        local decel_we_need = 0
+        if dist_to_next_wpt > 0 then
+
+            -- First of all let's check if we have to decelerate
+            local no_descent_GS = GS -- Approx
+            local this_wpt_time_approx = nm_to_m(dist_to_next_wpt / kts_to_ms(no_descent_GS))
+            decel_we_need = kts_to_ms(V_START-V_END) / this_wpt_time_approx
+            local h_force_we_need = decel_we_need * weight
+
+            local v_force = net_force - h_force_we_need
+            while v_force > 0 do -- We cannot decelerate so fast, so let's halve the h_force to continue the descent
+                h_force_we_need = h_force_we_need / 2
+                v_force = net_force - h_force_we_need  
+            end
+
+            -- Ok now compute the descent parameters
+            local decel = h_force_we_need / weight
+
+            VS = ms_to_fpm(v_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
+            GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+            time  = nm_to_m(dist_to_next_wpt / kts_to_ms(GS))
+        end 
+
+        curr_alt = curr_alt - VS * time / 60
+        V_START = V_END + ms_to_kts(decel_we_need * time)
+
+        the_big_array[computed_des_idx].pred.altitude = curr_alt
+        the_big_array[computed_des_idx].pred.ias      = V_START
+        the_big_array[computed_des_idx].pred.mach     = mach
+        the_big_array[computed_des_idx].pred.vs       = VS
+        if not the_big_array[computed_des_idx].pred.is_partial then
+            the_big_array[computed_des_idx].pred.time     = time
+            the_big_array[computed_des_idx].pred.fuel     = fuel_consumption
+        else
+            the_big_array[computed_des_idx].pred.time     = the_big_array[computed_des_idx].pred.time + time
+            the_big_array[computed_des_idx].pred.fuel     = the_big_array[computed_des_idx].pred.fuel + fuel_consumption
+        end
+        weight = weight + fuel_consumption * time
+    end
+
+    return weight
+end
 
 local function vertical_profile_descent_update(approx_weight_at_TOD)
     -- For the descent phase we have to go back, so we start from the runways threshold and we climb up
@@ -1134,6 +1218,7 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 5)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 6)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 7)
+    curr_weight = curr_weight + vertical_profile_descent_update_step8(curr_weight)
 
 end
 
