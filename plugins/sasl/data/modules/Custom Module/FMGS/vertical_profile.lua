@@ -378,12 +378,9 @@ end
 -------------------------------------------------------------------------------
 -- Descent
 -------------------------------------------------------------------------------
-local function get_target_speed_descent(altitude)
+local function get_target_speed_descent()
     -- This function does not consider  the initial climb part or
     -- restrictions
-    if altitude < FMGS_sys.data.init.alt_speed_limit_descent[2] then
-        return FMGS_sys.data.init.alt_speed_limit_descent[1], nil
-    end
 
     -- Otherwise it depends on the cost index
     local cost_index = FMGS_init_get_cost_idx()
@@ -806,8 +803,8 @@ local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt,
     local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = get(OTA)    -- TODO Cannot use local
-    local density = get(Weather_Sigma)  -- TODO Cannot use local
+    local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, init_alt)
+    local density = get_density_ratio(init_alt)
     local drag = predict_drag_w_gf(density, TAS, mach, init_weight, flaps, gear)
 
     local needed_thrust = math.max(0, drag + excess_thrust)
@@ -972,8 +969,8 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local excess_thrust = -fpm_to_ms(VS) * (weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = get(OTA)    -- TODO Cannot use local
-    local density = get(Weather_Sigma)  -- TODO Cannot use local
+    local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
+    local density = get_density_ratio(alt)
     local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
 
     -- In this case I assume to be at idle...
@@ -1065,8 +1062,8 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, alt)
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = get(OTA)    -- TODO Cannot use local
-    local density = get(Weather_Sigma)  -- TODO Cannot use local
+    local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
+    local density = get_density_ratio(alt)
     local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
 
     -- In this case I assume to be at idle...
@@ -1099,42 +1096,56 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     return fuel_consumption * time
 end
 
-local function vertical_profile_descent_update_step8(weight)
-    local curr_alt= FMGS_sys.data.pred.appr.steps[7].alt
-    local V_END   = FMGS_sys.data.pred.appr.steps[7].ias
-    local V_START = FMGS_sys.data.init.alt_speed_limit_descent[1]
+local function vertical_profile_descent_update_step89(weight, idx)
+    local curr_alt, V_END, V_START, MACH_LIMIT
+    
+    if idx == 8 then
+        curr_alt = FMGS_sys.data.pred.appr.steps[7].alt
+        V_END   = FMGS_sys.data.pred.appr.steps[7].ias
+        V_START = FMGS_sys.data.init.alt_speed_limit_descent[1]
+    else
+        curr_alt = the_big_array[computed_des_idx].pred.altitude
+        V_END    = the_big_array[computed_des_idx].pred.ias
+        V_START, MACH_LIMIT  = get_target_speed_descent()
+    end
+    assert(V_START)
+    assert(V_END)
 
     local initial_dist_to_consider = 0
     if the_big_array[computed_des_idx-1].pred.is_partial then
         initial_dist_to_consider = the_big_array[computed_des_idx-1].pred.partial_dist
     end
 
-    while curr_alt <= FMGS_sys.data.init.alt_speed_limit_descent[2] do
+    local upper_limit = idx == 8 and FMGS_sys.data.init.alt_speed_limit_descent[2] or FMGS_sys.data.init.crz_fl
+
+    while curr_alt < upper_limit do
 
         computed_des_idx = computed_des_idx - 1
+        local leg = the_big_array[computed_des_idx]
+        local MACH_LIMIT = 0
 
         -- Comply with the speed constraint if possible
-        V_START = math.min(V_START, the_big_array[computed_des_idx].pred.prop_spd_cstr)
+        if leg.pred.prop_spd_cstr then
+            V_START = math.min(V_START, leg.pred.prop_spd_cstr)
+        end
         V_START = math.max(V_START, V_END)
-
         local V_AVG = (V_START+V_END)/2
 
         local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, curr_alt)
 
         -- Time to compute the drag and therefore the thrust we need
-        local oat = get(OTA)    -- TODO Cannot use local
-        local density = get(Weather_Sigma)  -- TODO Cannot use local
-        local drag = predict_drag_w_gf(density, TAS, mach, weight, 0, false)
+        local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, curr_alt)
+        local density = get_density_ratio(curr_alt)
+        local drag = predict_drag(density, TAS, mach, weight)
 
         -- In this case I assume to be at idle...
         local N1_minimum = predict_minimum_N1_engine(curr_alt, oat, density, 0, false)
         local thrust_idle = predict_engine_thrust(mach, density, oat, curr_alt, N1_minimum) * 2
         local fuel_consumption = ENG.data.n1_to_FF(N1_minimum/get_takeoff_N1(), density)*2
-
         local net_force = thrust_idle - drag
 
-
-        local dist_to_next_wpt = the_big_array[computed_des_idx].computed_distance - initial_dist_to_consider
+        local wpt_dist = leg.computed_distance or 0
+        local dist_to_next_wpt = wpt_dist - initial_dist_to_consider
         initial_dist_to_consider = 0
 
         local VS   = the_big_array[computed_des_idx+1].pred.vs
@@ -1160,22 +1171,46 @@ local function vertical_profile_descent_update_step8(weight)
 
             VS = ms_to_fpm(v_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
             GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
-            time  = nm_to_m(dist_to_next_wpt / kts_to_ms(GS))
+            time  = nm_to_m(dist_to_next_wpt) / kts_to_ms(GS)
         end 
 
         curr_alt = curr_alt - VS * time / 60
+
+        local overshoot = false
+        if curr_alt > upper_limit and VS ~= 0 then
+            -- We overshoot the target, so let's recompute the time to
+            -- target:
+            time = time - (curr_alt - upper_limit) / VS * 60
+            -- and update distance and previous:
+            leg.pred.is_partial   = true
+            leg.pred.partial_dist = dist_to_next_wpt - m_to_nm(time * kts_to_ms(GS))
+            curr_alt = upper_limit
+            overshoot = true
+            computed_des_idx = computed_des_idx + 1
+        end
+
         V_START = V_END + ms_to_kts(decel_we_need * time)
 
-        the_big_array[computed_des_idx].pred.altitude = curr_alt
-        the_big_array[computed_des_idx].pred.ias      = V_START
-        the_big_array[computed_des_idx].pred.mach     = mach
-        the_big_array[computed_des_idx].pred.vs       = VS
-        if not the_big_array[computed_des_idx].pred.is_partial then
-            the_big_array[computed_des_idx].pred.time     = time
-            the_big_array[computed_des_idx].pred.fuel     = fuel_consumption
+        assert(V_START)
+
+        if leg.pred.is_climb then
+            FMGS_sys.data.pred.invalid = true
+            return weight
         else
-            the_big_array[computed_des_idx].pred.time     = the_big_array[computed_des_idx].pred.time + time
-            the_big_array[computed_des_idx].pred.fuel     = the_big_array[computed_des_idx].pred.fuel + fuel_consumption
+            leg.pred.is_descent = true
+        end
+
+        leg.pred.altitude = curr_alt
+        leg.pred.ias      = V_START
+        leg.pred.mach     = mach
+        leg.pred.vs       = VS
+
+        if not leg.pred.is_partial or overshoot then
+            leg.pred.time     = time
+            leg.pred.fuel     = fuel_consumption
+        else
+            leg.pred.time     = leg.pred.time + time
+            leg.pred.fuel     = leg.pred.fuel + fuel_consumption
         end
         weight = weight + fuel_consumption * time
     end
@@ -1218,7 +1253,8 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 5)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 6)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 7)
-    curr_weight = curr_weight + vertical_profile_descent_update_step8(curr_weight)
+    curr_weight = curr_weight + vertical_profile_descent_update_step89(curr_weight, 8)
+    curr_weight = curr_weight + vertical_profile_descent_update_step89(curr_weight, 9)
 
 end
 

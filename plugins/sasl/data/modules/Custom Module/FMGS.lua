@@ -57,6 +57,7 @@ FMGS_sys.data = {
     },
     
     pred = {    -- Various predictions
+        invalid = false,
         trip_fuel = nil,
         trip_time = nil,
         trip_dist = nil,
