@@ -1001,6 +1001,21 @@ function vertical_profile_cruise_descent_ft_update()
     -- HOWEVER: it's possible that the last point is still partial (see vertical_profile_descent_update_step89)
     -- therefore we need to complete the last point time and fuel.
 
+    local start_leg = the_big_array[computed_des_idx]
+    local fuel_cumulative = start_leg.pred.fuel
+    local time_cumulative = start_leg.pred.time
+    local i = computed_des_idx + 1
+    local end_i = #the_big_array
+
+    while i <= end_i do
+        fuel_cumulative = fuel_cumulative + the_big_array[i].pred.fuel
+        time_cumulative = time_cumulative + the_big_array[i].pred.time
+
+        the_big_array[i].pred.fuel = fuel_cumulative
+        the_big_array[i].pred.time = time_cumulative
+
+        i = i + 1
+    end
 
 end
 
@@ -1045,13 +1060,9 @@ function vertical_profile_update()
 
     local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
 
-    print("APPROX WEIGHT TOD", approx_weight_at_TOD)
-
     vertical_profile_descent_update(approx_weight_at_TOD)
 
     local exact_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
-
-    print("EXACT WEIGHT TOD", exact_weight_at_TOD)
 
     vertical_profile_cruise_descent_ft_update()
 
