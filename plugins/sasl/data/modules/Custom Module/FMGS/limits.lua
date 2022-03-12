@@ -21,7 +21,7 @@ local function compute_max_alt(curr_weight)
 
     local max_fl = Math_rescale_lim_lower(62000, 39100, 78000, 34500, curr_weight)
 
-    local delta_isa = get(OTA) - Temperature_get_ISA()  -- TODO Verify if it's OTA or TAT
+    local delta_isa = get(OTA) - air_temperature_get_ISA()  -- TODO Verify if it's OTA or TAT
 
     local isa_correction_table = {
         {   -- No AI

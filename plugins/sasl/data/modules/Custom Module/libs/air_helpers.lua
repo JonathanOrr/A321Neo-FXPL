@@ -29,17 +29,30 @@ local function get_std_pressure(altitude, tropo_alt, sea_level_temp, sea_level_p
     end
 end
 
-function get_air_density(altitude, tropo_alt, sea_level_temp, sea_level_press)
+function air_get_density(altitude, tropo_alt, sea_level_temp, sea_level_press)
     return get_std_pressure(altitude, tropo_alt, sea_level_temp, sea_level_press) 
         / (DRY_AIR_CONSTANT * (sea_level_temp + 273.15))
 end
 
-function Temperature_get_ISA()
+function air_temperature_get_ISA()
     local alt_meter = get(ACF_elevation)
     return math.max(-56.5, 15 - 6.5 * alt_meter/1000)
 end
 
-function density_to_ratio(density)
+function air_density_to_ratio(density)
     return density / 1.225
 end
 
+function air_compute_vs(T,D,W,tas)
+    local gamma = ( T - D ) / W;
+    return tas * math.sin(gamma) * 60
+end
+
+function air_predict_temperature_at_alt(curr_ota, curr_alt_ft, ref_alt_ft)
+    local curr_alt_m= curr_alt_ft*0.3048
+    local ref_alt_m = ref_alt_ft*0.3048
+    
+    local isa_temp = math.max(-56.5, 15 - 6.5 * ref_alt_m/1000)
+    local isa_temp_curr = math.max(-56.5, 15 - 6.5 * curr_alt_m/1000)
+    return isa_temp+isa_temp_curr-curr_ota
+end

@@ -28,6 +28,7 @@ local EARTH_GRAVITY = 9.80665
 local QUANTUM_BASE_IN_SEC_CLB = 20  -- Predictions are build with this maximum granularity (lower is possible)
 local QUANTUM_BASE_IN_SEC = 60  -- Predictions are build with this maximum granularity (lower is possible)
 
+
 -------------------------------------------------------------------------------
 -- Global variables
 -------------------------------------------------------------------------------
@@ -40,25 +41,12 @@ local file_debug = nil
 -------------------------------------------------------------------------------
 -- Helper functions
 -------------------------------------------------------------------------------
-local function compute_vs(T,D,W, tas)
-    local gamma = ( T - D ) / W;
-    return tas * math.sin(gamma) * 60
-end
-
-local function predict_temperature_at_alt(curr_ota, curr_alt_ft, ref_alt_ft)
-    local curr_alt_m= curr_alt_ft*0.3048
-    local ref_alt_m = ref_alt_ft*0.3048
-    
-    local isa_temp = math.max(-56.5, 15 - 6.5 * ref_alt_m/1000)
-    local isa_temp_curr = math.max(-56.5, 15 - 6.5 * curr_alt_m/1000)
-    return isa_temp+isa_temp_curr-curr_ota
-end
 
 local function get_density_ratio(ref_alt)   -- Get density according to ISA
-    local temp_sea_level = 15+get(OTA)-Temperature_get_ISA()
+    local temp_sea_level = 15+get(OTA)-air_temperature_get_ISA()
     local press_sea_level = get(Weather_curr_press_sea_level) * 3386.38
-    local density = get_air_density(ref_alt, FMGS_sys.data.init.tropo, temp_sea_level, press_sea_level)
-    density = density_to_ratio(density)
+    local density = air_get_density(ref_alt, FMGS_sys.data.init.tropo, temp_sea_level, press_sea_level)
+    density = air_density_to_ratio(density)
     return density
 end
 
@@ -205,7 +193,7 @@ local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     local thrust = predict_engine_thrust(mach, density, oat, rwy_alt+200, N1) * 2
     local drag   = predict_drag_w_gf(density, tas, mach, takeoff_weight, FMGS_sys.perf.flaps or 2, true)
     fuel_consumption = ENG.data.n1_to_FF(1, density)*2
-    return compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
+    return air_compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
 end
 
 
@@ -229,11 +217,11 @@ local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, we
     local ref_alt = (end_alt+begin_alt)/2
     local density = get_density_ratio(ref_alt)
     local oat = get(OTA)
-    local ota_pred = predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
+    local ota_pred = air_predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
     local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
     local thrust = predict_engine_thrust(mach, density, ota_pred, ref_alt, N1) * 2
     local drag   = predict_drag(density, tas, mach, weight)
-    local vs = compute_vs(thrust,drag, weight, tas)
+    local vs = air_compute_vs(thrust,drag, weight, tas)
 
     local time = (end_alt-begin_alt) / vs * 60 -- seconds
 
@@ -256,7 +244,7 @@ end
 -------------------------------------------------------------------------------
 
 local function predict_climb_thrust_net_avail(ias,altitude, weight)
-    local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
+    local oat_pred = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
     local N1 = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
     local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
     local density = get_density_ratio(altitude)
@@ -278,7 +266,7 @@ local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end
     local ref_alt = (end_alt+begin_alt)/2
     local ref_spd = (end_spd+begin_spd)/2
     local oat = get(OTA)
-    local oat_pred = predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
+    local oat_pred = air_predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
     local N1 = eng_N1_limit_clb(oat_pred, 0, ref_alt, true, false, false)
     local density = get_density_ratio(ref_alt)
     local _, tas, mach = convert_to_eas_tas_mach(ref_spd, ref_alt)
@@ -323,7 +311,7 @@ end
 -- Cruise
 -------------------------------------------------------------------------------
 local function predict_cruise_N1_at_alt_ias(ias,altitude, weight)
-    local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
+    local oat_pred = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
     local N1_max = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
     local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
     local density = get_density_ratio(altitude)
@@ -339,7 +327,7 @@ local function predict_cruise_N1_at_alt_ias(ias,altitude, weight)
 end
 
 local function predict_cruise_N1_at_alt_M(M, altitude, weight)
-    local oat_pred = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
+    local oat_pred = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
     local N1_max = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
     local tas = convert_to_tas(M, altitude)
     local density = get_density_ratio(altitude)
@@ -803,7 +791,7 @@ local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt,
     local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, init_alt)
+    local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, init_alt)
     local density = get_density_ratio(init_alt)
     local drag = predict_drag_w_gf(density, TAS, mach, init_weight, flaps, gear)
 
@@ -969,7 +957,7 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local excess_thrust = -fpm_to_ms(VS) * (weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
+    local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
     local density = get_density_ratio(alt)
     local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
 
@@ -1062,7 +1050,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, alt)
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
+    local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
     local density = get_density_ratio(alt)
     local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
 
@@ -1134,7 +1122,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
         local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, curr_alt)
 
         -- Time to compute the drag and therefore the thrust we need
-        local oat = predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, curr_alt)
+        local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, curr_alt)
         local density = get_density_ratio(curr_alt)
         local drag = predict_drag(density, TAS, mach, weight)
 
