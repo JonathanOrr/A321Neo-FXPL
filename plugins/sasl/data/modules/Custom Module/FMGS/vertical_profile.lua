@@ -22,7 +22,6 @@ include("FMGS/predictors/drag.lua")
 include("libs/speed_helpers.lua")
 include('libs/air_helpers.lua')
 
-local DEBUG_TO_FILE = false
 
 local EARTH_GRAVITY = 9.80665
 local QUANTUM_BASE_IN_SEC_CLB = 20  -- Predictions are build with this maximum granularity (lower is possible)
@@ -254,11 +253,6 @@ local function predict_climb_thrust_net_avail(ias,altitude, weight)
     -- let's remove the drag now
     local drag = predict_drag(density, tas, mach, weight)
 
-    if DEBUG_TO_FILE then
-        file_debug:write("  INPUTS: ias=" .. ias .. "kts, altitude="..altitude.."ft, weight="..weight.."kg", "\n")
-        file_debug:write("  COMPUTED: tas=" .. tas .. "kts, mach="..mach.."M, density (ratio)="..density.."", "\n")
-        file_debug:write("  FINAL: thrust_each=" .. thrust_per_engine .. "N, drag="..drag.."N, net="..(thrust_per_engine * 2 - drag).."N", "\n")
-    end
     return thrust_per_engine * 2 - drag
 end
 
@@ -484,10 +478,7 @@ function vertical_profile_climb_update()
         FMGS_sys.data.pred.takeoff.dist_to_400ft    +
         FMGS_sys.data.pred.takeoff.dist_to_sec_climb+
         FMGS_sys.data.pred.takeoff.dist_to_vacc
-    
-    if DEBUG_TO_FILE then
-        file_debug:write("After takeoff phase we traveled for " .. traveled_nm .. " nm", "\n")
-    end
+
     
     while traveled_nm > 0 do    -- How many WPTs we overflown during takeoff phase?
         i = i + 1
@@ -495,10 +486,6 @@ function vertical_profile_climb_update()
     end
 
     curr_dist = traveled_nm + the_big_array[i].computed_distance
-
-    if DEBUG_TO_FILE then
-        file_debug:write("Therefore we are at the " .. i .. "-th waypoint with " .. curr_dist .. " nm remaining", "\n")
-    end
 
     local runs = 0  -- Just for debugging the performance
     local total_fuel_cons = FMGS_sys.data.pred.takeoff.total_fuel_kgs
@@ -518,10 +505,6 @@ function vertical_profile_climb_update()
         Q = QUANTUM_BASE_IN_SEC_CLB
         A = 0
 
-        if DEBUG_TO_FILE then
-            file_debug:write("Leg " .. i .. "-th: we are at " .. curr_spd .. " kts, " .. curr_alt .. "ft, " .. curr_weight .. "kg", "\n")
-            file_debug:write("Leg " .. i .. "-th: thrust info follows", "\n")
-        end
 
         thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt,curr_weight)
 
@@ -538,10 +521,6 @@ function vertical_profile_climb_update()
         -- Be sure the target speed is ok with the possible constraint
         target_speed = math.min(target_speed, leg.pred.prop_spd_cstr)
 
-        if DEBUG_TO_FILE then
-            file_debug:write("Leg " .. i .. "-th: target IAS is " .. target_speed .. "kts and target mach is " .. (target_mach and target_mach or 'NIL'), "\n")
-        end
-
         -- If needed, let's compute the time to reach the target speed (in this case we are accelerating)
         if target_speed - curr_spd > 1 and (not target_mach or target_mach - curr_mach > 0.005) then
             -- In this case we need to accelerate and climb at the same time
@@ -551,11 +530,6 @@ function vertical_profile_climb_update()
             A = thrust_for_acceleration / curr_weight -- [m/s2]
             Q = 1   -- Reduce the quantum to increase the precision of the speed change
 
-            if DEBUG_TO_FILE then
-                file_debug:write("Leg " .. i .. "-th: speed change requested, quantum time goes to 1", "\n")
-                file_debug:write("Leg " .. i .. "-th: thrust for acceleration " .. thrust_for_acceleration .. "N and thrust for climbing " .. thrust_available .. "N", "\n")
-                file_debug:write("Leg " .. i .. "-th: acceleration is then " .. A .. " m/s", "\n")
-            end
     
         end
 
@@ -590,11 +564,6 @@ function vertical_profile_climb_update()
             
         until (not target_mach or new_mach < target_mach)
 
-        if DEBUG_TO_FILE then
-            file_debug:write("Leg " .. i .. "-th: solved in " .. emergency_out .. " iterations", "\n")
-            file_debug:write("Leg " .. i .. "-th: final quantum is " .. Q .. "s", "\n")
-        end
-
         if emergency_out > 1000 then
             logWarning("Emergency exit from repeat-until loop in vertical profile. This is no good.")
         end
@@ -615,22 +584,12 @@ function vertical_profile_climb_update()
         curr_dist = curr_dist + m_to_nm(kts_to_ms(GS)) * Q  -- in [nm]
         curr_time = curr_time + Q
 
-        if DEBUG_TO_FILE then
-            file_debug:write("Leg " .. i .. "-th: new values: " .. new_mach .. "M, " .. new_spd .. "kts, " ..new_alt .. "ft, " .. curr_dist .. "nm, " .. curr_time .. "s, " .. curr_weight .. "kg", "\n")
-        end
-
         if curr_alt >= cruise_alt then
-            if DEBUG_TO_FILE then
-                file_debug:write("Leg " .. i .. "-th: reached cruise ALT", "\n")
-            end
     
             break
         end
 
         if curr_dist >= D then
-            if DEBUG_TO_FILE then
-                file_debug:write("Leg " .. i .. "-th: finished", "\n")
-            end
 
             -- We finally reached the end of the leg, so let's update its predictions
 
@@ -648,9 +607,6 @@ function vertical_profile_climb_update()
                     if the_big_array[i+1].pred.is_descent then
                         -- Very bad here, we cannot climb to the cruise FLZ, we have no
                         -- sufficient time/space, break everything
-                        if DEBUG_TO_FILE then
-                            file_debug:write("Leg " .. i .. "-th: end of space", "\n")
-                        end
                         return nil, nil, nil
                     end
                     the_big_array[i+1].pred.is_climb = true
@@ -660,9 +616,6 @@ function vertical_profile_climb_update()
 
             -- Goto the next WPTs
         else
-            if DEBUG_TO_FILE then
-                file_debug:write("Leg " .. i .. "-th: still inside", "\n")
-            end
 
             skip_dist_reset = true
             i = i - 1
@@ -1246,11 +1199,24 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
 
 end
 
-function vertical_profile_update()
+function vertical_profile_cruise_descent_ft_update()
+    -- From the first descent point (computed_des_idx, this time for real)
+    -- we have to update fuel and time from that point on. The data on each
+    -- waypoint is relative to each leg (and we need to transform it to global)
+    -- HOWEVER: it's possible that the last point is still partial (see vertical_profile_descent_update_step89)
+    -- therefore we need to complete the last point time and fuel.
 
-    if DEBUG_TO_FILE then
-        file_debug = io.open("vertical-profile.log", "w")
+    if the_big_array[computed_des_idx-1].pred.is_partial then
+        computed_des_idx = computed_des_idx - 1
+
+        local dist = the_big_array[computed_des_idx-1].pred.partial_dist
+        -- We consider the point before this one, and in that case we use it as a reference
+        -- for time and distance
     end
+
+end
+
+function vertical_profile_update()
 
     -- Start with reset
     vertical_profile_reset()
@@ -1291,7 +1257,11 @@ function vertical_profile_update()
 
     local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
 
+    print("APPROX WEIGHT TOD", approx_weight_at_TOD)
+
     vertical_profile_descent_update(approx_weight_at_TOD)
+
+    vertical_profile_cruise_descent_ft_update()
 
 
 end
