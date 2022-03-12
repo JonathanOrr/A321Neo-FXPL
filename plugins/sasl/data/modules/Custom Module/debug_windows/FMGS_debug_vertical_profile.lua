@@ -174,7 +174,7 @@ local function draw_descent()
     for i, l in ipairs(legs) do
         if l.pred.is_descent then
             printed = printed + 1
-            print_single_leg(printed, l)
+            print_single_leg(printed, l, l.pred.is_tod)
         end
     end
 end

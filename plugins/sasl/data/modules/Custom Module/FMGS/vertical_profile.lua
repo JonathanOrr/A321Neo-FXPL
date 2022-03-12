@@ -482,7 +482,8 @@ local function vertical_profile_cruise_update(idx_next_wpt)
     local max_dist = approx_TOD_distance(the_big_array, last_clb_idx)  -- This is the max dist from the TOC to the TOD
 
     local cumul_dist = curr_dist
-    while i <= first_des_idx do
+    local stop_idx = computed_des_idx and computed_des_idx or first_des_idx
+    while i <= stop_idx do
         if cumul_dist >= max_dist then
             -- See comment above max_dist 
             break
@@ -500,15 +501,18 @@ local function vertical_profile_cruise_update(idx_next_wpt)
 
         local time_to_travel = dist_to_travel / m_to_nm(kts_to_ms(GS))
 
-        leg.pred.altitude = cruise_alt
-        leg.pred.mach = managed_mach
-        leg.pred.time = curr_time + time_to_travel
-        leg.pred.fuel = curr_fuel + FF * time_to_travel
-        leg.pred.vs   = 0
 
         curr_weight = curr_weight - FF * time_to_travel
         curr_dist = 0
         cumul_dist = cumul_dist + dist_to_travel
+        curr_time = curr_time + time_to_travel
+        curr_fuel = curr_fuel + FF * time_to_travel
+
+        leg.pred.altitude = cruise_alt
+        leg.pred.mach = managed_mach
+        leg.pred.vs   = 0
+        leg.pred.time = curr_time
+        leg.pred.fuel = curr_fuel
 
         i = i + 1
     end
@@ -827,10 +831,8 @@ local function vertical_profile_descent_update_step89(weight, idx)
     local upper_limit = idx == 8 and FMGS_sys.data.init.alt_speed_limit_descent[2] or FMGS_sys.data.init.crz_fl
 
     while curr_alt < upper_limit do
-
         computed_des_idx = computed_des_idx - 1
         local leg = the_big_array[computed_des_idx]
-        local MACH_LIMIT = 0
 
         -- Comply with the speed constraint if possible
         if leg.pred.prop_spd_cstr then
@@ -888,10 +890,11 @@ local function vertical_profile_descent_update_step89(weight, idx)
         if curr_alt > upper_limit and VS ~= 0 then
             -- We overshoot the target, so let's recompute the time to
             -- target:
-            time = time - (curr_alt - upper_limit) / VS * 60
+            time = time + (curr_alt - upper_limit) / VS * 60    -- get smaller, VS is negative
             -- and update distance and previous:
             leg.pred.is_partial   = true
             leg.pred.partial_dist = dist_to_next_wpt - m_to_nm(time * kts_to_ms(GS))
+
             curr_alt = upper_limit
             overshoot = true
             computed_des_idx = computed_des_idx + 1
@@ -915,12 +918,37 @@ local function vertical_profile_descent_update_step89(weight, idx)
 
         if not leg.pred.is_partial or overshoot then
             leg.pred.time     = time
-            leg.pred.fuel     = fuel_consumption
+            leg.pred.fuel     = fuel_consumption * time
         else
             leg.pred.time     = leg.pred.time + time
-            leg.pred.fuel     = leg.pred.fuel + fuel_consumption
+            leg.pred.fuel     = leg.pred.fuel + fuel_consumption * time
         end
         weight = weight + fuel_consumption * time
+    end
+
+    -- Add the TOP of DESCENT PSEUDO WPT
+    if idx == 9 then
+        local last_leg = the_big_array[computed_des_idx-1]
+        table.insert(the_big_array, computed_des_idx, {name="T/D",
+                                    computed_distance = last_leg.computed_distance - last_leg.pred.partial_dist,
+                                    pred={
+                                           is_tod = true,
+                                           is_descent = true,
+                                           altitude=upper_limit,
+                                           ias=last_leg.pred.ias,
+                                           mach=last_leg.pred.mach,
+                                           time=last_leg.pred.time,
+                                           fuel=last_leg.pred.fuel,
+                                           vs=last_leg.pred.vs,
+                                           dist_prev_wpt=last_leg.pred.partial_dist,
+                                           weight=weight
+                                        }}
+        )
+        last_leg.pred.vs = 0
+        last_leg.pred.is_descent = false
+        last_leg.pred.time = 0  -- To be recomputed by cruise
+        last_leg.pred.fuel = 0  -- To be recomputed by cruise
+        last_leg.computed_distance = last_leg.pred.partial_dist
     end
 
     return weight
@@ -973,13 +1001,6 @@ function vertical_profile_cruise_descent_ft_update()
     -- HOWEVER: it's possible that the last point is still partial (see vertical_profile_descent_update_step89)
     -- therefore we need to complete the last point time and fuel.
 
-    if the_big_array[computed_des_idx-1].pred.is_partial then
-        computed_des_idx = computed_des_idx - 1
-
-        local dist = the_big_array[computed_des_idx-1].pred.partial_dist
-        -- We consider the point before this one, and in that case we use it as a reference
-        -- for time and distance
-    end
 
 end
 
@@ -1027,6 +1048,10 @@ function vertical_profile_update()
     print("APPROX WEIGHT TOD", approx_weight_at_TOD)
 
     vertical_profile_descent_update(approx_weight_at_TOD)
+
+    local exact_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
+
+    print("EXACT WEIGHT TOD", exact_weight_at_TOD)
 
     vertical_profile_cruise_descent_ft_update()
 
