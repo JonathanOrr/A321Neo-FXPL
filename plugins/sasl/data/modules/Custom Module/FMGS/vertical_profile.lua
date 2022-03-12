@@ -23,6 +23,25 @@ include("libs/speed_helpers.lua")
 include('libs/air_helpers.lua')
 
 
+-------------------------------------------------------------------------------
+-- Helper functions
+-------------------------------------------------------------------------------
+
+function get_density_ratio(ref_alt)   -- Get density according to ISA
+    local temp_sea_level = 15+get(OTA)-air_temperature_get_ISA()
+    local press_sea_level = get(Weather_curr_press_sea_level) * 3386.38
+    local density = air_get_density(ref_alt, FMGS_sys.data.init.tropo, temp_sea_level, press_sea_level)
+    density = air_density_to_ratio(density)
+    return density
+end
+
+
+
+include('FMGS/vertical_profile_climb.lua')
+include('FMGS/vertical_profile_cruise.lua')
+include('FMGS/vertical_profile_descent.lua')
+
+
 local EARTH_GRAVITY = 9.80665
 local QUANTUM_BASE_IN_SEC_CLB = 20  -- Predictions are build with this maximum granularity (lower is possible)
 local QUANTUM_BASE_IN_SEC = 60  -- Predictions are build with this maximum granularity (lower is possible)
@@ -38,17 +57,8 @@ local computed_des_idx = nil    -- Last index of the descent that has been compu
 local file_debug = nil
 
 -------------------------------------------------------------------------------
--- Helper functions
+-- Array creation
 -------------------------------------------------------------------------------
-
-local function get_density_ratio(ref_alt)   -- Get density according to ISA
-    local temp_sea_level = 15+get(OTA)-air_temperature_get_ISA()
-    local press_sea_level = get(Weather_curr_press_sea_level) * 3386.38
-    local density = air_get_density(ref_alt, FMGS_sys.data.init.tropo, temp_sea_level, press_sea_level)
-    density = air_density_to_ratio(density)
-    return density
-end
-
 
 local function prepare_the_common_big_array_merge(array)
     if not (array and array.legs) then
@@ -169,213 +179,6 @@ local function prepare_the_common_big_array()
     end
 
 end
-
--------------------------------------------------------------------------------
--- Initial climb segments
--------------------------------------------------------------------------------
-
-local function get_takeoff_N1()
-    if get(Eng_N1_flex_temp) == 0 then
-        return eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), true, false, false)
-    else
-        return eng_N1_limit_flex(get(Eng_N1_flex_temp), get(OTA), get(Capt_Baro_Alt), true, false, false)
-    end
-end
-
-local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
-    -- This is the climb from rwy alt to rwy_alt + 400
-
-    local N1 = get_takeoff_N1()
-    local oat = get(OTA)
-    local density = get(Weather_Sigma)
-    local _, tas, mach = convert_to_eas_tas_mach(v2, rwy_alt+200)   -- Let's use +200 to stay in the middle
-    local thrust = predict_engine_thrust(mach, density, oat, rwy_alt+200, N1) * 2
-    local drag   = predict_drag_w_gf(density, tas, mach, takeoff_weight, FMGS_sys.perf.flaps or 2, true)
-    fuel_consumption = ENG.data.n1_to_FF(1, density)*2
-    return air_compute_vs(thrust,drag, takeoff_weight, tas), fuel_consumption
-end
-
-
-local function get_time_dist_from_V2_to_VSRS(rwy_alt, v2, takeoff_weight)
-    local ref_alt = rwy_alt+400
-    local oat = get(OTA)
-    local density = get_density_ratio(ref_alt)
-    local N1 = get_takeoff_N1()
-    local _, tas, mach = convert_to_eas_tas_mach(v2, ref_alt)
-    local thrust = predict_engine_thrust(mach, density, oat, ref_alt, N1) * 2
-    local drag   = predict_drag(density, tas, mach, takeoff_weight)
-    local acc = (thrust - drag) / takeoff_weight    -- Acceleration in m/s2
-
-    local time = kts_to_ms(10) / acc -- 10 knots
-    local dist = 0.5 * acc * (time^2) + kts_to_ms(v2) * time
-    fuel_consumption = ENG.data.n1_to_FF(1, density)*2
-    return time, m_to_nm(dist), fuel_consumption  -- Time, dist, fuel
-end
-
-local function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, weight)
-    local ref_alt = (end_alt+begin_alt)/2
-    local density = get_density_ratio(ref_alt)
-    local oat = get(OTA)
-    local ota_pred = air_predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
-    local _, tas, mach = convert_to_eas_tas_mach(ias, ref_alt)
-    local thrust = predict_engine_thrust(mach, density, ota_pred, ref_alt, N1) * 2
-    local drag   = predict_drag(density, tas, mach, weight)
-    local vs = air_compute_vs(thrust,drag, weight, tas)
-
-    local time = (end_alt-begin_alt) / vs * 60 -- seconds
-
-    local gs = tas_to_gs(tas, vs, 0, 0)    -- TODO Wind
-
-    fuel_consumption = ENG.data.n1_to_FF(1, density)*2
-    return time, gs * time / 3600, fuel_consumption
-end
-
-local function get_time_dist_from_VSRS_to_VACC(begin_alt, end_alt, speed, weight)
-    local N1 = get_takeoff_N1()
-
-    local time, dist, fuel = get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, speed, weight)
-
-    return time, dist, fuel
-end
-
--------------------------------------------------------------------------------
--- Climb
--------------------------------------------------------------------------------
-
-local function predict_climb_thrust_net_avail(ias,altitude, weight)
-    local oat_pred = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
-    local N1 = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
-    local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
-    local density = get_density_ratio(altitude)
-
-    local thrust_per_engine = predict_engine_thrust(mach, density, oat_pred, altitude, N1)
-
-    -- let's remove the drag now
-    local drag = predict_drag(density, tas, mach, weight)
-
-    return thrust_per_engine * 2 - drag
-end
-
-local function compute_fuel_consumption_climb(begin_alt, end_alt, begin_spd, end_spd)
-    local ref_alt = (end_alt+begin_alt)/2
-    local ref_spd = (end_spd+begin_spd)/2
-    local oat = get(OTA)
-    local oat_pred = air_predict_temperature_at_alt(oat, get(Elevation_m)*3.28084, ref_alt)
-    local N1 = eng_N1_limit_clb(oat_pred, 0, ref_alt, true, false, false)
-    local density = get_density_ratio(ref_alt)
-    local _, tas, mach = convert_to_eas_tas_mach(ref_spd, ref_alt)
-
-    fuel_consumption = ENG.data.n1_to_FF(N1/get_takeoff_N1(), density)*2
-    return fuel_consumption
-
-end
-
-local function get_target_mach_cruise(alt_feet, gross_weight)
-    local cost_index = FMGS_init_get_cost_idx()
-    if not cost_index then
-        cost_index = 0 -- Cost index default to zero
-    end
-    return math.min(0.80,alt_feet*(7.5000e-06-8.2500e-06 * cost_index/100) + 0.4875 + 0.3368 * cost_index / 100 
-           + (2.3500e-06-2.5000e-06 *cost_index/100) * gross_weight -0.1592 +0.2075 * cost_index/100);
-end
-
-local function get_target_speed_climb(altitude, gross_weight)
-    -- This function does not consider  the initial climb part or
-    -- restrictions
-    if altitude < FMGS_sys.data.init.alt_speed_limit_climb[2] then
-        return FMGS_sys.data.init.alt_speed_limit_climb[1], nil
-    end
-
-    -- Otherwise it depends on the cost index
-    local cost_index = FMGS_init_get_cost_idx()
-    if not cost_index then
-        cost_index = 0 -- Cost index default to zero
-    end
-
-    -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
-    local optimal_speed = math.min(340,0.645 * cost_index + 308)
-    local optimal_mach  = math.min(0.8, 0.765 + 0.001683333 * cost_index - 0.00007895833 * cost_index^2 + 0.000001828125 * cost_index^3 - 1.822917e-8*cost_index^4 + 6.510417e-11*cost_index^5)
-    local cruise_mach = get_target_mach_cruise(altitude, gross_weight)
-    optimal_mach = math.min(optimal_mach, cruise_mach)
-    return optimal_speed, optimal_mach
-end
-
-
--------------------------------------------------------------------------------
--- Cruise
--------------------------------------------------------------------------------
-local function predict_cruise_N1_at_alt_ias(ias,altitude, weight)
-    local oat_pred = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
-    local N1_max = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
-    local _, tas, mach = convert_to_eas_tas_mach(ias, altitude)
-    local density = get_density_ratio(altitude)
-    local drag = predict_drag(density, tas, mach, weight)
-
-
-    local N1_per_engine = predict_engine_N1(mach, density, oat_pred, altitude, drag/2)
-
-    local fuel_consumption = ENG.data.n1_to_FF(N1_per_engine/get_takeoff_N1(), density)*2
-
-    return N1_per_engine, fuel_consumption
-
-end
-
-local function predict_cruise_N1_at_alt_M(M, altitude, weight)
-    local oat_pred = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, altitude)
-    local N1_max = eng_N1_limit_clb(oat_pred, 0, altitude, true, false, false)
-    local tas = convert_to_tas(M, altitude)
-    local density = get_density_ratio(altitude)
-    local drag = predict_drag(density, tas, M, weight)
-
-
-    local N1_per_engine = predict_engine_N1(M, density, oat_pred, altitude, drag/2)
-
-    local fuel_consumption = ENG.data.n1_to_FF(N1_per_engine/get_takeoff_N1(), density)*2
-
-    return N1_per_engine, fuel_consumption
-
-end
-
-local function approx_TOD_distance()  -- This is a very rough prediction, but it's ok for just the weight
-
-    local total_legs = #the_big_array
-    local toc_to_rwy_dist = 0
-    for i=last_clb_idx,total_legs do
-        local leg = the_big_array[i]
-        toc_to_rwy_dist = toc_to_rwy_dist + (leg.computed_distance or 0)
-    end
-
-    -- we need about 100 nm at FL390 to reach 0 ft so...
-    local cruise_alt = FMGS_sys.data.init.crz_fl
-    local appprox_descent_nm = cruise_alt / 39000 * 100
-
-    toc_to_rwy_dist = toc_to_rwy_dist - appprox_descent_nm
-    if toc_to_rwy_dist <= 0 then
-        return nil  -- Too close
-    end
-
-    return toc_to_rwy_dist
-end
-
--------------------------------------------------------------------------------
--- Descent
--------------------------------------------------------------------------------
-local function get_target_speed_descent()
-    -- This function does not consider  the initial climb part or
-    -- restrictions
-
-    -- Otherwise it depends on the cost index
-    local cost_index = FMGS_init_get_cost_idx()
-    if not cost_index then
-        cost_index = 0 -- Cost index default to zero
-    end
-
-    -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
-    local optimal_speed = -0.0003333333333 * cost_index^3 + 0.0308928571429* cost_index^2 +0.7869047619048 * cost_index + 252.1142857142856
-    local optimal_mach  = -0.000003392857143 * cost_index * cost_index + 0.000716428571429 * cost_index + 0.764485714285714
-    return optimal_speed, optimal_mach
-end
-
 
 -------------------------------------------------------------------------------
 -- Main functions
@@ -676,7 +479,7 @@ local function vertical_profile_cruise_update(idx_next_wpt)
     -- NOTE: we have to compute the cruise (even if approx) before the descent
     -- or we won't know the weight at TOD!
 
-    local max_dist = approx_TOD_distance()  -- This is the max dist from the TOC to the TOD
+    local max_dist = approx_TOD_distance(the_big_array, last_clb_idx)  -- This is the max dist from the TOC to the TOD
 
     local cumul_dist = curr_dist
     while i <= first_des_idx do
@@ -713,30 +516,6 @@ local function vertical_profile_cruise_update(idx_next_wpt)
     return curr_weight
 end
 
-local function find_FDP()
-
-    -- Reset data
-    FMGS_sys.data.pred.appr.fdp_idx = nil
-    FMGS_sys.data.pred.appr.fdp_dist_to_rwy = nil
-    FMGS_sys.data.pred.appr.final_angle = 3
-
-    -- And then recompute
-    local cifp_appr = FMGS_arr_get_appr(false)
-    for i,x in ipairs(cifp_appr.legs) do
-        if not FMGS_sys.data.pred.appr.fdp_idx then
-            if x.vpath_angle and x.vpath_angle > 0 then
-                FMGS_sys.data.pred.appr.fdp_idx = i
-                FMGS_sys.data.pred.appr.final_angle = math.abs(x.vpath_angle / 100)
-                FMGS_sys.data.pred.appr.fdp_dist_to_rwy = 0 
-            end
-        else
-            -- Ok let's compute the distance with the runway (we need this later)
-            FMGS_sys.data.pred.appr.fdp_dist_to_rwy = FMGS_sys.data.pred.appr.fdp_dist_to_rwy + (x.computed_distance or 0)
-        end
-    end
-
-end
-
 local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt, TAS, mach, VS, flaps, gear)
     local excess_thrust = fpm_to_ms(VS) * (init_weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
@@ -763,18 +542,6 @@ local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt,
     local fuel_consumption = ENG.data.n1_to_FF(N1_per_engine/get_takeoff_N1(), density)*2
 
     return N1_per_engine, GS, fuel_consumption
-end
-
-local function compute_vapp(weight_at_rwy)
-    -- Then we need the Vapp speed
-    local flaps = 5  -- TODO: flaps from perf appr page
-    local VLS = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight_at_rwy, flaps, true)
-    local APPR_CORR = 5 -- TODO:
-    -- - 5kt if A/THR is ON
-    -- - 5kt if ice accretion (10kt instead of 5kt on A320 family when in CONF 3)
-    -- - 1/3 Headwind excluding gust
-    -- Cannot be < 5 or > 15
-    return VLS + APPR_CORR
 end
 
 local function approach_backupdate_legs(begin_alt, VS, dist, mach, ias_start, ias_end, GS, fuel_consumption)
