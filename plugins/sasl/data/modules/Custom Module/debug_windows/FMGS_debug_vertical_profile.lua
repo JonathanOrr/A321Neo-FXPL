@@ -200,6 +200,19 @@ local function draw_key_wpts()
             sasl.gl.drawText(Font_B612MONO_regular, 10, 290, "Distance previous WPT = " .. (l.pred.dist_prev_wpt and Round(l.pred.dist_prev_wpt,1) or "N/A") .. " nm", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
             sasl.gl.drawText(Font_B612MONO_regular, 10, 270, "Predicted weight      = " .. (l.pred.weight and math.ceil(l.pred.weight) or "N/A") .. " Kg", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
         end
+        if l.pred.is_tod then
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 450, "TOP OF DESCENT", 18, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 430, "Leg # " .. i, 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 410, "ALT  = " .. (l.pred.altitude and math.ceil(l.pred.altitude) or "N/A") .. " ft", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 390, "IAS  = " .. (l.pred.ias and math.ceil(l.pred.ias) or "N/A") .. " kts", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 370, "M    = " .. (l.pred.mach and Round(l.pred.mach,3) or "N/A"), 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            local t = l.pred.time
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 350, "TIME = " .. (t and math.floor(t/60) .. ":" .. math.floor(t%60) or "N/A") .. " (mm:ss)", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 330, "FUELc= " .. (l.pred.fuel and Round(l.pred.fuel,1) or "N/A") .. " Kg", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 310, "V/S  = " .. (l.pred.vs and Round(l.pred.vs,1) or "N/A") .. " feet/min", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 290, "Distance previous WPT = " .. (l.pred.dist_prev_wpt and Round(l.pred.dist_prev_wpt,1) or "N/A") .. " nm", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+            sasl.gl.drawText(Font_B612MONO_regular, 360, 270, "Predicted weight      = " .. (l.pred.weight and math.ceil(l.pred.weight) or "N/A") .. " Kg", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+        end
     end
 
 end

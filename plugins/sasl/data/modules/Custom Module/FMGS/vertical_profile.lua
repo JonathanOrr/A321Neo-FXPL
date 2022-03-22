@@ -633,7 +633,7 @@ local function vertical_profile_descent_update_step1(weight_at_rwy)
     -- Update the other legs
     approach_backupdate_legs(rwy_alt, VS, dist, mach, VAPP, VAPP, GS, fuel_consumption)
 
-    return fuel_consumption * time
+    return - fuel_consumption * time
 end
 
 
@@ -736,7 +736,7 @@ local function vertical_profile_descent_update_step234(weight, i_step)
 
     approach_backupdate_legs(FMGS_sys.data.pred.appr.steps[i_step-1].alt, VS, dist, mach, V_START, V_END, GS, fuel_consumption)
 
-    return fuel_consumption * time
+    return - fuel_consumption * time
 end
 
 local function vertical_profile_descent_update_step567(weight, i_step)
@@ -805,7 +805,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
 
     approach_backupdate_legs(FMGS_sys.data.pred.appr.steps[i_step-1].alt, VS, dist, mach, V_START, V_END, GS, fuel_consumption)
 
-    return fuel_consumption * time
+    return - fuel_consumption * time
 end
 
 local function vertical_profile_descent_update_step89(weight, idx)
@@ -970,7 +970,6 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
     -- 8th step: from decel point to speed limit (FL100): transition to 250 kts
     -- 9th step: from speed limit (FL100) to CRZ FL: ECON DES MACH / ECON DES SPD
 
-
     -- First of all, I need the approx weight at runway level, so let's take the one
     -- at TOD and then use the tabular data to obtain an approximation
     local curr_weight = approx_weight_at_TOD - FMGS_sys.data.init.crz_fl / 50
@@ -989,8 +988,8 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 5)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 6)
     curr_weight = curr_weight + vertical_profile_descent_update_step567(curr_weight, 7)
-    curr_weight = curr_weight + vertical_profile_descent_update_step89(curr_weight, 8)
-    curr_weight = curr_weight + vertical_profile_descent_update_step89(curr_weight, 9)
+    curr_weight = vertical_profile_descent_update_step89(curr_weight, 8)    -- Non increment version
+    curr_weight = vertical_profile_descent_update_step89(curr_weight, 9)    -- Non increment version
 
 end
 
