@@ -93,7 +93,6 @@ local function perform_FPLN_conversion(fpln)
     converted_segment_list = convert_pi(converted_segment_list)
 
     fpln.segment_curved_list = converted_segment_list
-    create_turns(fpln.segment_curved_list)
 end
 
 function update_route()
@@ -111,8 +110,6 @@ function update_route()
         -- No F/PLN requires recomputing, bye bye
         return
     end
-
-    fpln.require_recompute = false
 
     local dist, total_distance = 0, 0
     local init_pt
@@ -158,5 +155,24 @@ function update_route()
     end
 
     perform_FPLN_conversion(fpln)
+end
+
+function update_route_turns()
+    local fpln
+    if FMGS_sys.fpln.active.require_recompute then
+        fpln = FMGS_sys.fpln.active
+    end
+    if FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute then
+        fpln = FMGS_sys.fpln.temp
+    end
+
+    if not fpln then
+        -- No F/PLN requires recomputing, bye bye
+        return
+    end
+
+    fpln.require_recompute = false
+    
+    create_turns(fpln.segment_curved_list)
 end
 

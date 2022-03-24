@@ -203,7 +203,8 @@ function create_turns(old_FPLN)
         local curr = old_FPLN[i]
         local next = old_FPLN[i+1]
 
-        local speed = curr.orig_ref.cstr_speed_type and curr.orig_ref.cstr_speed_type > 0 and curr.orig_ref.cstr_speed or 180    -- TODO Speed profile
+        local speed = (curr.orig_ref.cstr_speed_type and curr.orig_ref.cstr_speed_type > 0 and curr.orig_ref.cstr_speed)
+                       or (curr.orig_ref.pred and curr.orig_ref.pred.ias) or 180
 
         if     (curr.segment_type == FMGS_COMP_SEGMENT_LINE or curr.segment_type == FMGS_COMP_SEGMENT_ENROUTE) 
            and (next.segment_type == FMGS_COMP_SEGMENT_LINE or next.segment_type == FMGS_COMP_SEGMENT_ENROUTE)

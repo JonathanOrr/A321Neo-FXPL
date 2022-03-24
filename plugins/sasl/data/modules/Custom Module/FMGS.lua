@@ -354,5 +354,8 @@ function update()
     update_limits()
     update_predictions()
 
+    update_route_turns()
+
+
     perf_measure_stop("FMGS:update()")
 end
