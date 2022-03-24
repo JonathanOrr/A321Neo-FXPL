@@ -626,8 +626,8 @@ local function vertical_profile_descent_update_step1(weight_at_rwy)
     the_big_array[computed_des_idx].pred.altitude = rwy_alt
     the_big_array[computed_des_idx].pred.ias      = VAPP
     the_big_array[computed_des_idx].pred.mach     = mach
-    the_big_array[computed_des_idx].pred.time     = 0
-    the_big_array[computed_des_idx].pred.fuel     = 0
+    the_big_array[computed_des_idx].pred.time     = -time
+    the_big_array[computed_des_idx].pred.fuel     = -fuel_consumption * time
     the_big_array[computed_des_idx].pred.vs       = VS
 
     -- Update the other legs
@@ -993,6 +993,54 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
 
 end
 
+function vertical_profile_descent_add_pseudo()
+    -- This function adds the pseudo waypoints for the descent (we add all of them even if
+    -- not displayed by the ND/MCDU)
+    -- We start from the runway and we go back up
+    local end_i = #the_big_array
+    local steps_i = 1
+
+    local dist_from_rwy = 0
+
+    while end_i > 1 do -- The condition doesn't matter, we exit for the `break`
+        local leg = the_big_array[end_i]
+        local prev_leg = the_big_array[end_i-1]
+
+        dist_from_rwy = dist_from_rwy + (leg.computed_distance or 0)
+
+        while dist_from_rwy > - FMGS_sys.data.pred.appr.steps[steps_i].dist do
+
+            local perc
+            if leg.computed_distance > 0 then
+                perc = (dist_from_rwy + FMGS_sys.data.pred.appr.steps[steps_i].dist) / leg.computed_distance
+            else 
+                perc = 0 -- This in theory is not possible
+            end
+
+            FMGS_sys.data.pred.appr.steps[steps_i].ref_leg  = prev_leg
+            FMGS_sys.data.pred.appr.steps[steps_i].ref_perc = perc
+
+            FMGS_sys.data.pred.appr.steps[steps_i].fuel = Math_lerp(prev_leg.pred.fuel, leg.pred.fuel, perc)
+            FMGS_sys.data.pred.appr.steps[steps_i].time = Math_lerp(prev_leg.pred.time, leg.pred.time, perc)
+            
+
+            steps_i = steps_i + 1
+            if steps_i == 8 then
+                break
+            end
+        end
+
+        if steps_i == 8 then
+            break
+        end
+
+        end_i = end_i - 1
+    end
+
+
+
+end
+
 function vertical_profile_cruise_descent_ft_update()
     -- From the first descent point (computed_des_idx, this time for real)
     -- we have to update fuel and time from that point on. The data on each
@@ -1064,6 +1112,7 @@ function vertical_profile_update()
     local exact_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
 
     vertical_profile_cruise_descent_ft_update()
+    vertical_profile_descent_add_pseudo()
 
 
 end
