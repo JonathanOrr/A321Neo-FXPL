@@ -1,12 +1,12 @@
 
 local small_triangle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/small_triangle.png")
-local boc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/boc.png")
-local tod = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/tod.png")
-local toc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/toc.png")
-local bod = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/bod.png")
-local intercept = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/intercept.png")
-local spdchange = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/spdchange.png")
-local hold = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/hold.png")
+local boc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/constraints/boc.png")
+local tod = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/constraints/tod.png")
+local toc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/constraints/toc.png")
+local bod = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/constraints/bod.png")
+local intercept = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/constraints/intercept.png")
+local spdchange = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/constraints/spdchange.png")
+local hold = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/constraints/hold.png")
 
 
 function ND_DRAWING_dashed_arcs(x,y, radius, dashes_width, dashes_length,space_length,start_angle, arc_angle, flexible_spaces, starting_is_space, ending_is_space, colour)
