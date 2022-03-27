@@ -312,6 +312,10 @@ function draw_vprof()
     elseif curr_subpage == 6 then
         draw_key_wpts()
     end
+    if FMGS_sys.data.pred.invalid then
+        sasl.gl.drawText(Font_B612MONO_regular, 650, 490, "Invalid Vertical Profile.", 16, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+    end
+
 end
 
 function update_vprof()
