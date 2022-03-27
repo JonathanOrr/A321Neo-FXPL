@@ -284,8 +284,15 @@ function vertical_profile_climb_update()
 
     
     while traveled_nm > 0 do    -- How many WPTs we overflown during takeoff phase?
+
         i = i + 1
         traveled_nm = traveled_nm - the_big_array[i].computed_distance
+        -- We need to add some predictions here, nobody cares, it's just
+        -- for the display in the MCDU
+        local _,_,v2 = FMGS_perf_get_v_speeds()
+        the_big_array[i].pred.time = curr_time
+        the_big_array[i].pred.ias  = 2
+
     end
 
     curr_dist = traveled_nm + the_big_array[i].computed_distance
