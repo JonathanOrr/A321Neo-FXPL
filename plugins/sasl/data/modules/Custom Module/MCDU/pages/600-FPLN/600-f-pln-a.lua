@@ -16,6 +16,12 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
+local function time_beautify(time_in_sec)
+    local hours   = math.floor(time_in_sec / 3600)
+    local minutes = math.floor((time_in_sec-hours*3600) / 60)
+    return Fwd_string_fill(hours.."", "0", 2) .. Fwd_string_fill(minutes.."", "0", 2)
+end
+
 -------------------------------------------------------------------------------
 -- DEPARTURE
 -------------------------------------------------------------------------------
@@ -226,8 +232,9 @@ function THIS_PAGE:render_list(mcdu_data)
                 last_spd_cstr_value = nil
             end
             local distance = x.computed_distance
+            local time = x.pred and x.pred.time and time_beautify(x.pred.time) or "----"
             self:add_f(mcdu_data, function(line_id)
-                THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
+                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
             end, x)
         else
             local distance = x.computed_distance
@@ -253,7 +260,8 @@ function THIS_PAGE:render_list(mcdu_data)
             end
             local name = x.id or "(MAN)"
             self:add_f(mcdu_data, function(line_id)
-                THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
+                local time = x.pred and time_beautify(x.pred.time) or "----"
+                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
             end, x)
         end
     end
