@@ -444,7 +444,6 @@ function vertical_profile_climb_update()
 end
 
 local function vertical_profile_cruise_update(idx_next_wpt)
-    print("idx_next_wpt", idx_next_wpt)
     local TC = the_big_array[idx_next_wpt-1]
     local i = idx_next_wpt
     local cruise_alt = FMGS_sys.data.init.crz_fl
@@ -463,10 +462,7 @@ local function vertical_profile_cruise_update(idx_next_wpt)
 
     local D = leg.computed_distance or 0 -- This is the distance from the TOC to the first leg
 
-    print("curr_time", curr_time, "curr_fuel", curr_fuel, "curr_dist", curr_dist, "D", D)
-
     if curr_dist > D then
-        print("curr_dist > D")
         -- This may happen if we reached the TC and the same time the next waypoint. In that case, the
         -- previous function does not update the idx next wpt, so we have to do that
         leg.pred.altitude = cruise_alt
@@ -498,7 +494,6 @@ local function vertical_profile_cruise_update(idx_next_wpt)
         leg.pred.is_climb = false -- we need to reset the is_climb, because now it's in the cruise phase
 
         D = leg.computed_distance or 0
-        print(i, stop_idx, "D", D)
         local dist_to_travel = D - curr_dist
         local managed_mach = get_target_mach_cruise(cruise_alt, curr_weight)
         local N1, FF = predict_cruise_N1_at_alt_M(managed_mach, cruise_alt, curr_weight)
@@ -838,16 +833,9 @@ local function vertical_profile_descent_update_step89(weight, idx)
 
     local initial_dist_to_consider = 0
 
-    print("==================")
-    print("Running ", idx, "weight is", weight)
-    print("V START: ", V_START)
-    print("V END: ", V_END)
-
-    print("Is Partial? ", the_big_array[computed_des_idx-1].pred.is_partial)
 
     if the_big_array[computed_des_idx-1].pred.is_partial then
         initial_dist_to_consider = the_big_array[computed_des_idx-1].pred.partial_dist
-        print("Partial dist ", initial_dist_to_consider)
     end
 
     local upper_limit = idx == 8 and FMGS_sys.data.init.alt_speed_limit_descent[2] or FMGS_sys.data.init.crz_fl
@@ -858,16 +846,12 @@ local function vertical_profile_descent_update_step89(weight, idx)
         computed_des_idx = computed_des_idx - 1
         local leg = the_big_array[computed_des_idx]
 
-        print("------------")
-        print("WPT ", computed_des_idx .. "/" .. #the_big_array, leg.id)
-
         -- Comply with the speed constraint if possible
         if leg.pred.prop_spd_cstr then
             V_START = math.min(V_START, leg.pred.prop_spd_cstr)
         end
         V_START = math.max(V_START, V_END)
         local V_AVG = (V_START+V_END)/2
-        print("V AVG: ", V_AVG)
 
         local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, curr_alt)
 
@@ -912,23 +896,13 @@ local function vertical_profile_descent_update_step89(weight, idx)
             time  = nm_to_m(dist_to_next_wpt) / kts_to_ms(GS)
         end 
 
-        print("TAS: ", TAS)
-        print("Mach: ", mach)
-        print("Decel we need: ", decel_we_need)
-        print("Dist to next WPT: ", dist_to_next_wpt)
-        print("START ALT: ", curr_alt)
-        print("V/S: ", VS)
-        print("TIME: ", time)
         curr_alt = curr_alt - VS * time / 60
-        print("END ALT: ", curr_alt)
 
         -- Update the CLIMB/DESCENT status checking it's not invalid
         if leg.pred.is_climb then
-            print("ERROR")
             FMGS_sys.data.pred.invalid = true
             return weight
         else
-            print("SET DESCENT")
             leg.pred.is_descent = true
         end
 
@@ -945,7 +919,6 @@ local function vertical_profile_descent_update_step89(weight, idx)
 
             curr_alt = upper_limit
             overshoot = true
-            print("OVERSHOOT")
         end
 
         V_START = V_END + ms_to_kts(decel_we_need * time)
@@ -980,7 +953,6 @@ local function vertical_profile_descent_update_step89(weight, idx)
         local next_leg = the_big_array[computed_des_idx]
         local prev_leg = the_big_array[computed_des_idx+1]
         computed_des_idx = computed_des_idx + 1
-        print("TOD IS @ ", computed_des_idx)
         local _,_,tod_mach = convert_to_eas_tas_mach(V_START, curr_alt)
         table.insert(the_big_array, computed_des_idx, {name="T/D",
                                     computed_distance = prev_leg.computed_distance - (next_leg.pred.partial_dist or 0),
@@ -1102,10 +1074,8 @@ function vertical_profile_cruise_descent_ft_update()
     -- therefore we need to complete the last point time and fuel.
 
     local start_leg = the_big_array[computed_des_idx]
-    print("vertical_profile_cruise_descent_ft_update", "START LEG", computed_des_idx, start_leg.name, start_leg.id)
     local fuel_cumulative = start_leg.pred.fuel
     local time_cumulative = start_leg.pred.time
-    print("vertical_profile_cruise_descent_ft_update", "START LEG FUEL", fuel_cumulative, "START LEG TIME",time_cumulative  )
 
     if not start_leg.pred.is_tod then
         logWarning("TOD is not the TOD, what happened here? This is a bug. computed_des_idx=", computed_des_idx)
