@@ -409,6 +409,7 @@ function vertical_profile_climb_update()
             leg.pred.time     = curr_time
             leg.pred.fuel     = total_fuel_cons
             leg.pred.vs       = VS
+            leg.pred.cms_segment = target_mach and (target_mach - new_mach > 0.005)
 
             if i < total_legs then
                 -- We didn't reach the TOC, so let's be sure the next wpt is
@@ -519,6 +520,7 @@ local function vertical_profile_cruise_update(idx_next_wpt)
 
         leg.pred.altitude = cruise_alt
         leg.pred.mach = managed_mach
+        leg.pred.cms_segment = true
         leg.pred.vs   = 0
         leg.pred.time = curr_time
         leg.pred.fuel = curr_fuel

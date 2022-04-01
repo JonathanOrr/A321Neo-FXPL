@@ -16,11 +16,6 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
-local function time_beautify(time_in_sec)
-    local hours   = math.floor(time_in_sec / 3600)
-    local minutes = math.floor((time_in_sec-hours*3600) / 60)
-    return Fwd_string_fill(hours.."", "0", 2) .. Fwd_string_fill(minutes.."", "0", 2)
-end
 
 -------------------------------------------------------------------------------
 -- DEPARTURE
@@ -44,14 +39,26 @@ function THIS_PAGE:render_dest(mcdu_data)
         local rwy, sibl = FMGS_arr_get_rwy(false)
         arr_id = arr_id .. (sibl and rwy.sibl_name or rwy.name)
     end
-    local trip_time = (FMGS_perf_get_pred_trip_time() and FMGS_perf_get_pred_trip_time() or "----")
+    local trip_time = mcdu_time_beautify(FMGS_perf_get_pred_trip_time())
     self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8).. trip_time, MCDU_LARGE)
 
     local trip_dist_num = FMGS_perf_get_pred_trip_dist()
     local trip_dist = trip_dist_num and math.ceil(trip_dist_num) or "----"
-    local efob = (FMGS_perf_get_pred_trip_efob() and FMGS_perf_get_pred_trip_efob() or "----")
+    local efob = FMGS_perf_get_pred_trip_efob() and Round_fill(FMGS_perf_get_pred_trip_efob(), 1) or "----"
     self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6), MCDU_LARGE)
 
+end
+
+local function render_altitude(x)
+    if not x then
+        return "-----"
+    end
+
+    if x > FMGS_perf_get_current_trans_alt() then
+        return "FL" .. Fwd_string_fill(tostring(math.ceil(x/100)), "0", 3)
+    else
+        return tostring(math.ceil(x))
+    end
 end
 
 -------------------------------------------------------------------------------
@@ -195,6 +202,28 @@ local function get_proc_name(mcdu_data,obj)
     return ""         
 end
 
+local function get_spd_alt_cstr(x)
+    local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
+    local spd_cstr = ""
+    if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
+        spd_cstr = tostring(x.cstr_speed)
+    end
+
+    if x.pred and x.pred.ias then
+        spd_cstr = tostring(math.ceil(x.pred.ias))
+        if x.pred.cms_segment then
+            spd_cstr = "." .. math.ceil(x.pred.mach*100)
+        end
+    end
+    
+    if x.pred and x.pred.altitude then
+        alt_cstr = render_altitude(x.pred.altitude)
+        alt_cstr_col = nil -- Default one
+    end
+
+    return spd_cstr, alt_cstr, alt_cstr_col
+end
+
 function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
@@ -219,48 +248,37 @@ function THIS_PAGE:render_list(mcdu_data)
                 proc = get_proc_name(mcdu_data,x)
             end
 
-            local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
-            local spd_cstr = ""
-            if x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
-                spd_cstr  = tostring(x.cstr_speed)
-                if last_spd_cstr_value == spd_cstr then
-                    spd_cstr = "\""
-                else
-                    last_spd_cstr_value = spd_cstr
-                end 
-            else
+            local spd_cstr, alt_cstr, alt_cstr_col = get_spd_alt_cstr(x)
+            
+            if spd_cstr == "" then
                 last_spd_cstr_value = nil
+            elseif last_spd_cstr_value == spd_cstr then
+                spd_cstr = "\""
+            else
+                last_spd_cstr_value = spd_cstr
             end
+
             local distance = x.computed_distance
-            local time = x.pred and x.pred.time and time_beautify(x.pred.time) or "----"
+            local time = x.pred and x.pred.time and mcdu_time_beautify(x.pred.time) or "----"
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
             end, x)
         else
             local distance = x.computed_distance
             local proc = x.airway_name or ""
-            local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
-            local spd_cstr = ""
-            if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
-                spd_cstr  = tostring(x.cstr_speed)
-                if last_spd_cstr_value == spd_cstr then
-                    spd_cstr = "\""
-                else
-                    last_spd_cstr_value = spd_cstr
-                end 
-            elseif x.cstr_speed_mach then
-                spd_cstr  = "." .. tostring(math.floor(x.cstr_speed_mach*100))
-                if last_spd_cstr_value == spd_cstr then
-                    spd_cstr = "\""
-                else
-                    last_spd_cstr_value = spd_cstr
-                end 
-            else
+            local spd_cstr, alt_cstr, alt_cstr_col = get_spd_alt_cstr(x)
+            
+            if spd_cstr == "" then
                 last_spd_cstr_value = nil
+            elseif last_spd_cstr_value == spd_cstr then
+                spd_cstr = "\""
+            else
+                last_spd_cstr_value = spd_cstr
             end
+
             local name = x.id or "(MAN)"
             self:add_f(mcdu_data, function(line_id)
-                local time = x.pred and time_beautify(x.pred.time) or "----"
+                local time = x.pred and mcdu_time_beautify(x.pred.time) or "----"
                 THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
             end, x)
         end
@@ -289,7 +307,7 @@ function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, distance, trip_
     trip_time = trip_time or "----"
 
     local left_side  = arr_id
-    local ctr_side   = mcdu_format_force_to_small(" " .. trip_time .. "  ---")
+    local ctr_side   = mcdu_format_force_to_small(" " .. mcdu_time_beautify(trip_time) .. "  ---")
     local right_side = mcdu_format_force_to_small("/" .. Fwd_string_fill(tostring(arr_alt)," ", 6))
 
     local dist_text=""
