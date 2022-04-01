@@ -1113,6 +1113,12 @@ function vertical_profile_cruise_descent_ft_update()
 
 end
 
+local function update_overall_predictions()
+    FMGS_sys.data.pred.trip_time = the_big_array[#the_big_array].pred.time
+    FMGS_sys.data.pred.trip_fuel = the_big_array[#the_big_array].pred.fuel / 1000
+    FMGS_sys.data.pred.trip_efob = (FMGS_sys.data.init.weights.block_fuel - FMGS_sys.data.pred.trip_fuel / 1000)
+end
+
 function vertical_profile_update()
 
     -- Start with reset
@@ -1162,6 +1168,8 @@ function vertical_profile_update()
     vertical_profile_cruise_descent_ft_update()
     --vertical_profile_descent_add_pseudo()
 
+    -- Update main predictions like overall time, etc.
+    update_overall_predictions()
 
 end
 
