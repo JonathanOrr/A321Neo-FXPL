@@ -344,6 +344,7 @@ function vertical_profile_climb_update()
         end
 
         local new_alt, new_spd, new_mach, GS, VS
+        local cms_segment = false
         local emergency_out = 0 -- This counter is to exit in case of an infinite loop (shouldn't happen, but, you know...)
         repeat
             emergency_out = emergency_out + 1
@@ -356,6 +357,7 @@ function vertical_profile_climb_update()
                                                     -- the accelerations
                 A = A - ACC_MACH_REDUCTION
                 thrust_available = thrust_available - (-ACC_MACH_REDUCTION * curr_weight)   -- Reduce speed to remain in valid mach when climbing
+                cms_segment = true
             end
 
             local _, TAS, _ = convert_to_eas_tas_mach(curr_spd, curr_alt)
@@ -409,7 +411,7 @@ function vertical_profile_climb_update()
             leg.pred.time     = curr_time
             leg.pred.fuel     = total_fuel_cons
             leg.pred.vs       = VS
-            leg.pred.cms_segment = target_mach and (target_mach - new_mach > 0.005)
+            leg.pred.cms_segment = cms_segment
 
             if i < total_legs then
                 -- We didn't reach the TOC, so let's be sure the next wpt is

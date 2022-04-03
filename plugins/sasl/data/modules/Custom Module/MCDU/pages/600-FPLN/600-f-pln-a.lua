@@ -173,8 +173,10 @@ local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name)
             table.insert(list_messages, i, {id=name, 
                                             pred={  time=pseudo_wpt.time, 
                                                     ias=pseudo_wpt.ias, 
+                                                    mach=pseudo_wpt.mach,
                                                     altitude=pseudo_wpt.altitude, 
-                                                    fuel=pseudo_wpt.fuel
+                                                    fuel=pseudo_wpt.fuel,
+                                                    cms_segment = true
                                             },
                                             computed_distance = pseudo_wpt.dist_prev_wpt,
                                             point_type=POINT_TYPE_PSUEDO}
@@ -238,9 +240,13 @@ local function get_spd_alt_cstr(x)
         spd_cstr = tostring(x.cstr_speed)
     end
 
-    if x.pred and x.pred.ias then
-        spd_cstr = tostring(math.ceil(x.pred.ias))
-        if x.pred.cms_segment then
+    if x.pred then
+        if x.pred.ias then
+            spd_cstr = tostring(math.ceil(x.pred.ias))
+            if x.pred.cms_segment and x.pred.mach then
+                spd_cstr = "." .. math.ceil(x.pred.mach*100)
+            end
+        elseif x.pred.mach then
             spd_cstr = "." .. math.ceil(x.pred.mach*100)
         end
     end
