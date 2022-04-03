@@ -434,6 +434,17 @@ function vertical_profile_climb_update()
         i = i + 1
     end
 
+    FMGS_sys.data.pred.climb.toc_wpt = {
+        ias=curr_spd,
+        mach=curr_mach,
+        time=curr_time,
+        fuel=total_fuel_cons,
+        altitude=cruise_alt,
+        prev_wpt=the_big_array[i],
+        dist_prev_wpt=curr_dist,
+        weight=curr_weight
+    }
+
     table.insert(the_big_array, i, {name="T/C", 
                                     pred={
                                            is_toc = true,
@@ -963,6 +974,16 @@ local function vertical_profile_descent_update_step89(weight, idx)
         local prev_leg = the_big_array[computed_des_idx+1]
         computed_des_idx = computed_des_idx + 1
         local _,_,tod_mach = convert_to_eas_tas_mach(V_START, curr_alt)
+
+        FMGS_sys.data.pred.descent.tod_wpt = {
+            ias=V_START,
+            mach=tod_mach,
+            altitude=upper_limit,
+            prev_wpt=the_big_array[computed_des_idx],
+            dist_prev_wpt=next_leg.pred.partial_dist,
+            weight=weight
+        }
+
         table.insert(the_big_array, computed_des_idx, {name="T/D",
                                     computed_distance = prev_leg.computed_distance - (next_leg.pred.partial_dist or 0),
                                     pred={
@@ -1112,6 +1133,9 @@ function vertical_profile_cruise_descent_ft_update()
 
         i = i + 1
     end
+
+    FMGS_sys.data.pred.descent.tod_wpt.time = the_big_array[computed_des_idx+1].pred.time
+    FMGS_sys.data.pred.descent.tod_wpt.fuel = the_big_array[computed_des_idx+1].pred.fuel
 
 end
 

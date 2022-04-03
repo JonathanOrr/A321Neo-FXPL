@@ -77,7 +77,12 @@ FMGS_sys.data = {
         },
 
         climb = {
-            total_fuel_kgs = nil
+            total_fuel_kgs = nil,
+            toc_wpt = nil
+        },
+
+        descent = {
+            tod_wpt = nil
         },
 
         appr = {

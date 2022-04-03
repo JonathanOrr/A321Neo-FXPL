@@ -163,6 +163,32 @@ function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
 
 end
 
+local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name)
+    if not pseudo_wpt then
+        return
+    end
+    for i,x in ipairs(list_messages) do
+        if x == pseudo_wpt.prev_wpt then
+            list_messages[i].temp_computed_distance = list_messages[i].computed_distance - pseudo_wpt.dist_prev_wpt
+            table.insert(list_messages, i, {id=name, 
+                                            pred={  time=pseudo_wpt.time, 
+                                                    ias=pseudo_wpt.ias, 
+                                                    altitude=pseudo_wpt.altitude, 
+                                                    fuel=pseudo_wpt.fuel
+                                            },
+                                            computed_distance = pseudo_wpt.dist_prev_wpt,
+                                            point_type=POINT_TYPE_PSUEDO}
+                        )
+            break   -- This is super important, otherwise inifnite loop will occur
+        end
+    end
+end
+
+function THIS_PAGE:prepare_list_pseudo(mcdu_data, list_messages)
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_toc(), "(T/C)")
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_tod(), "(T/D)")
+end
+
 function THIS_PAGE:prepare_list(mcdu_data)
     local list_messages = {
         {invalid=true} -- First one is always empty (it represents the departure airport)
@@ -179,6 +205,9 @@ function THIS_PAGE:prepare_list(mcdu_data)
     end
 
     THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
+
+    THIS_PAGE:prepare_list_pseudo(mcdu_data, list_messages)
+
 
     return list_messages
 end
@@ -240,7 +269,7 @@ function THIS_PAGE:render_list(mcdu_data)
              -- NOP -- This is normal: in some cases we add a non existent line
                     -- to the array (see prepare_list)
             last_spd_cstr_value = nil
-        elseif x.point_type ~= POINT_TYPE_LEG then
+        elseif x.point_type ~= POINT_TYPE_LEG and x.point_type ~= POINT_TYPE_PSUEDO then
             local name, proc = cifp_convert_leg_name(x)
             x.id = name -- This is necessary for the LAT REV page
 
@@ -258,13 +287,13 @@ function THIS_PAGE:render_list(mcdu_data)
                 last_spd_cstr_value = spd_cstr
             end
 
-            local distance = x.computed_distance
+            local distance = x.temp_computed_distance or x.computed_distance
             local time = x.pred and x.pred.time and mcdu_time_beautify(x.pred.time) or "----"
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
             end, x)
         else
-            local distance = x.computed_distance
+            local distance = x.temp_computed_distance or x.computed_distance
             local proc = x.airway_name or ""
             local spd_cstr, alt_cstr, alt_cstr_col = get_spd_alt_cstr(x)
             

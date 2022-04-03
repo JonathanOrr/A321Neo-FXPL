@@ -1004,6 +1004,14 @@ function FMGS_perf_get_pred_trip_efob()
     return FMGS_sys.data.pred.trip_efob
 end
 
+function FMGS_pred_get_toc()
+    return FMGS_sys.data.pred.climb.toc_wpt
+end
+
+function FMGS_pred_get_tod()
+    return FMGS_sys.data.pred.descent.tod_wpt
+end
+
 
 -------------------------------------------------------------------------------
 -- Route
