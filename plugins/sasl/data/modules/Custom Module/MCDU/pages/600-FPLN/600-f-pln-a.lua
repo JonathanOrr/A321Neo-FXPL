@@ -92,7 +92,8 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
             dist_text = Round(distance, 0) .. (i == 2 and "NM" or "  ")
         end
         dist_text = Fwd_string_fill(dist_text, " ", 6) .. "   "
-        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. proc_name, MCDU_SMALL, ECAM_WHITE)
+        local color_proc_name = proc_name:match("%(%w*%)") and ECAM_GREEN or ECAM_WHITE -- If (SPD) or similar, use green
+        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. proc_name, MCDU_SMALL, color_proc_name)
         self:set_line(mcdu_data, MCDU_RIGHT, i, brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and mcdu_data.page_data[600].curr_idx == 1) and ECAM_WHITE or main_col)
     end
     
@@ -163,7 +164,7 @@ function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
 
 end
 
-local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name)
+local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper_name)
     if not pseudo_wpt then
         return
     end
@@ -171,6 +172,7 @@ local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name)
         if x == pseudo_wpt.prev_wpt then
             list_messages[i].temp_computed_distance = list_messages[i].computed_distance - pseudo_wpt.dist_prev_wpt
             table.insert(list_messages, i, {id=name, 
+                                            airway_name=upper_name, -- May be nil
                                             pred={  time=pseudo_wpt.time, 
                                                     ias=pseudo_wpt.ias, 
                                                     mach=pseudo_wpt.mach,
@@ -188,6 +190,8 @@ end
 
 function THIS_PAGE:prepare_list_pseudo(mcdu_data, list_messages)
     prepare_add_generic_pseudo(list_messages, FMGS_pred_get_toc(), "(T/C)")
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_climb_lim(), "(LIM)", "(SPD)")
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_descent_lim(), "(LIM)", "(SPD)")
     prepare_add_generic_pseudo(list_messages, FMGS_pred_get_tod(), "(T/D)")
 end
 

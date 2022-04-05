@@ -386,6 +386,23 @@ function vertical_profile_climb_update()
         end
         -- Let's scompute the fuel consumption in this period
         local fuel_consump = compute_fuel_consumption_climb(curr_alt, new_alt, curr_spd, new_spd)   --[kg/s]
+
+
+        if  curr_alt < FMGS_sys.data.init.alt_speed_limit_climb[2] and
+            new_alt >= FMGS_sys.data.init.alt_speed_limit_climb[2] then
+                -- Uh, in this case we have to add the (SPD)/(LIM) pseudo waypoint
+            local ratio = (FMGS_sys.data.init.alt_speed_limit_climb[2]-curr_alt)/(new_alt-curr_alt)
+            FMGS_sys.data.pred.climb.lim_wpt = {
+                ias=FMGS_sys.data.init.alt_speed_limit_climb[1],
+                time=curr_time + Q*ratio,
+                fuel=total_fuel_cons + fuel_consump * Q * ratio,
+                altitude=FMGS_sys.data.init.alt_speed_limit_climb[2],
+                prev_wpt=the_big_array[i],
+                dist_prev_wpt=curr_dist+ m_to_nm(kts_to_ms(GS)) * Q * ratio,
+                weight=curr_weight - fuel_consump * Q * ratio 
+            }
+        end
+
         total_fuel_cons = total_fuel_cons + fuel_consump * Q
         curr_weight = curr_weight - fuel_consump * Q    -- [kg]
 
@@ -966,12 +983,26 @@ local function vertical_profile_descent_update_step89(weight, idx)
         weight = weight + fuel_consumption * time
     end
 
-    -- Add the TOP of DESCENT PSEUDO WPT
+    if idx == 8 then
+        -- Uh, in this case we have to add the (SPD)/(LIM) pseudo waypoint
+        local prev_alt = the_big_array[computed_des_idx+1].pred.altitude
+        local ratio = (FMGS_sys.data.init.alt_speed_limit_descent[2]-prev_alt)/(curr_alt-prev_alt)
+        FMGS_sys.data.pred.descent.lim_wpt = {
+            ias=V_START,
+            altitude=upper_limit,
+            time = Math_lerp(the_big_array[computed_des_idx].pred.time, the_big_array[computed_des_idx+1].pred.time, ratio),
+            fuel = Math_lerp(the_big_array[computed_des_idx].pred.fuel, the_big_array[computed_des_idx+1].pred.fuel, ratio),
+            dist_prev_wpt = the_big_array[computed_des_idx].pred.partial_dist * ratio,
+            prev_wpt=the_big_array[computed_des_idx+1],
+        }
+    end
+
+    
     if idx == 8 then
         computed_des_idx = computed_des_idx + 1
         local next_leg = the_big_array[computed_des_idx-1]
         next_leg.pred.ias = V_START      
-    elseif idx == 9 then
+    elseif idx == 9 then -- Add the TOP of DESCENT PSEUDO WPT
         local next_leg = the_big_array[computed_des_idx]
         local prev_leg = the_big_array[computed_des_idx+1]
         computed_des_idx = computed_des_idx + 1
@@ -1132,6 +1163,11 @@ function vertical_profile_cruise_descent_ft_update()
 
         the_big_array[i].pred.fuel = fuel_cumulative
         the_big_array[i].pred.time = time_cumulative
+
+        if i < end_i and FMGS_sys.data.pred.descent.lim_wpt.prev_wpt == the_big_array[i+1] then
+            FMGS_sys.data.pred.descent.lim_wpt.fuel = FMGS_sys.data.pred.descent.lim_wpt.fuel + fuel_cumulative
+            FMGS_sys.data.pred.descent.lim_wpt.time = FMGS_sys.data.pred.descent.lim_wpt.time + time_cumulative
+        end
 
         i = i + 1
     end

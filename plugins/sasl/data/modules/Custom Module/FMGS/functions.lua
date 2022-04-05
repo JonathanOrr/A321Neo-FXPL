@@ -1012,6 +1012,13 @@ function FMGS_pred_get_tod()
     return FMGS_sys.data.pred.descent.tod_wpt
 end
 
+function FMGS_pred_get_climb_lim()
+    return FMGS_sys.data.pred.climb.lim_wpt
+end
+
+function FMGS_pred_get_descent_lim()
+    return FMGS_sys.data.pred.descent.lim_wpt
+end
 
 -------------------------------------------------------------------------------
 -- Route

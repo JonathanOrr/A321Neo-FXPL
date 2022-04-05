@@ -78,11 +78,13 @@ FMGS_sys.data = {
 
         climb = {
             total_fuel_kgs = nil,
+            lim_wpt = nil, -- The 10000ft/250kts point
             toc_wpt = nil
         },
 
         descent = {
-            tod_wpt = nil
+            tod_wpt = nil,
+            lim_wpt = nil, -- The 10000ft/250kts point
         },
 
         appr = {
