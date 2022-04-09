@@ -1020,6 +1020,10 @@ function FMGS_pred_get_descent_lim()
     return FMGS_sys.data.pred.descent.lim_wpt
 end
 
+function FMGS_pred_get_decel_point()
+    return FMGS_sys.data.pred.appr.steps[#FMGS_sys.data.pred.appr.steps] 
+end
+
 -------------------------------------------------------------------------------
 -- Route
 -------------------------------------------------------------------------------

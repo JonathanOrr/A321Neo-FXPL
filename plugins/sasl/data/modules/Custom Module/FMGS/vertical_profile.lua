@@ -837,15 +837,19 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local dist = m_to_nm(kts_to_ms(GS) * time)
 
     -- I can now update the last waypoint
-    FMGS_sys.data.pred.appr.steps[i_step].time  = FMGS_sys.data.pred.appr.steps[i_step-1].time + time
-    FMGS_sys.data.pred.appr.steps[i_step].dist  = FMGS_sys.data.pred.appr.steps[i_step-1].dist + dist
-    FMGS_sys.data.pred.appr.steps[i_step].fuel  = FMGS_sys.data.pred.appr.steps[i_step-1].fuel + fuel_consumption * time
-    FMGS_sys.data.pred.appr.steps[i_step].N1    = N1_minimum
-    FMGS_sys.data.pred.appr.steps[i_step].ias   = V_START
-    FMGS_sys.data.pred.appr.steps[i_step].alt   = FMGS_sys.data.pred.appr.steps[i_step-1].alt + VS * time / 60
-    FMGS_sys.data.pred.appr.steps[i_step].vs    = VS
+    FMGS_sys.data.pred.appr.steps[i_step].time    = FMGS_sys.data.pred.appr.steps[i_step-1].time + time
+    FMGS_sys.data.pred.appr.steps[i_step].dist    = FMGS_sys.data.pred.appr.steps[i_step-1].dist + dist
+    FMGS_sys.data.pred.appr.steps[i_step].fuel    = FMGS_sys.data.pred.appr.steps[i_step-1].fuel + fuel_consumption * time
+    FMGS_sys.data.pred.appr.steps[i_step].N1      = N1_minimum
+    FMGS_sys.data.pred.appr.steps[i_step].ias     = V_START
+    FMGS_sys.data.pred.appr.steps[i_step].alt     = FMGS_sys.data.pred.appr.steps[i_step-1].alt + VS * time / 60
+    FMGS_sys.data.pred.appr.steps[i_step].vs      = VS
 
     approach_backupdate_legs(FMGS_sys.data.pred.appr.steps[i_step-1].alt, VS, dist, mach, V_START, V_END, GS, fuel_consumption)
+
+    -- This is needed by the MCDU to know where is the DECEL point
+    FMGS_sys.data.pred.appr.steps[i_step].prev_wpt = the_big_array[computed_des_idx]
+    FMGS_sys.data.pred.appr.steps[i_step].dist_prev_wpt = the_big_array[computed_des_idx].pred.partial_dist
 
     return - fuel_consumption * time
 end
@@ -1164,6 +1168,7 @@ function vertical_profile_cruise_descent_ft_update()
         the_big_array[i].pred.fuel = fuel_cumulative
         the_big_array[i].pred.time = time_cumulative
 
+        -- Update of the pseudo waypoints fuel and time
         if i < end_i and FMGS_sys.data.pred.descent.lim_wpt.prev_wpt == the_big_array[i+1] then
             FMGS_sys.data.pred.descent.lim_wpt.fuel = FMGS_sys.data.pred.descent.lim_wpt.fuel + fuel_cumulative
             FMGS_sys.data.pred.descent.lim_wpt.time = FMGS_sys.data.pred.descent.lim_wpt.time + time_cumulative
@@ -1174,6 +1179,20 @@ function vertical_profile_cruise_descent_ft_update()
 
     FMGS_sys.data.pred.descent.tod_wpt.time = the_big_array[computed_des_idx+1].pred.time
     FMGS_sys.data.pred.descent.tod_wpt.fuel = the_big_array[computed_des_idx+1].pred.fuel
+
+    -- For the other pseudowaypoints we have to do the opposite
+    while i > computed_des_idx do
+
+        local appr = FMGS_sys.data.pred.appr
+        for j=1,#appr.steps do
+            if i < end_i and appr.steps[j].prev_wpt == the_big_array[i+1] then
+                appr.steps[j].fuel = appr.steps[j].fuel + fuel_cumulative
+                appr.steps[j].time = appr.steps[j].time + time_cumulative
+            end
+        end
+
+        i = i - 1
+    end
 
 end
 

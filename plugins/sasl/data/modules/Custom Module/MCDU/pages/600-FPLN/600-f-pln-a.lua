@@ -176,7 +176,7 @@ local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper
                                             pred={  time=pseudo_wpt.time, 
                                                     ias=pseudo_wpt.ias, 
                                                     mach=pseudo_wpt.mach,
-                                                    altitude=pseudo_wpt.altitude, 
+                                                    altitude=pseudo_wpt.altitude or pseudo_wpt.alt, 
                                                     fuel=pseudo_wpt.fuel,
                                                     cms_segment = true
                                             },
@@ -193,6 +193,12 @@ function THIS_PAGE:prepare_list_pseudo(mcdu_data, list_messages)
     prepare_add_generic_pseudo(list_messages, FMGS_pred_get_climb_lim(), "(LIM)", "(SPD)")
     prepare_add_generic_pseudo(list_messages, FMGS_pred_get_descent_lim(), "(LIM)", "(SPD)")
     prepare_add_generic_pseudo(list_messages, FMGS_pred_get_tod(), "(T/D)")
+
+    local DECEL = FMGS_pred_get_decel_point()
+    if DECEL.prev_wpt then
+        prepare_add_generic_pseudo(list_messages, DECEL, "(DECEL)") 
+    end
+
 end
 
 function THIS_PAGE:prepare_list(mcdu_data)
