@@ -19,6 +19,7 @@
 include('FMGS/route.lua')
 include('FMGS/limits.lua')
 include('FMGS/vertical_profile.lua')
+include('FMGS/constraints_checker.lua')
 
 local loading_cifp = 0
 
@@ -348,6 +349,7 @@ end
 local function update_predictions()
     if FMGS_sys.data.pred.takeoff.require_update then
         vertical_profile_update()
+        decorate_legs_with_constraints()
         FMGS_sys.data.pred.takeoff.require_update = false
     end
 end

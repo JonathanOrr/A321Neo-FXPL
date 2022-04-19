@@ -16,6 +16,8 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
+local CSTR_MET = 1
+local CSTR_NOT_MET = 2
 
 -------------------------------------------------------------------------------
 -- DEPARTURE
@@ -64,7 +66,7 @@ end
 -------------------------------------------------------------------------------
 -- COMMON
 -------------------------------------------------------------------------------
-function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first)
+function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first, spd_cstr_status)
     local main_col = is_the_first and ECAM_WHITE or (FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN)
 
     time = is_arpt and time or mcdu_format_force_to_small(time) -- TIME is small only for airports
@@ -81,8 +83,12 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
     end
 
     self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
-    self:set_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, spd and main_col or ECAM_WHITE)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, spd and main_col or ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, alt_col or main_col)
+
+    if spd_cstr_status and spd_cstr_status > 0 then
+        self:add_multi_line(mcdu_data, MCDU_CENTER, i, "   " .. mcdu_format_force_to_small("*"), MCDU_LARGE, spd_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
+    end
     
     if i ~= 1 then
         local brg_trk = is_trk ~= nil and ((is_trk and "TRK" or "BRG") .. Fwd_string_fill(tostring(math.floor(bearing)), "0", 3) .. "°") or "    "
@@ -96,7 +102,6 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
         self:set_line(mcdu_data, MCDU_LEFT, i, " " .. proc_name, MCDU_SMALL, color_proc_name)
         self:set_line(mcdu_data, MCDU_RIGHT, i, brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and mcdu_data.page_data[600].curr_idx == 1) and ECAM_WHITE or main_col)
     end
-    
 end
 
 function THIS_PAGE:render_discontinuity(mcdu_data, i)
@@ -246,6 +251,8 @@ end
 local function get_spd_alt_cstr(x)
     local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
     local spd_cstr = ""
+    local spd_cstr_status = 0
+    local alt_cstr_status = 0
     if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
         spd_cstr = tostring(x.cstr_speed)
     end
@@ -255,6 +262,13 @@ local function get_spd_alt_cstr(x)
             spd_cstr = tostring(math.ceil(x.pred.ias))
             if x.pred.cms_segment and x.pred.mach then
                 spd_cstr = "." .. math.ceil(x.pred.mach*100)
+            end
+            if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
+                if x.pred.cstr_ias_met then
+                    spd_cstr_status = 1
+                else
+                    spd_cstr_status = 2
+                end
             end
         elseif x.pred.mach then
             spd_cstr = "." .. math.ceil(x.pred.mach*100)
@@ -266,7 +280,7 @@ local function get_spd_alt_cstr(x)
         alt_cstr_col = nil -- Default one
     end
 
-    return spd_cstr, alt_cstr, alt_cstr_col
+    return spd_cstr, alt_cstr, alt_cstr_col, spd_cstr_status, alt_cstr_status
 end
 
 function THIS_PAGE:render_list(mcdu_data)
@@ -293,7 +307,7 @@ function THIS_PAGE:render_list(mcdu_data)
                 proc = get_proc_name(mcdu_data,x)
             end
 
-            local spd_cstr, alt_cstr, alt_cstr_col = get_spd_alt_cstr(x)
+            local spd_cstr, alt_cstr, alt_cstr_col, spd_cstr_status, alt_cstr_status = get_spd_alt_cstr(x)
             
             if spd_cstr == "" then
                 last_spd_cstr_value = nil
@@ -306,12 +320,12 @@ function THIS_PAGE:render_list(mcdu_data)
             local distance = x.temp_computed_distance or x.computed_distance
             local time = x.pred and x.pred.time and mcdu_time_beautify(x.pred.time) or "----"
             self:add_f(mcdu_data, function(line_id)
-                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
+                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2, spd_cstr_status, alt_cstr_status)
             end, x)
         else
             local distance = x.temp_computed_distance or x.computed_distance
             local proc = x.airway_name or ""
-            local spd_cstr, alt_cstr, alt_cstr_col = get_spd_alt_cstr(x)
+            local spd_cstr, alt_cstr, alt_cstr_col, spd_cstr_status, alt_cstr_status = get_spd_alt_cstr(x)
             
             if spd_cstr == "" then
                 last_spd_cstr_value = nil
@@ -324,7 +338,7 @@ function THIS_PAGE:render_list(mcdu_data)
             local name = x.id or "(MAN)"
             self:add_f(mcdu_data, function(line_id)
                 local time = x.pred and mcdu_time_beautify(x.pred.time) or "----"
-                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
+                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false, spd_cstr_status, alt_cstr_status)
             end, x)
         end
     end
