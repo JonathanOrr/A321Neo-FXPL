@@ -66,7 +66,7 @@ end
 -------------------------------------------------------------------------------
 -- COMMON
 -------------------------------------------------------------------------------
-function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first, spd_cstr_status)
+function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first, spd_cstr_status, alt_cstr_status)
     local main_col = is_the_first and ECAM_WHITE or (FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN)
 
     time = is_arpt and time or mcdu_format_force_to_small(time) -- TIME is small only for airports
@@ -84,10 +84,13 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
 
     self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
     self:add_multi_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, spd and main_col or ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, alt_col or main_col)
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, alt_col or main_col)
 
     if spd_cstr_status and spd_cstr_status > 0 then
         self:add_multi_line(mcdu_data, MCDU_CENTER, i, "   " .. mcdu_format_force_to_small("*"), MCDU_LARGE, spd_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
+    end
+    if alt_cstr_status and alt_cstr_status > 0 then
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, i, mcdu_format_force_to_small("*") .. "     ", MCDU_LARGE, alt_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
     end
     
     if i ~= 1 then
@@ -265,9 +268,9 @@ local function get_spd_alt_cstr(x)
             end
             if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
                 if x.pred.cstr_ias_met then
-                    spd_cstr_status = 1
+                    spd_cstr_status = CSTR_MET
                 else
-                    spd_cstr_status = 2
+                    spd_cstr_status = CSTR_NOT_MET
                 end
             end
         elseif x.pred.mach then
@@ -278,6 +281,13 @@ local function get_spd_alt_cstr(x)
     if x.pred and x.pred.altitude then
         alt_cstr = render_altitude(x.pred.altitude)
         alt_cstr_col = nil -- Default one
+        if x.cstr_alt_type and x.cstr_alt_type ~= CIFP_CSTR_ALT_NONE then
+            if x.pred.cstr_alt_met then
+                alt_cstr_status = CSTR_MET
+            else
+                alt_cstr_status = CSTR_NOT_MET
+            end
+        end
     end
 
     return spd_cstr, alt_cstr, alt_cstr_col, spd_cstr_status, alt_cstr_status
