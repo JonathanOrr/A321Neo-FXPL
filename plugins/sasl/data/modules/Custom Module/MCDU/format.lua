@@ -92,6 +92,9 @@ function mcdu_time_beautify(time_in_sec)
     if not time_in_sec then
         return "----"
     end
+    if type(time_in_sec) ~= "number" then
+        assert(false, "time_in_sec should be a number but instead is:" .. tostring(time_in_sec))
+    end
     local hours   = math.floor(time_in_sec / 3600)
     local minutes = math.floor((time_in_sec-hours*3600) / 60)
     return Fwd_string_fill(hours.."", "0", 2) .. Fwd_string_fill(minutes.."", "0", 2)
