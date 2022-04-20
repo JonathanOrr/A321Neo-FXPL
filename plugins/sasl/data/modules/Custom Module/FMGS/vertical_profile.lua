@@ -74,6 +74,12 @@ local function prepare_the_common_big_array_merge(array)
                 first_des_idx = #the_big_array
             end
         end
+
+        if not leg.computed_distance then
+            leg.computed_distance = 0
+            -- This should not happen
+            logWarning(leg.id, "Leg nr." .. i .. " does not have a computed distance.")
+        end
     end
 end
 
@@ -286,6 +292,7 @@ function vertical_profile_climb_update()
     while traveled_nm > 0 do    -- How many WPTs we overflown during takeoff phase?
 
         i = i + 1
+        print("Ehi, accessing i=", i)
         traveled_nm = traveled_nm - the_big_array[i].computed_distance
         -- We need to add some predictions here, nobody cares, it's just
         -- for the display in the MCDU
@@ -1234,7 +1241,10 @@ function vertical_profile_update()
         return -- Cannot make any other prediction
     end
 
-    prepare_the_common_big_array()
+    local valid = prepare_the_common_big_array()
+    if not valid then
+        return -- Cannot make any other prediction
+    end
     local idx_next_wpt
     FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_climb_update()
     if not FMGS_sys.data.pred.climb.total_fuel_kgs then

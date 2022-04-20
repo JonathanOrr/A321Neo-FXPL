@@ -48,6 +48,8 @@ local function decorate_leg_with_alt_constraint(leg)
         local alt_cstr_1 = (leg.cstr_altitude1_fl and leg.cstr_altitude1*100 or leg.cstr_altitude1)
         local alt_cstr_2 = (leg.cstr_altitude2_fl and leg.cstr_altitude2*100 or leg.cstr_altitude2)
         return (leg.pred.altitude <= alt_cstr_2 + ALT_TOLERANCE) and (leg.pred.altitude >= alt_cstr_1 - ALT_TOLERANCE)
+    elseif leg.cstr_alt_type == CIFP_CSTR_ALT_GLIDE then
+        -- Do nothing for this constraint
     else
         assert(false, "This should never happen.")
     end

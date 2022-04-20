@@ -373,7 +373,6 @@ function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, distance, trip_
     -- altn fpln.
     local arr_id    = apt.id
     local arr_alt   = apt.alt
-    trip_time = trip_time or "----"
 
     local left_side  = arr_id
     local ctr_side   = mcdu_format_force_to_small(" " .. mcdu_time_beautify(trip_time) .. "  ---")

@@ -53,7 +53,6 @@ local function update_cifp(apt_ref, reference, initial_point)
             prev_point = GeoPoint:create({ lat = leg.lat, lon = leg.lon})
             table.insert(reference.computed_legs, leg)
         end
-
         leg.computed_distance = distance
         total_distance = total_distance + distance
     end
@@ -75,11 +74,14 @@ local function fpln_recompute_distances_fplnlegs(fpln, prev_point)
             assert(prev.lat and prev.lon and x.lat and x.lon)
             fpln.legs[k].computed_distance = GC_distance_kt(prev.lat, prev.lon, x.lat, x.lon)
             total_distance = total_distance + fpln.legs[k].computed_distance
+        else
+            fpln.legs[k].computed_distance = 0 -- As a safety measure we set zero in case we don't know
+                                               -- the previous point
         end
         prev = fpln.legs[k]
     end
 
-    if prev.discontinuity then
+    if not prev or prev.discontinuity then
         return total_distance, nil
     else
         return total_distance, GeoPoint:create({ lat=prev.lat, lon=prev.lon})
@@ -154,7 +156,13 @@ function update_route()
         FMGS_sys.data.pred.trip_dist = nil -- This has no sense
     end
 
-    perform_FPLN_conversion(fpln)
+    fpln.segment_curved_list = nil -- Cleanup old list of turns
+
+    if dep_rwy then 
+        -- We need a start point for the conversion to the curved segment list.
+        -- Without the departure runway, nothing can be done
+        perform_FPLN_conversion(fpln)
+    end
 end
 
 function update_route_turns()
@@ -173,6 +181,9 @@ function update_route_turns()
 
     fpln.require_recompute = false
     
-    create_turns(fpln.segment_curved_list)
+    if fpln.segment_curved_list then
+        -- The list may not exist if the flight plan is incomplete
+        create_turns(fpln.segment_curved_list)
+    end
 end
 
