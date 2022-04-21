@@ -19,6 +19,7 @@
 include("FMGS/functions.lua")
 include("libs/table.save.lua")
 include("debug_windows/FMGS_debug_vertical_profile.lua")
+include("debug_windows/FMGS_debug_constraints.lua")
 
 size = {1000, 600}
 
@@ -40,7 +41,7 @@ local function draw_main_menu()
     sasl.gl.drawText(Font_B612MONO_regular, 20+(3/2*BTN_WIDTH), size[2]-27, "Flight Plan", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
     sasl.gl.drawFrame (30+BTN_WIDTH*2, size[2]-40, BTN_WIDTH, BTN_HEIGHT, curr_page == 3 and UI_LIGHT_BLUE or UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 30+(5/2*BTN_WIDTH), size[2]-27, "Performance", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 30+(5/2*BTN_WIDTH), size[2]-27, "Constraints", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
     sasl.gl.drawFrame (40+BTN_WIDTH*3, size[2]-40, BTN_WIDTH, BTN_HEIGHT, curr_page == 4 and UI_LIGHT_BLUE or UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 40+(7/2*BTN_WIDTH), size[2]-27, "Vert. Profile", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
@@ -502,6 +503,8 @@ function draw()
     elseif curr_page == 2 then
         draw_page_fpln()
         draw_leg_details()
+    elseif curr_page == 3 then
+        draw_cstrs()
     elseif curr_page == 4 then
         draw_vprof()
     end
