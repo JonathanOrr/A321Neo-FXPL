@@ -10,10 +10,10 @@ function draw_waypoints()
     sasl.gl.drawWideLine(100,500,900,500,3,ECAM_GREEN)
 
     local max_alt = FMGS_sys.data.init.crz_fl or 40000
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 495, max_alt, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 370, 3*max_alt/4, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 245, max_alt/2, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 10, 120, max_alt/4, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 495, max_alt, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 370, 3*max_alt/4, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 245, max_alt/2, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 120, max_alt/4, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     
     local s_px = 100
     local e_px = 900
