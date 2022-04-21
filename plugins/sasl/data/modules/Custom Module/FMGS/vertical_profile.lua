@@ -95,6 +95,7 @@ local function prepare_the_common_big_array()
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_star)
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_via)
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_appr)
+    prepare_the_common_big_array_merge({legs={ {id="[RWY]", computed_distance = FMGS_sys.fpln.active.apts.arr_rwy[1].last_distance, pred={is_descent=true}} }}) -- Add a fake point for the arraival runway
 
     -- Now I have to update the vertical constraints (CLIMB)
     local last_alt_cstr = 999999
