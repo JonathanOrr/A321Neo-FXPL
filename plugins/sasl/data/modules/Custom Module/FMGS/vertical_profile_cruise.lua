@@ -54,6 +54,9 @@ function approx_TOD_distance(the_big_array, last_clb_idx)  -- This is a very rou
     local toc_to_rwy_dist = 0
     for i=last_clb_idx,total_legs do
         local leg = the_big_array[i]
+        if not leg then
+            logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "last_clb_idx=", last_clb_idx)
+        end
         toc_to_rwy_dist = toc_to_rwy_dist + (leg.computed_distance or 0)
     end
 
