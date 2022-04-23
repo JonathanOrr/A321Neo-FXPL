@@ -95,9 +95,15 @@ local function prepare_the_common_big_array()
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_star)
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_via)
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_appr)
-    prepare_the_common_big_array_merge({legs={ {id="[RWY]", computed_distance = FMGS_sys.fpln.active.apts.arr_rwy[1].last_distance, pred={is_descent=true}} }}) -- Add a fake point for the arraival runway
 
-    -- Now I have to update the vertical constraints (CLIMB)
+-- The following doesn't work because the leg name is not loaded yet. I'm not sure we really need this.
+
+--    if string.sub(the_big_array[#the_big_array].id , 1, 2) ~= "RW" then
+--       -- In case it's missing in the procedure, add a fake runway in the correct position
+--        prepare_the_common_big_array_merge({legs={ {id="[RWY]", computed_distance = FMGS_sys.fpln.active.apts.arr_rwy[1].last_distance, pred={is_descent=true}} }}) -- Add a fake point for the arraival runway
+--    end
+
+-- Now I have to update the vertical constraints (CLIMB)
     local last_alt_cstr = 999999
     local last_spd_cstr = 999
     if last_clb_idx and last_clb_idx > 0 then
@@ -1060,7 +1066,7 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
 
     -- Steps (reversed):
     -- 1st step: from runway to 1000ft AGL. Speed stabilized to Vapp, we assume the ° provided by the approach phase or 3° if not available
-    -- 2nd step: from 1000ft to selection of flaps full: VLS    (if landing in conf 3 selected, ignore)
+    -- 2nd step: from 1000ft to selection of flaps full: VLS    (if landing in conf 3 selected, ignore, TODO)
     -- 3rd step: from flaps full to flaps3: to VLS
     -- 4th step: from flaps3 to FDP intercept
     -- 5th step: from FDP intercept to flaps2: to VLS

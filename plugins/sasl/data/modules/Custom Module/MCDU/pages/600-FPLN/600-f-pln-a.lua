@@ -318,11 +318,12 @@ function THIS_PAGE:render_list(mcdu_data)
             end
 
             local spd_cstr, alt_cstr, alt_cstr_col, spd_cstr_status, alt_cstr_status = get_spd_alt_cstr(x)
-            
+            local spd_cstr_req_elipses = false
+
             if spd_cstr == "" then
                 last_spd_cstr_value = nil
             elseif last_spd_cstr_value == spd_cstr then
-                spd_cstr = "\""
+                spd_cstr_req_elipses = true
             else
                 last_spd_cstr_value = spd_cstr
             end
@@ -330,23 +331,26 @@ function THIS_PAGE:render_list(mcdu_data)
             local distance = x.temp_computed_distance or x.computed_distance
             local time = x.pred and x.pred.time and mcdu_time_beautify(x.pred.time) or "----"
             self:add_f(mcdu_data, function(line_id)
-                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2, spd_cstr_status, alt_cstr_status)
+                local spd_cstr_str = (spd_cstr_req_elipses and line_id ~= 1) and "\"" or spd_cstr
+                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr_str, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2, spd_cstr_status, alt_cstr_status)
             end, x)
         else
             local distance = x.temp_computed_distance or x.computed_distance
             local proc = x.airway_name or ""
             local spd_cstr, alt_cstr, alt_cstr_col, spd_cstr_status, alt_cstr_status = get_spd_alt_cstr(x)
+            local spd_cstr_req_elipses = false
             
             if spd_cstr == "" then
                 last_spd_cstr_value = nil
             elseif last_spd_cstr_value == spd_cstr then
-                spd_cstr = "\""
+                spd_cstr_req_elipses = true
             else
                 last_spd_cstr_value = spd_cstr
             end
 
             local name = x.id or "(MAN)"
             self:add_f(mcdu_data, function(line_id)
+                local spd_cstr_str = (spd_cstr_req_elipses and line_id ~= 1) and "\"" or spd_cstr
                 local time = x.pred and mcdu_time_beautify(x.pred.time) or "----"
                 THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false, spd_cstr_status, alt_cstr_status)
             end, x)
