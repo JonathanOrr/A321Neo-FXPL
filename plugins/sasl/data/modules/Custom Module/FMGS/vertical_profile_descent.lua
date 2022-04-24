@@ -61,10 +61,15 @@ function compute_vapp(weight_at_rwy)
     -- Then we need the Vapp speed
     local flaps = FMGS_get_landing_config() + 1
     local VLS = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight_at_rwy, flaps, true)
+    FMGS_set_landing_vls(VLS)
     local APPR_CORR = 5 -- TODO:
     -- - 5kt if A/THR is ON
     -- - 5kt if ice accretion (10kt instead of 5kt on A320 family when in CONF 3)
     -- - 1/3 Headwind excluding gust
     -- Cannot be < 5 or > 15
-    return VLS + APPR_CORR
+    FMGS_set_landing_vapp_internal(VLS+APPR_CORR)
+
+    local vapp_our, vapp_user = FMGS_get_landing_vapp()
+
+    return vapp_user or vapp_our
 end

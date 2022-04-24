@@ -76,13 +76,13 @@ function THIS_PAGE:render(mcdu_data)
     ------
 
     local c,d = FMGS_get_landing_vapp()
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, d~= nil and d or mcdu_format_force_to_small(c), MCDU_LARGE, ECAM_BLUE)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, d~= nil and Round(d,0) or mcdu_format_force_to_small(Round(c,0)), MCDU_LARGE, ECAM_BLUE)
 
     ------
     --C5--
     ------
 
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "           "..FMGS_get_landing_vls(), MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "           "..Round(FMGS_get_landing_vls(),0), MCDU_LARGE, ECAM_GREEN)
 
     ------
     --R2--
@@ -195,7 +195,8 @@ function THIS_PAGE:L5(mcdu_data)
         mcdu_data.clear_the_clear()
         return
     end
-    local input = mcdu_get_entry(mcdu_data, {"!!!","!!", "!"}, false)
+    local input = mcdu_get_entry(mcdu_data, {"!!!"}, false)
+    input = tonumber(input)
     if input == nil then return end
     FMGS_set_landing_vapp(input)
 end
@@ -208,6 +209,7 @@ function THIS_PAGE:R2(mcdu_data)
     end
     local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!"}, false)
     if input == nil then return end
+    input = tonumber(input)
     FMGS_set_landing_mda(input)
 end
 
@@ -220,7 +222,7 @@ function THIS_PAGE:R3(mcdu_data)
     if have_ils then
         local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!"}, false)
         if input == nil then return end
-        FMGS_set_landing_dh(input)
+        FMGS_set_landing_dh(tonumber(input))
         FMGS_set_landing_mda(nil)
     end
 end

@@ -954,6 +954,7 @@ end
 
 function FMGS_set_landing_vapp(spd) --caution! User! Not system default value!
     FMGS_sys.perf.landing.user_vapp = spd
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_landing_vapp()
