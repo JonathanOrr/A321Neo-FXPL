@@ -1271,7 +1271,7 @@ function vertical_profile_update()
 end
 
 
-FMGS_sys.pred_debug = { -- Just for debugging
+FMGS_sys.pred_internals = { -- For debugging and perf page
 
     get_big_array = function()
         return the_big_array

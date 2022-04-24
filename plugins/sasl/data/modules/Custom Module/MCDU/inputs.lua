@@ -81,10 +81,15 @@ function mcdu_parse_entry(entry, expected_format)
 		format_type = "number"
 		expected_format = {"number", length = 5, dp = 0}
 		if string.sub(entry, 1, 2) == "FL" then
-			entry = string.sub(entry, 3, -1) -- get rid of FL
+            local num = tonumber(string.sub(entry, 3, -1)) -- get rid of FL
+            if num then
+                entry = tostring(num*100)
+            else
+                return "$invalid"
+            end
         else
             if tonumber(entry) then
-                entry = tostring(math.floor(tonumber(entry) / 100))
+                entry = tostring(math.floor(tonumber(entry)))
             else
                 return "$invalid"
             end

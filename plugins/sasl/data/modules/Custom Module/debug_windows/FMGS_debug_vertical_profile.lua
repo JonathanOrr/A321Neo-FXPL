@@ -131,7 +131,7 @@ local function print_single_leg(i, l, is_green)
 end
 
 local function draw_climb()
-    local legs = FMGS_sys.pred_debug.get_big_array()
+    local legs = FMGS_sys.pred_internals.get_big_array()
     if not legs then
         sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
         return
@@ -148,7 +148,7 @@ local function draw_climb()
 end
 
 local function draw_cruise()
-    local legs = FMGS_sys.pred_debug.get_big_array()
+    local legs = FMGS_sys.pred_internals.get_big_array()
     if not legs then
         sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
         return
@@ -163,7 +163,7 @@ local function draw_cruise()
 end
 
 local function draw_descent()
-    local legs = FMGS_sys.pred_debug.get_big_array()
+    local legs = FMGS_sys.pred_internals.get_big_array()
     if not legs then
         sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
         return
@@ -180,7 +180,7 @@ local function draw_descent()
 end
 
 local function draw_key_wpts()
-    local legs = FMGS_sys.pred_debug.get_big_array()
+    local legs = FMGS_sys.pred_internals.get_big_array()
     if not legs then
         sasl.gl.drawText(Font_B612MONO_regular, 10, 250, "NO PREDICTIONS", 25, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
         return

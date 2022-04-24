@@ -22,7 +22,7 @@ function draw_waypoints()
     local s_px = 100
     local e_px = 900
 
-    local legs = FMGS_sys.pred_debug.get_big_array()
+    local legs = FMGS_sys.pred_internals.get_big_array()
     if not legs then
         return
     end
