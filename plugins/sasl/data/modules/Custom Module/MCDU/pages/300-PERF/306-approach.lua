@@ -76,13 +76,17 @@ function THIS_PAGE:render(mcdu_data)
     ------
 
     local c,d = FMGS_get_landing_vapp()
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, d~= nil and Round(d,0) or mcdu_format_force_to_small(Round(c,0)), MCDU_LARGE, ECAM_BLUE)
-
+    if c == nil and d == nil then
+        self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "[]", MCDU_LARGE, ECAM_BLUE)
+    else
+        self:add_multi_line(mcdu_data, MCDU_LEFT, 5, d~= nil and Round(d,0) or mcdu_format_force_to_small(Round(c,0)), MCDU_LARGE, ECAM_BLUE)
+    end
     ------
     --C5--
     ------
 
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "           "..Round(FMGS_get_landing_vls(),0), MCDU_LARGE, ECAM_GREEN)
+    local vls = FMGS_get_landing_vls()
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "           "..(vls and Round(vls,0) or "---"), MCDU_LARGE, vls and ECAM_GREEN or ECAM_WHITE)
 
     ------
     --R2--

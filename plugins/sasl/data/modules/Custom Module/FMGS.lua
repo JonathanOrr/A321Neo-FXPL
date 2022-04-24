@@ -189,10 +189,10 @@ FMGS_sys.perf = {
         wind = nil,
         trans_alt = 10000,
         user_trans_alt = nil,
-        vapp = 143,
+        vapp = nil,
         user_vapp = nil,
         landing_config = 4, -- 3 is 3, 4 is full
-        vls = 138
+        vls = nil
     },
     go_around = {
         thr_red = 1500,
