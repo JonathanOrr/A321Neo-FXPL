@@ -273,6 +273,9 @@ local function draw_apprland_dynamic()
 
     for i,s in ipairs(FMGS_sys.data.pred.appr.steps) do
         local left = size[1]-100-100*i
+        if s.skip then
+            sasl.gl.drawText(Font_B612MONO_regular, left, 180, "SKIP", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        end
         sasl.gl.drawText(Font_B612MONO_regular, left, 160, s.ias and math.ceil(s.ias) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
         sasl.gl.drawText(Font_B612MONO_regular, left, 140, s.alt and math.ceil(s.alt) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
         sasl.gl.drawText(Font_B612MONO_regular, left, 120, s.vs and math.ceil(s.vs) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)

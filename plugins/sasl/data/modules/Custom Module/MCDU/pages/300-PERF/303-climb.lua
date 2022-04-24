@@ -162,8 +162,9 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --  R1  --
     ----------
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, "DRT CLB", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, "[ ]", MCDU_LARGE, ECAM_BLUE)
+-- No derated option
+--    self:set_line(mcdu_data, MCDU_RIGHT, 1, "DRT CLB", MCDU_SMALL, ECAM_WHITE)
+--    self:set_line(mcdu_data, MCDU_RIGHT, 1, "[ ]", MCDU_LARGE, ECAM_BLUE)
     ----------
     --  R2  --
     ----------

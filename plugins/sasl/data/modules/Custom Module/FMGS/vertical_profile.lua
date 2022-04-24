@@ -651,7 +651,7 @@ local function vertical_profile_descent_update_step1(weight_at_rwy)
     -- The the rwy altitude
     local rwy_alt = FMGS_sys.fpln.active.apts.arr.alt
 
-    local flaps = 5  -- TODO: flaps from perf appr page
+    local flaps = FMGS_get_landing_config()+1
     local VAPP = compute_vapp(weight_at_rwy)
 
     -- Ok, now the landing slope
@@ -696,9 +696,24 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local alt = FMGS_sys.data.pred.appr.steps[i_step-1].alt
 
     local flaps_start, flaps_end
+
+    -- CONF 3 case
+    if i_step == 2 and FMGS_get_landing_config() == 3 then
+        -- CONF 3 selected, we need to skip the step 2
+        FMGS_sys.data.pred.appr.steps[i_step].alt   = alt
+        FMGS_sys.data.pred.appr.steps[i_step].ias   = FMGS_sys.data.pred.appr.steps[i_step-1].ias
+        FMGS_sys.data.pred.appr.steps[i_step].time  = FMGS_sys.data.pred.appr.steps[i_step-1].time
+        FMGS_sys.data.pred.appr.steps[i_step].dist  = FMGS_sys.data.pred.appr.steps[i_step-1].dist
+        FMGS_sys.data.pred.appr.steps[i_step].fuel  = FMGS_sys.data.pred.appr.steps[i_step-1].fuel
+        FMGS_sys.data.pred.appr.steps[i_step].N1    = FMGS_sys.data.pred.appr.steps[i_step-1].N1
+        FMGS_sys.data.pred.appr.steps[i_step].VS    = FMGS_sys.data.pred.appr.steps[i_step-1].VS
+        FMGS_sys.data.pred.appr.steps[i_step].skip  = true
+        return 0
+    end
+
     if i_step < 4 then
-        flaps_start = 6 - i_step  -- TODO: flaps from perf appr page
-        flaps_end   = 7 - i_step -- TODO: flaps from perf appr page
+        flaps_start = 6 - i_step
+        flaps_end   = 7 - i_step
     else
         flaps_start = 3
         flaps_end   = 3
