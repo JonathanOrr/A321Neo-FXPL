@@ -67,7 +67,11 @@ function get_time_dist_to_alt_constant_spd(begin_alt, end_alt, N1, ias, weight)
 
     local time = (end_alt-begin_alt) / vs * 60 -- seconds
 
-    local gs = tas_to_gs(tas, vs, 0, 0)    -- TODO Wind
+    local wind_spd = get(Wind_SPD)
+    local wind_dir = get(Wind_HDG)
+    wind_dir = wind_to_relative(wind_dir, (FMGS_sys.fpln.active.apts.dep_rwy[2] and 180 or 0) + FMGS_sys.fpln.active.apts.dep_rwy[1].bearing) -- Transofrm it to relative
+
+    local gs = tas_to_gs(tas, vs, wind_spd, wind_dir)
 
     fuel_consumption = ENG.data.n1_to_FF(1, density)*2
     return time, gs * time / 3600, fuel_consumption

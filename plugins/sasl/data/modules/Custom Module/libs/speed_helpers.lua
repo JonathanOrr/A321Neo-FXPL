@@ -131,3 +131,7 @@ function tas_to_gs(tas, vs, v_wind, d_wind)
     vs = fpm_to_kts(vs)
     return math.sqrt(tas*tas - vs*vs) + v_wind * math.cos(math.rad(d_wind))
 end
+
+function wind_to_relative(wind_dir, acf_dir)
+    return (acf_dir - wind_dir + 360) % 360
+end

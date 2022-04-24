@@ -576,7 +576,10 @@ local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt,
     local excess_thrust = fpm_to_ms(VS) * (init_weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
     -- Let's compute also the GS (we need this later)
-    local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+    local wind_spd = FMGS_sys.perf.landing.wind or 0
+    local wind_dir = FMGS_sys.perf.landing.mag  or 0
+    wind_dir = wind_to_relative(wind_dir, (FMGS_sys.fpln.active.apts.arr_rwy[2] and 180 or 0) + FMGS_sys.fpln.active.apts.arr_rwy[1].bearing) -- Transofrm it to relative
+    local GS = tas_to_gs(TAS, VS, wind_spd, wind_dir)    -- TODO: Put wind here
 
     -- Time to compute the drag and therefore the thrust we need
     local oat = get_arrival_apt_temp()
