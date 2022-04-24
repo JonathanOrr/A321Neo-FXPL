@@ -73,3 +73,11 @@ function compute_vapp(weight_at_rwy)
 
     return vapp_user or vapp_our
 end
+
+function get_arrival_apt_temp() 
+    if FMGS_sys.perf.landing.temp then
+        return FMGS_sys.perf.landing.temp
+    else
+        return get(OTA)
+    end
+end

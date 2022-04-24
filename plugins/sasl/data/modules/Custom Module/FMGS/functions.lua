@@ -905,6 +905,7 @@ end
 
 function FMGS_set_landing_apt_temp(temp)
     FMGS_sys.perf.landing.temp = temp
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_landing_apt_temp()
@@ -933,6 +934,7 @@ end
 
 function FMGS_set_landing_trans_alt(alt) --caution! User! Not system default value!
     FMGS_sys.perf.landing.user_trans_alt = alt
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_landing_trans_alt()

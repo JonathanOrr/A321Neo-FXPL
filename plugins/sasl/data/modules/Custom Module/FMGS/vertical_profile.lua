@@ -35,8 +35,6 @@ function get_density_ratio(ref_alt)   -- Get density according to ISA
     return density
 end
 
-
-
 include('FMGS/vertical_profile_climb.lua')
 include('FMGS/vertical_profile_cruise.lua')
 include('FMGS/vertical_profile_descent.lua')
@@ -581,7 +579,7 @@ local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt,
     local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, init_alt)
+    local oat = get_arrival_apt_temp()
     local density = get_density_ratio(init_alt)
     local drag = predict_drag_w_gf(density, TAS, mach, init_weight, flaps, gear)
 
@@ -751,7 +749,7 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local excess_thrust = -fpm_to_ms(VS) * (weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
+    local oat = air_predict_temperature_at_alt(get_arrival_apt_temp(), FMGS_sys.fpln.active.apts.arr.alt, alt)
     local density = get_density_ratio(alt)
     local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
 
@@ -844,7 +842,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, alt)
 
     -- Time to compute the drag and therefore the thrust we need
-    local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, alt)
+    local oat = air_predict_temperature_at_alt(get_arrival_apt_temp(), FMGS_sys.fpln.active.apts.arr.alt, alt)
     local density = get_density_ratio(alt)
     local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
 
@@ -927,7 +925,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
         local _, TAS, mach = convert_to_eas_tas_mach(V_AVG, curr_alt)
 
         -- Time to compute the drag and therefore the thrust we need
-        local oat = air_predict_temperature_at_alt(get(OTA), get(Elevation_m)*3.28084, curr_alt)
+        local oat = air_predict_temperature_at_alt(get_arrival_apt_temp(), FMGS_sys.fpln.active.apts.arr.alt, curr_alt)
         local density = get_density_ratio(curr_alt)
         local drag = predict_drag(density, TAS, mach, weight)
 
