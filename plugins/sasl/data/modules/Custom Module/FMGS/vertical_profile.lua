@@ -63,13 +63,22 @@ local function prepare_the_common_big_array_merge(array)
         return
     end
 
+    -- Let's clarify the role of is_climb / is_descent
+    -- - The ones under flt_phase are the ones from avionics bay
+    -- - The ones under flt_phase_user are the ones changed by the user with the MCDU
+    -- - The ones under pred are the ones predicted by FMGS
+
     for i, leg in ipairs(array.legs) do
         if not leg.discontinuity then
-            if leg.pred and not leg.pred.is_climb and not last_clb_idx then
-                last_clb_idx = #the_big_array
+            local is_a_climb = (leg.flt_phase_user and leg.flt_phase_user.is_climb) or ((not (leg.flt_phase_user and leg.flt_phase_user.is_descent)) and (leg.flt_phase and leg.flt_phase.is_climb)) 
+            local is_a_descent = (leg.flt_phase_user and leg.flt_phase_user.is_descent) or ((not (leg.flt_phase_user and leg.flt_phase_user.is_climb)) and (leg.flt_phase and leg.flt_phase.is_descent)) 
+            leg.pred = {is_climb = is_a_climb, is_descent = is_a_descent}
+
+            if is_a_climb then
+                last_clb_idx = #the_big_array + 1
             end
             table.insert(the_big_array, leg)
-            if leg.pred and leg.pred.is_descent and not first_des_idx then
+            if is_a_descent and not first_des_idx then
                 first_des_idx = #the_big_array
             end
         end
@@ -94,6 +103,9 @@ local function prepare_the_common_big_array()
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_star)
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_via)
     prepare_the_common_big_array_merge(FMGS_sys.fpln.active.apts.arr_appr)
+
+
+    -- TODO manage the case last_clb_idx == 0 or first_des_idx == 0 or nil
 
 -- The following doesn't work because the leg name is not loaded yet. I'm not sure we really need this.
 
@@ -1255,13 +1267,16 @@ function vertical_profile_update()
 
     prepare_the_common_big_array()
 
+    if not last_clb_idx or not first_des_idx or last_clb_idx <= 0 or first_des_idx <= 0 then
+        return -- Cannot make any other prediction as I don't find climb or descent segments
+    end
+
     local idx_next_wpt
     FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_climb_update()
     if not FMGS_sys.data.pred.climb.total_fuel_kgs then
         -- Error, like cruise FL is too high
         return  -- Cannot make any other prediction
     end
-
 
     local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
 

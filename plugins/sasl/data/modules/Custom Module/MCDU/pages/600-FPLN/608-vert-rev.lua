@@ -51,10 +51,15 @@ function THIS_PAGE:render(mcdu_data)
         or subject.data.point_type == POINT_TYPE_ARR_TRANS
     then
         mcdu_data.page_data[608].is_clb_or_desc = 2  -- DESCENT
-    elseif subject.data.pred and subject.data.pred.is_climb then
+    elseif subject.data.flt_phase_user and subject.data.flt_phase_user.is_climb then
         mcdu_data.page_data[608].is_clb_or_desc = 1  -- CLIMB
-    elseif subject.data.pred and subject.data.pred.is_descent then
+    elseif subject.data.flt_phase_user and subject.data.flt_phase_user.is_descent then
         mcdu_data.page_data[608].is_clb_or_desc = 2  -- DESCENT
+    elseif subject.data.flt_phase and subject.data.flt_phase.is_climb then
+        mcdu_data.page_data[608].is_clb_or_desc = 1  -- CLIMB
+    elseif subject.data.flt_phase and subject.data.flt_phase.is_descent then
+        mcdu_data.page_data[608].is_clb_or_desc = 2  -- DESCENT
+
     else
         mcdu_data.page_data[608].is_clb_or_desc = 0
     end
@@ -294,13 +299,13 @@ local function set_spd_cstr(mcdu_data, is_clb)
         subject.data.cstr_speed_type = mcdu_data.page_data[608].to_set_spd[1]
         subject.data.cstr_speed = mcdu_data.page_data[608].to_set_spd[2]
 
-        if not subject.data.pred then
-            subject.data.pred = {}
+        if not subject.data.flt_phase_user then
+            subject.data.flt_phase_user = {}
         end
         if is_clb then
-            subject.data.pred.is_climb = true
+            subject.data.flt_phase_user.is_climb = true
         else
-            subject.data.pred.is_descent = true
+            subject.data.flt_phase_user.is_descent = true
         end
         mcdu_data.page_data[608].ask_clb_des = false
         mcdu_data.page_data[608].to_set_spd = nil
@@ -311,13 +316,13 @@ local function set_spd_cstr(mcdu_data, is_clb)
         subject.data.cstr_altitude1 = mcdu_data.page_data[608].to_set_alt[2]
         subject.data.cstr_altitude1_fl = false
 
-        if not subject.data.pred then
-            subject.data.pred = {}
+        if not subject.data.flt_phase_user then
+            subject.data.flt_phase_user = {}
         end
         if is_clb then
-            subject.data.pred.is_climb = true
+            subject.data.flt_phase_user.is_climb = true
         else
-            subject.data.pred.is_descent = true
+            subject.data.flt_phase_user.is_descent = true
         end
         mcdu_data.page_data[608].ask_clb_des = false
         mcdu_data.page_data[608].to_set_alt = nil

@@ -117,10 +117,41 @@ local function draw_takeoff()
 
 end
 
+local function get_flt_phase(l, which)
+    local str = ""
+    if which == 1 then
+        if l.flt_phase_user and l.flt_phase_user.is_climb then
+            str = str + "Y"
+        end
+        str = str + "/"
+        if l.flt_phase and l.flt_phase.is_climb then
+            str = str + "Y"
+        end
+        str = str + "/"
+        if l.pred and l.pred.is_climb then
+            str = str + "Y"
+        end
+    end
+    if which == 2 then
+        if l.flt_phase_user and l.flt_phase_user.is_descent then
+            str = str + "Y"
+        end
+        str = str + "/"
+        if l.flt_phase and l.flt_phase.is_descent then
+            str = str + "Y"
+        end
+        str = str + "/"
+        if l.pred and l.pred.is_climb then
+            str = str + "Y"
+        end
+    end
+    return str
+end
+
 local function print_single_leg(i, l, is_green)
     sasl.gl.drawText(Font_B612MONO_regular, 10, 480-i*18, Aft_string_fill(i .. ")", " ", 4) .. Aft_string_fill((l.id or l.name or "[SID/STAR]"), " ", 12) 
-    .. "   CLB? " .. (l.pred.is_climb and "Y" or "N")
-    .. "   DES? " .. (l.pred.is_descent and "Y" or "N")
+    .. "   CLB? " .. get_flt_phase(l,1)
+    .. "   DES? " .. get_flt_phase(l,2)
     .. "   IAS=" .. (l.pred.ias and math.ceil(l.pred.ias) or "N/A")
     .. "   ALT=" .. Aft_string_fill(""..(l.pred.altitude and math.floor(l.pred.altitude) or "N/A"), " ", 6)
     .. "   MACH=" .. (l.pred.mach and Round_fill(l.pred.mach,2) or "N/A ")

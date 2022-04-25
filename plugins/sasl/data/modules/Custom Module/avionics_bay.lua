@@ -223,7 +223,9 @@ local function convert_cifp_array(rawdata, cifp_arr, is_clb)
                 holding_fix  = l.holding_fix,
                 first_missed_app = l.first_missed_app,
 
-                pred = { is_climb=is_clb, is_descent=not is_clb }
+                -- The following is used in the prediction part to know
+                -- if a point belongs to the climb or descent phase
+                flt_phase = { is_climb=is_clb, is_descent=not is_clb }
             })
         end
         

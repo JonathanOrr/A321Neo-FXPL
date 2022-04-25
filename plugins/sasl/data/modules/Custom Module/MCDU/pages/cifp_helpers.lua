@@ -117,9 +117,13 @@ end
 function cifp_convert_alt_cstr(x)
 
     local clb_desc_type = 0
-    if x.pred and x.pred.is_climb then
+    if x.flt_phase_user and x.flt_phase_user.is_climb then
         clb_desc_type = 1
-    elseif x.pred and x.pred.is_descent then
+    elseif x.flt_phase_user and x.flt_phase_user.is_descent then
+        clb_desc_type = 2
+    elseif x.flt_phase and x.flt_phase.is_climb then
+        clb_desc_type = 1
+    elseif x.flt_phase and x.flt_phase.is_descent then
         clb_desc_type = 2
     end
 
