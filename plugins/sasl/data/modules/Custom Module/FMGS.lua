@@ -26,6 +26,7 @@ local loading_cifp = 0
 local config = {
     status = FMGS_MODE_OFF,
     phase  = FMGS_PHASE_PREFLIGHT,
+    takeoff_time = nil,
     master = 0,
     backup_req = false,
     gps_primary = false,
@@ -251,6 +252,17 @@ local function update_nav_accuracy()
     FMGS_sys.data.nav_accuracy = err
 end
 
+local function update_phase()
+    if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT then
+        -- TODO add in `and` with "SRS takeoff mode engaged"
+
+        if ENG.dyn[1].n1 > 85 or ENG.dyn[2].n1 > 85 or adirs_get_avg_gs() > 90 then
+            FMGS_sys.config.phase = FMGS_PHASE_TAKEOFF
+            FMGS_sys.config.takeoff_time = get(TIME)
+        end
+    end
+end
+
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
     --       This has no sense in our aircraft, so this mode doesn't exist.
@@ -275,6 +287,7 @@ local function update_status()
         FMGS_sys.config.master = 0
     end
 
+    update_phase()
     update_gps_primary()
     update_nav_accuracy()
 

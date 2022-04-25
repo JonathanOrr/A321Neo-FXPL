@@ -157,21 +157,21 @@ local function draw_page_config()
     ----------------------
     sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-140, "Phase:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
     local text = "UKNWN"
-    if FMGS_sys.config.status == FMGS_PHASE_PREFLIGHT    then
+    if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT    then
         text = "PREFLIGHT"
-    elseif FMGS_sys.config.status == FMGS_PHASE_TAKEOFF then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_TAKEOFF then
         text = "TAKEOFF"
-    elseif FMGS_sys.config.status == FMGS_PHASE_CLIMB then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_CLIMB then
         text = "CLIMB"
-    elseif FMGS_sys.config.status == FMGS_PHASE_CRUISE then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_CRUISE then
         text = "CRUISE"
-    elseif FMGS_sys.config.status == FMGS_PHASE_DESCENT then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_DESCENT then
         text = "DESCENT"
-    elseif FMGS_sys.config.status == FMGS_PHASE_APPROACH then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_APPROACH then
         text = "APPROACH"
-    elseif FMGS_sys.config.status == FMGS_PHASE_GOAROUND then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_GOAROUND then
         text = "GOAROUND"
-    elseif FMGS_sys.config.status == FMGS_PHASE_DONE then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_DONE then
         text = "DONE"
     end
     sasl.gl.drawText(Font_B612MONO_regular, 80, size[2]-140, text, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
