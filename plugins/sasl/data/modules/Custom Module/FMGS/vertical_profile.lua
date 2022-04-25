@@ -928,7 +928,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
 
     -- This is needed by the MCDU to know where is the DECEL point
     FMGS_sys.data.pred.appr.steps[i_step].prev_wpt = the_big_array[computed_des_idx]
-    FMGS_sys.data.pred.appr.steps[i_step].dist_prev_wpt = the_big_array[computed_des_idx].pred.partial_dist
+    FMGS_sys.data.pred.appr.steps[i_step].dist_prev_wpt = the_big_array[computed_des_idx].pred.partial_dist or 0
 
     return - fuel_consumption * time
 end

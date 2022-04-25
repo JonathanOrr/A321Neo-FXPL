@@ -121,28 +121,28 @@ local function get_flt_phase(l, which)
     local str = ""
     if which == 1 then
         if l.flt_phase_user and l.flt_phase_user.is_climb then
-            str = str + "Y"
+            str = str .. "Y"
         end
-        str = str + "/"
+        str = str .. "/"
         if l.flt_phase and l.flt_phase.is_climb then
-            str = str + "Y"
+            str = str .. "Y"
         end
-        str = str + "/"
+        str = str .. "/"
         if l.pred and l.pred.is_climb then
-            str = str + "Y"
+            str = str .. "Y"
         end
     end
     if which == 2 then
         if l.flt_phase_user and l.flt_phase_user.is_descent then
-            str = str + "Y"
+            str = str .. "Y"
         end
-        str = str + "/"
+        str = str .. "/"
         if l.flt_phase and l.flt_phase.is_descent then
-            str = str + "Y"
+            str = str .. "Y"
         end
-        str = str + "/"
+        str = str .. "/"
         if l.pred and l.pred.is_climb then
-            str = str + "Y"
+            str = str .. "Y"
         end
     end
     return str
