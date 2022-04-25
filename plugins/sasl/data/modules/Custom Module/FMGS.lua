@@ -58,14 +58,17 @@ FMGS_sys.data = {
     },
     
     pred = {    -- Various predictions
+                ----------------------------------------------------------------------
+                -- NOTE! ADD the default value also to vertical_profile_reset() !
+                ----------------------------------------------------------------------
         invalid = false,
         trip_fuel = nil,
         trip_time = nil,
         trip_dist = nil,
         efob = nil,
+        require_update = false,
 
         takeoff = {
-            require_update = false,
             gdot = nil,
             ROC_init = nil,
             total_fuel_kgs = nil,

@@ -51,6 +51,7 @@ end
 function approx_TOD_distance(the_big_array, last_clb_idx)  -- This is a very rough prediction, but it's ok for just the weight
 
     local total_legs = #the_big_array
+
     local toc_to_rwy_dist = 0
     for i=last_clb_idx,total_legs do
         local leg = the_big_array[i]

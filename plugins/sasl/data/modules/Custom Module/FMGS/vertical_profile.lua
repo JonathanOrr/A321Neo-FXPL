@@ -62,6 +62,7 @@ local function prepare_the_common_big_array_merge(array)
     if not (array and array.legs) then
         return
     end
+
     for i, leg in ipairs(array.legs) do
         if not leg.discontinuity then
             if leg.pred and not leg.pred.is_climb and not last_clb_idx then
@@ -195,8 +196,44 @@ end
 -- Main functions
 -------------------------------------------------------------------------------
 local function vertical_profile_reset()
+    FMGS_sys.data.pred.invalid = false
+
+    FMGS_sys.data.pred.trip_fuel = nil
+    FMGS_sys.data.pred.trip_time = nil
+    FMGS_sys.data.pred.efob      = nil
+
     FMGS_sys.data.pred.takeoff.gdot = nil
     FMGS_sys.data.pred.takeoff.ROC_init = nil
+    FMGS_sys.data.pred.takeoff.total_fuel_kgs = nil
+    FMGS_sys.data.pred.takeoff.time_to_400ft = 0
+    FMGS_sys.data.pred.takeoff.dist_to_400ft = 0
+    FMGS_sys.data.pred.takeoff.time_to_sec_climb = 0
+    FMGS_sys.data.pred.takeoff.dist_to_sec_climb = 0
+    FMGS_sys.data.pred.takeoff.time_to_vacc = 0
+    FMGS_sys.data.pred.takeoff.dist_to_vacc = 0
+
+    FMGS_sys.data.pred.climb.total_fuel_kgs = nil
+    FMGS_sys.data.pred.climb.lim_wpt = nil
+    FMGS_sys.data.pred.climb.toc_wpt = nil
+
+    FMGS_sys.data.pred.descent.tod_wpt = nil
+    FMGS_sys.data.pred.descent.lim_wpt = nil
+
+    FMGS_sys.data.pred.appr.fdp_idx = nil
+    FMGS_sys.data.pred.appr.fdp_dist_to_rwy = nil
+    FMGS_sys.data.pred.appr.final_angle = nil
+    FMGS_sys.data.pred.appr.steps = {{},{},{},{},{},{},{}}
+
+    if the_big_array then
+        for _,leg in ipairs(the_big_array) do
+            leg.pred = {}
+        end
+    end
+
+    the_big_array    = nil   
+    last_clb_idx     = nil
+    first_des_idx    = nil
+    computed_des_idx = nil
 
 end
 
@@ -510,6 +547,7 @@ local function vertical_profile_cruise_update(idx_next_wpt)
     end 
 
     local D = leg.computed_distance or 0 -- This is the distance from the TOC to the first leg
+
 
     if curr_dist > D then
         -- This may happen if we reached the TC and the same time the next waypoint. In that case, the
@@ -1114,55 +1152,7 @@ local function vertical_profile_descent_update(approx_weight_at_TOD)
 
 end
 
-function vertical_profile_descent_add_pseudo()
-    -- This function adds the pseudo waypoints for the descent (we add all of them even if
-    -- not displayed by the ND/MCDU)
-    -- We start from the runway and we go back up
-    local end_i = #the_big_array
-    local steps_i = 1
-
-    local dist_from_rwy = 0
-
-    while end_i > 1 do -- The condition doesn't matter, we exit for the `break`
-        local leg = the_big_array[end_i]
-        local prev_leg = the_big_array[end_i-1]
-
-        dist_from_rwy = dist_from_rwy + (leg.computed_distance or 0)
-
-        while dist_from_rwy > - FMGS_sys.data.pred.appr.steps[steps_i].dist do
-
-            local perc
-            if leg.computed_distance > 0 then
-                perc = (dist_from_rwy + FMGS_sys.data.pred.appr.steps[steps_i].dist) / leg.computed_distance
-            else 
-                perc = 0 -- This in theory is not possible
-            end
-
-            FMGS_sys.data.pred.appr.steps[steps_i].ref_leg  = prev_leg
-            FMGS_sys.data.pred.appr.steps[steps_i].ref_perc = perc
-
-            FMGS_sys.data.pred.appr.steps[steps_i].fuel = Math_lerp(prev_leg.pred.fuel, leg.pred.fuel, perc)
-            FMGS_sys.data.pred.appr.steps[steps_i].time = Math_lerp(prev_leg.pred.time, leg.pred.time, perc)
-            
-
-            steps_i = steps_i + 1
-            if steps_i == 8 then
-                break
-            end
-        end
-
-        if steps_i == 8 then
-            break
-        end
-
-        end_i = end_i - 1
-    end
-
-
-
-end
-
-function vertical_profile_cruise_descent_ft_update()
+local function vertical_profile_cruise_descent_ft_update()
     -- From the first descent point (computed_des_idx, this time for real)
     -- we have to update fuel and time from that point on. The data on each
     -- waypoint is relative to each leg (and we need to transform it to global)
@@ -1228,7 +1218,7 @@ end
 local function update_overall_predictions()
     FMGS_sys.data.pred.trip_time = the_big_array[#the_big_array].pred.time
     FMGS_sys.data.pred.trip_fuel = the_big_array[#the_big_array].pred.fuel / 1000
-    FMGS_sys.data.pred.trip_efob = (FMGS_sys.data.init.weights.block_fuel - FMGS_sys.data.pred.trip_fuel / 1000)
+    FMGS_sys.data.pred.efob = (FMGS_sys.data.init.weights.block_fuel - FMGS_sys.data.pred.trip_fuel / 1000)
 end
 
 function vertical_profile_update()
@@ -1272,17 +1262,19 @@ function vertical_profile_update()
         return  -- Cannot make any other prediction
     end
 
+
     local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
 
     vertical_profile_descent_update(approx_weight_at_TOD)
 
     local exact_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
 
-    vertical_profile_cruise_descent_ft_update()
-    --vertical_profile_descent_add_pseudo()
+    if not FMGS_sys.data.pred.invalid then
+        vertical_profile_cruise_descent_ft_update()
 
-    -- Update main predictions like overall time, etc.
-    update_overall_predictions()
+        -- Update main predictions like overall time, etc.
+        update_overall_predictions()
+    end
 
 end
 

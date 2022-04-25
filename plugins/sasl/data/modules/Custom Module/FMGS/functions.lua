@@ -1006,7 +1006,7 @@ function FMGS_perf_get_pred_trip_fuel()
 end
 
 function FMGS_perf_get_pred_trip_efob()
-    return FMGS_sys.data.pred.trip_efob
+    return FMGS_sys.data.pred.efob
 end
 
 function FMGS_pred_get_toc()

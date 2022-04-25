@@ -23,7 +23,7 @@ include("debug_windows/FMGS_debug_constraints.lua")
 
 size = {1000, 600}
 
-local curr_page = 4
+local curr_page = 1
 local curr_detail = nil
 local curr_detail_2 = nil
 local load_result = ""
@@ -254,17 +254,17 @@ local function draw_page_pred()
     sasl.gl.drawFrame (10, size[2]-570, 400, 150, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-440, "PREDICTIONS", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-460, "Trip Fuel:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-460, FMGS_sys.data.pred.trip_fuel or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-460, "Trip Fuel (kgs):", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-460, FMGS_sys.data.pred.trip_fuel and Round(FMGS_sys.data.pred.trip_fuel*1000, 2) or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-480, "Trip Time:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-480, FMGS_sys.data.pred.trip_time or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-480, "Trip Time (s):", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-480, FMGS_sys.data.pred.trip_time and math.floor(FMGS_sys.data.pred.trip_time) or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-500, "Trip Dist:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-500, FMGS_sys.data.pred.trip_dist or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-500, "Trip Dist (nm):", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-500, FMGS_sys.data.pred.trip_dist and Round(FMGS_sys.data.pred.trip_dist, 1) or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
     sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-520, "EFOB:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-520, FMGS_sys.data.pred.efob or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-520, FMGS_sys.data.pred.efob or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
 
 end
