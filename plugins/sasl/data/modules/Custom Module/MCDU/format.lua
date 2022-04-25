@@ -95,6 +95,16 @@ function mcdu_time_beautify(time_in_sec)
     if type(time_in_sec) ~= "number" then
         assert(false, "time_in_sec should be a number but instead is:" .. tostring(time_in_sec))
     end
+
+    -- Now, if we are in takeoff or later phase, we have to compute the UTC time
+    if FMGS_get_phase() > FMGS_PHASE_PREFLIGHT then
+        local time_diff = get(TIME) - FMGS_get_takeoff_time()
+        local curr_sec = get(ZULU_hours)*3600 + get(ZULU_mins)* 60 + get(ZULU_secs)
+        local orig_time_takeoff = (curr_sec - time_diff + 86400) % 86400
+
+        time_in_sec = (time_in_sec + orig_time_takeoff) % 86400 
+    end
+
     local hours   = math.floor(time_in_sec / 3600)
     local minutes = math.floor((time_in_sec-hours*3600) / 60)
     return Fwd_string_fill(hours.."", "0", 2) .. Fwd_string_fill(minutes.."", "0", 2)

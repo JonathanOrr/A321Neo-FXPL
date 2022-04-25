@@ -81,6 +81,11 @@ function FMGS_get_phase()
     return FMGS_sys.config.phase
 end
 
+function FMGS_get_takeoff_time()
+    return FMGS_sys.config.takeoff_time
+end
+
+
 function FMGS_get_status()
     return FMGS_sys.config.status
 end

@@ -26,14 +26,16 @@ function THIS_PAGE:render_dep(mcdu_data)
     local arpt_id    = mcdu_data.page_data[600].curr_fpln.apts.dep.id
     local arpt_alt   = mcdu_data.page_data[600].curr_fpln.apts.dep.alt
 
-    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, "0000", FMGS_perf_get_v_speeds(), tostring(arpt_alt), nil, "", nil, nil, nil, true)
+    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, mcdu_time_beautify(0), FMGS_perf_get_v_speeds(), tostring(arpt_alt), nil, "", nil, nil, nil, true)
 end
 
 -------------------------------------------------------------------------------
 -- ARRIVAL
 -------------------------------------------------------------------------------
 function THIS_PAGE:render_dest(mcdu_data)
-    self:set_line(mcdu_data, MCDU_LEFT, 6, " DEST   TIME", MCDU_SMALL)
+    local time_str = FMGS_get_phase() > FMGS_PHASE_PREFLIGHT and "UTC " or "TIME"
+
+    self:set_line(mcdu_data, MCDU_LEFT, 6, " DEST   " .. time_str, MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
 
     local arr_id    = mcdu_data.page_data[600].curr_fpln.apts.arr.id
@@ -537,7 +539,8 @@ function THIS_PAGE:render(mcdu_data)
     THIS_PAGE:render_list(mcdu_data)
     THIS_PAGE:print_render_list(mcdu_data)
 
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, "TIME  SPD/ALT   ", MCDU_SMALL)
+    local time_str = FMGS_get_phase() > FMGS_PHASE_PREFLIGHT and "UTC " or "TIME"
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, time_str .. "  SPD/ALT   ", MCDU_SMALL)
 
     if mcdu_data.page_data[600].curr_idx == 1 then
         THIS_PAGE:render_dep(mcdu_data)
