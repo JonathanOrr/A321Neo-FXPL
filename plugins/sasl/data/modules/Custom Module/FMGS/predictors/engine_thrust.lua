@@ -74,8 +74,13 @@ end
 
 function predict_minimum_N1_engine(altitude_feet, oat, density, flaps, is_gear_open)
 
-    -- Now let's check if the computed N1 is below the minimum:
+    -- IDEL APPR N1
     local idle_appr = ENG.data.min_n1_approach_idle(altitude_feet, oat)
+    if flaps == 0 and is_gear_open == false then
+        idle_appr = 0
+    end
+
+    -- Normal MIN N1
     local comp_min_n1 = ENG.data.min_n1_idle(density)
 
     return math.max(idle_appr, comp_min_n1, ENG.data.min_n1_idle_hard)

@@ -141,7 +141,7 @@ local function get_flt_phase(l, which)
             str = str .. "Y"
         end
         str = str .. "/"
-        if l.pred and l.pred.is_climb then
+        if l.pred and l.pred.is_descent then
             str = str .. "Y"
         end
     end

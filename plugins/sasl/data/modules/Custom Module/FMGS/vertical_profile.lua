@@ -986,6 +986,12 @@ local function vertical_profile_descent_update_step89(weight, idx)
         local thrust_idle = predict_engine_thrust(mach, density, oat, curr_alt, N1_minimum) * 2
         local fuel_consumption = ENG.data.n1_to_FF(N1_minimum/get_takeoff_N1(), density)*2
         local net_force = thrust_idle - drag
+        if net_force >= 0 then
+            sasl.logWarning("Net force in descent is not negative but is " .. net_force .. 
+                            " (thrust_idle=" .. thrust_idle .. ", drag=" .. drag .. 
+                            "). This shouldn't be possible.")
+            net_force = -10000   -- Just a random number to avoid crash, predictions will be off
+        end
 
         local wpt_dist =  the_big_array[computed_des_idx+1].computed_distance or 0
         local dist_to_next_wpt = wpt_dist - initial_dist_to_consider
@@ -1000,13 +1006,17 @@ local function vertical_profile_descent_update_step89(weight, idx)
             -- First of all let's check if we have to decelerate
             local no_descent_GS = GS -- Approx
             local this_wpt_time_approx = nm_to_m(dist_to_next_wpt / kts_to_ms(no_descent_GS))
+            if this_wpt_time_approx < 1 then
+                this_wpt_time_approx = 1 -- Just as a safety precaution
+            end
             decel_we_need = kts_to_ms(V_START-V_END) / this_wpt_time_approx
             local h_force_we_need = decel_we_need * weight
 
-            local v_force = net_force - h_force_we_need
+            assert(h_force_we_need >= 0)
+            local v_force = net_force + h_force_we_need
             while v_force > 0 do -- We cannot decelerate so fast, so let's halve the h_force to continue the descent
                 h_force_we_need = h_force_we_need / 2
-                v_force = net_force - h_force_we_need  
+                v_force = net_force + h_force_we_need  
             end
 
             -- Ok now compute the descent parameters
@@ -1015,6 +1025,8 @@ local function vertical_profile_descent_update_step89(weight, idx)
             VS = ms_to_fpm(v_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
             GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
             time  = nm_to_m(dist_to_next_wpt) / kts_to_ms(GS)
+
+            V_END = V_END + ms_to_kts(decel * time)
         end 
 
         curr_alt = curr_alt - VS * time / 60

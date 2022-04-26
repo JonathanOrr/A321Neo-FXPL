@@ -11,11 +11,11 @@ function draw_waypoints()
 
     local max_alt = FMGS_sys.data.init.crz_fl or 40000
     sasl.gl.drawText(Font_B612MONO_regular, 70, 495, max_alt, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 70, 5*400/6+95, 5*max_alt/6, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 70, 4*400/6+95, 4*max_alt/6, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 70, 3*400/6+95, 3*max_alt/6, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 70, 2*400/6+95, 2*max_alt/6, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 70, 1*400/6+95, max_alt/6, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 5*400/6+95, math.floor(5*max_alt/6), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 4*400/6+95, math.floor(4*max_alt/6), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 3*400/6+95, math.floor(3*max_alt/6), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 2*400/6+95, math.floor(2*max_alt/6), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 70, 1*400/6+95, math.floor(max_alt/6), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 70, 95, 0, 12, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
 
     
