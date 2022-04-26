@@ -351,8 +351,7 @@ function vertical_profile_climb_update()
         -- for the display in the MCDU
         local _,_,v2 = FMGS_perf_get_v_speeds()
         the_big_array[i].pred.time = curr_time
-        the_big_array[i].pred.ias  = 2
-
+        the_big_array[i].pred.ias  = v2 + 10    -- First points are V_SRS (V2 + 10)
     end
 
     curr_dist = traveled_nm + the_big_array[i].computed_distance
