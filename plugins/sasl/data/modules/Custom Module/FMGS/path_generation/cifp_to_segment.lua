@@ -16,7 +16,7 @@
 -- Short description: Convert a FPLN to a sequence of segments
 -------------------------------------------------------------------------------
 
-
+local debug_leg_names = {"IF", "TF", "CF", "DF", "FA", "FC", "FD", "FM", "CA", "CD", "CI", "CR", "RF", "AF", "VA", "VD", "VI", "VM", "VR", "PI", "HA", "HF", "HM" }
 local last_mag_decl = 0
 
 local function estimate_vertical_performance(start_alt, end_alt)
@@ -171,13 +171,14 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, enforce_in
 
    local outb = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
 
-   if math.floor(last_course) == math.floor(outb) then
+   local heading_diff = math.abs(heading_difference(last_course, outb))
+   if heading_diff < 5 then
       -- Simple case, just keep the heading
       return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
    end
 
    -- If not, we have to intercept the new course
-   local INTERCEPT_ANGLE = 45 -- From 30 to 45
+   local INTERCEPT_ANGLE = math.min(heading_diff, 45) -- From 30 to 45
 
    local goal_out_radial    = (outb+180)%360;
    local intercept_radial_1 = (outb+INTERCEPT_ANGLE) % 360;
@@ -203,7 +204,7 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, enforce_in
 
    -- This is something unexpected, but let's skip the radial connection
    -- and go direct
-   sasl.logWarning("convert_generic_CF: CF cannot find radial")
+   sasl.logWarning("convert_generic_CF: CF cannot find radial. last_course="..last_course.." outb="..outb.. " INTERCEPT_ANGLE="..INTERCEPT_ANGLE)
    return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
 end
 
@@ -342,7 +343,6 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
          -- Here we have two cases:
          -- - We have a previous point, just go direct to the IF fix then
          -- - This is the first point ever (in this save it and do nothing)
-
          if last_lat and last_lon and last_lat ~= x.lat and last_lon ~= x.lon  then
             -- Let's consider it similar to a TF leg
             leg1 = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
@@ -502,7 +502,6 @@ function convert_from_FMGS_data(fpln)
  
     local parse_section = function(name, str_desc)
        i_legs = apts[name] and apts[name].legs
- 
        segments, last_lat, last_lon, last_ob, last_c_alt = convert_generic(i_legs,last_lat,last_lon,last_c_alt,last_ob)
  
        if debug_FMGS_path_generation then

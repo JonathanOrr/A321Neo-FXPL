@@ -279,7 +279,7 @@ local function draw_active_fpln(data)   -- This is just a test
             x.x = c_x
             x.y = c_y
 
-            local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+            local color = ECAM_GREEN
 
             if x.ptr_type == FMGS_PTR_WPT then
                 draw_poi_array(data, x, image_point_wpt, color)

@@ -123,7 +123,7 @@ local function create_turn(curr, next, speed)
     local diff = math.abs(heading_difference(curr_bear, next_bear)) 
     if diff > 0 and diff <= 90 then
         return create_turn_less_90(curr, next, curr_bear, next_bear, speed)
-    elseif diff > 0 and diff < 180 then
+    elseif diff > 0 and diff < 178 then -- Skip the turn if it's within 2 degree
         return create_turn_less_180(curr, next, curr_bear, next_bear, speed)
     else
         return nil  -- No need a turn
@@ -203,8 +203,7 @@ function create_turns(old_FPLN)
         local curr = old_FPLN[i]
         local next = old_FPLN[i+1]
 
-        local speed = (curr.orig_ref.cstr_speed_type and curr.orig_ref.cstr_speed_type > 0 and curr.orig_ref.cstr_speed)
-                       or (curr.orig_ref.pred and curr.orig_ref.pred.ias) or 180
+        local speed = (curr.orig_ref.pred and curr.orig_ref.pred.ias) or 180
 
         if     (curr.segment_type == FMGS_COMP_SEGMENT_LINE or curr.segment_type == FMGS_COMP_SEGMENT_ENROUTE) 
            and (next.segment_type == FMGS_COMP_SEGMENT_LINE or next.segment_type == FMGS_COMP_SEGMENT_ENROUTE)
