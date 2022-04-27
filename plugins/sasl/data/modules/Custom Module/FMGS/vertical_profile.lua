@@ -610,6 +610,7 @@ local function vertical_profile_cruise_update(idx_next_wpt)
 
         leg.pred.altitude = cruise_alt
         leg.pred.mach = managed_mach
+        leg.pred.ias  = mach_to_cas(managed_mach, cruise_alt)
         leg.pred.cms_segment = true
         leg.pred.vs   = 0
         leg.pred.time = curr_time

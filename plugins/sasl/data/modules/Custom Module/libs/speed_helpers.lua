@@ -35,9 +35,17 @@ local function compressible_pitot(M)
     return (M*M*(k-1)/2 + 1) ^ (k/(k-1)) - 1
 end
 
+local function compressible_pitot_inverse(p)
+    return math.sqrt(((p + 1) ^ (1/(k/(k-1))) - 1) * 2 / (k-1))
+end
+
 -- Return Mach number, given a pressure ratio d=p_d/p_s
-local function pitot_to_Mach(d)
+local function pitot_to_mach(d)
     return math.sqrt(((d+1)^((k-1)/k) - 1)*2/(k-1))
+end
+
+local function mach_to_pitot(M)
+    return (M^2 * (k-1) / 2 + 1)^(1/((k-1)/k)) - 1
 end
 
 -- Given an altitude h, return the temperature, assuming we're
@@ -108,11 +116,21 @@ function convert_to_eas_tas_mach(cas, alt)
     local rho = density(alt)
     local pd = compressible_pitot(cas/lss0) * p0
 
-    local M = pitot_to_Mach(pd / ps)
+    local M = pitot_to_mach(pd / ps)
     local eas = lss0 * M * math.sqrt(ps/p0)
     local tas = lss * M
 
     return ms_to_kts(eas), ms_to_kts(tas), M
+end
+
+function mach_to_cas(M, alt)
+    alt = alt / feet_per_metre
+
+    local ps = pressure(alt)
+    local pd = mach_to_pitot(M) * ps
+    local caslss = compressible_pitot_inverse(pd / p0)
+
+    return ms_to_kts(caslss * lss0)
 end
 
 function convert_to_tas(M, alt)
