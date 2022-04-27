@@ -319,7 +319,7 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
    local enforce_intercept_course = false
 
    if not i_legs then
-      return {}, begin_lat, begin_lon, begin_alt, begin_course
+      return {}, begin_lat, begin_lon, begin_course, begin_alt
    end
 
    if debug_FMGS_path_generation then
@@ -355,7 +355,7 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       elseif x.leg_type == CIFP_LEG_TYPE_TF or x.leg_type == CIFP_LEG_TYPE_DF then
          -- For TF the outb_mag may or may not be valid (optional field)
          -- we enforce it with the correct computation 
-         x.outb_mag = get_earth_bearing(last_lat, last_lon, x.lat, x.lon)
+         x.outb_mag = get_earth_bearing(last_lat, last_lon, x.lat, x.lon)*10
          x.outb_mag_in_true = true
          leg1 = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
       elseif x.leg_type == CIFP_LEG_TYPE_RF then
