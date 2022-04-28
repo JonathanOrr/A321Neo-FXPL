@@ -140,6 +140,7 @@ end
 
 --used to animate a value with a curve USE ONLY WITH FLOAT VALUES
 function Set_anim_value(current_value, target, min, max, speed)
+    assert(speed >= 0, "Anim value speed must be > 0!")
 
     if target >= (max - 0.001) and current_value >= (max - 0.01) then
         return max
@@ -152,6 +153,8 @@ function Set_anim_value(current_value, target, min, max, speed)
 end
 
 function Set_anim_value_linear_range(current_value, target, min, max, linear_spd, curved_spd)
+    assert(linear_spd >= 0 and curved_spd >=0, "Anim value speed must be > 0!")
+
     local limited_target = Math_clamp(target, min, max)
 
     local int_linear_speed = linear_spd / curved_spd
@@ -161,10 +164,12 @@ function Set_anim_value_linear_range(current_value, target, min, max, linear_spd
 end
 
 function Set_anim_value_no_lim(current_value, target, speed)
+    assert(speed >= 0, "Anim value speed must be > 0!")
     return current_value + ((target - current_value) * (speed * get(DELTA_TIME)))
 end
 
 local function Set_linear_anim_value_internal(current_value, target, min, max, speed, speed_m)
+    assert(speed >= 0 and speed_m >= 0, "Anim value speed must be > 0!")
     target = Math_clamp(target, min, max)
     if speed_m ~= 0 and speed ~= 0 then
         if target - current_value < (speed + (speed * 0.005)) * speed_m and target - current_value > -(speed + (speed * 0.005)) * speed_m then

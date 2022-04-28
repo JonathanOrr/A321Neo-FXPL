@@ -849,7 +849,7 @@ local function update_startup_case3(eng, req_cooldown)
 
         -- Set EGT and FF to zero
         if eng_EGT_off[eng] == EGT_MAGIC then eng_EGT_off[eng] = ENG.dyn[eng].egt end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
-        local egt_speed = math.min(10, (eng_EGT_off[eng]-get(OTA))/20)
+        local egt_speed = math.min(10, math.abs(eng_EGT_off[eng]-get(OTA))/20)
         eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], get(OTA), -50, 1500, egt_speed)
         eng_FF_off[eng] = 0
         igniter_eng[eng] = 0
