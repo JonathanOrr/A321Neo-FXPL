@@ -57,7 +57,7 @@ FMGS_sys.data = {
         max_alt = nil,
         opt_alt = nil
     },
-    
+
     pred = {    -- Various predictions
                 ----------------------------------------------------------------------
                 -- NOTE! ADD the default value also to vertical_profile_reset() !
@@ -109,7 +109,13 @@ FMGS_sys.data = {
     },
 
     nav_accuracy = 0.0,
+    winds = {}
 }
+
+FMGS_sys.data.winds[FMGS_PHASE_CLIMB] = {}
+FMGS_sys.data.winds[FMGS_PHASE_CRUISE] = {}
+FMGS_sys.data.winds[FMGS_PHASE_DESCENT] = {}
+
 FMGS_sys.fpln = {
 
     active = {

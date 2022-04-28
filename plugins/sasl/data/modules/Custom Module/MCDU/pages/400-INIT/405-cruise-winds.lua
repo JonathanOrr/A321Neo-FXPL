@@ -14,10 +14,10 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=403})
+local THIS_PAGE = MCDU_Page:new({id=405})
 
 function THIS_PAGE:render(mcdu_data)
-    self:set_title(mcdu_data, "CLIMB WIND")
+    self:set_title(mcdu_data, "CRZ WIND")
 
     
     self:set_line(mcdu_data, MCDU_LEFT, 4, "PAGE NOT YET IMPLEMENTED", MCDU_LARGE, ECAM_MAGENTA)

@@ -110,6 +110,10 @@ function mcdu_time_beautify(time_in_sec)
     return Fwd_string_fill(hours.."", "0", 2) .. Fwd_string_fill(minutes.."", "0", 2)
 end
 
+function mcdu_fl_to_str(fl)
+  return "FL"..mcdu_pad_num(math.floor(fl), 3)
+end
+
 function mcdu_format_force_to_small(text)
 
     if type(text) ~= "string" then
