@@ -55,7 +55,7 @@ end
 --- @field set fun(self:GlobalProperty, value:any, offset:number, numValues:number)
 --- @field size fun():number
 --- @field free fun()
---- @field raw fun():lightuserdata
+--- @field raw fun():userdata
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ end
 --- : https://1-sim.com/files/SASL3Manual.pdf#globalProperty
 function globalProperty(name)
     local ref, t = sasl.findDataRef(name, TYPE_UNKNOWN, true)
-    local index = nil
+    local index
     if not ref then
         local sname, sindex = string.match(name, '(.+)%[(%d+)%]$')
         if sname and sindex then
@@ -169,16 +169,16 @@ function globalProperty(name)
     local size = function() return sasl.getDataRefSize(ref) end
     if t == TYPE_INT_ARRAY or t == TYPE_FLOAT_ARRAY or t == TYPE_STRING then
         if index then
-            get = function(self) return sasl.getDataRef(ref, index + 1, nil) end
-            set = function(self, value) sasl.setDataRef(ref, value, index + 1, nil) end
+            get = function(_) return sasl.getDataRef(ref, index + 1, nil) end
+            set = function(_, value) sasl.setDataRef(ref, value, index + 1, nil) end
             size = function() return 1 end
         else
-            get = function(self, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end
-            set = function(self, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end
+            get = function(_, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end
+            set = function(_, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end
         end
     else
-        get = function(self) return sasl.getDataRef(ref) end
-        set = function(self, value) sasl.setDataRef(ref, value) end
+        get = function(_) return sasl.getDataRef(ref) end
+        set = function(_, value) sasl.setDataRef(ref, value) end
     end
 
     return {
@@ -208,11 +208,11 @@ function globalPropertyd(name)
     local get, set
 
     if t == TYPE_FLOAT or t == TYPE_DOUBLE or t == TYPE_INT then
-        get = function(self) return sasl.getDataRef(ref) end
-        set = function(self, value) sasl.setDataRef(ref, value) end
+        get = function(_) return sasl.getDataRef(ref) end
+        set = function(_, value) sasl.setDataRef(ref, value) end
     elseif t == TYPE_STRING then
-        get = function(self) return 0 end
-        set = function(self, value) sasl.setDataRef(ref, tostring(value), nil, nil) end
+        get = function(_) return 0 end
+        set = function(_, value) sasl.setDataRef(ref, tostring(value), nil, nil) end
         logDebug('"'..name..'": '.."Casting string to double")
     else
         logWarning('"'..name..'": '.."Can't cast "..propTypeToString(t).." to double")
@@ -252,8 +252,8 @@ function createGlobalPropertyd(name, default, isNotPublished, isShared, isReadOn
     return {
         __p = 1;
         name = name;
-        get = function(self) return sasl.getDataRef(ref) end;
-        set = function(self, value) sasl.setDataRef(ref, value) end;
+        get = function(_) return sasl.getDataRef(ref) end;
+        set = function(_, value) sasl.setDataRef(ref, value) end;
         size = function() return 1 end;
         free = function() sasl.freeDataRef(ref) end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -277,8 +277,8 @@ function createFunctionalPropertyd(name, getter, setter, isNotPublished)
     return {
         __p = 1;
         name = name;
-        get = function(self) return sasl.getDataRef(ref) end;
-        set = function(self, value) sasl.setDataRef(ref, value) end;
+        get = function(_) return sasl.getDataRef(ref) end;
+        set = function(_, value) sasl.setDataRef(ref, value) end;
         size = function() return 1 end;
         free = function() sasl.freeDataRef(ref) end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -301,11 +301,11 @@ function globalPropertyf(name)
     local get, set
 
     if t == TYPE_FLOAT or t == TYPE_DOUBLE or t == TYPE_INT then
-        get = function(self) return sasl.getDataRef(ref) end
-        set = function(self, value) sasl.setDataRef(ref, value) end
+        get = function(_) return sasl.getDataRef(ref) end
+        set = function(_, value) sasl.setDataRef(ref, value) end
     elseif t == TYPE_STRING then
-        get = function(self) return 0 end
-        set = function(self, value) sasl.setDataRef(ref, tostring(value), nil, nil) end
+        get = function(_) return 0 end
+        set = function(_, value) sasl.setDataRef(ref, tostring(value), nil, nil) end
         logDebug('"'..name..'": '.."Casting string to float")
     else
         logWarning('"'..name..'": '.."Can't cast "..propTypeToString(t).." to float")
@@ -345,8 +345,8 @@ function createGlobalPropertyf(name, default, isNotPublished, isShared, isReadOn
     return {
         __p = 1;
         name = name;
-        get = function(self) return sasl.getDataRef(ref) end;
-        set = function(self, value) sasl.setDataRef(ref, value) end;
+        get = function(_) return sasl.getDataRef(ref) end;
+        set = function(_, value) sasl.setDataRef(ref, value) end;
         size = function() return 1 end;
         free = function() sasl.freeDataRef(ref) end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -370,8 +370,8 @@ function createFunctionalPropertyf(name, getter, setter, isNotPublished)
     return {
         __p = 1;
         name = name;
-        get = function(self) return sasl.getDataRef(ref) end;
-        set = function(self, value) sasl.setDataRef(ref, value) end;
+        get = function(_) return sasl.getDataRef(ref) end;
+        set = function(_, value) sasl.setDataRef(ref, value) end;
         size = function() return 1 end;
         free = function() sasl.freeDataRef(ref) end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -394,15 +394,15 @@ function globalPropertyi(name)
     local get, set
 
     if t == TYPE_INT then
-        get = function(self) return sasl.getDataRef(ref) end
-        set = function(self, value) sasl.setDataRef(ref, value) end
+        get = function(_) return sasl.getDataRef(ref) end
+        set = function(_, value) sasl.setDataRef(ref, value) end
     elseif t == TYPE_FLOAT or t == TYPE_DOUBLE then
-        get = function(self) return math.floor(sasl.getDataRef(ref)) end
-        set = function(self, value) sasl.setDataRef(ref, math.floor(value)) end
+        get = function(_) return math.floor(sasl.getDataRef(ref)) end
+        set = function(_, value) sasl.setDataRef(ref, math.floor(value)) end
         logDebug('"'..name..'": '.."Casting "..propTypeToString(t).." to int")
     elseif t == TYPE_STRING then
-        get = function(self) return 0 end
-        set = function(self, value) sasl.setDataRef(ref, tostring(value), nil, nil) end
+        get = function(_) return 0 end
+        set = function(_, value) sasl.setDataRef(ref, tostring(value), nil, nil) end
         logDebug('"'..name..'": '.."Casting string to int")
     else
         logWarning('"'..name..'": '.."Can't cast "..propTypeToString(t).." to int")
@@ -442,8 +442,8 @@ function createGlobalPropertyi(name, default, isNotPublished, isShared, isReadOn
     return {
         __p = 1;
         name = name;
-        get = function(self) return sasl.getDataRef(ref) end;
-        set = function(self, value) sasl.setDataRef(ref, value) end;
+        get = function(_) return sasl.getDataRef(ref) end;
+        set = function(_, value) sasl.setDataRef(ref, value) end;
         size = function() return 1 end;
         free = function() sasl.freeDataRef(ref) end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -467,8 +467,8 @@ function createFunctionalPropertyi(name, getter, setter, isNotPublished)
     return {
         __p = 1;
         name = name;
-        get = function(self) return sasl.getDataRef(ref) end;
-        set = function(self, value) sasl.setDataRef(ref, value) end;
+        get = function(_) return sasl.getDataRef(ref) end;
+        set = function(_, value) sasl.setDataRef(ref, value) end;
         size = function() return 1 end;
         free = function() sasl.freeDataRef(ref) end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -491,11 +491,11 @@ function globalPropertys(name)
     local get, set
 
     if t == TYPE_STRING then
-        get = function(self, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end
-        set = function(self, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end
+        get = function(_, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end
+        set = function(_, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end
     elseif t == TYPE_FLOAT or t == TYPE_INT or t == TYPE_DOUBLE then
-        get = function(self) return tostring(sasl.getDataRef(ref, nil, nil)) end
-        set = function(self, value) end
+        get = function(_) return tostring(sasl.getDataRef(ref, nil, nil)) end
+        set = function(_) end
         logDebug('"'..name..'": '.."Casting "..propTypeToString(t).." to string. Partial <get> and <set> aren't available")
     else
         logWarning('"'..name..'": '.."Can't cast "..propTypeToString(t).." to string")
@@ -539,8 +539,8 @@ function createGlobalPropertys(name, default, isNotPublished, isShared, isReadOn
     return {
         __p = 1;
         name = name;
-        get = function(self, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end;
-        set = function(self, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end;
+        get = function(_, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end;
+        set = function(_, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end;
         size = function() return sasl.getDataRefSize(ref) end;
         free = function() sasl.freeDataRef(ref) end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -566,8 +566,8 @@ function createFunctionalPropertys(name, getter, setter, isNotPublished, sizeGet
     return {
         __p = 1;
         name = name;
-        get = function(self, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end;
-        set = function(self, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end;
+        get = function(_, offset, numValues) return sasl.getDataRef(ref, offset, numValues) end;
+        set = function(_, value, offset, numValues) sasl.setDataRef(ref, value, offset, numValues) end;
         size = function() return sasl.getDataRefSize(ref); end;
         free = function() sasl.freeDataRef(ref); end;
         raw = function() return sasl.getRawDataRef(ref) end;
@@ -590,17 +590,17 @@ function globalPropertyia(name)
     local get, set
 
     if t == TYPE_INT_ARRAY then
-        get = function(self, offset, numValues)
+        get = function(_, offset, numValues)
             return sasl.getDataRef(ref, offset, numValues)
         end
-        set = function(self, value, offset, numValues)
+        set = function(_, value, offset, numValues)
             sasl.setDataRef(ref, value, offset, numValues)
         end
     elseif t == TYPE_FLOAT_ARRAY then
-        get = function(self, offset, numValues)
+        get = function(_, offset, numValues)
             return floorArray(sasl.getDataRef(ref, offset, numValues))
         end
-        set = function(self, value, offset, numValues)
+        set = function(_, value, offset, numValues)
             sasl.setDataRef(ref, floorArray(value), offset, numValues)
         end
         logDebug('"'..name..'": '.."Casting float array to int array")
@@ -636,11 +636,11 @@ function globalPropertyiae(name, index)
     end
     local get, set
     if t == TYPE_INT_ARRAY then
-        get = function(self) return sasl.getDataRef(ref, index, nil) end
-        set = function(self, value) sasl.setDataRef(ref, value, index, nil) end
+        get = function(_) return sasl.getDataRef(ref, index, nil) end
+        set = function(_, value) sasl.setDataRef(ref, value, index, nil) end
     elseif t == TYPE_FLOAT_ARRAY then
-        get = function(self) return math.floor(sasl.getDataRef(ref, index, nil)) end
-        set = function(self, value) sasl.setDataRef(ref, math.floor(value), index, nil) end
+        get = function(_) return math.floor(sasl.getDataRef(ref, index, nil)) end
+        set = function(_, value) sasl.setDataRef(ref, math.floor(value), index, nil) end
         logDebug('"'..name..'": '.."Casting float array element to int array element")
     else
         logWarning('"'..name..'": '.."Can't cast "..propTypeToString(t).." to int array element")
@@ -691,10 +691,10 @@ function createGlobalPropertyia(name, default, isNotPublished, isShared, isReadO
     return {
         __p = 1;
         name = name;
-        get = function(self, offset, numValues)
+        get = function(_, offset, numValues)
             return sasl.getDataRef(ref, offset, numValues)
         end;
-        set = function(self, value, offset, numValues)
+        set = function(_, value, offset, numValues)
             sasl.setDataRef(ref, value, offset, numValues)
         end;
         size = function() return sasl.getDataRefSize(ref) end;
@@ -722,10 +722,10 @@ function createFunctionalPropertyia(name, getter, setter, isNotPublished, sizeGe
     return {
         __p = 1;
         name = name;
-        get = function(self, offset, numValues)
+        get = function(_, offset, numValues)
             return sasl.getDataRef(ref, offset, numValues)
         end;
-        set = function(self, value, offset, numValues)
+        set = function(_, value, offset, numValues)
             sasl.setDataRef(ref, value, offset, numValues)
         end;
         size = function() return sasl.getDataRefSize(ref) end;
@@ -750,10 +750,10 @@ function globalPropertyfa(name)
     local get, set
 
     if t == TYPE_FLOAT_ARRAY or t == TYPE_INT_ARRAY then
-        get = function(self, offset, numValues)
+        get = function(_, offset, numValues)
             return sasl.getDataRef(ref, offset, numValues)
         end
-        set = function(self, value, offset, numValues)
+        set = function(_, value, offset, numValues)
             sasl.setDataRef(ref, value, offset, numValues)
         end
     else
@@ -789,8 +789,8 @@ function globalPropertyfae(name, index)
     local get, set
 
     if t == TYPE_FLOAT_ARRAY or t == TYPE_INT_ARRAY then
-        get = function(self) return sasl.getDataRef(ref, index, nil) end
-        set = function(self, value) sasl.setDataRef(ref, value, index, nil) end
+        get = function(_) return sasl.getDataRef(ref, index, nil) end
+        set = function(_, value) sasl.setDataRef(ref, value, index, nil) end
     else
         logWarning('"'..name..'": '.."Can't cast "..propTypeToString(t).." to float array element")
     end
@@ -839,10 +839,10 @@ function createGlobalPropertyfa(name, default, isNotPublished, isShared, isReadO
     return {
         __p = 1;
         name = name;
-        get = function(self, offset, numValues)
+        get = function(_, offset, numValues)
             return sasl.getDataRef(ref, offset, numValues)
         end;
-        set = function(self, value, offset, numValues)
+        set = function(_, value, offset, numValues)
             sasl.setDataRef(ref, value, offset, numValues)
         end;
         size = function() return sasl.getDataRefSize(ref) end;
@@ -870,10 +870,10 @@ function createFunctionalPropertyfa(name, getter, setter, isNotPublished, sizeGe
     return {
         __p = 1;
         name = name;
-        get = function(self, offset, numValues)
+        get = function(_, offset, numValues)
             return sasl.getDataRef(ref, offset, numValues)
         end;
-        set = function(self, value, offset, numValues)
+        set = function(_, value, offset, numValues)
             sasl.setDataRef(ref, value, offset, numValues)
         end;
         size = function() return sasl.getDataRefSize(ref); end;

@@ -4,13 +4,13 @@
 
 --- Default mouse click handler for component.
 --- @param comp Component
---- @param x number
---- @param y number
---- @param button MouseButtonID
+--- @param _ number
+--- @param _ number
+--- @param button MouseButton
 --- @param parentX number
 --- @param parentY number
 --- @return boolean
-function private.defaultOnMouseHold(comp, x, y, button, parentX, parentY)
+function private.defaultOnMouseHold(comp, _, _, button, parentX, parentY)
     if button == 1 and get(comp.movable) and comp.dragging == 1 then
         local position = get(comp.position)
         comp.dragStartX = parentX
@@ -30,7 +30,7 @@ end
 --- @param comp Component
 --- @param x number
 --- @param y number
---- @param button MouseButtonID
+--- @param button MouseButton
 --- @param parentX number
 --- @param parentY number
 --- @return boolean
@@ -59,13 +59,13 @@ end
 
 --- Default mouse up handler for component.
 --- @param comp Component
---- @param x number
---- @param y number
---- @param button MouseButtonID
---- @param parentX number
---- @param parentY number
+--- @param _ number
+--- @param _ number
+--- @param button MouseButton
+--- @param _ number
+--- @param _ number
 --- @return boolean
-function private.defaultOnMouseUp(comp, x, y, button, parentX, parentY)
+function private.defaultOnMouseUp(comp, _, _, button, _, _)
     if button == 1 and (get(comp.movable) or get(comp.resizable)) then
         if comp.dragging then
             comp.dragging = 0
@@ -83,13 +83,13 @@ end
 
 --- Default mouse move handler for component.
 --- @param comp Component
---- @param x number
---- @param y number
---- @param button MouseButtonID
+--- @param _ number
+--- @param _ number
+--- @param _ MouseButton
 --- @param parentX number
 --- @param parentY number
 --- @return boolean
-function private.defaultOnMouseMove(comp, x, y, button, parentX, parentY)
+function private.defaultOnMouseMove(comp, _, _, _, parentX, parentY)
     if rawget(comp, "resizing") then
         local pos = get(comp.position)
         local newSizeX = comp.dragStartSizeX + (parentX - comp.dragStartX)
@@ -135,15 +135,8 @@ end
 -------------------------------------------------------------------------------
 
 --- Default mouse wheel handler for component.
---- @param comp Component
---- @param x number
---- @param y number
---- @param button MouseButtonID
---- @param parentX number
---- @param parentY number
---- @param wheelClicks number
 --- @return boolean
-function private.defaultOnMouseWheel(comp, x, y, button, parentX, parentY, wheelClicks)
+function private.defaultOnMouseWheel()
     return false
 end
 
@@ -151,14 +144,8 @@ end
 -------------------------------------------------------------------------------
 
 --- Default key down handler.
---- @param comp Component
---- @param char number
---- @param key number
---- @param shiftDown MouseButtonID
---- @param ctrlDown number
---- @param AltOptDown number
 --- @return boolean
-function private.defaultOnKeyDown(comp, char, key, shiftDown, ctrlDown, AltOptDown)
+function private.defaultOnKeyDown()
     return false
 end
 
@@ -166,14 +153,8 @@ end
 -------------------------------------------------------------------------------
 
 --- Default key up handler.
---- @param comp Component
---- @param char number
---- @param key number
---- @param shiftDown MouseButtonID
---- @param ctrlDown number
---- @param AltOptDown number
 --- @return boolean
-function private.defaultOnKeyUp(comp, char, key, shiftDown, ctrlDown, AltOptDown)
+function private.defaultOnKeyUp()
     return false
 end
 

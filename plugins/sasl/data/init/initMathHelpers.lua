@@ -98,7 +98,7 @@ end
 
 --- @class StereographicProjection
 --- @field setProjectionCenter fun(self:StereographicProjection, lat:number, lon:number)
---- @field setScale fun(self:StereographicProjection, nmRange:number, cartesianRange:number)
+--- @field setScale fun(self:StereographicProjection, inNmRange:number, inCartesianRange:number)
 --- @field LLtoXY fun(self:StereographicProjection, lat:number, lon:number):number, number
 --- @field XYtoLL fun(self:StereographicProjection, x:number, y:number):number, number
 
@@ -116,12 +116,12 @@ function newStereographicProjection(prCLatitude, prCLongitude, nmRange, cartesia
         self.prCLat = lat
         self.prCLon = lon
     end
-    r.setScale = function(self, nmRange, cartesianRange)
-        if nmRange <= 0 or cartesianRange <= 0 then
+    r.setScale = function(self, inNmRange, inCartesianRange)
+        if inNmRange <= 0 or inCartesianRange <= 0 then
             logError("Incorrect scale values for stereographic projection")
         end
-        self.nmR = nmRange
-        self.cR = cartesianRange
+        self.nmR = inNmRange
+        self.cR = inCartesianRange
     end
     r.LLtoXY = function(self, lat, lon)
         return sasl.stereographicLLtoXY(self.prCLat, self.prCLon, self.nmR, self.cR, lat, lon)

@@ -3,15 +3,32 @@
 -------------------------------------------------------------------------------
 
 --- @class gl
+gl = {}
+
 --- @class al
+al = {}
+
 --- @class net
+net = {}
+
 --- @class options
+options = {}
+
+--- @class windows
+windows = {}
 
 --- @class sasl
 --- @field gl gl
 --- @field al al
 --- @field net net
 --- @field options options
+sasl = {
+    gl = gl,
+    al = al,
+    net = net,
+    options = options,
+    windows = windows
+}
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -25,39 +42,46 @@ LOG_INFO = nil
 LOG_WARN = nil
 LOG_ERROR = nil
 
---- Writes data to the log file using info-level.
---- @vararg data
+--- Writes data to log files using info-level.
+--- @vararg string
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#logInfo
-function logInfo(data, ...) end;
+function logInfo(...) end;
 sasl.logInfo = logInfo;
 
---- Writes data to the log file using warning-level.
---- @vararg data
+--- Writes data to log files using info-level.
+--- @vararg string
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#print
+function print(...) end;
+sasl.print = print;
+
+--- Writes data to log files using warning-level.
+--- @vararg string
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#logWarning
-function logWarning(data, ...) end;
+function logWarning(...) end;
 sasl.logWarning = logWarning;
 
---- Writes data to the log file using error-level.
---- @vararg data
+--- Writes data to log files using error-level.
+--- @vararg string
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#logError
-function logError(data, ...) end;
+function logError(...) end;
 sasl.logError = logError;
 
---- Writes data to the log file using debug-level.
---- @vararg data
+--- Writes data to log files using debug-level.
+--- @vararg string
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#logDebug
-function logDebug(data, ...) end;
+function logDebug(...) end;
 sasl.logDebug = logDebug;
 
---- Writes data to the log file using debug-level.
---- @vararg data
+--- Writes data to log files using debug-level.
+--- @vararg string
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#logTrace
-function logTrace(data, ...) end;
+function logTrace(...) end;
 sasl.logTrace = logTrace;
 
 --- Returns currently selected log level.
@@ -69,10 +93,24 @@ sasl.getLogLevel = getLogLevel;
 
 --- Sets current log level for logger.
 --- @param level LogLevelID
------- @see reference
+--- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setLogLevel
 function setLogLevel(level) end;
 sasl.setLogLevel = setLogLevel;
+
+--- Writes data to log files using more parameters
+--- @param level LogLevelID
+--- @param isFatal boolean
+--- @param header string
+--- @param message string
+--- @param stackTraceDepth number
+--- @param color Color
+--- @overload fun(level:LogLevelID, isFatal:boolean, header:string, message:string):void
+--- @overload fun(level:LogLevelID, isFatal:boolean, header:string, message:string, stackTraceDepth:string):void
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#log
+function log(level, isFatal, header, message, stackTraceDepth, color) end;
+sasl.log = log;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -153,22 +191,35 @@ sasl.listFiles = listFiles;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setAircraftPanelRendering
 function setAircraftPanelRendering(isOn) end;
-sasl.options.setAircraftPanelRendering = setAircraftPanelRendering;
+options.setAircraftPanelRendering = setAircraftPanelRendering;
 
----Enables/disables 3D rendering for SASL project.
+--- Enables/disables 3D rendering for SASL project.
 --- @param isOn boolean
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#set3DRendering
 function set3DRendering(isOn) end;
-sasl.options.set3DRendering = set3DRendering;
+options.set3DRendering = set3DRendering;
 
----Enables/disables interactive abiliti es for SASL project(mouse
---- and keyboard callbacks).
+--- Enables/disables interactive abilities for SASL project (mouse and keyboard callbacks).
 --- @param isOn boolean
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setInteractivity
 function setInteractivity(isOn) end;
-sasl.options.setInteractivity = setInteractivity;
+options.setInteractivity = setInteractivity;
+
+--- Enables/disables ability to alter blending parameters when drawing to 2D targets.
+--- @param isOn boolean
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#setCustomBlending
+function setCustomBlending(isOn) end;
+options.setCustomBlending = setCustomBlending;
+
+--- Enables/disables optimization related to drawing into multiple render targets in 'update' function.
+--- @param isOn boolean
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#setUpdateDrawingReady
+function setUpdateDrawingReady(isOn) end;
+options.setUpdateDrawingReady = setUpdateDrawingReady;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -183,7 +234,7 @@ SASL_RENDER_2D_MULTIPASS = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRenderingMode2D
 function setRenderingMode2D(ID) end;
-sasl.options.setRenderingMode2D = setRenderingMode2D;
+options.setRenderingMode2D = setRenderingMode2D;
 
 --- @class PanelRenderingModeId
 
@@ -195,7 +246,7 @@ SASL_RENDER_PANEL_BEFORE_AND_AFTER = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setPanelRenderingMode
 function setPanelRenderingMode(ID) end;
-sasl.options.setPanelRenderingMode = setPanelRenderingMode;
+options.setPanelRenderingMode = setPanelRenderingMode;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -206,12 +257,19 @@ SASL_KEEP_PROCESSING = nil
 SASL_STOP_PROCESSING = nil
 
 --- Sets different modes for handling Lua errors during project development,
---- depending on the passed ID value. Default stack trace limit is 6.
+--- depending on the passed ID value.
 --- @param ID ErrorsHandlingModeID
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setLuaErrorsHandling
 function setLuaErrorsHandling(ID) end;
-sasl.options.setLuaErrorsHandling = setLuaErrorsHandling;
+options.setLuaErrorsHandling = setLuaErrorsHandling;
+
+--- Sets limit for Lua stack trace entries. Default stack trace limit is 6.
+--- @param limit number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#setLuaStackTraceLimit
+function setLuaStackTraceLimit(limit) end;
+options.setLuaStackTraceLimit = setLuaStackTraceLimit;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -223,7 +281,7 @@ sasl.options.setLuaErrorsHandling = setLuaErrorsHandling;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getMonitorsIDsGlobal
 function getMonitorsIDsGlobal() end;
-sasl.windows.getMonitorsIDsGlobal = getMonitorsIDsGlobal;
+windows.getMonitorsIDsGlobal = getMonitorsIDsGlobal;
 
 --- Returns the table of all monitor IDs in the OS. This may include monitors
 --- that are not covered by the simulator window.
@@ -231,7 +289,7 @@ sasl.windows.getMonitorsIDsGlobal = getMonitorsIDsGlobal;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getMonitorsIDsOS
 function getMonitorsIDsOS() end;
-sasl.windows.getMonitorsIDsOS = getMonitorsIDsOS;
+windows.getMonitorsIDsOS = getMonitorsIDsOS;
 
 --- Returns the bounds (taking scaling into account) of each full-screen X-Plane
 --- window within the X-Plane global desktop space.
@@ -240,7 +298,7 @@ sasl.windows.getMonitorsIDsOS = getMonitorsIDsOS;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getMonitorBoundsGlobal
 function getMonitorBoundsGlobal(id) end;
-sasl.windows.getMonitorBoundsGlobal = getMonitorBoundsGlobal;
+windows.getMonitorBoundsGlobal = getMonitorBoundsGlobal;
 
 --- Returns the bounds of the monitor in OS pixels. id is a numeric identifier of
 --- particular monitor.
@@ -249,14 +307,14 @@ sasl.windows.getMonitorBoundsGlobal = getMonitorBoundsGlobal;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getMonitorBoundsOS
 function getMonitorBoundsOS(id) end;
-sasl.windows.getMonitorBoundsOS = getMonitorBoundsOS;
+windows.getMonitorBoundsOS = getMonitorBoundsOS;
 
 --- This routine returns the bounds of the ”global” X-Plane desktop.
 --- @return number, number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getScreenBoundsGlobal
 function getScreenBoundsGlobal() end;
-sasl.windows.getScreenBoundsGlobal = getScreenBoundsGlobal;
+windows.getScreenBoundsGlobal = getScreenBoundsGlobal;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -343,7 +401,7 @@ MENU_CHECKED = nil
 --- Appends new menu item with name to the menu with specified inMenuID.
 --- @param inMenuID menuID
 --- @param name string
---- @param callback fun()
+--- @param callback fun():void
 --- @overload fun(inMenuID:menuID, name:string):menuItemID
 --- @return menuItemID
 --- @see reference
@@ -354,11 +412,11 @@ sasl.appendMenuItem = appendMenuItem;
 --- Appends new menu item with name to the menu with specified inMenuID.
 --- @param inMenuID menuID
 --- @param name string
---- @param command commandID
+--- @param commandID command
 --- @return menuItemID
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#appendMenuItemWithCommand
-function appendMenuItemWithCommand(inMenuID, name, command) end;
+function appendMenuItemWithCommand(inMenuID, name, commandID) end;
 sasl.appendMenuItemWithCommand = appendMenuItemWithCommand;
 
 --- Removes menu item specified by inMenuItemID from menu that corresponds to
@@ -534,7 +592,7 @@ sasl.stopCameraControl = stopCameraControl;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#downloadFileSync
 function downloadFileSync(url, path) end;
-sasl.net.downloadFileSync = downloadFileSync;
+net.downloadFileSync = downloadFileSync;
 
 --- Asynchronously downloads file, specified by url and writes it to the
 --- specified path
@@ -544,7 +602,7 @@ sasl.net.downloadFileSync = downloadFileSync;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#downloadFileAsync
 function downloadFileAsync(url, path, callback) end;
-sasl.net.downloadFileAsync = downloadFileAsync;
+net.downloadFileAsync = downloadFileAsync;
 
 --- Synchronously downloads contents from file, specified by url.
 --- @param url string
@@ -552,16 +610,15 @@ sasl.net.downloadFileAsync = downloadFileAsync;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#downloadFileContentsSync
 function downloadFileContentsSync(url) end;
-sasl.net.downloadFileContentsSync = downloadFileContentsSync;
+net.downloadFileContentsSync = downloadFileContentsSync;
 
 --- Asynchronously downloads contents from file, specified by url.
 --- @param url string
---- @param path string
---- @param callback fun(url:string, path:string, isOk:boolean, error:string):void
+--- @param callback fun(url:string, contents:string, isOk:boolean, error:string):void
 --- @see reference
---- : https://1-sim.com/files/SASL3Manual.pdf#downloadFileAsync
-function downloadFileAsync(url, path, callback) end;
-sasl.net.downloadFileAsync = downloadFileAsync;
+--- : https://1-sim.com/files/SASL3Manual.pdf#downloadFileContentsAsync
+function downloadFileContentsAsync(url, callback) end;
+net.downloadFileContentsAsync = downloadFileContentsAsync;
 
 --- @class TimeoutType
 
@@ -579,7 +636,7 @@ SASL_TIMEOUT_VALUE_DEFAULT = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setDownloadTimeout
 function setDownloadTimeout(type, time, speed) end;
-sasl.net.setDownloadTimeout = setDownloadTimeout;
+net.setDownloadTimeout = setDownloadTimeout;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -824,7 +881,6 @@ sasl.unregisterMessageHandler = unregisterMessageHandler;
 --- @param id PluginID
 --- @param messageID number
 --- @param type MessageDataType
---- @param data string | table
 --- @overload fun(id:PluginID, messageID:number, type:MessageDataType, data:string | table):void
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#sendMessageToPlugin
@@ -1014,15 +1070,18 @@ sasl.getCSPanelMousePos = getCSPanelMousePos;
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
---- @class KeyEventType
+--- @class AsciiKeyCode
 
+--- @class VirtualKeyCode
+
+--- @class KeyEventType
 KB_DOWN_EVENT = nil
 KB_UP_EVENT = nil
 KB_HOLD_EVENT = nil
 
 --- Registers keyboard input callback.
---- @return number
 --- @param callback fun(char:AsciiKeyCode, key:VirtualKeyCode, shiftDown:number, ctrlDown:number, altOptDown:number, event:KeyEventType):void
+--- @return number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#registerGlobalKeyHandler
 function registerGlobalKeyHandler(callback) end;
@@ -1136,15 +1195,7 @@ sasl.findNavAid = findNavAid;
 
 --- Returns all available information about navigation point, represented by identifier id.
 --- @param id NavAidID
---- @return NavAidType
---- @return number
---- @return number
---- @return number
---- @return number
---- @return number
---- @return string
---- @return string
---- @return boolean
+--- @return NavAidType, number, number, number, number, number, string, string, boolean
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getNavAidInfo
 function getNavAidInfo(id) end;
@@ -1190,12 +1241,7 @@ sasl.setDestinationFMSEntry = setDestinationFMSEntry;
 
 --- Returns information about FMS entry.
 --- @param index number
---- @return NavAidType
---- @return string
---- @return NavAidID
---- @return number
---- @return number
---- @return number
+--- @return NavAidType, string, NavAidID, number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getFMSEntryInfo
 function getFMSEntryInfo(index) end;
@@ -1282,9 +1328,7 @@ sasl.reloadScenery = reloadScenery;
 --- @param latitude number
 --- @param longitude number
 --- @param altitude number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#worldToLocal
 function worldToLocal(latitude, longitude, altitude) end;
@@ -1294,9 +1338,7 @@ sasl.worldToLocal = worldToLocal;
 --- @param x number
 --- @param y number
 --- @param z number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#localToWorld
 function localToWorld(x, y, z) end;
@@ -1305,11 +1347,9 @@ sasl.localToWorld = localToWorld;
 --- Converts aircraft model OpenGL coordinates (with origin in aircraft center and
 --- aircraft orientation) to local OpenGL coordinates.
 --- @param u number
---- @param b number
+--- @param v number
 --- @param w number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#modelToLocal
 function modelToLocal(u, v, w) end;
@@ -1320,9 +1360,7 @@ sasl.modelToLocal = modelToLocal;
 --- @param x number
 --- @param y number
 --- @param z number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#localToModel
 function localToModel(x, y, z) end;
@@ -1335,17 +1373,7 @@ sasl.localToModel = localToModel;
 --- @param x number
 --- @param y number
 --- @param z number
---- @return TerrainProbeResult
---- @return number
---- @return number
---- @return number
---- @return number
---- @return number
---- @return number
---- @return number
---- @return number
---- @return number
---- @return number
+--- @return TerrainProbeResult, number, number, number, number, number, number, number, number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#probeTerrain
 function probeTerrain(x, y, z) end;
@@ -1375,11 +1403,11 @@ sasl.degMagneticToDegTrue = degMagneticToDegTrue;
 
 --- Creates a new instance of the object based on the objectId object identifier.
 --- @param objectId number
---- @param datarefs table
+--- @param datarefs string[]
 --- @return number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#createInstance
-function createInstance(objectId) end;
+function createInstance(objectId, datarefs) end;
 sasl.createInstance = createInstance;
 
 --- Destroys an instance of the object with instanceId identifier.
@@ -1424,7 +1452,7 @@ SHAPE_EXTRUDE_CENTER = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawLine
 function drawLine(x1, y1, x2, y2, color) end;
-sasl.gl.drawLine = drawLine;
+gl.drawLine = drawLine;
 
 --- Draws wide line between x1, y1 point and x2, y2 point with specified color and with
 --- specified thickness.
@@ -1437,7 +1465,7 @@ sasl.gl.drawLine = drawLine;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawWideLine
 function drawWideLine(x1, y1, x2, y2, thickness, color) end;
-sasl.gl.drawWideLine = drawWideLine;
+gl.drawWideLine = drawWideLine;
 
 --- Draws poly-line between specified points with specified color.
 --- @param points table
@@ -1445,7 +1473,7 @@ sasl.gl.drawWideLine = drawWideLine;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawPolyLine
 function drawPolyLine(points, color) end;
-sasl.gl.drawPolyLine = drawPolyLine;
+gl.drawPolyLine = drawPolyLine;
 
 --- Acts like drawPolyLine function, but takes line thickness parameter into account.
 --- @param points table
@@ -1454,7 +1482,7 @@ sasl.gl.drawPolyLine = drawPolyLine;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawWidePolyLine
 function drawWidePolyLine(points, thickness, color) end;
-sasl.gl.drawWidePolyLine = drawWidePolyLine;
+gl.drawWidePolyLine = drawWidePolyLine;
 
 --- Draws filled triangle by given points x1, y1, x2, y2 and x3, y3 with specified color.
 --- @param x1 number
@@ -1467,7 +1495,7 @@ sasl.gl.drawWidePolyLine = drawWidePolyLine;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawTriangle
 function drawTriangle(x1, y1, x2, y2, x3, y3, color) end;
-sasl.gl.drawTriangle = drawTriangle;
+gl.drawTriangle = drawTriangle;
 
 --- Draws filled rectangle, specified by x, y, width and height with specified color.
 --- @param x number
@@ -1478,7 +1506,7 @@ sasl.gl.drawTriangle = drawTriangle;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRectangle
 function drawRectangle(x, y, width, height, color) end;
-sasl.gl.drawRectangle = drawRectangle;
+gl.drawRectangle = drawRectangle;
 
 --- Draws frame, specified by x, y, width and height with specified color.
 --- @param x number
@@ -1489,7 +1517,7 @@ sasl.gl.drawRectangle = drawRectangle;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawFrame
 function drawFrame(x, y, width, height, color) end;
-sasl.gl.drawFrame = drawFrame;
+gl.drawFrame = drawFrame;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -1499,9 +1527,9 @@ sasl.gl.drawFrame = drawFrame;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setLinePattern
 function setLinePattern(pattern) end;
-sasl.gl.setLinePattern = setLinePattern;
+gl.setLinePattern = setLinePattern;
 
---- Draws line between x1, y1 and x2, y2 points using pattern and specified color
+--- Draws line between x1, y1 and x2, y2 points using pattern and specified color.
 --- @param x1 number
 --- @param y1 number
 --- @param x2 number
@@ -1511,16 +1539,15 @@ sasl.gl.setLinePattern = setLinePattern;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawLinePattern
 function drawLinePattern(x1, y1, x2, y2, savePatternState, color) end;
-sasl.gl.drawLinePattern = drawLinePattern;
+gl.drawLinePattern = drawLinePattern;
 
---- Acts like drawLinePattern function, but draws poly-line with current selected
---- pattern.
+--- Acts like drawLinePattern function, but draws poly-line with current selected pattern.
 --- @param points table
 --- @param color Color
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawPolyLinePattern
 function drawPolyLinePattern(points, color) end;
-sasl.gl.drawPolyLinePattern = drawPolyLinePattern;
+gl.drawPolyLinePattern = drawPolyLinePattern;
 
 --- Draws line between x1, y1 and x2, y2 points using pattern and specified color.
 --- @param x1 number
@@ -1534,7 +1561,7 @@ sasl.gl.drawPolyLinePattern = drawPolyLinePattern;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawBezierLineQ
 function drawBezierLineQ(x1, y1, x2, y2, x3, y3, parts, color) end;
-sasl.gl.drawBezierLineQ = drawBezierLineQ;
+gl.drawBezierLineQ = drawBezierLineQ;
 
 --- Works as drawBezierLineQ function, but draws Bezier line with specific thickness.
 --- @param x1 number
@@ -1549,7 +1576,7 @@ sasl.gl.drawBezierLineQ = drawBezierLineQ;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawWideBezierLineQ
 function drawWideBezierLineQ(x1, y1, x2, y2, x3, y3, parts, thickness, color) end;
-sasl.gl.drawWideBezierLineQ = drawWideBezierLineQ;
+gl.drawWideBezierLineQ = drawWideBezierLineQ;
 
 --- Draws curved quadratic Bezier line, specified by anchor points x1, y1 and x3, y3,
 --- and control point x2, y2.
@@ -1563,7 +1590,7 @@ sasl.gl.drawWideBezierLineQ = drawWideBezierLineQ;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawBezierLineQAdaptive
 function drawBezierLineQAdaptive(x1, y1, x2, y2, x3, y3, color) end;
-sasl.gl.drawBezierLineQAdaptive = drawBezierLineQAdaptive;
+gl.drawBezierLineQAdaptive = drawBezierLineQAdaptive;
 
 --- Works as drawBezierLineQAdaptive function, but draws Bezier line with specific
 --- thickness.
@@ -1578,7 +1605,7 @@ sasl.gl.drawBezierLineQAdaptive = drawBezierLineQAdaptive;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawWideBezierLineQAdaptive
 function drawWideBezierLineQAdaptive(x1, y1, x2, y2, x3, y3, thickness, color) end;
-sasl.gl.drawWideBezierLineQAdaptive = drawWideBezierLineQAdaptive;
+gl.drawWideBezierLineQAdaptive = drawWideBezierLineQAdaptive;
 
 --- Draws curved cubic Bezier line, specified by anchor points x1, y1 and x4, y4, and
 --- control points x2, y2 and x3, y3.
@@ -1595,7 +1622,7 @@ sasl.gl.drawWideBezierLineQAdaptive = drawWideBezierLineQAdaptive;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawBezierLineC
 function drawBezierLineC(x1, y1, x2, y2, x3, y3, x4, y4, parts, color) end;
-sasl.gl.drawBezierLineC = drawBezierLineC;
+gl.drawBezierLineC = drawBezierLineC;
 
 --- Works as drawBezierLineC function, but draws Bezier line with specific thickness.
 --- @param x1 number
@@ -1612,7 +1639,7 @@ sasl.gl.drawBezierLineC = drawBezierLineC;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawWideBezierLineC
 function drawWideBezierLineC(x1, y1, x2, y2, x3, y3, x4, y4, parts, thickness, color) end;
-sasl.gl.drawWideBezierLineC = drawWideBezierLineC;
+gl.drawWideBezierLineC = drawWideBezierLineC;
 
 --- Draws curved cubic Bezier line, specified by anchor points x1, y1 and x4, y4, and
 --- control points x2, y2 and x3, y3.
@@ -1628,7 +1655,7 @@ sasl.gl.drawWideBezierLineC = drawWideBezierLineC;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawBezierLineCAdaptive
 function drawBezierLineCAdaptive(x1, y1, x2, y2, x3, y3, x4, y4, color) end;
-sasl.gl.drawBezierLineCAdaptive = drawBezierLineCAdaptive;
+gl.drawBezierLineCAdaptive = drawBezierLineCAdaptive;
 
 --- Works as drawBezierLineCAdaptive function, but draws Bezier line with specific
 --- thickness.
@@ -1645,7 +1672,7 @@ sasl.gl.drawBezierLineCAdaptive = drawBezierLineCAdaptive;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawWideBezierLineCAdaptive
 function drawWideBezierLineCAdaptive(x1, y1, x2, y2, x3, y3, x4, y4, thickness, color) end;
-sasl.gl.drawWideBezierLineCAdaptive = drawWideBezierLineCAdaptive;
+gl.drawWideBezierLineCAdaptive = drawWideBezierLineCAdaptive;
 
 --- Draws circle with center in x, y coordinates and specified radius.
 --- @param x number
@@ -1656,7 +1683,7 @@ sasl.gl.drawWideBezierLineCAdaptive = drawWideBezierLineCAdaptive;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawCircle
 function drawCircle(x, y, radius, isFilled, color) end;
-sasl.gl.drawCircle = drawCircle;
+gl.drawCircle = drawCircle;
 
 --- Draws arc with center in x, y. radiusInner and radiusOuter defines arc form, arc
 --- will be drawn between these distances.
@@ -1670,7 +1697,7 @@ sasl.gl.drawCircle = drawCircle;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawArc
 function drawArc(x, y, radiusInner, radiusOuter, startAngle, arcAngle, color) end;
-sasl.gl.drawArc = drawArc;
+gl.drawArc = drawArc;
 
 --- Draws arc with center in x, y and of specified radius.
 --- @param x number
@@ -1682,10 +1709,9 @@ sasl.gl.drawArc = drawArc;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawArcLine
 function drawArcLine(x, y, radius, startAngle, arcAngle, color) end;
-sasl.gl.drawArcLine = drawArcLine;
+gl.drawArcLine = drawArcLine;
 
---- Draws custom convex shape defined with points table, contains coordinates of
---- shape points.
+--- Draws custom convex shape.
 --- @param points table
 --- @param isFilled boolean
 --- @param thickness number
@@ -1693,63 +1719,58 @@ sasl.gl.drawArcLine = drawArcLine;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawConvexPolygon
 function drawConvexPolygon(points, isFilled, thickness, color) end;
-sasl.gl.drawConvexPolygon = drawConvexPolygon;
+gl.drawConvexPolygon = drawConvexPolygon;
 
---- Draws custom convex shape defined with points table, contains coordinates of
---- shape points.
+--- Draws custom convex shape with per-vertex color
 --- @param points table
---- @param isFilled boolean
---- @param thickness number
---- @param color Color
+--- @param colors table
 --- @see reference
---- : https://1-sim.com/files/SASL3Manual.pdf#drawConvexPolygon
-function drawConvexPolygon(points, isFilled, thickness, color) end;
-sasl.gl.drawConvexPolygon = drawConvexPolygon;
+--- : https://1-sim.com/files/SASL3Manual.pdf#drawConvexPolygonMC
+function drawConvexPolygonMC(points, colors) end;
+gl.drawConvexPolygonMC = drawConvexPolygonMC;
 
 --- Sets shape extrusion mode for drawing polygons.
 --- @param mode ShapeExtrusionMode
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setPolygonExtrudeMode
 function setPolygonExtrudeMode(mode) end;
-sasl.gl.setPolygonExtrudeMode = setPolygonExtrudeMode;
+gl.setPolygonExtrudeMode = setPolygonExtrudeMode;
 
 --- Sets shape extrusion mode for wide lines drawing.
 --- @param mode ShapeExtrusionMode
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setWideLineExtrudeMode
 function setWideLineExtrudeMode(mode) end;
-sasl.gl.setWideLineExtrudeMode = setWideLineExtrudeMode;
+gl.setWideLineExtrudeMode = setWideLineExtrudeMode;
 
 --- Wrapper around glLineWidth OpenGL function.
 --- @param width number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setInternalLineWidth
 function setInternalLineWidth(width) end;
-sasl.gl.setInternalLineWidth = setInternalLineWidth;
+gl.setInternalLineWidth = setInternalLineWidth;
 
 --- Wrapper around glLineStipple OpenGL function.
 --- @param enabled boolean
---- @param factor number
---- @param pattern number
 --- @overload fun(enabled: boolean, factor: number, pattern: number):void
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setInternalLineStipple
 function setInternalLineStipple(enabled) end;
-sasl.gl.setInternalLineStipple = setInternalLineStipple;
+gl.setInternalLineStipple = setInternalLineStipple;
 
 --- Saves to the settings stack current OpenGL internal line settings like width, pattern
 --- and stipple to be able restoreInternalLineState() in future.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#saveInternalLineState
 function saveInternalLineState() end;
-sasl.gl.saveInternalLineState = saveInternalLineState;
+gl.saveInternalLineState = saveInternalLineState;
 
 --- Restores from the settings stack OpenGL internal line settings like width, pattern
 --- and stipple.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#restoreInternalLineState
 function restoreInternalLineState() end;
-sasl.gl.restoreInternalLineState = restoreInternalLineState;
+gl.restoreInternalLineState = restoreInternalLineState;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -1772,7 +1793,7 @@ TEXTURE_MIRROR_REPEAT = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawTexture
 function drawTexture(id, x, y, width, height, color) end;
-sasl.gl.drawTexture = drawTexture;
+gl.drawTexture = drawTexture;
 
 --- Draws texture specified by numeric texture handle id at position, specified by
 --- coordinates x, y, rotated around texture center by angle in degrees.
@@ -1786,7 +1807,7 @@ sasl.gl.drawTexture = drawTexture;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRotatedTexture
 function drawRotatedTexture(id, angle, x, y, width, height, color) end;
-sasl.gl.drawRotatedTexture = drawRotatedTexture;
+gl.drawRotatedTexture = drawRotatedTexture;
 
 --- Draws texture specified by numeric texture handle id at position, specified by
 --- coordinates x, y, rotated around rx, ry point by angle in degrees.
@@ -1802,7 +1823,7 @@ sasl.gl.drawRotatedTexture = drawRotatedTexture;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRotatedTextureCenter
 function drawRotatedTextureCenter(id, angle, rx, ry, x, y, width, height, color) end;
-sasl.gl.drawRotatedTextureCenter = drawRotatedTextureCenter;
+gl.drawRotatedTextureCenter = drawRotatedTextureCenter;
 
 --- Draws texture like drawTexture function, but only the part of specified texture will
 --- be drawn.
@@ -1819,7 +1840,7 @@ sasl.gl.drawRotatedTextureCenter = drawRotatedTextureCenter;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawTexturePart
 function drawTexturePart(id, x, y, width, height, tx, ty, twidth, theight, color) end;
-sasl.gl.drawTexturePart = drawTexturePart;
+gl.drawTexturePart = drawTexturePart;
 
 --- Draws texture like drawRotatedTexture function, but only the part of specified texture
 --- will be drawn.
@@ -1837,7 +1858,7 @@ sasl.gl.drawTexturePart = drawTexturePart;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRotatedTexturePart
 function drawRotatedTexturePart(id, angle, x, y, width, height, tx, ty, twidth, theight, color) end;
-sasl.gl.drawRotatedTexturePart = drawRotatedTexturePart;
+gl.drawRotatedTexturePart = drawRotatedTexturePart;
 
 --- Draws texture like drawRotatedTextureCenter function, but only the part of
 --- specified texture will be drawn.
@@ -1857,7 +1878,7 @@ sasl.gl.drawRotatedTexturePart = drawRotatedTexturePart;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRotatedTexturePartCenter
 function drawRotatedTexturePartCenter(id, angle, rx, ry, x, y, width, height, tx, ty, twidth, theight, color) end;
-sasl.gl.drawRotatedTexturePartCenter = drawRotatedTexturePartCenter;
+gl.drawRotatedTexturePartCenter = drawRotatedTexturePartCenter;
 
 --- Draws texture specified by numeric texture handle id using four points to
 ---specify drawn shape.
@@ -1874,7 +1895,7 @@ sasl.gl.drawRotatedTexturePartCenter = drawRotatedTexturePartCenter;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawTextureCoords
 function drawTextureCoords(id, x1, y1, x2, y2, x3, y3, x4, y4, color) end;
-sasl.gl.drawTextureCoords = drawTextureCoords;
+gl.drawTextureCoords = drawTextureCoords;
 
 --- Draws texture specified by numeric texture handle id at position, specified by x, y,
 --- width, height.
@@ -1891,25 +1912,23 @@ sasl.gl.drawTextureCoords = drawTextureCoords;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawTextureWithRotatedCoords
 function drawTextureWithRotatedCoords(id, angle, x, y, width, height, tx, ty, twidth, theight) end;
-sasl.gl.drawTextureWithRotatedCoords = drawTextureWithRotatedCoords;
+gl.drawTextureWithRotatedCoords = drawTextureWithRotatedCoords;
 
 --- Returns width and height of texture, specified by numeric texture handle id.
 --- @param id number
---- @return number
---- @return number
+--- @return number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getTextureSize
 function getTextureSize(id) end;
-sasl.gl.getTextureSize = getTextureSize;
+gl.getTextureSize = getTextureSize;
 
 --- Same as getTextureSize.
 --- @param id number
---- @return number
---- @return number
+--- @return number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getTextureSourceSize
 function getTextureSourceSize(id) end;
-sasl.gl.getTextureSourceSize = getTextureSourceSize;
+gl.getTextureSourceSize = getTextureSourceSize;
 
 --- Same as getTextureSize.
 --- @param id number
@@ -1917,7 +1936,7 @@ sasl.gl.getTextureSourceSize = getTextureSourceSize;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setTextureWrapping
 function setTextureWrapping(id, mode) end;
-sasl.gl.setTextureWrapping = setTextureWrapping;
+gl.setTextureWrapping = setTextureWrapping;
 
 --- @class SpecID
 
@@ -1932,7 +1951,16 @@ AIRCRAFT_LITE_MAP_TEX = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#importTexture
 function importTexture(inSpecID) end;
-sasl.gl.importTexture = importTexture;
+gl.importTexture = importTexture;
+
+--- Exports specific texture with identifier inSpecID from SASL textures system and
+--- returns underlying graphics API texture handler.
+--- @param inSpecID SpecID
+--- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#exportTexture
+function exportTexture(inSpecID) end;
+gl.exportTexture = exportTexture;
 
 --- Recreates texture specified by numeric identifier id with new width and height.
 --- @param id number
@@ -1942,7 +1970,7 @@ sasl.gl.importTexture = importTexture;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#recreateTexture
 function recreateTexture(id, width, height, saveContents) end;
-sasl.gl.recreateTexture = recreateTexture;
+gl.recreateTexture = recreateTexture;
 
 --- Start rendering into texture, specified by numeric handle id.
 --- @param id number
@@ -1953,7 +1981,7 @@ sasl.gl.recreateTexture = recreateTexture;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRenderTarget
 function setRenderTarget(id, isNeedClear, inAALevel) end;
-sasl.gl.setRenderTarget = setRenderTarget;
+gl.setRenderTarget = setRenderTarget;
 
 --- Clears rectangular area of current render target.
 --- @param x number
@@ -1963,23 +1991,31 @@ sasl.gl.setRenderTarget = setRenderTarget;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#clearRenderTarget
 function clearRenderTarget(x, y, width, height) end;
-sasl.gl.clearRenderTarget = clearRenderTarget;
+gl.clearRenderTarget = clearRenderTarget;
 
 --- Finishes rendering to texture and continue rendering to default render target.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#restoreRenderTarget
 function restoreRenderTarget() end;
-sasl.gl.restoreRenderTarget = restoreRenderTarget;
+gl.restoreRenderTarget = restoreRenderTarget;
+
+--- @class RenderTargetAttachment
+RENDER_TARGET_C = nil
+RENDER_TARGET_CDS = nil
 
 --- Generates new RGBA texture that can be used as render target and returns its numeric
 --- handle id.
 --- @param width number
 --- @param height number
+--- @param aaLevel number
+--- @param attachment RenderTargetAttachment
+--- @overload fun(width:number, height:number):number
+--- @overload fun(width:number, height:number, aaLevel:number):number
 --- @return number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#createRenderTarget
-function createRenderTarget(width, height) end;
-sasl.gl.createRenderTarget = createRenderTarget;
+function createRenderTarget(width, height, aaLevel, attachment) end;
+gl.createRenderTarget = createRenderTarget;
 
 --- Destroys render target specified by id, previously created with createRenderTarget
 --- function.
@@ -1987,7 +2023,7 @@ sasl.gl.createRenderTarget = createRenderTarget;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#destroyRenderTarget
 function destroyRenderTarget(id) end;
-sasl.gl.destroyRenderTarget = destroyRenderTarget;
+gl.destroyRenderTarget = destroyRenderTarget;
 
 --- Creates new RGBA texture and returns its numeric handle id.
 --- @param width number
@@ -1995,7 +2031,7 @@ sasl.gl.destroyRenderTarget = destroyRenderTarget;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#createTexture
 function createTexture(width, height) end;
-sasl.gl.createTexture = createTexture;
+gl.createTexture = createTexture;
 
 --- Copies current data from render target to texture, specified by numeric identifier id.
 --- @param id number
@@ -2006,7 +2042,7 @@ sasl.gl.createTexture = createTexture;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getTargetTextureData
 function getTargetTextureData(id, x, y, width, height) end;
-sasl.gl.getTargetTextureData = getTargetTextureData;
+gl.getTargetTextureData = getTargetTextureData;
 
 --- Creates new texture data storage object and returns its numeric identifier id.
 --- @param width number
@@ -2015,14 +2051,14 @@ sasl.gl.getTargetTextureData = getTargetTextureData;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#createTextureDataStorage
 function createTextureDataStorage(width, height) end;
-sasl.gl.createTextureDataStorage = createTextureDataStorage;
+gl.createTextureDataStorage = createTextureDataStorage;
 
 --- Deletes texture data storage object, specified by numeric handle id.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#deleteTextureDataStorage
 function deleteTextureDataStorage(id) end;
-sasl.gl.deleteTextureDataStorage = deleteTextureDataStorage;
+gl.deleteTextureDataStorage = deleteTextureDataStorage;
 
 --- Returns raw texture data, stored in storage with specified numeric identifier id.
 --- @param id number
@@ -2030,7 +2066,7 @@ sasl.gl.deleteTextureDataStorage = deleteTextureDataStorage;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getTextureDataPointer
 function getTextureDataPointer(id) end;
-sasl.gl.getTextureDataPointer = getTextureDataPointer;
+gl.getTextureDataPointer = getTextureDataPointer;
 
 --- Fills storage, specified by numeric handle storageID, by texture raw data and
 --- returns this data.
@@ -2040,7 +2076,7 @@ sasl.gl.getTextureDataPointer = getTextureDataPointer;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getRawTextureData
 function getRawTextureData(textID, storageID) end;
-sasl.gl.getRawTextureData = getRawTextureData;
+gl.getRawTextureData = getRawTextureData;
 
 --- Updates texture, specified by numeric handle texID, with current storage data.
 --- @param textID number
@@ -2048,15 +2084,20 @@ sasl.gl.getRawTextureData = getRawTextureData;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRawTextureData
 function setRawTextureData(textID, storageID) end;
-sasl.gl.setRawTextureData = setRawTextureData;
+gl.setRawTextureData = setRawTextureData;
 
---- Saves texture, specified by numeric handle texID, in file filename.
+--- Saves texture, specified by numeric handle texID, in file.
 --- @param filename string
---- @param textID number
+--- @param texID number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#imageFromTexture
-function imageFromTexture(filename, textID) end;
-sasl.gl.imageFromTexture = imageFromTexture;
+function imageFromTexture(filename, texID) end;
+gl.imageFromTexture = imageFromTexture;
+
+--- @class FontHinterPreference
+FONT_HINTER_AUTO = nil
+FONT_HINTER_NATIVE = nil
+FONT_HINTER_DISABLED = nil
 
 --- @class TextAlignment
 
@@ -2077,7 +2118,7 @@ TEXT_ALIGN_BOTTOM = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawBitmapText
 function drawBitmapText(id, x, y, text, alignment, color) end;
-sasl.gl.drawBitmapText = drawBitmapText;
+gl.drawBitmapText = drawBitmapText;
 
 --- Draws text string at specified position x, y using bitmap font, specified by
 --- numeric identifier id.
@@ -2093,7 +2134,7 @@ sasl.gl.drawBitmapText = drawBitmapText;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRotatedBitmapText
 function drawRotatedBitmapText(id, cx, cy, angle, x, y, text, alignment, color) end;
-sasl.gl.drawRotatedBitmapText = drawRotatedBitmapText;
+gl.drawRotatedBitmapText = drawRotatedBitmapText;
 
 --- Measures text string using bitmap font, specified by numeric identifier id.
 --- @param id number
@@ -2102,7 +2143,7 @@ sasl.gl.drawRotatedBitmapText = drawRotatedBitmapText;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#measureBitmapText
 function measureBitmapText(id, text) end;
-sasl.gl.measureBitmapText = measureBitmapText;
+gl.measureBitmapText = measureBitmapText;
 
 --- Measures text string using bitmap font, specified by numeric identifier id.
 --- @param id number
@@ -2110,7 +2151,7 @@ sasl.gl.measureBitmapText = measureBitmapText;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#measureBitmapTextGlyphs
 function measureBitmapTextGlyphs(id, text) end;
-sasl.gl.measureBitmapTextGlyphs = measureBitmapTextGlyphs;
+gl.measureBitmapTextGlyphs = measureBitmapTextGlyphs;
 
 --- Sets outline thickness for font instance, specified by numeric font instance
 --- handle id.
@@ -2119,7 +2160,7 @@ sasl.gl.measureBitmapTextGlyphs = measureBitmapTextGlyphs;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontOutlineThickness
 function setFontOutlineThickness(id, outlineThickness) end;
-sasl.gl.setFontOutlineThickness = setFontOutlineThickness;
+gl.setFontOutlineThickness = setFontOutlineThickness;
 
 --- Sets outline color for font instance, specified by id.
 --- @param id number
@@ -2127,7 +2168,7 @@ sasl.gl.setFontOutlineThickness = setFontOutlineThickness;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontOutlineColor
 function setFontOutlineColor(id, color) end;
-sasl.gl.setFontOutlineColor = setFontOutlineColor;
+gl.setFontOutlineColor = setFontOutlineColor;
 
 --- @class FontRenderMode
 
@@ -2142,7 +2183,7 @@ TEXT_RENDER_FORCED_MONO = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontRenderMode
 function setFontRenderMode(id, mode, value) end;
-sasl.gl.setFontRenderMode = setFontRenderMode;
+gl.setFontRenderMode = setFontRenderMode;
 
 --- Sets render mode for font instance, specified by id.
 --- @param id number
@@ -2152,7 +2193,7 @@ sasl.gl.setFontRenderMode = setFontRenderMode;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontRenderMode
 function setFontRenderMode(id, mode, value) end;
-sasl.gl.setFontRenderMode = setFontRenderMode;
+gl.setFontRenderMode = setFontRenderMode;
 
 --- Sets size for font instance, specified by id.
 --- @param id number
@@ -2160,7 +2201,7 @@ sasl.gl.setFontRenderMode = setFontRenderMode;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontSize
 function setFontSize(id, size) end;
-sasl.gl.setFontSize = setFontSize;
+gl.setFontSize = setFontSize;
 
 --- @class FontDirectionMode
 
@@ -2173,7 +2214,7 @@ TEXT_DIRECTION_VERTICAL = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontDirection
 function setFontDirection(id, mode) end;
-sasl.gl.setFontDirection = setFontDirection;
+gl.setFontDirection = setFontDirection;
 
 --- Enables/disables bold mode for font instance, specified by id.
 --- @param id number
@@ -2189,7 +2230,7 @@ sasl.gl.setFontBold = setFontBold;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontItalic
 function setFontItalic(id, isItalic) end;
-sasl.gl.setFontItalic = setFontItalic;
+gl.setFontItalic = setFontItalic;
 
 --- @class TextBckMode
 
@@ -2203,7 +2244,7 @@ TEXT_BCK_RECTANGLE = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontBckMode
 function setFontBckMode(id, mode) end;
-sasl.gl.setFontBckMode = setFontBckMode;
+gl.setFontBckMode = setFontBckMode;
 
 --- Sets background color for font instance, specified by id.
 --- @param id number
@@ -2211,7 +2252,7 @@ sasl.gl.setFontBckMode = setFontBckMode;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontBckColor
 function setFontBckColor(id, color) end;
-sasl.gl.setFontBckColor = setFontBckColor;
+gl.setFontBckColor = setFontBckColor;
 
 --- Sets text background padding values for font instance, specified by id.
 --- @param id number
@@ -2225,7 +2266,7 @@ sasl.gl.setFontBckColor = setFontBckColor;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontBckPadding
 function setFontBckPadding(id, left, top, right, bottom) end;
-sasl.gl.setFontBckPadding = setFontBckPadding;
+gl.setFontBckPadding = setFontBckPadding;
 
 --- Sets glyph spacing factor for font instance, specified by id.
 --- @param id number
@@ -2233,7 +2274,7 @@ sasl.gl.setFontBckPadding = setFontBckPadding;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontGlyphSpacingFactor
 function setFontGlyphSpacingFactor(id, factor) end;
-sasl.gl.setFontGlyphSpacingFactor = setFontGlyphSpacingFactor;
+gl.setFontGlyphSpacingFactor = setFontGlyphSpacingFactor;
 
 --- Enables/disables Unicode glyphs support for the font instance (id).
 --- @param id number
@@ -2241,28 +2282,28 @@ sasl.gl.setFontGlyphSpacingFactor = setFontGlyphSpacingFactor;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setFontUnicode
 function setFontUnicode(id, unicode) end;
-sasl.gl.setFontUnicode = setFontUnicode;
+gl.setFontUnicode = setFontUnicode;
 
 --- Saves current font instance configuration on stack.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#saveFontState
 function saveFontState(id) end;
-sasl.gl.saveFontState = saveFontState;
+gl.saveFontState = saveFontState;
 
 --- Restores previously saved font instance configuration.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#restoreFontState
 function restoreFontState(id) end;
-sasl.gl.restoreFontState = restoreFontState;
+gl.restoreFontState = restoreFontState;
 
 --- Enables or disables special mode for text rendering.
 --- @param enabled boolean
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRenderTextPixelAligned
 function setRenderTextPixelAligned(enabled) end;
-sasl.gl.setRenderTextPixelAligned = setRenderTextPixelAligned;
+gl.setRenderTextPixelAligned = setRenderTextPixelAligned;
 
 --- Draws text string at specified position x, y using font instance, specified
 --- by numeric identifier id.
@@ -2278,7 +2319,7 @@ sasl.gl.setRenderTextPixelAligned = setRenderTextPixelAligned;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawText
 function drawText(id, x, y, text, size, isBold, isItalic, alignment, color) end;
-sasl.gl.drawText = drawText;
+gl.drawText = drawText;
 
 --- Draws text string at specified position x, y using font instance, specified
 --- by numeric identifier id.
@@ -2291,7 +2332,7 @@ sasl.gl.drawText = drawText;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawTextI
 function drawTextI(id, x, y, text, alignment, color) end;
-sasl.gl.drawTextI = drawTextI;
+gl.drawTextI = drawTextI;
 
 --- Draws text string at specified position x, y using font instance, specified
 --- by numeric identifier id.
@@ -2310,7 +2351,7 @@ sasl.gl.drawTextI = drawTextI;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRotatedText
 function drawRotatedText(id, x, y, cx, cy, angle, text, size, isBold, isItalic, alignment, color) end;
-sasl.gl.drawRotatedText = drawRotatedText;
+gl.drawRotatedText = drawRotatedText;
 
 --- Draws text string at specified position x, y using font instance, specified
 --- by numeric identifier id.
@@ -2326,7 +2367,7 @@ sasl.gl.drawRotatedText = drawRotatedText;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawRotatedTextI
 function drawRotatedTextI(id, x, y, cx, cy, angle, text, alignment, color) end;
-sasl.gl.drawRotatedTextI = drawRotatedTextI;
+gl.drawRotatedTextI = drawRotatedTextI;
 
 --- Measures text string using font instance, specified by numeric identifier id.
 --- @param id number
@@ -2334,12 +2375,11 @@ sasl.gl.drawRotatedTextI = drawRotatedTextI;
 --- @param size number
 --- @param isBold boolean
 --- @param isItalic boolean
---- @return number
---- @return number
+--- @return number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#measureText
 function measureText(id, text, size, isBold, isItalic) end;
-sasl.gl.measureText = measureText;
+gl.measureText = measureText;
 
 --- Measures text string using font instance, specified by numeric identifier id.
 --- @param id number
@@ -2350,17 +2390,16 @@ sasl.gl.measureText = measureText;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#measureTextGlyphs
 function measureTextGlyphs(id, text, size, isBold) end;
-sasl.gl.measureTextGlyphs = measureTextGlyphs;
+gl.measureTextGlyphs = measureTextGlyphs;
 
 --- Measures text string using font instance, specified by numeric identifier id.
 --- @param id number
 --- @param text string
---- @return number
---- @return number
+--- @return number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#measureTextI
 function measureTextI(id, text) end;
-sasl.gl.measureTextI = measureTextI;
+gl.measureTextI = measureTextI;
 
 --- Measures text string using font instance, specified by numeric identifier id.
 --- @param id number
@@ -2369,10 +2408,82 @@ sasl.gl.measureTextI = measureTextI;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#measureTextGlyphsI
 function measureTextGlyphsI(id, text) end;
-sasl.gl.measureTextGlyphsI = measureTextGlyphsI;
+gl.measureTextGlyphsI = measureTextGlyphsI;
+
+--- Loads texture from data block.
+--- @param data string
+--- @param x number
+--- @param y number
+--- @param width number
+--- @param height number
+--- @overload fun(data:string):number
+--- @overload fun(data:string, width:number, height:number):number
+--- @return number, number, number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadImageFromMemory
+function loadImageFromMemory(data, x, y, width, height) end;
+gl.loadImageFromMemory = loadImageFromMemory;
+
+--- Loads texture from data block.
+--- @param data string
+--- @param x number
+--- @param y number
+--- @param width number
+--- @param height number
+--- @overload fun(data:string):number
+--- @overload fun(data:string, width:number, height:number):number
+--- @return number, number, number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadImageFromMemory
+function loadTextureFromMemory(data, x, y, width, height) end;
+gl.loadTextureFromMemory = loadTextureFromMemory;
+
+--- Unloads texture, specified by id.
+--- @param id number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#unloadImage
+function unloadImage(id) end;
+gl.unloadImage = unloadImage;
+
+--- Unloads texture, specified by id.
+--- @param id number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#unloadImage
+function unloadTexture(id) end;
+gl.unloadTexture = unloadTexture;
+
+--- Unloads font, specified by id.
+--- @param id number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#unloadFont
+function unloadFont(id) end;
+gl.unloadFont = unloadFont;
+
+--- Draws texture used as glyphs storage for specified font
+--- @param id number
+--- @param x number
+--- @param y number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#drawFontTexture
+function drawFontTexture(id, x, y) end;
+gl.drawFontTexture = drawFontTexture;
+
+--- Returns string with information about font instance
+--- @param id number
+--- @return string
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#getFontInfo
+function getFontInfo(id) end;
+gl.getFontInfo = getFontInfo;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
+
+--- @class ShaderTypeID
+
+SHADER_TYPE_VERTEX = nil
+SHADER_TYPE_FRAGMENT = nil
+SHADER_TYPE_GEOMETRY = nil
 
 --- @class ShaderUniformType
 
@@ -2387,21 +2498,21 @@ TYPE_SAMPLER = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#createShaderProgram
 function createShaderProgram() end;
-sasl.gl.createShaderProgram = createShaderProgram;
+gl.createShaderProgram = createShaderProgram;
 
 --- Deletes shader program, specified by numeric identifier id.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#deleteShaderProgram
 function deleteShaderProgram(id) end;
-sasl.gl.deleteShaderProgram = deleteShaderProgram;
+gl.deleteShaderProgram = deleteShaderProgram;
 
 --- Links shader program, specified by numeric identifier id.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#linkShaderProgram
 function linkShaderProgram(id) end;
-sasl.gl.linkShaderProgram = linkShaderProgram;
+gl.linkShaderProgram = linkShaderProgram;
 
 --- Sets shader uniform variables with different types.
 --- @param shaderID number
@@ -2410,27 +2521,23 @@ sasl.gl.linkShaderProgram = linkShaderProgram;
 --- @param data number | table
 --- @param textureID number
 --- @param textureUnit number
---- @overload fun(shaderID:number, name:string, TYPE_INT:ShaderUniformType, data:number)
---- @overload fun(shaderID:number, name:string, TYPE_FLOAT:ShaderUniformType, data:number)
---- @overload fun(shaderID:number, name:string, TYPE_INT_ARRAY:ShaderUniformType, data:table)
---- @overload fun(shaderID:number, name:string, TYPE_FLOAT_ARRAY:ShaderUniformType, data:table)
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setShaderUniform
-function setShaderUniform(shaderID, name, TYPE_SAMPLER, textureID, textureUnit) end;
-sasl.gl.setShaderUniform = setShaderUniform;
+function setShaderUniform(shaderID, name, type, data, textureID, textureUnit) end;
+gl.setShaderUniform = setShaderUniform;
 
 --- Start using shader program, specified by numeric identifier id, for rendering.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#useShaderProgram
 function useShaderProgram(id) end;
-sasl.gl.useShaderProgram = useShaderProgram;
+gl.useShaderProgram = useShaderProgram;
 
 --- Stops shader program usage.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#stopShaderProgram
 function stopShaderProgram() end;
-sasl.gl.stopShaderProgram = stopShaderProgram;
+gl.stopShaderProgram = stopShaderProgram;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -2465,7 +2572,7 @@ BLEND_EQUATION_REVERSE_SUBTRACT = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setBlendFunction
 function setBlendFunction(sourceBlend, destBlend) end;
-sasl.gl.setBlendFunction = setBlendFunction;
+gl.setBlendFunction = setBlendFunction;
 
 --- Sets current blending functions separately for RGB components and for alpha component.
 --- @param sourceBlendRGB BlendFunctionID
@@ -2475,14 +2582,14 @@ sasl.gl.setBlendFunction = setBlendFunction;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setBlendFunctionSeparate
 function setBlendFunctionSeparate(sourceBlendRGB, destBlendRGB, sourceBlendAlpha, destBlendAlpha) end;
-sasl.gl.setBlendFunctionSeparate = setBlendFunctionSeparate;
+gl.setBlendFunctionSeparate = setBlendFunctionSeparate;
 
 --- Sets current blending equation, specified by identifier id.
 --- @param id BlendEquationID
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setBlendFunctionSeparate
 function setBlendEquation(id) end;
-sasl.gl.setBlendEquation = setBlendEquation;
+gl.setBlendEquation = setBlendEquation;
 
 --- Sets current blending equations separately for RGB components and for alpha component
 --- - equationIDRGB and equationIDAlpha.
@@ -2491,20 +2598,20 @@ sasl.gl.setBlendEquation = setBlendEquation;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setBlendEquationSeparate
 function setBlendEquationSeparate(equationIDRGB, equationIDAlpha) end;
-sasl.gl.setBlendEquationSeparate = setBlendEquationSeparate;
+gl.setBlendEquationSeparate = setBlendEquationSeparate;
 
 --- Sets current blend color.
 --- @param color Color
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setBlendColor
 function setBlendColor(color) end;
-sasl.gl.setBlendColor = setBlendColor;
+gl.setBlendColor = setBlendColor;
 
 --- Sets blending options to defaults.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#resetBlending
 function resetBlending() end;
-sasl.gl.resetBlending = resetBlending;
+gl.resetBlending = resetBlending;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -2517,13 +2624,13 @@ sasl.gl.resetBlending = resetBlending;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setClipArea
 function setClipArea(x, y, width, height) end;
-sasl.gl.setClipArea = setClipArea;
+gl.setClipArea = setClipArea;
 
 --- Resets current clip area.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#resetClipArea
 function resetClipArea() end;
-sasl.gl.resetClipArea = resetClipArea;
+gl.resetClipArea = resetClipArea;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -2532,7 +2639,7 @@ sasl.gl.resetClipArea = resetClipArea;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawMaskStart
 function drawMaskStart() end;
-sasl.gl.drawMaskStart = drawMaskStart;
+gl.drawMaskStart = drawMaskStart;
 
 --- Prepares drawing context to draw under mask.
 --- @param invertMaskLogic boolean
@@ -2540,13 +2647,13 @@ sasl.gl.drawMaskStart = drawMaskStart;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawUnderMask
 function drawUnderMask(invertMaskLogic) end;
-sasl.gl.drawUnderMask = drawUnderMask;
+gl.drawUnderMask = drawUnderMask;
 
 --- Restores drawing context and previous drawing state, and disables masking.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawMaskEnd
 function drawMaskEnd() end;
-sasl.gl.drawMaskEnd = drawMaskEnd;
+gl.drawMaskEnd = drawMaskEnd;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -2555,13 +2662,13 @@ sasl.gl.drawMaskEnd = drawMaskEnd;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#saveGraphicsContext
 function saveGraphicsContext() end;
-sasl.gl.saveGraphicsContext = saveGraphicsContext;
+gl.saveGraphicsContext = saveGraphicsContext;
 
 --- Restores previous transformation matrix.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#restoreGraphicsContext
 function restoreGraphicsContext() end;
-sasl.gl.restoreGraphicsContext = restoreGraphicsContext;
+gl.restoreGraphicsContext = restoreGraphicsContext;
 
 --- Multiplies current transformation matrix on translation matrix, specified by translation
 --- coordinates x, y.
@@ -2570,7 +2677,7 @@ sasl.gl.restoreGraphicsContext = restoreGraphicsContext;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setTranslateTransform
 function setTranslateTransform(x, y) end;
-sasl.gl.setTranslateTransform = setTranslateTransform;
+gl.setTranslateTransform = setTranslateTransform;
 
 --- Multiplies current transformation matrix on rotation matrix to rotate current context
 --- on angle degrees.
@@ -2578,7 +2685,7 @@ sasl.gl.setTranslateTransform = setTranslateTransform;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRotateTransform
 function setRotateTransform(angle) end;
-sasl.gl.setRotateTransform = setRotateTransform;
+gl.setRotateTransform = setRotateTransform;
 
 --- Multiplies current transformation matrix on scaling matrix, specified by scaling factors
 --- scaleX, scaleY.
@@ -2587,7 +2694,7 @@ sasl.gl.setRotateTransform = setRotateTransform;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setScaleTransform
 function setScaleTransform(scaleX, scaleY) end;
-sasl.gl.setScaleTransform = setScaleTransform;
+gl.setScaleTransform = setScaleTransform;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -2597,33 +2704,46 @@ sasl.gl.setScaleTransform = setScaleTransform;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#isLitStage
 function isLitStage() end;
-sasl.gl.isLitStage = isLitStage;
+gl.isLitStage = isLitStage;
 
 --- Returns true in case if SASL now draws in non-lit stage, and returns false otherwise.
 --- @return boolean
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#isNonLitStage
 function isNonLitStage() end;
-sasl.gl.isNonLitStage = isNonLitStage;
+gl.isNonLitStage = isNonLitStage;
 
 --- Returns true in case if SASL now draws before X-Plane, and returns false otherwise.
 --- @return boolean
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#isPanelBeforeStage
 function isPanelBeforeStage() end;
-sasl.gl.isPanelBeforeStage = isPanelBeforeStage;
+gl.isPanelBeforeStage = isPanelBeforeStage;
 
 --- Returns true in case if SASL now draws after X-Plane, and returns false otherwise.
 --- @return boolean
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#isPanelAfterStage
 function isPanelAfterStage() end;
-sasl.gl.isPanelAfterStage = isPanelAfterStage;
+gl.isPanelAfterStage = isPanelAfterStage;
+
+--- Starts telemetry recording (info about processed vertices and batches)
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#startGraphicsTelemetry
+function startGraphicsTelemetry() end;
+gl.startGraphicsTelemetry = startGraphicsTelemetry
+
+--- Stops telemetry recording and returns amount of vertices and batches since start of record.
+--- @return number, number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#stopGraphicsTelemetry
+function stopGraphicsTelemetry() end;
+gl.stopGraphicsTelemetry = stopGraphicsTelemetry
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
---- Draws 3D line between x1, y1, z1 and x2, y2, z2 points with specified color in
+--- [DEPRECATED] Draws 3D line between x1, y1, z1 and x2, y2, z2 points with specified color in
 --- OpenGL local 3D coordinates.
 --- @param x1 number
 --- @param y1 number
@@ -2635,9 +2755,9 @@ sasl.gl.isPanelAfterStage = isPanelAfterStage;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawLine3D
 function drawLine3D(x1, y1, z1, x2, y2, z2, color) end;
-sasl.gl.drawLine3D = drawLine3D;
+gl.drawLine3D = drawLine3D;
 
---- Draws 3D triangle, specified by x1, y1, z1 and x2, y2, z2 and x3, y3, z3 points with
+--- [DEPRECATED] Draws 3D triangle, specified by x1, y1, z1 and x2, y2, z2 and x3, y3, z3 points with
 --- specified color in OpenGL local 3D coordinates.
 --- @param x1 number
 --- @param y1 number
@@ -2652,9 +2772,9 @@ sasl.gl.drawLine3D = drawLine3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawTriangle3D
 function drawTriangle3D(x1, y1, z1, x2, y2, z2, x3, y3, z3, color) end;
-sasl.gl.drawTriangle3D = drawTriangle3D;
+gl.drawTriangle3D = drawTriangle3D;
 
---- Draws 3D triangle, specified by x1, y1, z1 and x2, y2, z2 and x3, y3, z3 points with
+--- [DEPRECATED] Draws 3D circle, specified by center and circle parameters
 --- specified color in OpenGL local 3D coordinates.
 --- @param x number
 --- @param y number
@@ -2667,9 +2787,9 @@ sasl.gl.drawTriangle3D = drawTriangle3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawCircle3D
 function drawCircle3D(x, y, z, radius, pitch, yaw, isFilled, color) end;
-sasl.gl.drawCircle3D = drawCircle3D;
+gl.drawCircle3D = drawCircle3D;
 
---- Draws 3D angle, centered at x, y, z and angular width angle, with specified length,
+--- [DEPRECATED] Draws 3D angle, centered at x, y, z and angular width angle, with specified length,
 --- made out of rays count.
 --- @param x number
 --- @param y number
@@ -2683,9 +2803,9 @@ sasl.gl.drawCircle3D = drawCircle3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawAngle3D
 function drawAngle3D(x, y, z, angle, length, rays, pitch, yaw, color) end;
-sasl.gl.drawAngle3D = drawAngle3D;
+gl.drawAngle3D = drawAngle3D;
 
---- Draws standing 3D cone at x, y, z with radius and height.
+--- [DEPRECATED] Draws standing 3D cone at x, y, z with radius and height.
 --- @param x number
 --- @param y number
 --- @param z number
@@ -2695,24 +2815,24 @@ sasl.gl.drawAngle3D = drawAngle3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawStandingCone3D
 function drawStandingCone3D(x, y, z, radius, height, color) end;
-sasl.gl.drawStandingCone3D = drawStandingCone3D;
+gl.drawStandingCone3D = drawStandingCone3D;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
---- Saves current transformation matrix on the stack.
+--- [DEPRECATED] Saves current transformation matrix on the stack.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#saveGraphicsState3D
 function saveGraphicsState3D() end;
-sasl.gl.saveGraphicsState3D = saveGraphicsState3D;
+gl.saveGraphicsState3D = saveGraphicsState3D;
 
---- Restores previous transformation matrix state.
+--- [DEPRECATED] Restores previous transformation matrix state.
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#restoreGraphicsContext3D
 function restoreGraphicsContext3D() end;
-sasl.gl.restoreGraphicsContext3D = restoreGraphicsContext3D;
+gl.restoreGraphicsContext3D = restoreGraphicsContext3D;
 
---- Multiplies current transformation matrix on translation matrix, specified by translation
+--- [DEPRECATED] Multiplies current transformation matrix on translation matrix, specified by translation
 --- coordinates x, y, z.
 --- @param x number
 --- @param y number
@@ -2720,25 +2840,25 @@ sasl.gl.restoreGraphicsContext3D = restoreGraphicsContext3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setTranslateTransform3D
 function setTranslateTransform3D(x, y, z) end;
-sasl.gl.setTranslateTransform3D = setTranslateTransform3D;
+gl.setTranslateTransform3D = setTranslateTransform3D;
 
---- Multiplies current transformation matrix on rotation matrix around X axis, specified by
+--- [DEPRECATED] Multiplies current transformation matrix on rotation matrix around X axis, specified by
 --- angle in degrees.
 --- @param angle number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRotateTransformX3D
 function setRotateTransformX3D(angle) end;
-sasl.gl.setRotateTransformX3D = setRotateTransformX3D;
+gl.setRotateTransformX3D = setRotateTransformX3D;
 
---- Multiplies current transformation matrix on rotation matrix around Y axis, specified by
+--- [DEPRECATED] Multiplies current transformation matrix on rotation matrix around Y axis, specified by
 --- angle in degrees.
 --- @param angle number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRotateTransformY3D
 function setRotateTransformY3D(angle) end;
-sasl.gl.setRotateTransformY3D = setRotateTransformY3D;
+gl.setRotateTransformY3D = setRotateTransformY3D;
 
---- Multiplies current transformation matrix on rotation matrix around vector, specified by
+--- [DEPRECATED] Multiplies current transformation matrix on rotation matrix around vector, specified by
 --- x, y and z coordinates.
 --- @param angle number
 --- @param x number
@@ -2747,9 +2867,9 @@ sasl.gl.setRotateTransformY3D = setRotateTransformY3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setRotateTransform3D
 function setRotateTransform3D(angle, x, y, z) end;
-sasl.gl.setRotateTransform3D = setRotateTransform3D;
+gl.setRotateTransform3D = setRotateTransform3D;
 
---- Multiplies current transformation matrix on scaling matrix, specified by scaling factors
+--- [DEPRECATED] Multiplies current transformation matrix on scaling matrix, specified by scaling factors
 --- x, y and z.
 --- @param x number
 --- @param y number
@@ -2757,18 +2877,7 @@ sasl.gl.setRotateTransform3D = setRotateTransform3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setScaleTransform3D
 function setScaleTransform3D(x, y, z) end;
-sasl.gl.setScaleTransform3D = setScaleTransform3D;
-
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-
---- @class Cursor
---- @field x number
---- @field y number
---- @field width number
---- @field height number
---- @field shape number
---- @field hideOSCursor boolean
+gl.setScaleTransform3D = setScaleTransform3D;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -2783,14 +2892,14 @@ sasl.gl.setScaleTransform3D = setScaleTransform3D;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#loadSample
 function loadSample(fileName, isNeedTimer, isNeedReversed) end;
-sasl.al.loadSample = loadSample;
+al.loadSample = loadSample;
 
 --- Unloads sample, specified by numeric identifier id.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#unloadSample
 function unloadSample(id) end;
-sasl.al.unloadSample = unloadSample;
+al.unloadSample = unloadSample;
 
 --- @class SoundEnvironment
 
@@ -2805,28 +2914,28 @@ SOUND_EVERYWHERE = nil
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#playSample
 function playSample(id, isLooping) end;
-sasl.al.playSample = playSample;
+al.playSample = playSample;
 
 --- Stops playing sample with specified numeric id.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#stopSample
 function stopSample(id) end;
-sasl.al.stopSample = stopSample;
+al.stopSample = stopSample;
 
 --- Pauses playing sample with specified numeric id.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#pauseSample
 function pauseSample(id) end;
-sasl.al.pauseSample = pauseSample;
+al.pauseSample = pauseSample;
 
 --- Sets sample playback position to zero.
 --- @param id number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#rewindSample
 function rewindSample(id) end;
-sasl.al.rewindSample = rewindSample;
+al.rewindSample = rewindSample;
 
 --- Returns true if sample, specified by id is playing right now and false otherwise.
 --- @param id number
@@ -2834,7 +2943,7 @@ sasl.al.rewindSample = rewindSample;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#isSamplePlaying
 function isSamplePlaying(id) end;
-sasl.al.isSamplePlaying = isSamplePlaying;
+al.isSamplePlaying = isSamplePlaying;
 
 --- Returns remaining time of playing for sample, specified by numeric identifier id, if the
 --- sample is playing right now.
@@ -2843,7 +2952,7 @@ sasl.al.isSamplePlaying = isSamplePlaying;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSamplePlayingRemaining
 function getSamplePlayingRemaining(id) end;
-sasl.al.getSamplePlayingRemaining = getSamplePlayingRemaining;
+al.getSamplePlayingRemaining = getSamplePlayingRemaining;
 
 --- Sets gain of sample, specified by numeric identifier id.
 --- @param id number
@@ -2851,14 +2960,14 @@ sasl.al.getSamplePlayingRemaining = getSamplePlayingRemaining;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleGain
 function setSampleGain(id, gain) end;
-sasl.al.setSampleGain = setSampleGain;
+al.setSampleGain = setSampleGain;
 
 --- Adjusts gain of all samples in SASL sound system.
 --- @param gain number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setMasterGain
 function setMasterGain(gain) end;
-sasl.al.setMasterGain = setMasterGain;
+al.setMasterGain = setMasterGain;
 
 --- Sets minimum gain of sample, specified by numeric identifier id.
 --- @param id number
@@ -2866,7 +2975,7 @@ sasl.al.setMasterGain = setMasterGain;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setMinimumSampleGain
 function setMinimumSampleGain(id, minGain) end;
-sasl.al.setMinimumSampleGain = setMinimumSampleGain;
+al.setMinimumSampleGain = setMinimumSampleGain;
 
 --- Sets maximum gain of sample, specified by numeric identifier id.
 --- @param id number
@@ -2874,7 +2983,7 @@ sasl.al.setMinimumSampleGain = setMinimumSampleGain;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setMaximumSampleGain
 function setMaximumSampleGain(id, maxGain) end;
-sasl.al.setMaximumSampleGain = setMaximumSampleGain;
+al.setMaximumSampleGain = setMaximumSampleGain;
 
 --- Sets pitch (frequency) of sample, specified by numeric identifier id.
 --- @param id number
@@ -2882,7 +2991,7 @@ sasl.al.setMaximumSampleGain = setMaximumSampleGain;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSamplePitch
 function setSamplePitch(id, pitch) end;
-sasl.al.setSamplePitch = setSamplePitch;
+al.setSamplePitch = setSamplePitch;
 
 --- Sets current playback point position for sample, specified with numeric identifier id.
 --- @param id number
@@ -2890,7 +2999,7 @@ sasl.al.setSamplePitch = setSamplePitch;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleOffset
 function setSampleOffset(id, offset) end;
-sasl.al.setSampleOffset = setSampleOffset;
+al.setSampleOffset = setSampleOffset;
 
 --- Returns current playback point position for sample, specified with numeric identifier id.
 --- @param id number
@@ -2898,7 +3007,7 @@ sasl.al.setSampleOffset = setSampleOffset;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSampleOffset
 function getSampleOffset(id) end;
-sasl.al.getSampleOffset = getSampleOffset;
+al.getSampleOffset = getSampleOffset;
 
 --- Returns total duration of the sample (in seconds), specified with numeric identifier id.
 --- @param id number
@@ -2906,7 +3015,7 @@ sasl.al.getSampleOffset = getSampleOffset;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSampleDuration
 function getSampleDuration(id) end;
-sasl.al.getSampleDuration = getSampleDuration;
+al.getSampleDuration = getSampleDuration;
 
 --- Sets 3D position of sample, specified by numeric identifier id.
 --- @param id number
@@ -2916,17 +3025,15 @@ sasl.al.getSampleDuration = getSampleDuration;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSamplePosition
 function setSamplePosition(id, x, y, z) end;
-sasl.al.setSamplePosition = setSamplePosition;
+al.setSamplePosition = setSamplePosition;
 
 --- Returns 3D position of sample, specified by numeric identifier id.
 --- @param id number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSamplePosition
 function getSamplePosition(id) end;
-sasl.al.getSamplePosition = getSamplePosition;
+al.getSamplePosition = getSamplePosition;
 
 --- Sets direction vector of sample, specified by numeric identifier id.
 --- @param id number
@@ -2936,17 +3043,15 @@ sasl.al.getSamplePosition = getSamplePosition;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleDirection
 function setSampleDirection(id, x, y, z) end;
-sasl.al.setSampleDirection = setSampleDirection;
+al.setSampleDirection = setSampleDirection;
 
 --- Returns direction vector of sample, specified by numeric identifier id.
 --- @param id number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSampleDirection
 function getSampleDirection(id) end;
-sasl.al.getSampleDirection = getSampleDirection;
+al.getSampleDirection = getSampleDirection;
 
 --- Sets spatial velocity vector for sample, specified by numeric identifier id.
 --- @param id number
@@ -2956,17 +3061,15 @@ sasl.al.getSampleDirection = getSampleDirection;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleVelocity
 function setSampleVelocity(id, x, y, z) end;
-sasl.al.setSampleVelocity = setSampleVelocity;
+al.setSampleVelocity = setSampleVelocity;
 
 --- Returns spatial velocity vector for sample, specified by numeric identifier id.
 --- @param id number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSampleVelocity
 function getSampleVelocity(id) end;
-sasl.al.getSampleVelocity = getSampleVelocity;
+al.getSampleVelocity = getSampleVelocity;
 
 --- Sets sound cone parameters for sample, specified by numeric identifier id.
 --- @param id number
@@ -2976,17 +3079,15 @@ sasl.al.getSampleVelocity = getSampleVelocity;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleCone
 function setSampleCone(id, outerGain, innerAngle, outerAngle) end;
-sasl.al.setSampleCone = setSampleCone;
+al.setSampleCone = setSampleCone;
 
 --- Returns sound cone parameters for sample, specified by numeric identifier id.
 --- @param id number
---- @return number
---- @return number
---- @return number
+--- @return number, number, number
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSampleCone
 function getSampleCone(id) end;
-sasl.al.getSampleCone = getSampleCone;
+al.getSampleCone = getSampleCone;
 
 --- Sets sound environment option for sample, specified by numeric identifier id.
 --- @param id number
@@ -2994,7 +3095,7 @@ sasl.al.getSampleCone = getSampleCone;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleEnv
 function setSampleEnv(id, env) end;
-sasl.al.setSampleEnv = setSampleEnv;
+al.setSampleEnv = setSampleEnv;
 
 --- Returns sound environment value for sample, specified by numeric identifier id.
 --- @param id number
@@ -3002,7 +3103,7 @@ sasl.al.setSampleEnv = setSampleEnv;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSampleEnv
 function getSampleEnv(id) end;
-sasl.al.getSampleEnv = getSampleEnv;
+al.getSampleEnv = getSampleEnv;
 
 --- Sets attachment point for sample, specified by numeric identifier id.
 --- @param id number
@@ -3010,7 +3111,7 @@ sasl.al.getSampleEnv = getSampleEnv;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleRelative
 function setSampleRelative(id, isRelative) end;
-sasl.al.setSampleRelative = setSampleRelative;
+al.setSampleRelative = setSampleRelative;
 
 --- Returns attachment point identifier for sample, specified by numeric identifier id.
 --- @param id number
@@ -3018,7 +3119,7 @@ sasl.al.setSampleRelative = setSampleRelative;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#getSampleRelative
 function getSampleRelative(id) end;
-sasl.al.getSampleRelative = getSampleRelative;
+al.getSampleRelative = getSampleRelative;
 
 --- Sets maximum distance, at which sample can be heard.
 --- @param id number
@@ -3026,7 +3127,7 @@ sasl.al.getSampleRelative = getSampleRelative;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleMaxDistance
 function setSampleMaxDistance(id, distance) end;
-sasl.al.setSampleMaxDistance = setSampleMaxDistance;
+al.setSampleMaxDistance = setSampleMaxDistance;
 
 --- Sets computational rolloff factor for sample, specified by id.
 --- @param id number
@@ -3034,7 +3135,7 @@ sasl.al.setSampleMaxDistance = setSampleMaxDistance;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleRolloffFactor
 function setSampleRolloffFactor(id, factor) end;
-sasl.al.setSampleRolloffFactor = setSampleRolloffFactor;
+al.setSampleRolloffFactor = setSampleRolloffFactor;
 
 --- Sets reference distance for sample, specified by id.
 --- @param id number
@@ -3042,13 +3143,12 @@ sasl.al.setSampleRolloffFactor = setSampleRolloffFactor;
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#setSampleRefDistance
 function setSampleRefDistance(id, distance) end;
-sasl.al.setSampleRefDistance = setSampleRefDistance;
+al.setSampleRefDistance = setSampleRefDistance;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
---- Defines internal component property with specified name and assigns inValue value
---- to it.
+--- Defines internal component property with specified name and assigns inValue value to it.
 --- @param name string
 --- @param inValue any
 --- @return Property
@@ -3065,13 +3165,7 @@ function defineProperty(name, inValue) end
 --- @param toStdIn string
 --- @param stdOutToString boolean
 --- @param stdErrToString boolean
---- @return boolean
---- @return number
---- @return number
---- @return number
---- @return number
---- @return string
---- @return string
+--- @return boolean, number, number, number, number, string, string
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#startProcessSync
 function startProcessSync(path, args, toStdIn, stdOutToString, stdErrToString) end
@@ -3083,7 +3177,7 @@ sasl.startProcessSync = startProcessSync;
 --- @param toStdIn string
 --- @param stdOutToString boolean
 --- @param stdErrToString boolean
---- @param callback (status:boolean, pOut:number, outSize:number, pErr:number, errSize:number, inOutString:string, inErrString:string):void
+--- @param callback fun(status:boolean, pOut:number, outSize:number, pErr:number, errSize:number, inOutString:string, inErrString:string):void
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#startProcessAsync
 function startProcessAsync(path, args, toStdIn, stdOutToString, stdErrToString, callback) end
@@ -3110,5 +3204,6 @@ sasl.readConfig = readConfig;
 --- : https://1-sim.com/files/SASL3Manual.pdf#writeConfig
 function writeConfig(pathToFile, format, t) end
 sasl.writeConfig = writeConfig;
+
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------

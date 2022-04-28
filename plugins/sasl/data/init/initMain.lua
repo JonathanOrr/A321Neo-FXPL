@@ -44,11 +44,11 @@ _SLOADED = {}
 --- @field movable Property | boolean
 --- @field resizable Property | boolean
 --- @field resizeProportional Property | boolean
---- @field onMouseDown fun(self:Component, x:number, y:number, button:MouseButtonID, parentX:number, parentY:number):boolean
---- @field onMouseUp fun(self:Component, x:number, y:number, button:MouseButtonID, parentX:number, parentY:number):boolean
---- @field onMouseHold fun(self:Component, x:number, y:number, button:MouseButtonID, parentX:number, parentY:number):boolean
---- @field onMouseMove fun(self:Component, x:number, y:number, button:MouseButtonID, parentX:number, parentY:number):boolean
---- @field onMouseWheel fun(self:Component, x:number, y:number, button:MouseButtonID, parentX:number, parentY:number, wheelClicks:number):boolean
+--- @field onMouseDown fun(self:Component, x:number, y:number, button:MouseButton, parentX:number, parentY:number):boolean
+--- @field onMouseUp fun(self:Component, x:number, y:number, button:MouseButton, parentX:number, parentY:number):boolean
+--- @field onMouseHold fun(self:Component, x:number, y:number, button:MouseButton, parentX:number, parentY:number):boolean
+--- @field onMouseMove fun(self:Component, x:number, y:number, button:MouseButton, parentX:number, parentY:number):boolean
+--- @field onMouseWheel fun(self:Component, x:number, y:number, button:MouseButton, parentX:number, parentY:number, wheelClicks:number):boolean
 --- @field onKeyDown fun(self:Component, char:number, key:number, shiftDown:number, ctrlDown:number, AltOptDown:number):boolean
 --- @field onKeyUp fun(self:Component, char:number, key:number, shiftDown:number, ctrlDown:number, AltOptDown:number):boolean
 --- @field logInfo fun(...)
@@ -366,7 +366,6 @@ end
 
 --- Saves current state.
 function private.saveState()
-    private.initState()
     private.savePopupsState()
     private.saveContextWindowsState()
     private.writeTableToFile(moduleDirectory.."/state.txt", private.savedState, "state")
@@ -473,7 +472,6 @@ function private.runMouseEventByPath(path, name, x, y, button, value)
         px = mx
         py = my
         local position = get(c.position)
-        local size = get(c.size)
         mx = (mx - position[1]) * c.size[1] / position[3]
         my = (my - position[2]) * c.size[2] / position[4]
     end
@@ -521,6 +519,7 @@ end
 --- @field width number
 --- @field height number
 --- @field shape number
+--- @field hideOSCursor boolean
 
 --- Cursor state and position.
 private.cursor = nil
@@ -661,7 +660,7 @@ function private.getFocusedComponentPath()
 end
 
 function private.clearFocusedComponentPaths()
-    for k, v in ipairs(focusedComponentPath) do
+    for _, v in ipairs(focusedComponentPath) do
         for _, c in ipairs(v) do
             set(c.focused, false)
         end

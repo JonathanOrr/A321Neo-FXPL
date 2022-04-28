@@ -15,10 +15,10 @@ end
 
 local function mergeTablesSimple(t1, t2)
     local t = {}
-    for k, v in ipairs(t1) do
+    for _, v in ipairs(t1) do
         table.insert(t, v)
     end
-    for k, v in ipairs(t2) do
+    for _, v in ipairs(t2) do
         table.insert(t, v)
     end
     return t
@@ -78,13 +78,13 @@ function private.writeTableToFile(fileName, t, tname)
     local f = io.open(fileName, "w+")
     if f ~= nil then
         local cache = {}
-        local function writeTable(t, depth)
-            local tStr = tostring(t)
+        local function writeTable(inT, depth)
+            local tStr = tostring(inT)
             local indent = string.rep(' ', depth * 4)
             if cache[tStr] then
             else
                 cache[tStr] = true
-                for k, v in pairs(t) do
+                for k, v in pairs(inT) do
                     local vt = type(v)
                     local kStr
                     if type(k) == "number" then
