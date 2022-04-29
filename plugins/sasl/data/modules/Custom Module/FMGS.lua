@@ -401,6 +401,10 @@ local function update_wind_uplink()
         FMGS_sys.data.winds_climb[3]
     }
 
+    for i,x in ipairs(FMGS_sys.fpln.active.legs) do
+        x.winds = {FMGS_sys.data.winds_climb[3]}
+    end
+
     MCDU.send_message("WIND DATA UPLINK", ECAM_WHITE)
 
 end

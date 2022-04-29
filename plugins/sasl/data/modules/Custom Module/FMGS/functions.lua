@@ -1114,7 +1114,50 @@ function FMGS_winds_set_wind_descent(dir, spd, alt, pos)
     table.sort(FMGS_sys.data.winds_descent, function(a, b) return a.alt < b.alt end)
 end
 
+function FMGS_winds_get_wind_cruise(leg_id)
+    if FMGS_sys.fpln.active.legs[leg_id] then
+        if FMGS_sys.fpln.active.legs[leg_id].winds then
+            return FMGS_sys.fpln.active.legs[leg_id].winds
+        end
+    end
+    return nil
+end
 
+function FMGS_winds_set_wind_cruise(leg_id, dir, spd, alt, pos)
+    if FMGS_sys.fpln.active.legs[leg_id] then    
+        
+        local legs = FMGS_sys.fpln.active.legs
+        local n_legs = #legs
+        for i=leg_id,n_legs do
+
+            if not FMGS_sys.fpln.active.legs[i].winds then
+                FMGS_sys.fpln.active.legs[i].winds = {}
+            end
+
+            local winds = FMGS_sys.fpln.active.legs[i].winds
+
+
+            if winds[pos] then
+                winds[pos] = {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)}
+            else
+                table.insert(winds, {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)})
+            end
+            table.sort(winds, function(a, b) return a.alt < b.alt end)
+        end
+    end
+end
+
+function FMGS_winds_clear_wind_cruise(leg_id, idx)
+    local legs = FMGS_sys.fpln.active.legs
+    local n_legs = #legs
+    for i=leg_id,n_legs do
+        if FMGS_sys.fpln.active.legs[i] and FMGS_sys.fpln.active.legs[i].winds then
+            if FMGS_sys.fpln.active.legs[i].winds[idx] then
+                table.remove(FMGS_sys.fpln.active.legs[i].winds, idx)
+            end
+        end
+    end
+end
 
 function FMGS_winds_req_in_progress()
     return FMGS_sys.data.winds_req_in_progress_time >= 0
@@ -1123,3 +1166,4 @@ end
 function FMGS_winds_req_go()
     FMGS_sys.data.winds_req_in_progress_time = get(TIME)
 end
+
