@@ -41,18 +41,14 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_line(mcdu_data, MCDU_LEFT, 1, "TRU WIND/ALT", MCDU_SMALL, ECAM_WHITE)
 
-    if FMGS_get_phase() == FMGS_PHASE_PREFLIGHT then
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, "HISTORY", MCDU_SMALL, ECAM_WHITE)
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, "WIND", MCDU_LARGE, ECAM_WHITE)
-    end
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "WIND", MCDU_SMALL, ECAM_ORANGE)
     if FMGS_winds_req_in_progress() then
         self:set_line(mcdu_data, MCDU_RIGHT, 2, "REQUEST ", MCDU_LARGE, ECAM_ORANGE)
     else
         self:set_line(mcdu_data, MCDU_RIGHT, 2, "REQUEST*", MCDU_LARGE, ECAM_ORANGE)
     end
-    self:set_line(mcdu_data, MCDU_RIGHT, 5, "PREV", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 5, "PHASE>", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 4, "PREV", MCDU_SMALL, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 4, "PHASE>", MCDU_LARGE, ECAM_WHITE)
 
     local winds = FMGS_winds_get_wind_descent()
     for i = 1,5 do
@@ -128,16 +124,17 @@ function THIS_PAGE:L5(mcdu_data)
     end
 end
 
-function THIS_PAGE:R1(mcdu_data)
-    mcdu_send_message(mcdu_data, "NOT IMPLEMENTED")
-end
-
 function THIS_PAGE:R2(mcdu_data)
     FMGS_winds_req_go()
 end
 
-function THIS_PAGE:R5(mcdu_data)
-    mcdu_open_page(mcdu_data, 404)
+function THIS_PAGE:R4(mcdu_data)
+    if #FMGS_get_enroute_legs() == 0 then
+        mcdu_open_page(mcdu_data, 404)
+    else
+        mcdu_data.page_data[405] = nil
+        mcdu_open_page(mcdu_data, 405)
+    end
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

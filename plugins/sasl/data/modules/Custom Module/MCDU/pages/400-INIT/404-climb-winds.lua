@@ -43,7 +43,7 @@ function THIS_PAGE:render(mcdu_data)
 
     if FMGS_get_phase() == FMGS_PHASE_PREFLIGHT then
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "HISTORY", MCDU_SMALL, ECAM_WHITE)
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, "WIND", MCDU_LARGE, ECAM_WHITE)
+        self:set_line(mcdu_data, MCDU_RIGHT, 1, "WIND>", MCDU_LARGE, ECAM_WHITE)
     end
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "WIND", MCDU_SMALL, ECAM_ORANGE)
     if FMGS_winds_req_in_progress() then
@@ -137,7 +137,12 @@ function THIS_PAGE:R2(mcdu_data)
 end
 
 function THIS_PAGE:R5(mcdu_data)
-    mcdu_open_page(mcdu_data, 406)
+    if #FMGS_get_enroute_legs() == 0 then
+        mcdu_open_page(mcdu_data, 406)
+    else
+        mcdu_data.page_data[405] = nil
+        mcdu_open_page(mcdu_data, 405)
+    end
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
