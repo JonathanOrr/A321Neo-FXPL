@@ -21,6 +21,8 @@ include('FMGS/limits.lua')
 include('FMGS/vertical_profile.lua')
 include('FMGS/constraints_checker.lua')
 
+local TIME_TO_GET_WIND = 5 -- in seconds
+
 local loading_cifp = 0
 
 local config = {
@@ -376,6 +378,33 @@ local function update_predictions()
     end
 end
 
+local function update_wind_uplink()
+    if FMGS_sys.data.winds_req_in_progress_time < 0 then
+        return
+    end
+    if get(TIME) - FMGS_sys.data.winds_req_in_progress_time < TIME_TO_GET_WIND then
+        return
+    end
+
+    FMGS_sys.data.winds_req_in_progress_time = -1
+    FMGS_sys.data.winds_climb = {
+        {alt = Round(get(Wind_layer_1_alt)*3.28084, 0), spd = Round(get(Wind_layer_1_speed), 0), dir = Round(get(Wind_layer_1_dir),0) },
+        {alt = Round(get(Wind_layer_2_alt)*3.28084, 0), spd = Round(get(Wind_layer_2_speed), 0), dir = Round(get(Wind_layer_2_dir),0) },
+        {alt = Round(get(Wind_layer_3_alt)*3.28084, 0), spd = Round(get(Wind_layer_3_speed), 0), dir = Round(get(Wind_layer_3_dir),0) }
+    }
+
+    table.sort(FMGS_sys.data.winds_climb, function(a, b) return a.alt < b.alt end)
+
+    FMGS_sys.data.winds_descent = {
+        FMGS_sys.data.winds_climb[1],
+        FMGS_sys.data.winds_climb[2],
+        FMGS_sys.data.winds_climb[3]
+    }
+
+    MCDU.send_message("WIND DATA UPLINK", ECAM_WHITE)
+
+end
+
 function update()
     perf_measure_start("FMGS:update()")
     update_status()
@@ -387,6 +416,8 @@ function update()
 
     update_route_turns()
 
+
+    update_wind_uplink()
 
     perf_measure_stop("FMGS:update()")
 end
