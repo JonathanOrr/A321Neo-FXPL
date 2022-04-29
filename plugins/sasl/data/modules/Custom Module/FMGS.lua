@@ -109,12 +109,12 @@ FMGS_sys.data = {
     },
 
     nav_accuracy = 0.0,
-    winds = {}
-}
 
-FMGS_sys.data.winds[FMGS_PHASE_CLIMB] = {}
-FMGS_sys.data.winds[FMGS_PHASE_CRUISE] = {}
-FMGS_sys.data.winds[FMGS_PHASE_DESCENT] = {}
+    -- Winds (cruise winds are in each WPT)
+    winds_climb = {},
+    winds_descent = {},
+    winds_req_in_progress_time = -1  -- <0 if not in progress, get(TIME) if yes
+}
 
 FMGS_sys.fpln = {
 

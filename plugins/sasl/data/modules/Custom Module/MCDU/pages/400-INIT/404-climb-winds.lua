@@ -14,18 +14,25 @@
 -------------------------------------------------------------------------------
 
 local function format_wind_fl(data)
-    return mcdu_wind_to_str(data.dir, data.spd).." "..mcdu_fl_to_str(data.fl)
+    if FMGS_perf_get_trans_alt() and data.alt > FMGS_perf_get_trans_alt() then
+        return mcdu_wind_to_str(data.dir, data.spd).."/"..mcdu_fl_to_str(data.alt/100)
+    else
+        return mcdu_wind_to_str(data.dir, data.spd).."/"..data.alt
+    end
 end
 
 local function parse_wind_str(wind_str)
-    dir, spd, fl = string.match(wind_str, "^(%d+)/(%d+)/F?L?(%d+)$")
-    return tonumber(dir), tonumber(spd), tonumber(fl)
+    local dir, spd, fl = string.match(wind_str, "^(%d+)/(%d+)/F?L?(%d+)$")
+    if not dir or not spd or not fl then
+        dir, spd, fl = string.match(wind_str, "^(%d+)/(%d+)/(%d+)$")
+    end
+
+    fl = tonumber(fl)
+    if fl and fl < 1000 then
+        fl = fl * 100
+    end
+    return tonumber(dir), tonumber(spd), fl
 end
-FMGS_sys.data.winds[FMGS_PHASE_CLIMB] = {
-  {fl = 350, dir=274, spd = 53},
-  {fl = 310, dir=279, spd = 47},
-  {fl = 250, dir=271, spd = 37},
-}
 
 local THIS_PAGE = MCDU_Page:new({id=404})
 
@@ -38,15 +45,21 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "HISTORY", MCDU_SMALL, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "WIND", MCDU_LARGE, ECAM_WHITE)
     end
-    self:set_line(mcdu_data, MCDU_RIGHT, 2, "WIND", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 2, "REQUEST*", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 2, "WIND", MCDU_SMALL, ECAM_ORANGE)
+    if FMGS_winds_req_in_progress() then
+        self:set_line(mcdu_data, MCDU_RIGHT, 2, "REQUEST ", MCDU_LARGE, ECAM_ORANGE)
+    else
+        self:set_line(mcdu_data, MCDU_RIGHT, 2, "REQUEST*", MCDU_LARGE, ECAM_ORANGE)
+    end
     self:set_line(mcdu_data, MCDU_RIGHT, 5, "NEXT", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 5, "PHASE>", MCDU_LARGE, ECAM_WHITE)
 
+    local winds = FMGS_winds_get_wind_climb()
     for i = 1,5 do
-        local winds = FMGS_winds_get_winds(FMGS_PHASE_CLIMB)[i]
-        if winds ~= nil then
-            local fmt_wind = format_wind_fl(winds)
+        if FMGS_winds_req_in_progress() then
+            self:set_line(mcdu_data, MCDU_LEFT, i, "---°/---/-----", MCDU_LARGE, ECAM_WHITE)
+        elseif winds[i] then
+            local fmt_wind = format_wind_fl(winds[i])
             self:set_line(mcdu_data, MCDU_LEFT, i, fmt_wind, MCDU_LARGE, ECAM_BLUE)
         else
             self:set_line(mcdu_data, MCDU_LEFT, i, "[ ]°/[ ]/[   ]", MCDU_LARGE, ECAM_BLUE)
@@ -55,47 +68,76 @@ function THIS_PAGE:render(mcdu_data)
     end
 end
 
-local function input_winds(mcdu_data, phase, i)
+local function input_winds(mcdu_data, i)
     if mcdu_data.clr then
-        FMGS_winds_clear_wind(phase, i)
+        FMGS_winds_clear_wind_climb(i)
         mcdu_data.clear_the_clear()
         return
     end
-    local input = mcdu_get_entry_simple(mcdu_data, {"###/###/###", "###/##/###", "###/###/FL###", "###/##/FL###"}, false)
-    if input == nil then
-        mcdu_send_message(mcdu_data, "INVALID INPUT")
+    local input = mcdu_data.entry.text
+    local dir, spd, alt = parse_wind_str(input)
+    if dir == nil or spd == nil or alt == nil then
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
         return
     end
-    if FMGS_sys.data.winds[phase][i] ~= nil then
-        mcdu_send_message(mcdu_data, "FORMAT ERROR")
-        print("FORMAT ERROR")
-    else
-        FMGS_winds_set_wind(phase, parse_wind_str(input))
+    if dir < 0 or dir > 360 or spd > 150 or spd < 0 or alt < 0 or alt > 40000 then
+        mcdu_send_message(mcdu_data, "OUT OF RANGE")
+        return
     end
+    mcdu_data.entry.text = ""
+    FMGS_winds_set_wind_climb(dir, spd, alt, i)
 end
 
 function THIS_PAGE:L1(mcdu_data)
-    input_winds(mcdu_data, FMGS_PHASE_CLIMB, 1)
+    if not FMGS_winds_req_in_progress() then
+        input_winds(mcdu_data, 1)
+    else
+        MCDU_Page:L1(mcdu_data)
+    end
 end
 
 function THIS_PAGE:L2(mcdu_data)
-    input_winds(mcdu_data, FMGS_PHASE_CLIMB, 2)
+    if not FMGS_winds_req_in_progress() then
+        input_winds(mcdu_data, 2)
+    else
+        MCDU_Page:L2(mcdu_data)
+    end
 end
 
 function THIS_PAGE:L3(mcdu_data)
-    input_winds(mcdu_data, FMGS_PHASE_CLIMB, 3)
+    if not FMGS_winds_req_in_progress() then
+        input_winds(mcdu_data, 3)
+    else
+        MCDU_Page:L3(mcdu_data)
+    end
 end
 
 function THIS_PAGE:L4(mcdu_data)
-    input_winds(mcdu_data, FMGS_PHASE_CLIMB, 4)
+    if not FMGS_winds_req_in_progress() then
+        input_winds(mcdu_data, 4)
+    else
+        MCDU_Page:L4(mcdu_data)
+    end
 end
 
 function THIS_PAGE:L5(mcdu_data)
-    input_winds(mcdu_data, FMGS_PHASE_CLIMB, 5)
+    if not FMGS_winds_req_in_progress() then
+        input_winds(mcdu_data, 5)
+    else
+        MCDU_Page:L5(mcdu_data)
+    end
 end
 
 function THIS_PAGE:R1(mcdu_data)
-    -- MCDU.send_message(mcdu_data, "350-53-350")
+    mcdu_send_message(mcdu_data, "NOT IMPLEMENTED")
+end
+
+function THIS_PAGE:R2(mcdu_data)
+    FMGS_winds_req_go()
+end
+
+function THIS_PAGE:R5(mcdu_data)
+    mcdu_open_page(mcdu_data, 406)
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

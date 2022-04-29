@@ -1076,15 +1076,50 @@ end
 -------------------------------------------------------------------------------
 -- Winds
 -------------------------------------------------------------------------------
-function FMGS_winds_clear_wind(phase, idx)
-  table.remove(FMGS_sys.data.winds[phase], idx)
+function FMGS_winds_clear_wind_climb(idx)
+    if FMGS_sys.data.winds_climb[idx] then
+        table.remove(FMGS_sys.data.winds_climb, idx)
+    end
 end
 
-function FMGS_winds_get_winds(phase)
-  table.sort(FMGS_sys.data.winds[phase], function(a, b) return a.fl > b.fl end)
-  return FMGS_sys.data.winds[phase]
+function FMGS_winds_get_wind_climb()
+  return FMGS_sys.data.winds_climb
 end
 
-function FMGS_winds_set_wind(phase, dir, spd, fl, pos)
-    table.insert(FMGS_sys.data.winds[phase], {fl = fl, dir = dir, spd = spd, pos = pos})
+function FMGS_winds_set_wind_climb(dir, spd, alt, pos)
+    if FMGS_sys.data.winds_climb[pos] then
+        FMGS_sys.data.winds_climb[pos] = {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)}
+    else
+        table.insert(FMGS_sys.data.winds_climb, {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)})
+    end
+    table.sort(FMGS_sys.data.winds_climb, function(a, b) return a.alt < b.alt end)
+end
+
+function FMGS_winds_clear_wind_descent(idx)
+    if FMGS_sys.data.winds_descent[idx] then
+        table.remove(FMGS_sys.data.winds_descent, idx)
+    end
+end
+
+function FMGS_winds_get_wind_descent()
+  return FMGS_sys.data.winds_descent
+end
+
+function FMGS_winds_set_wind_descent(dir, spd, alt, pos)
+    if FMGS_sys.data.winds_descent[pos] then
+        FMGS_sys.data.winds_descent[pos] = {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)}
+    else
+        table.insert(FMGS_sys.data.winds_descent, {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)})
+    end
+    table.sort(FMGS_sys.data.winds_descent, function(a, b) return a.alt < b.alt end)
+end
+
+
+
+function FMGS_winds_req_in_progress()
+    return FMGS_sys.data.winds_req_in_progress_time >= 0
+end
+
+function FMGS_winds_req_go()
+    FMGS_sys.data.winds_req_in_progress_time = get(TIME)
 end
