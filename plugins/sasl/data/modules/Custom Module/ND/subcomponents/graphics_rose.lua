@@ -242,6 +242,7 @@ local function draw_poi_array(data, poi, texture, color)
     return modified, poi
 end
 
+
 local function draw_airports(data)
     if data.config.extra_data ~= ND_DATA_ARPT then
         return  -- Airport button not selected

@@ -27,9 +27,10 @@ local function get_wind_str(leg)
     local is_climb   = (leg.flt_phase_user and leg.flt_phase_user.is_climb) or  (leg.flt_phase and leg.flt_phase.is_climb)
     local is_descent = (leg.flt_phase_user and leg.flt_phase_user.is_descent) or  (leg.flt_phase and leg.flt_phase.is_descent)
 
-    is_climb = is_climb or leg.pred.is_climb or leg.pred.is_toc
-    is_descent = is_descent or leg.pred.is_descent or leg.pred.is_tod
-
+    if leg.pred then
+        is_climb = is_climb or leg.pred.is_climb or leg.pred.is_toc
+        is_descent = is_descent or leg.pred.is_descent or leg.pred.is_tod
+    end
     local format_wind_num = function(num) return Fwd_string_fill(Round(num,0).."", " ", 3) end
 
     if not leg.pred or not leg.pred.altitude then
