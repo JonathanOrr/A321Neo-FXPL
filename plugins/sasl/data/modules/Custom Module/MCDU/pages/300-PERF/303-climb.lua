@@ -51,7 +51,7 @@ local function fill_managed_data(managed_data_table, target_alt)
     local ias, mach, time, dist
     if legs[found_leg].pred.ias and legs[found_leg+1].pred.ias then
         ias = Math_rescale(legs[found_leg].pred.altitude or 0, legs[found_leg].pred.ias, legs[found_leg+1].pred.altitude, legs[found_leg+1].pred.ias, target_alt)
-        ias = math.min(ias, legs[found_leg].pred.prop_spd_cstr) -- This is not perfect, but ok
+        ias = math.min(ias, legs[found_leg].pred.prop_spd_cstr or 999) -- This is not perfect, but ok
         if target_alt < FMGS_sys.data.init.alt_speed_limit_climb[2] then
             ias = math.min(ias, FMGS_sys.data.init.alt_speed_limit_climb[1])    -- This is not perfect but ok
         end
@@ -98,7 +98,7 @@ function THIS_PAGE:render(mcdu_data)
     local prediction_altitude = mcdu_data.page_data[303].prediction_altitude
     local managed_data = {nil, nil, nil} --FORMAT IS SPEED, ARRIVING UTC, DISTANCE
     local selected_data = {nil, nil,nil}
-    local expedite_data = {0000, 120} --ARRIVING UTC, DISTANCE
+    local expedite_data = {nil, "---"} --ARRIVING UTC, DISTANCE
     local fms_is_in_climb_phase = false --IF THE FMS IS BEYOND TAKEOFF PHASE, WHICH IS AFTER DEPARTURE. USED TO DECIDE WETHER TO SHOW ACTIVATE APPR PHASE ON L6
 
     -- Compute stuff
@@ -213,7 +213,7 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --  C5  --
     ----------
-    self:add_multi_line(mcdu_data, MCDU_CENTER, 5,expedite_data[2] == nil and "" or mcdu_format_force_to_small(Fwd_string_fill(tostring(expedite_data[2]), "0", 4)), MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, 5,expedite_data[1] == nil and "" or mcdu_format_force_to_small(Fwd_string_fill(tostring(expedite_data[2]), "0", 4)), MCDU_LARGE, ECAM_GREEN)
 end
 
 function THIS_PAGE:R2(mcdu_data)
