@@ -70,15 +70,17 @@ local function fpln_recompute_distances_fplnlegs(fpln, prev_point)
     end
 
     for k,x in ipairs(fpln.legs) do
-        if (prev and not prev.discontinuity) and not x.discontinuity then
+        if prev and not x.discontinuity then
             assert(prev.lat and prev.lon and x.lat and x.lon)
-            fpln.legs[k].computed_distance = GC_distance_kt(prev.lat, prev.lon, x.lat, x.lon)
-            total_distance = total_distance + fpln.legs[k].computed_distance
+            x.computed_distance = GC_distance_kt(prev.lat, prev.lon, x.lat, x.lon)
+            total_distance = total_distance + x.computed_distance
         else
-            fpln.legs[k].computed_distance = 0 -- As a safety measure we set zero in case we don't know
+            x.computed_distance = 0 -- As a safety measure we set zero in case we don't know
                                                -- the previous point
         end
-        prev = fpln.legs[k]
+        if not x.discontinuity then
+            prev = x
+        end
     end
 
     if not prev or prev.discontinuity then

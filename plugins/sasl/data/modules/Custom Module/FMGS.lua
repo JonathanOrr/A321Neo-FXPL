@@ -50,6 +50,7 @@ FMGS_sys.data = {
             block_fuel = 12.0, -- Existing known fuel load
             rsv_fuel_perc = 5.0,
             rsv_fuel      = nil,
+            min_dest_fob  = nil,
         },
         alt_speed_limit_climb   = {250, 10000},
         alt_speed_limit_descent = {250, 10000}

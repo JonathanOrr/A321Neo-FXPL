@@ -63,12 +63,19 @@ function approx_TOD_distance(the_big_array, last_clb_idx)  -- This is a very rou
 
     -- we need about 100 nm at FL390 to reach 0 ft so...
     local cruise_alt = FMGS_sys.data.init.crz_fl
-    local appprox_descent_nm = cruise_alt / 39000 * 100
 
-    toc_to_rwy_dist = toc_to_rwy_dist - appprox_descent_nm
-    if toc_to_rwy_dist <= 0 then
-        return nil  -- Too close
+    local final_toc_to_rwy_dist
+    local emergency_exit = 0
+    repeat
+        cruise_alt = cruise_alt - 1000
+        local approx_descent_nm = cruise_alt / 39000 * 100
+
+        final_toc_to_rwy_dist = toc_to_rwy_dist - approx_descent_nm
+    until final_toc_to_rwy_dist > 0 or cruise_alt < 0
+
+    if cruise_alt <= 0 then
+        return nil  -- Impossible situation
     end
 
-    return toc_to_rwy_dist
+    return final_toc_to_rwy_dist
 end

@@ -389,7 +389,7 @@ function vertical_profile_climb_update()
         local target_speed, target_mach = get_target_speed_climb(curr_alt, curr_weight)
 
         -- Be sure the target speed is ok with the possible constraint
-        target_speed = math.min(target_speed, leg.pred.prop_spd_cstr)
+        target_speed = math.min(target_speed, leg.pred.prop_spd_cstr or 999)
 
         -- If needed, let's compute the time to reach the target speed (in this case we are accelerating)
         if target_speed - curr_spd > 1 and (not target_mach or target_mach - curr_mach > 0.005) then
@@ -544,6 +544,7 @@ end
 
 local function vertical_profile_cruise_update(idx_next_wpt)
     local TC = the_big_array[idx_next_wpt-1]
+    assert(TC.pred and TC.pred.dist_prev_wpt, "Ehi T/C is not the T/C!")
     local i = idx_next_wpt
     local cruise_alt = FMGS_sys.data.init.crz_fl
     local curr_spd      = TC.pred.ias
@@ -581,6 +582,11 @@ local function vertical_profile_cruise_update(idx_next_wpt)
     -- or we won't know the weight at TOD!
 
     local max_dist = approx_TOD_distance(the_big_array, last_clb_idx)  -- This is the max dist from the TOC to the TOD
+
+    if max_dist == nil then
+        logWarning("I cannot find a TOD, this is very strange.")
+        return curr_weight
+    end
 
     local cumul_dist = curr_dist
     local stop_idx = computed_des_idx and computed_des_idx or first_des_idx
@@ -1041,10 +1047,9 @@ local function vertical_profile_descent_update_step89(weight, idx)
         -- Update the CLIMB/DESCENT status checking it's not invalid
         if leg.pred.is_climb then
             FMGS_sys.data.pred.invalid = true
-            return weight
-        else
-            leg.pred.is_descent = true
+            return
         end
+        leg.pred.is_descent = true
 
         local overshoot = false
  
@@ -1090,7 +1095,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
         local ratio = (FMGS_sys.data.init.alt_speed_limit_descent[2]-prev_alt)/(curr_alt-prev_alt)
         FMGS_sys.data.pred.descent.lim_wpt = {
             ias=V_START,
-            altitude=upper_limit,
+            altitude=curr_alt,
             time = Math_lerp(the_big_array[computed_des_idx].pred.time, the_big_array[computed_des_idx+1].pred.time, ratio),
             fuel = Math_lerp(the_big_array[computed_des_idx].pred.fuel, the_big_array[computed_des_idx+1].pred.fuel, ratio),
             dist_prev_wpt = the_big_array[computed_des_idx].pred.partial_dist * ratio,
@@ -1112,7 +1117,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
         FMGS_sys.data.pred.descent.tod_wpt = {
             ias=V_START,
             mach=tod_mach,
-            altitude=upper_limit,
+            altitude=curr_alt,
             prev_wpt=the_big_array[computed_des_idx],
             dist_prev_wpt=next_leg.pred.partial_dist,
             weight=weight
@@ -1123,7 +1128,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
                                     pred={
                                            is_tod = true,
                                            is_descent = true,
-                                           altitude=upper_limit,
+                                           altitude=curr_alt,
                                            ias=V_START,
                                            mach=tod_mach,
                                            tod_time_step=tod_time,
@@ -1245,10 +1250,18 @@ local function vertical_profile_cruise_descent_ft_update()
 
 end
 
+local function vertical_profile_descent_step_position_update()
+
+end
+
 local function update_overall_predictions()
     FMGS_sys.data.pred.trip_time = the_big_array[#the_big_array].pred.time
     FMGS_sys.data.pred.trip_fuel = the_big_array[#the_big_array].pred.fuel / 1000
     FMGS_sys.data.pred.efob = (FMGS_sys.data.init.weights.block_fuel - FMGS_sys.data.pred.trip_fuel)
+
+    if FMGS_sys.data.pred.efob < 0 or (FMGS_sys.data.init.weights.min_dest_fob and FMGS_sys.data.pred.efob < FMGS_sys.data.init.weights.min_dest_fob) then
+        MCDU.send_message("DEST EFOB BELOW MIN", ECAM_ORANGE)
+    end
 end
 
 function vertical_profile_update()
@@ -1293,22 +1306,28 @@ function vertical_profile_update()
     FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_climb_update()
     if not FMGS_sys.data.pred.climb.total_fuel_kgs then
         -- Error, like cruise FL is too high
+        FMGS_sys.data.pred.invalid = true
         return  -- Cannot make any other prediction
     end
 
-    local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
-
-    vertical_profile_descent_update(approx_weight_at_TOD)
-
-    local exact_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
-
     if not FMGS_sys.data.pred.invalid then
+        local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
+
+        vertical_profile_descent_update(approx_weight_at_TOD)
+    end
+    -- FMGS_sys.data.pred.invalid may change
+    if not FMGS_sys.data.pred.invalid then
+
+        local exact_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
+
         vertical_profile_cruise_descent_ft_update()
 
         -- Update main predictions like overall time, etc.
         update_overall_predictions()
+    else
+        vertical_profile_reset()
+        MCDU.send_message("CRZ FL ABOVE MAX FL", ECAM_WHITE)
     end
-
 end
 
 

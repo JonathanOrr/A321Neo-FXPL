@@ -278,7 +278,7 @@ local function convert_generic_AF(x, last_lat, last_lon)
    local start_lat, start_lon = Move_along_distance_NM(ctr_lat, ctr_lon, dme, in_radial)  -- TODO MAG on radial
 
    local prev_connection
-   if start_lat ~= last_last or start_lon ~= last_lon then
+   if start_lat ~= last_lat or start_lon ~= last_lon then
       prev_connection = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=start_lat, end_lon=start_lon, leg_name = x.leg_name, orig_ref=x }
    end
 
