@@ -424,7 +424,8 @@ function vertical_profile_climb_update()
             -- Rate of climb at the beginning of the leg
             -- ROC = excess_power_force / weight_force * tas
             VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
-            GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+            local wind = FMGS_winds_get_climb_at_alt(curr_alt) or {spd=0, dir=0}
+            GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
 
             Q = math.min(Q, D/m_to_nm(kts_to_ms(GS)))   -- [s]
             Q = math.min(Q, (cruise_alt-curr_alt)/VS * 60)  -- [s]
@@ -598,8 +599,8 @@ local function vertical_profile_cruise_update(idx_next_wpt)
         local N1, FF = predict_cruise_N1_at_alt_M(managed_mach, cruise_alt, curr_weight)
 
         local TAS = convert_to_tas(managed_mach, cruise_alt)
-        local GS = tas_to_gs(TAS, 0, 0, 0)    -- TODO: Put wind here
-
+        local wind = FMGS_winds_get_cruise_at_alt(cruise_alt, leg) or {spd=0, dir=0}
+        local GS = tas_to_gs(TAS, 0, wind.spd, wind.dir)
         local time_to_travel = dist_to_travel / m_to_nm(kts_to_ms(GS))
 
 
@@ -630,7 +631,7 @@ local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt,
     local wind_spd = FMGS_sys.perf.landing.wind or 0
     local wind_dir = FMGS_sys.perf.landing.mag  or 0
     wind_dir = wind_to_relative(wind_dir, (FMGS_sys.fpln.active.apts.arr_rwy[2] and 180 or 0) + FMGS_sys.fpln.active.apts.arr_rwy[1].bearing) -- Transofrm it to relative
-    local GS = tas_to_gs(TAS, VS, wind_spd, wind_dir)    -- TODO: Put wind here
+    local GS = tas_to_gs(TAS, VS, wind_spd, wind_dir)
 
     -- Time to compute the drag and therefore the thrust we need
     local oat = get_arrival_apt_temp()
@@ -798,7 +799,8 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     -- Rate of climb at the beginning of the leg
     -- ROC = excess_power_force / weight_force * tas
     local VS = -ms_to_fpm(kts_to_ms(TAS) * math.sin(math.rad(angle)))
-    local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+    local wind = FMGS_winds_get_descent_at_alt(alt) or {spd=0, dir=0}
+    local GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
 
     local excess_thrust = -fpm_to_ms(VS) * (weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
@@ -913,7 +915,8 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local time  = kts_to_ms(V_START-V_END) / decel
     
     local VS = ms_to_fpm(net_force_vertical / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
-    local GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+    local wind = FMGS_winds_get_descent_at_alt(alt) or {spd=0, dir=0}
+    local GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
     local dist = m_to_nm(kts_to_ms(GS) * time)
 
     -- I can now update the last waypoint
@@ -1001,7 +1004,8 @@ local function vertical_profile_descent_update_step89(weight, idx)
 
         local VS   = the_big_array[computed_des_idx+1].pred.vs
         local time = 0
-        local GS   = tas_to_gs(TAS, VS, 0, 0) -- TODO: Put wind here
+        local wind = FMGS_winds_get_descent_at_alt(curr_alt) or {spd=0, dir=0}
+        local GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
         local decel_we_need = 0
         if dist_to_next_wpt > 0 then
 
@@ -1025,7 +1029,8 @@ local function vertical_profile_descent_update_step89(weight, idx)
             local decel = h_force_we_need / weight
 
             VS = ms_to_fpm(v_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
-            GS = tas_to_gs(TAS, VS, 0, 0)    -- TODO: Put wind here
+            local wind = FMGS_winds_get_descent_at_alt(curr_alt) or {spd=0, dir=0}
+            GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
             time  = nm_to_m(dist_to_next_wpt) / kts_to_ms(GS)
 
             V_END = V_END + ms_to_kts(decel * time)
