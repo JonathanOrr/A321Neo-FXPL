@@ -439,80 +439,6 @@ local function draw_terrain(data)
     sasl.gl.drawRectangle(0, 450, 900, 450, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
-local function draw_active_fpln(data)   -- This is just a test
-
-    local active_legs = FMGS_get_enroute_legs()
-
-
-    -- For each point in the FPLN...
-    for k,x in ipairs(active_legs) do
-
-        if not x.discontinuity then
-
-            local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
-            x.x = c_x
-            x.y = c_y
-            
-            local color = ECAM_GREEN
-
-            if x.ptr_type == FMGS_PTR_WPT then
-                draw_poi_array(data, x, image_point_wpt, color)
-            elseif x.ptr_type == FMGS_PTR_NDB then
-                draw_poi_array(data, x, image_point_ndb, color)
-            elseif x.ptr_type == FMGS_PTR_VOR then
-                draw_poi_array(data, x, x.is_coupled_dme and image_point_vor_dme or image_point_vor_only, color)
-            elseif x.ptr_type == FMGS_PTR_APT then
-                draw_poi_array(data, x, image_point_apt, color)
-            elseif x.ptr_type == FMGS_PTR_COORDS then
-            
-            end
-        end
-    end
-
-    -- Now let's draw the flight path
-    local curved_route =  FMGS_get_active_curved_route() 
-    if not curved_route then
-        return
-    end
-
-    local LINE_SIZE = 2
-
-    local already_drawn = {}
-    local first_point_drawn = false
-
-    for i,x in ipairs(curved_route) do
-        if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE or x.segment_type == FMGS_COMP_SEGMENT_RWY_LINE then
-            local x_start,y_start = rose_get_x_y_heading(data, x.start_lat, x.start_lon, data.inputs.heading)
-            local x_end,y_end     = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
-            sasl.gl.drawWideLine(x_start, y_start, x_end, y_end, LINE_SIZE, ECAM_GREEN)
-        elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
-            local x_ctr,y_ctr = rose_get_x_y_heading(data, x.ctr_lat, x.ctr_lon, data.inputs.heading)
-            local x_lat,y_lon = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
-            local xy_radius = rose_get_px_per_nm(data) * x.radius
-            sasl.gl.drawArc(x_ctr, y_ctr, xy_radius-LINE_SIZE/2, xy_radius+LINE_SIZE/2, x.start_angle+data.inputs.heading-Local_magnetic_deviation(), x.arc_length_deg, ECAM_GREEN)
-        end
-
-        local color = first_point_drawn and ECAM_GREEN or ECAM_WHITE
-
-        if x.orig_ref and x.orig_ref.leg_name_poi and not already_drawn[x.orig_ref.leg_name] then
-            already_drawn[x.orig_ref.leg_name] = true
-            first_point_drawn = true
-
-            local poi = x.orig_ref.leg_name_poi
-
-            if poi.ptr_type == FMGS_PTR_WPT then
-                draw_poi_array(data, poi, image_point_wpt, color)
-            elseif poi.ptr_type == FMGS_PTR_NDB then
-                draw_poi_array(data, poi, image_point_ndb, color)
-            elseif poi.ptr_type == FMGS_PTR_VOR then
-                draw_poi_array(data, poi, poi.is_coupled_dme and image_point_vor_dme or image_point_vor_only, color)
-            end
-            poi.x = nil
-            poi.y = nil
-        end
-    end   
-
-end
 
 local function draw_arpt_symbol(data)
     local apt = FMGS_get_apt_dep()
@@ -559,6 +485,15 @@ local function draw_arpt_symbol(data)
     end
 end
 
+local function draw_active_fpln(data)
+    local functions = {
+        draw_poi_array = draw_poi_array,
+        get_x_y_heading = rose_get_x_y_heading,
+        get_px_per_nm = rose_get_px_per_nm
+    }
+
+    ND_draw_active_fpln(data, functions)
+end
 
 local function draw_pois(data)
 
@@ -568,6 +503,10 @@ local function draw_pois(data)
     
     if data.misc.map_not_avail then
         return -- No POI is map not avail
+    end
+
+    if data.config.mode ~= ND_MODE_NAV then
+        return -- No POI in LS or VOR mode
     end
 
     

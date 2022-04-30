@@ -350,6 +350,16 @@ local function draw_wpts(data)
     
 end
 
+local function draw_active_fpln(data)
+    local functions = {
+        draw_poi_array = draw_poi_array,
+        get_x_y_heading = arc_get_x_y_heading,
+        get_px_per_nm = arc_get_px_per_nm
+    }
+
+    ND_draw_active_fpln(data, functions)
+end
+
 local function draw_pois(data)
 
     if data.config.range <= ND_RANGE_ZOOM_2 then
@@ -365,6 +375,8 @@ local function draw_pois(data)
     draw_dmes(data)
     draw_ndbs(data)
     draw_wpts(data)
+
+    draw_active_fpln(data)
 
     local need_to_update_poi = (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE
     if need_to_update_poi then
@@ -472,6 +484,7 @@ local function draw_tcas(data)
     end
 
 end
+
 -------------------------------------------------------------------------------
 -- Main draw_* functions
 -------------------------------------------------------------------------------
