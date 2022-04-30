@@ -308,8 +308,7 @@ function vertical_profile_climb_update()
 
     -- Compute the initial weight as the takeoff weight - the fuel consumed at takeoff and initial climb
     local curr_weight = ( FMGS_sys.data.init.weights.zfw
-                        + FMGS_sys.data.init.weights.block_fuel
-                        - FMGS_sys.data.init.weights.taxi_fuel) * 1000
+                        + FMGS_sys.data.init.weights.block_fuel) * 1000
                         - FMGS_sys.data.pred.takeoff.total_fuel_kgs
 
     assert(curr_weight > FMGS_sys.data.init.weights.zfw)
@@ -351,7 +350,9 @@ function vertical_profile_climb_update()
         -- for the display in the MCDU
         local _,_,v2 = FMGS_perf_get_v_speeds()
         the_big_array[i].pred.time = curr_time
-        the_big_array[i].pred.ias  = v2 + 10    -- First points are V_SRS (V2 + 10)
+        the_big_array[i].pred.ias  = curr_spd    -- First points are V_SRS (V2 + 10)
+        the_big_array[i].pred.altitude  = curr_alt
+        the_big_array[i].pred.fuel = FMGS_sys.data.pred.takeoff.total_fuel_kgs
     end
 
     curr_dist = traveled_nm + the_big_array[i].computed_distance
@@ -1242,7 +1243,7 @@ end
 local function update_overall_predictions()
     FMGS_sys.data.pred.trip_time = the_big_array[#the_big_array].pred.time
     FMGS_sys.data.pred.trip_fuel = the_big_array[#the_big_array].pred.fuel / 1000
-    FMGS_sys.data.pred.efob = (FMGS_sys.data.init.weights.block_fuel - FMGS_sys.data.pred.trip_fuel / 1000)
+    FMGS_sys.data.pred.efob = (FMGS_sys.data.init.weights.block_fuel - FMGS_sys.data.pred.trip_fuel)
 end
 
 function vertical_profile_update()
