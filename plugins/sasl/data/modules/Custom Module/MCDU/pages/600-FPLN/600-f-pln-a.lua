@@ -20,13 +20,67 @@ local CSTR_MET = 1
 local CSTR_NOT_MET = 2
 
 -------------------------------------------------------------------------------
+-- WINDS
+-------------------------------------------------------------------------------
+local function get_wind_str(leg)
+    local err_str = "---°/---"
+    local is_climb   = (leg.flt_phase_user and leg.flt_phase_user.is_climb) or  (leg.flt_phase and leg.flt_phase.is_climb)
+    local is_descent = (leg.flt_phase_user and leg.flt_phase_user.is_descent) or  (leg.flt_phase and leg.flt_phase.is_descent)
+
+    is_climb = is_climb or leg.pred.is_climb or leg.pred.is_toc
+    is_descent = is_descent or leg.pred.is_descent or leg.pred.is_tod
+
+    local format_wind_num = function(num) return Fwd_string_fill(Round(num,0).."", " ", 3) end
+
+    if not leg.pred or not leg.pred.altitude then
+        return err_str
+    elseif is_climb then
+        local wind = FMGS_winds_get_climb_at_alt(leg.pred.altitude)
+        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str
+    elseif is_descent then
+        local wind = FMGS_winds_get_descent_at_alt(leg.pred.altitude)
+        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str
+    elseif leg.winds then
+        local wind = FMGS_winds_get_cruise_at_alt(leg.pred.altitude, leg.winds)
+        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str
+    else
+        return err_str
+    end
+end
+
+local function get_efob(x)
+
+    local taxi_fuel = FMGS_init_get_taxi_fuel() or 0
+    if FMGS_init_get_block_fuel() and x.pred and x.pred.fuel then
+        return Round_fill(FMGS_init_get_block_fuel() - taxi_fuel - x.pred.fuel/1000,1)
+    end
+    return "----"
+end
+
+local function get_arrival_wind_str()
+    return (FMGS_get_landing_wind_mag() and Fwd_string_fill(Round(FMGS_get_landing_wind_mag(),0).."", " ", 3) or "---") 
+    .. "°/" .. 
+    (FMGS_get_landing_wind() and Fwd_string_fill(Round(FMGS_get_landing_wind(),0).."", " ", 3) or "---")
+end
+
+-------------------------------------------------------------------------------
 -- DEPARTURE
 -------------------------------------------------------------------------------
 function THIS_PAGE:render_dep(mcdu_data)
     local arpt_id    = mcdu_data.page_data[600].curr_fpln.apts.dep.id
     local arpt_alt   = mcdu_data.page_data[600].curr_fpln.apts.dep.alt
 
-    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, mcdu_time_beautify(0), FMGS_perf_get_v_speeds(), tostring(arpt_alt), nil, "", nil, nil, nil, true)
+    local data = {
+        id = arpt_id,
+        time = mcdu_time_beautify(0), 
+        spd = FMGS_perf_get_v_speeds(),
+        efob = FMGS_init_get_block_fuel()-FMGS_init_get_taxi_fuel(),
+        wind = "",
+        alt = tostring(arpt_alt),
+        proc_name = "",
+        is_arpt = true,
+    } 
+    THIS_PAGE:render_single(mcdu_data, 1, data)
 end
 
 -------------------------------------------------------------------------------
@@ -68,43 +122,41 @@ end
 -------------------------------------------------------------------------------
 -- COMMON
 -------------------------------------------------------------------------------
-function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first, spd_cstr_status, alt_cstr_status)
-    local main_col = is_the_first and ECAM_WHITE or (FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN)
+function THIS_PAGE:render_single(mcdu_data, i, data)
+    local main_col = data.is_the_first and ECAM_WHITE or (FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN)
 
-    time = is_arpt and time or mcdu_format_force_to_small(time) -- TIME is small only for airports
+    data.time = data.is_arpt and data.time or mcdu_format_force_to_small(data.time) -- TIME is small only for airports
+    data.efob = data.is_arpt and data.efob or mcdu_format_force_to_small(data.efob) -- EFOB is small only for airports
 
-    local left_side  = Aft_string_fill(id, " ", 8) 
-    local ctr_side   = (spd and spd or "---")
-    local right_side = "/" .. Fwd_string_fill(alt or "", " ", 6)
-    if not is_arpt then
-        left_side  = left_side .. mcdu_format_force_to_small(time)
+    local left_side  = Aft_string_fill(data.id, " ", 8) .. (mcdu_data.page_data[600].is_b_page and data.efob or data.time)
+    local ctr_side   = mcdu_data.page_data[600].is_b_page and "" or (data.spd and data.spd or "---")
+    local right_side = mcdu_data.page_data[600].is_b_page and data.wind or ("/" .. Fwd_string_fill(data.alt or "", " ", 6))
+    if not data.is_arpt then
         ctr_side   = mcdu_format_force_to_small(ctr_side)
         right_side = mcdu_format_force_to_small(right_side)
-    else
-        left_side  = left_side .. time
     end
 
     self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
-    self:add_multi_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, spd and main_col or ECAM_WHITE)
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, alt_col or main_col)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, data.spd and main_col or ECAM_WHITE)
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, mcdu_data.page_data[600].is_b_page and main_col or (data.alt_col or main_col))
 
-    if spd_cstr_status and spd_cstr_status > 0 then
-        self:add_multi_line(mcdu_data, MCDU_CENTER, i, "   " .. mcdu_format_force_to_small("*"), MCDU_LARGE, spd_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
+    if not mcdu_data.page_data[600].is_b_page and data.spd_cstr_status and data.spd_cstr_status > 0 then
+        self:add_multi_line(mcdu_data, MCDU_CENTER, i, "   " .. mcdu_format_force_to_small("*"), MCDU_LARGE, data.spd_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
     end
-    if alt_cstr_status and alt_cstr_status > 0 then
-        self:add_multi_line(mcdu_data, MCDU_RIGHT, i, mcdu_format_force_to_small("*") .. "     ", MCDU_LARGE, alt_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
+    if not mcdu_data.page_data[600].is_b_page and data.alt_cstr_status and data.alt_cstr_status > 0 then
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, i, mcdu_format_force_to_small("*") .. "     ", MCDU_LARGE, data.alt_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
     end
     
     if i ~= 1 then
-        local brg_trk = is_trk ~= nil and ((is_trk and "TRK" or "BRG") .. Fwd_string_fill(tostring(math.floor(bearing)), "0", 3) .. "°") or "    "
+        local brg_trk = data.is_trk ~= nil and ((data.is_trk and "TRK" or "BRG") .. Fwd_string_fill(tostring(math.floor(data.bearing)), "0", 3) .. "°") or "    "
 
         local dist_text=""
-        if distance ~= nil then
-            dist_text = Round(distance, 0) .. (i == 2 and "NM" or "  ")
+        if data.distance ~= nil then
+            dist_text = Round(data.distance, 0) .. (i == 2 and "NM" or "  ")
         end
         dist_text = Fwd_string_fill(dist_text, " ", 6) .. "   "
-        local color_proc_name = proc_name:match("%(%w*%)") and ECAM_GREEN or ECAM_WHITE -- If (SPD) or similar, use green
-        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. proc_name, MCDU_SMALL, color_proc_name)
+        local color_proc_name = data.proc_name:match("%(%w*%)") and ECAM_GREEN or ECAM_WHITE -- If (SPD) or similar, use green
+        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. data.proc_name, MCDU_SMALL, color_proc_name)
         self:set_line(mcdu_data, MCDU_RIGHT, i, brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and mcdu_data.page_data[600].curr_idx == 1) and ECAM_WHITE or main_col)
     end
 end
@@ -174,7 +226,7 @@ function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
 
 end
 
-local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper_name)
+local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper_name, is_climb, is_descent)
     if not pseudo_wpt then
         return
     end
@@ -189,7 +241,9 @@ local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper
                                                     mach=pseudo_wpt.mach,
                                                     altitude=pseudo_wpt.altitude or pseudo_wpt.alt, 
                                                     fuel=pseudo_wpt.fuel,
-                                                    cms_segment = true
+                                                    cms_segment = true,
+                                                    is_climb = is_climb,
+                                                    is_descent = is_descent
                                             },
                                             computed_distance = pseudo_wpt.dist_prev_wpt,
                                             point_type=POINT_TYPE_PSUEDO}
@@ -200,14 +254,14 @@ local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper
 end
 
 function THIS_PAGE:prepare_list_pseudo(mcdu_data, list_messages)
-    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_toc(), "(T/C)")
-    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_climb_lim(), "(LIM)", "(SPD)")
-    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_descent_lim(), "(LIM)", "(SPD)")
-    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_tod(), "(T/D)")
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_toc(), "(T/C)", nil, true, false)
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_climb_lim(), "(LIM)", "(SPD)", true, false)
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_descent_lim(), "(LIM)", "(SPD)", false, true)
+    prepare_add_generic_pseudo(list_messages, FMGS_pred_get_tod(), "(T/D)", nil, false, true)
 
     local DECEL = FMGS_pred_get_decel_point()
     if DECEL.prev_wpt then
-        prepare_add_generic_pseudo(list_messages, DECEL, "(DECEL)") 
+        prepare_add_generic_pseudo(list_messages, DECEL, "(DECEL)", nil, false, true) 
     end
 
 end
@@ -333,9 +387,27 @@ function THIS_PAGE:render_list(mcdu_data)
 
             local distance = x.temp_computed_distance or x.computed_distance
             local time = x.pred and x.pred.time and mcdu_time_beautify(x.pred.time) or "----"
+            local efob = get_efob(x)
             self:add_f(mcdu_data, function(line_id)
                 local spd_cstr_str = (spd_cstr_req_elipses and line_id ~= 1) and "\"" or spd_cstr
-                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr_str, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2, spd_cstr_status, alt_cstr_status)
+                local data = {
+                    id = name,
+                    time = time,
+                    efob = efob,
+                    wind = get_wind_str(x), 
+                    spd = spd_cstr_str,
+                    alt = alt_cstr,
+                    alt_col = alt_cstr_col,
+                    proc_name = proc,
+                    bearing = nil,
+                    is_trk = nil,
+                    distance = distance,
+                    is_arpt = false,
+                    is_the_first = i == 2,
+                    spd_cstr_status = spd_cstr_status,
+                    alt_cstr_status = alt_cstr_status
+                } 
+                THIS_PAGE:render_single(mcdu_data, line_id, data)
             end, x)
         else
             local distance = x.temp_computed_distance or x.computed_distance
@@ -352,20 +424,42 @@ function THIS_PAGE:render_list(mcdu_data)
             end
 
             local name = x.id or "(MAN)"
+            local efob = get_efob(x)
             self:add_f(mcdu_data, function(line_id)
                 local spd_cstr_str = (spd_cstr_req_elipses and line_id ~= 1) and "\"" or spd_cstr
                 local time = x.pred and mcdu_time_beautify(x.pred.time) or "----"
-                THIS_PAGE:render_single(mcdu_data, line_id, name, time, spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false, spd_cstr_status, alt_cstr_status)
+                local data = {
+                    id = name,
+                    time = time, 
+                    efob = efob,
+                    wind = get_wind_str(x), 
+                    spd = spd_cstr_str,
+                    alt = alt_cstr,
+                    alt_col = alt_cstr_col,
+                    proc_name = proc,
+                    bearing = nil,
+                    is_trk = nil,
+                    distance = distance,
+                    is_arpt = false,
+                    is_the_first = i == 2,
+                    spd_cstr_status = spd_cstr_status,
+                    alt_cstr_status = alt_cstr_status
+                } 
+                THIS_PAGE:render_single(mcdu_data, line_id, data)
             end, x)
         end
     end
 
     local arr_rwy_valid = mcdu_data.page_data[600].curr_fpln.apts.arr_rwy and mcdu_data.page_data[600].curr_fpln.apts.arr_rwy[1]
+    local wind_str = get_arrival_wind_str()
+
     self:print_simple_airport(mcdu_data,
                               mcdu_data.page_data[600].curr_fpln.apts.arr,
                               mcdu_data.page_data[600].curr_fpln.apts.arr,
                               arr_rwy_valid and mcdu_data.page_data[600].curr_fpln.apts.arr_rwy[1].last_distance,
                               FMGS_perf_get_pred_trip_time(),
+                              FMGS_perf_get_pred_trip_efob(),
+                              wind_str,
                               ECAM_GREEN)
 
     self:add_f(mcdu_data, function(line_id)
@@ -374,7 +468,7 @@ function THIS_PAGE:render_list(mcdu_data)
     THIS_PAGE:render_list_altn(mcdu_data)
 end
 
-function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, distance, trip_time, color)
+function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, distance, trip_time, efob, wind, color)
     -- APT Obj represents the object we want to save for lateral revision
     -- it should be nil, for instance, for the line with the arrival airport in the
     -- altn fpln.
@@ -382,8 +476,18 @@ function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, distance, trip_
     local arr_alt   = apt.alt
 
     local left_side  = arr_id
-    local ctr_side   = mcdu_format_force_to_small(" " .. mcdu_time_beautify(trip_time) .. "  ---")
-    local right_side = mcdu_format_force_to_small("/" .. Fwd_string_fill(tostring(arr_alt)," ", 6))
+
+    local time_str = mcdu_format_force_to_small(mcdu_time_beautify(trip_time)) -- TIME is small only for airports
+    local efob_str = efob and mcdu_format_force_to_small(Round_fill(efob,1)) or "----" -- EFOB is small only for airports
+
+    local ctr_side   = " " .. (mcdu_data.page_data[600].is_b_page and efob_str .. "     " or time_str .. "  ---") 
+    local right_side
+
+    if mcdu_data.page_data[600].is_b_page then
+        right_side = wind or "---°/---"
+    else
+        right_side = mcdu_format_force_to_small("/" .. Fwd_string_fill(tostring(arr_alt)," ", 6))
+    end
 
     local dist_text=""
     if distance ~= nil then
@@ -411,7 +515,8 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
     end
 
     -- Arrival aiport
-    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, nil, nil, FMGS_perf_get_pred_trip_time(), ECAM_BLUE)
+    local wind_str = get_arrival_wind_str()
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, nil, nil, FMGS_perf_get_pred_trip_time(), FMGS_perf_get_pred_trip_efob(), wind_str, ECAM_BLUE)
 
     -- TODO: ALTN route
     self:add_f(mcdu_data, function(line_id)
@@ -419,7 +524,7 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
     end)
 
     -- ALTN aiport
-    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.alt, nil, nil, nil, ECAM_BLUE) -- TODO Trip time
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.alt, nil, nil, nil, nil, nil, ECAM_BLUE) -- TODO Trip time
 
     self:add_f(mcdu_data, function(line_id)
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "---END OF ALTN F-PLN----", MCDU_LARGE)
@@ -505,6 +610,7 @@ function THIS_PAGE:render(mcdu_data)
         mcdu_data.page_data[600].curr_idx  = 1
         mcdu_data.page_data[600].page_end = false
         mcdu_data.page_data[600].goto_last = false
+        mcdu_data.page_data[600].is_b_page  = false
         mcdu_data.is_page_button_hit = false
     end
     mcdu_data.page_data[600].render_functions = {}
@@ -540,7 +646,12 @@ function THIS_PAGE:render(mcdu_data)
     THIS_PAGE:print_render_list(mcdu_data)
 
     local time_str = FMGS_get_phase() > FMGS_PHASE_PREFLIGHT and "UTC " or "TIME"
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, time_str .. "  SPD/ALT   ", MCDU_SMALL)
+    local full_str = time_str .. "  SPD/ALT   "
+    if mcdu_data.page_data[600].is_b_page then
+        time_str = "EFOB"
+        full_str = time_str ..   "      WIND  "
+    end
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, full_str, MCDU_SMALL)
 
     if mcdu_data.page_data[600].curr_idx == 1 then
         THIS_PAGE:render_dep(mcdu_data)
@@ -552,6 +663,9 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
         self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
     end
+
+    self:set_updn_arrows_bottom(mcdu_data, #mcdu_data.page_data[600].render_functions > 5)
+
 
 end
 
@@ -777,6 +891,15 @@ function THIS_PAGE:Slew_Up(mcdu_data)
         mcdu_data.page_data[600].curr_idx = 1
     end
 end
+
+function THIS_PAGE:Slew_Left(mcdu_data)
+    mcdu_data.page_data[600].is_b_page = not mcdu_data.page_data[600].is_b_page
+end
+
+function THIS_PAGE:Slew_Right(mcdu_data)
+    mcdu_data.page_data[600].is_b_page = not mcdu_data.page_data[600].is_b_page
+end
+
 
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

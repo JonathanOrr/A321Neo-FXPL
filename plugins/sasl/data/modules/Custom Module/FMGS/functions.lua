@@ -1167,3 +1167,52 @@ function FMGS_winds_req_go()
     FMGS_sys.data.winds_req_in_progress_time = get(TIME)
 end
 
+local function interpolate_wind(req_alt, points)
+    if not points or #points == 0 then
+        return nil
+    end
+    local bef_i = #points
+    for i,x in ipairs(points) do
+        if x.alt > req_alt then
+            bef_i = i - 1
+            break
+        end
+    end
+
+    local comp_a
+    if bef_i == 0 then
+        comp_a = {
+                alt=FMGS_sys.fpln.active.apts.dep and FMGS_sys.fpln.active.apts.dep.alt or 0, 
+                spd=get(Wind_SPD),
+                dir=get(Wind_HDG)
+            }
+    else
+        comp_a = points[bef_i]
+    end
+
+    local comp_b
+    if bef_i == #points then
+        return points[bef_i]
+    else
+        comp_b = points[bef_i+1]
+    end
+
+    -- Interpolation
+    return {
+        alt = req_alt, 
+        spd=Math_rescale_no_lim(comp_a.alt, comp_a.spd, comp_b.alt, comp_b.spd, req_alt),
+        dir=(Math_rescale_no_lim(comp_a.alt, comp_a.dir, comp_b.alt, comp_b.dir, req_alt)+360) % 360
+    }
+end
+
+function FMGS_winds_get_climb_at_alt(req_alt)
+    return interpolate_wind(req_alt, FMGS_sys.data.winds_climb)
+end
+
+function FMGS_winds_get_descent_at_alt(req_alt)
+    return interpolate_wind(req_alt, FMGS_sys.data.winds_descent)
+end
+
+function FMGS_winds_get_cruise_at_alt(req_alt, leg)
+    return interpolate_wind(req_alt, leg)
+end
