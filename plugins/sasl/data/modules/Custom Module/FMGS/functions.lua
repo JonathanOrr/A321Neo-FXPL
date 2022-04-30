@@ -107,6 +107,7 @@ end
 
 function FMGS_init_set_cost_idx(cost)
     FMGS_sys.data.init.cost_index = cost
+    FMGS_refresh_pred()
 end
 
 function FMGS_init_get_cost_idx()
@@ -116,6 +117,7 @@ end
 function FMGS_init_set_crz_fl(crz_fl, crz_temp)
     FMGS_sys.data.init.crz_fl = crz_fl
     FMGS_sys.data.init.crz_temp = crz_temp
+    FMGS_refresh_pred()
 end
 
 function FMGS_init_get_crz_fl_temp()
@@ -124,6 +126,7 @@ end
 
 function FMGS_init_set_tropo_alt(tropo)
     FMGS_sys.data.init.tropo = tropo
+    FMGS_refresh_pred()
 end
 
 function FMGS_init_get_tropo_alt()
@@ -136,6 +139,7 @@ end
 
 function FMGS_init_set_taxi_fuel(fuel)
     FMGS_sys.data.init.weights.taxi_fuel = fuel
+    FMGS_refresh_pred()
 end
 
 function FMGS_init_get_block_fuel()
@@ -144,6 +148,7 @@ end
 
 function FMGS_init_set_block_fuel(fuel)
     FMGS_sys.data.init.weights.block_fuel = fuel
+    FMGS_refresh_pred()
 end
 
 function FMGS_init_get_rsv_fuel()
@@ -156,6 +161,7 @@ end
 
 function FMGS_init_set_rsv_fuel(fuel)
     FMGS_sys.data.init.weights.rsv_fuel = fuel
+    FMGS_refresh_pred()
 end
 
 
@@ -166,6 +172,7 @@ end
 function FMGS_init_set_weight_zfw_cg(zfw, zfwcg)
     FMGS_sys.data.init.weights.zfw = zfw
     FMGS_sys.data.init.weights.zfwcg = zfwcg
+    FMGS_refresh_pred()
 end
 
 -------------------------------------------------------------------------------
@@ -185,6 +192,7 @@ function FMGS_set_apt_dep(name)
     end
     
     FMGS_sys.fpln.active.apts.dep = get_airport_or_nil(name)
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_apt_dep()
@@ -197,6 +205,7 @@ function FMGS_set_apt_arr(name)
     end
 
     FMGS_sys.fpln.active.apts.arr = get_airport_or_nil(name)
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_apt_arr()
@@ -209,6 +218,7 @@ function FMGS_set_apt_alt(name)
     end
 
     FMGS_sys.fpln.active.apts.alt = get_airport_or_nil(name)
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_apt_alt()
@@ -261,7 +271,7 @@ function FMGS_dep_set_rwy(rwy, sibling)
     -- the declination doesn't change significantly
     local _, year = AvionicsBay.get_data_cycle()
     rwy.mag_decl = AvionicsBay.get_declination(rwy.lat, rwy.lon, year)
-
+    FMGS_refresh_pred()
 end
 
 -------------------------------------------------------------------------------
@@ -324,6 +334,7 @@ end
 
 function FMGS_dep_set_sid(sid)
     FMGS_sys.fpln.temp.apts.dep_sid = itable_shallow_copy_legs(sid)
+    FMGS_refresh_pred()
 end
 
 function FMGS_dep_get_trans(ret_temp_if_avail)
@@ -336,6 +347,7 @@ end
 
 function FMGS_dep_set_trans(trans)
     FMGS_sys.fpln.temp.apts.dep_trans = itable_shallow_copy_legs(trans)
+    FMGS_refresh_pred()
 end
 
 function FMGS_arr_set_appr(appr, rwy, sibling)
@@ -359,6 +371,7 @@ function FMGS_arr_set_appr(appr, rwy, sibling)
             table.insert(FMGS_sys.fpln.temp.apts.arr_map.legs, x)
         end
     end
+    FMGS_refresh_pred()
 end
 
 function FMGS_arr_get_appr(ret_temp_if_avail)
@@ -389,6 +402,7 @@ end
 
 function FMGS_arr_set_star(star)
     FMGS_sys.fpln.temp.apts.arr_star = itable_shallow_copy_legs(star)
+    FMGS_refresh_pred()
 end
 
 function FMGS_arr_get_trans(ret_temp_if_avail)
@@ -401,6 +415,7 @@ end
 
 function FMGS_arr_set_trans(trans)
     FMGS_sys.fpln.temp.apts.arr_trans = itable_shallow_copy_legs(trans)
+    FMGS_refresh_pred()
 end
 
 function FMGS_arr_get_via(ret_temp_if_avail)
@@ -413,6 +428,7 @@ end
 
 function FMGS_arr_set_via(via)
     FMGS_sys.fpln.temp.apts.arr_via = itable_shallow_copy_legs(via)
+    FMGS_refresh_pred()
 end
 
 
@@ -473,6 +489,7 @@ function FMGS_dep_remove_sid_after(wpt)
     else
         assert(false)
     end
+    FMGS_refresh_pred()
 end
 
 
@@ -746,6 +763,7 @@ end
 -------------------------------------------------------------------------------
 function FMGS_perf_set_trans_alt(trans_alt)
     FMGS_sys.perf.takeoff.trans_alt = trans_alt
+    FMGS_refresh_pred()
 end
 
 function FMGS_perf_get_trans_alt()
@@ -754,6 +772,7 @@ end
 
 function FMGS_perf_set_user_trans_alt(trans_alt)
     FMGS_sys.perf.takeoff.user_trans_alt = trans_alt
+    FMGS_refresh_pred()
 end
 
 function FMGS_perf_get_user_trans_alt()
@@ -823,6 +842,7 @@ end
 
 function FMGS_set_takeoff_thrust_reduction(user_thr_red)
     FMGS_sys.perf.takeoff.user_thr_red = user_thr_red
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_takeoff_acc()
@@ -831,6 +851,7 @@ end
 
 function FMGS_set_takeoff_acc(user_acc)
     FMGS_sys.perf.takeoff.user_acc = user_acc
+    FMGS_refresh_pred()
 end
 
 function FMGS_perf_get_current_takeoff_acc()
@@ -847,6 +868,7 @@ end
 
 function FMGS_set_takeoff_flaps(f)
     FMGS_sys.perf.takeoff.flaps = f
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_takeoff_ths()
@@ -855,6 +877,7 @@ end
 
 function FMGS_set_takeoff_ths(t)
     FMGS_sys.perf.takeoff.ths = t
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_takeoff_flex_temp()
@@ -864,6 +887,7 @@ end
 function FMGS_set_takeoff_flex_temp(temp)
     FMGS_sys.perf.takeoff.flex_temp = temp
     set(Eng_N1_flex_temp, temp)    -- TODO remove
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_takeoff_eng_out_alt()
@@ -919,6 +943,7 @@ end
 
 function FMGS_set_landing_wind_mag(mag)
     FMGS_sys.perf.landing.mag = mag
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_landing_wind_mag()
@@ -927,6 +952,7 @@ end
 
 function FMGS_set_landing_wind(wind)
     FMGS_sys.perf.landing.wind = wind
+    FMGS_refresh_pred()
 end
 
 function FMGS_get_landing_wind()
@@ -1080,6 +1106,7 @@ function FMGS_winds_clear_wind_climb(idx)
     if FMGS_sys.data.winds_climb[idx] then
         table.remove(FMGS_sys.data.winds_climb, idx)
     end
+    FMGS_refresh_pred()
 end
 
 function FMGS_winds_get_wind_climb()
@@ -1093,12 +1120,14 @@ function FMGS_winds_set_wind_climb(dir, spd, alt, pos)
         table.insert(FMGS_sys.data.winds_climb, {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)})
     end
     table.sort(FMGS_sys.data.winds_climb, function(a, b) return a.alt < b.alt end)
+    FMGS_refresh_pred()
 end
 
 function FMGS_winds_clear_wind_descent(idx)
     if FMGS_sys.data.winds_descent[idx] then
         table.remove(FMGS_sys.data.winds_descent, idx)
     end
+    FMGS_refresh_pred()
 end
 
 function FMGS_winds_get_wind_descent()
@@ -1112,6 +1141,7 @@ function FMGS_winds_set_wind_descent(dir, spd, alt, pos)
         table.insert(FMGS_sys.data.winds_descent, {alt = Round(alt,0), dir = Round(dir,0), spd = Round(spd,0)})
     end
     table.sort(FMGS_sys.data.winds_descent, function(a, b) return a.alt < b.alt end)
+    FMGS_refresh_pred()
 end
 
 function FMGS_winds_get_wind_cruise(leg_id)
@@ -1144,6 +1174,7 @@ function FMGS_winds_set_wind_cruise(leg_id, dir, spd, alt, pos)
             end
             table.sort(winds, function(a, b) return a.alt < b.alt end)
         end
+        FMGS_refresh_pred()
     end
 end
 
@@ -1157,6 +1188,7 @@ function FMGS_winds_clear_wind_cruise(leg_id, idx)
             end
         end
     end
+    FMGS_refresh_pred()
 end
 
 function FMGS_winds_req_in_progress()
