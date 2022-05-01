@@ -52,6 +52,28 @@ FMGS_sys = {}
 GPS_sys = {}
 RA_sys = {}
 TCAS_sys = {}
+AOC_sys = {
+    reading_msg = 0,
+    msgs = {
+--        {
+--            message={
+--                "MESSAGE 1",
+--                "TO DO. THE DEED HAD ",
+--                "ALREADY BEEN DONE AND ",
+--                "THERE WAS NO GOING BACK ",
+--                "IT NOW HAD BEEN BECOME ",
+--                "A QUESTION OF HOW THEY ",
+--                "WERE GOING TO BE ABLE",
+--                "TO GET OUT OF THIS ",
+--                "SITUATION AND ESCAPE ",
+--            },
+--            time=1234,
+--            title="MESSAGE 1",
+--            opened=false,
+--            from_who = "SENDER"
+--        },
+    },
+}
 
  -- do NOT name anything else as "EFB", this is super important, used to store functions. See efb_prefrences.lua 
 EFB = {}

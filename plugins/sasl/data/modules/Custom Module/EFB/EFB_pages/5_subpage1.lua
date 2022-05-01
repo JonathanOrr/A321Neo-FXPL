@@ -87,7 +87,7 @@ function p5s1_buttons()
         metar_button_begin = get(TIME)
         please_wait_cover_begin = get(TIME)
         if string.len(target_airport) == 4 then
-            fetch_atis(target_airport, onContentsDownloaded)
+            fetch_metar(target_airport, onContentsDownloaded)
         end
     end)
 end
