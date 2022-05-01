@@ -107,13 +107,17 @@ function THIS_PAGE:render(mcdu_data)
     local crz_fl, crz_temp   = FMGS_init_get_crz_fl_temp()
     self:set_line(mcdu_data, MCDU_LEFT, 6, "CRZ FL/TEMP", MCDU_SMALL)
     if not FMGS_are_main_apts_set() then
-        self:set_line(mcdu_data, MCDU_LEFT, 6, "-----/---", MCDU_LARGE)
+        self:set_line(mcdu_data, MCDU_LEFT, 6, "----- /---", MCDU_LARGE)
     elseif crz_fl == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "_____/___", MCDU_LARGE, ECAM_ORANGE)
     elseif FMGS_perf_get_trans_alt() and crz_fl >= FMGS_perf_get_trans_alt() then
-        self:set_line(mcdu_data, MCDU_LEFT, 6, "FL"..Fwd_string_fill(tostring(crz_fl/100), "0", 3) .. "/" .. crz_temp, MCDU_LARGE, ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_LEFT, 6, "FL"..Fwd_string_fill(tostring(crz_fl/100), "0", 3) .. " /", MCDU_LARGE, ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_LEFT, 6, mcdu_format_force_to_small("       "..crz_temp.."°"), MCDU_LARGE, ECAM_BLUE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 6, tostring(crz_fl) .. "/" .. crz_temp, MCDU_LARGE, ECAM_BLUE)
+        crz_fl = tostring(crz_fl)
+        crz_fl = Aft_string_fill(crz_fl, " ", 6)
+        self:add_multi_line(mcdu_data, MCDU_LEFT, 6,  crz_fl.. "/", MCDU_LARGE, ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_LEFT, 6, mcdu_format_force_to_small("       "..crz_temp.."°"), MCDU_LARGE, ECAM_BLUE)
     end
 
     -------------------------------------
@@ -235,41 +239,53 @@ end
 
 
 function THIS_PAGE:L6(mcdu_data)
-    if not FMGS_are_main_apts_set() then --GUARD IT!!! No one can enter anythign when it shows ---/-- !!! You can only enter when it is ___/__ !!!
+    if not FMGS_are_main_apts_set()  then --GUARD IT!!! No one can enter anythign when it shows ---/-- !!! You can only enter when it is ___/__ !!!
         mcdu_send_message(mcdu_data, "NOT ALLOWED")
+    return end
+    if mcdu_data.clr then
+         mcdu_data.clear_the_clear()
+         mcdu_send_message(mcdu_data, "NOT ALLOWED")
     return end
 
     local input_a, input_b = mcdu_get_entry(mcdu_data, {"FL!!!","!!!!!","!!!!", "!!!"}, {"number", length = 2, dp = 0})
     local entry_out_of_range = false
 
-    if input_a ~= nil or input_b ~= nil then
-        local alt = 0
-        if input_a ~= nil then
-            if #input_a == 5 then
-                if string.sub(input_a,1,2) == "FL" then --if it begins with FL
-                    alt = tonumber(string.sub(input_a,3,5)) * 100
-                else -- it is probably 5 number characters in feet
-                    alt = tonumber(input_a)
-                end
-            elseif #input_a == 3 then --it is probably also a flight level, just without FL
-                alt = tonumber(input_a) * 100
-            elseif #input_a == 4 then --it is in feet
+    -------------------------------------PROCESSING THE CRZ FL + GENERATING ISA TEMP
+    local alt = 0
+    local isa_temp = 0
+    if input_a ~= nil then
+        if #input_a == 5 then
+            if string.sub(input_a,1,2) == "FL" then --if it begins with FL
+                alt = tonumber(string.sub(input_a,3,5)) * 100
+            else -- it is probably 5 number characters in feet
                 alt = tonumber(input_a)
             end
-
-
-            if alt >= 0 and alt <= 41000 then
-                local crz_temp = math.floor(alt / 100 * -0.2 + 16)
-                FMGS_init_set_crz_fl(alt, crz_temp)
-            else
-                entry_out_of_range = true
-            end
-
+        elseif #input_a == 3 then --it is probably also a flight level, just without FL
+            alt = tonumber(input_a) * 100
+        elseif #input_a == 4 then --it is in feet
+            alt = tonumber(input_a)
         end
-        if input_b ~= nil then
-            FMGS_init_set_crz_fl(alt, tonumber(input_b))
+
+
+        if alt >= 0 and alt <= 41000 then
+            isa_temp = math.floor(alt / 100 * -0.2 + 16)
+        else
+            entry_out_of_range = true
         end
     end
+    -------------------------------------END OF PROCESSING THE CRZ FL
+
+    local a,b = FMGS_init_get_crz_fl_temp() -- get the previously entered FL
+    if input_a ~= nil and input_b ~= nil then -- both temp and altitude
+        FMGS_init_set_crz_fl(alt, tonumber(input_b))
+    elseif input_a == nil and input_b ~= nil and a ~= nil then -- temp only, no altitude, altitude has previously been inserted
+        FMGS_init_set_crz_fl(a, tonumber(input_b)) --input instead of calculated isa
+    elseif input_a ~= nil and input_b == nil then -- altitude only
+        FMGS_init_set_crz_fl(alt, isa_temp)
+    else
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
+    end
+
     if entry_out_of_range then
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
     end
