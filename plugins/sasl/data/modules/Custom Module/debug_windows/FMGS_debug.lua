@@ -266,8 +266,40 @@ local function draw_page_pred()
     sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-520, "EFOB:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-520, FMGS_sys.data.pred.efob or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
+end
+
+local function draw_page_pred_errors()
+
+    sasl.gl.drawFrame (450, size[2]-230, 500, 150, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-100, "PREDICTION PROBLEMS", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
+
+
+    local reason_fail
+    if FMGS_sys.pred_internals.why_prediction_failed == 0 then
+        reason_fail = "NO FAIL"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 1 then
+        reason_fail = "MISSING DEPARTURE APT"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 2 then
+        reason_fail = "MISSING ZFW or Block or Taxi Fuel"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 3 then
+        reason_fail = "MISSING CRZ FL"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 4 then
+        reason_fail = "MISSING ARR. AIRPORT or Appr Proc."
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 5 then
+        reason_fail = "MISSING V2 or Fuel is too low for TO"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 6 then
+        reason_fail = "Not even 1 CLB or DES wpt exists"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 7 then
+        reason_fail = "CRZ FL too high (step 1)"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 8 then
+        reason_fail = "CRZ FL too high (step 2)"
+    end
+
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-120, "Why prediction failed:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 640, size[2]-120, reason_fail, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
 end
+
 
 local function draw_ab_info()
 
@@ -500,6 +532,7 @@ function draw()
         draw_page_config()
         draw_page_data()
         draw_page_pred()
+        draw_page_pred_errors()
     elseif curr_page == 2 then
         draw_page_fpln()
         draw_leg_details()

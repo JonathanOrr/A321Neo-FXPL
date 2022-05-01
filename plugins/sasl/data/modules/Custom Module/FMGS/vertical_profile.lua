@@ -1299,24 +1299,29 @@ function vertical_profile_update()
 
     -- Start with reset
     vertical_profile_reset()
+    FMGS_sys.pred_internals.why_prediction_failed = 0
 
     if not FMGS_sys.fpln.active or not FMGS_sys.fpln.active.apts.dep then
         -- No F/PLN or no departure airtport?
+        FMGS_sys.pred_internals.why_prediction_failed = 1
         return
     end
 
     if not FMGS_sys.data.init.weights.zfw or not FMGS_sys.data.init.weights.block_fuel or not FMGS_sys.data.init.weights.taxi_fuel then
         -- We need the weight and fuel my man
+        FMGS_sys.pred_internals.why_prediction_failed = 2
         return
     end
 
     if not FMGS_sys.data.init.crz_fl then
         -- We need also the Cruise FL...
+        FMGS_sys.pred_internals.why_prediction_failed = 3
         return
     end
 
     if not FMGS_sys.fpln.active.apts.arr or not FMGS_sys.fpln.active.apts.arr_appr then
         -- No approach / arr airtport?
+        FMGS_sys.pred_internals.why_prediction_failed = 4
         return
     end
 
@@ -1324,12 +1329,14 @@ function vertical_profile_update()
     local fuel_consumed = vertical_profile_takeoff_update() -- In Kgs
     FMGS_sys.data.pred.takeoff.total_fuel_kgs = fuel_consumed
     if not fuel_consumed or fuel_consumed > FMGS_sys.data.init.weights.block_fuel*1000 then
+        FMGS_sys.pred_internals.why_prediction_failed = 5
         return -- Cannot make any other prediction
     end
 
     prepare_the_common_big_array()
 
     if not last_clb_idx or not first_des_idx or last_clb_idx <= 0 or first_des_idx <= 0 then
+        FMGS_sys.pred_internals.why_prediction_failed = 6
         return -- Cannot make any other prediction as I don't find climb or descent segments
     end
 
@@ -1338,7 +1345,7 @@ function vertical_profile_update()
     if not FMGS_sys.data.pred.climb.total_fuel_kgs then
         -- Error, like cruise FL is too high
         FMGS_sys.data.pred.invalid = true
-        return  -- Cannot make any other prediction
+        FMGS_sys.pred_internals.why_prediction_failed = 7
     end
 
     if not FMGS_sys.data.pred.invalid then
@@ -1356,6 +1363,7 @@ function vertical_profile_update()
         -- Update main predictions like overall time, etc.
         update_overall_predictions()
     else
+        FMGS_sys.pred_internals.why_prediction_failed = 8
         vertical_profile_reset()
         MCDU.send_message("CRZ FL ABOVE MAX FL", ECAM_WHITE)
     end
@@ -1366,5 +1374,7 @@ FMGS_sys.pred_internals = { -- For debugging and perf page
 
     get_big_array = function()
         return the_big_array
-    end
+    end,
+
+    why_prediction_failed = 0,
 }
