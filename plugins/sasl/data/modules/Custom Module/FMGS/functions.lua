@@ -164,7 +164,6 @@ function FMGS_init_set_rsv_fuel(fuel)
     FMGS_refresh_pred()
 end
 
-
 function FMGS_init_get_weight_zfw_cg()
     return FMGS_sys.data.init.weights.zfw, FMGS_sys.data.init.weights.zfwcg
 end
@@ -173,6 +172,31 @@ function FMGS_init_set_weight_zfw_cg(zfw, zfwcg)
     FMGS_sys.data.init.weights.zfw = zfw
     FMGS_sys.data.init.weights.zfwcg = zfwcg
     FMGS_refresh_pred()
+end
+
+function FMGS_init_get_min_dest_fob()
+    return FMGS_sys.data.init.weights.min_dest_fob
+end
+
+function FMGS_init_set_min_dest_fob(fob)
+    FMGS_sys.data.init.weights.min_dest_fob = fob
+    FMGS_refresh_pred()
+end
+
+function FMGS_init_get_to_weight()
+    if FMGS_sys.data.init.weights.taxi_fuel and FMGS_sys.data.init.weights.block_fuel and FMGS_sys.data.init.weights.zfw then
+        return FMGS_sys.data.init.weights.zfw + FMGS_sys.data.init.weights.block_fuel - FMGS_sys.data.init.weights.taxi_fuel
+    else
+        return nil
+    end
+end
+
+function FMGS_init_get_land_weight()
+    if FMGS_sys.data.pred.efob then
+        return FMGS_sys.data.init.weights.zfw + FMGS_sys.data.pred.efob
+    else
+        return nil
+    end
 end
 
 -------------------------------------------------------------------------------

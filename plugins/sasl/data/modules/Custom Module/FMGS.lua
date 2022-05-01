@@ -69,7 +69,7 @@ FMGS_sys.data = {
         trip_fuel = nil,
         trip_time = nil,
         trip_dist = nil,
-        efob = nil,
+        efob = nil,         -- At destination
         require_update = false,
 
         takeoff = {
