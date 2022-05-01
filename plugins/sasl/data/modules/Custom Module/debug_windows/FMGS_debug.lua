@@ -293,6 +293,8 @@ local function draw_page_pred_errors()
         reason_fail = "CRZ FL too high (step 1)"
     elseif FMGS_sys.pred_internals.why_prediction_failed == 8 then
         reason_fail = "CRZ FL too high (step 2)"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 9 then
+        reason_fail = "Missing departure runway"
     end
 
     sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-120, "Why prediction failed:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)

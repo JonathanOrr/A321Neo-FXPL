@@ -896,7 +896,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
 
 
     -- Comply with the speed constraint if possible
-    V_START = math.min(V_START, the_big_array[computed_des_idx-1].pred.prop_spd_cstr)   -- TODO: probably it's +1 not -1, to check
+    V_START = math.min(V_START, the_big_array[computed_des_idx-1].pred.prop_spd_cstr or 999)   -- TODO: probably it's +1 not -1, to check
     V_START = math.max(V_START, V_END)
 
     local V_AVG = (V_START+V_END)/2
@@ -1304,6 +1304,11 @@ function vertical_profile_update()
     if not FMGS_sys.fpln.active or not FMGS_sys.fpln.active.apts.dep then
         -- No F/PLN or no departure airtport?
         FMGS_sys.pred_internals.why_prediction_failed = 1
+        return
+    end
+
+    if not FMGS_sys.fpln.active.apts.dep_rwy then
+        FMGS_sys.pred_internals.why_prediction_failed = 9
         return
     end
 

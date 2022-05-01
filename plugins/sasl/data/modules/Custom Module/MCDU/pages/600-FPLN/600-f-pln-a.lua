@@ -721,7 +721,7 @@ local function trigger_lat_rev(mcdu_data, id)
 
         local obj = mcdu_data.page_data[600].ref_lines[id]
 
-        if obj.invalid then
+        if obj.invalid or obj.point_type == POINT_TYPE_PSUEDO then
             return false
         end
 
@@ -734,6 +734,7 @@ local function trigger_lat_rev(mcdu_data, id)
             local table_obj = point_get_table(mcdu_data, obj.point_type)
             table.remove(table_obj, obj.ref_id)
             FMGS_reshape_fpln(true)
+            FMGS_refresh_pred()
 
         elseif #mcdu_data.entry.text > 0 then
             add_direct_waypoint(mcdu_data, obj)
@@ -758,7 +759,7 @@ local function trigger_vert_rev(mcdu_data, id)
             return false
         end
 
-        if obj.discontinuity then
+        if obj.discontinuity or obj.point_type == POINT_TYPE_PSUEDO then
             return false
         end
 
