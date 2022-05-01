@@ -446,18 +446,14 @@ function update_retard()
         if get(Capt_ra_alt_ft) < 20 and get(EWD_flight_phase) == PHASE_FINAL and not flare_entry_flag then --timer starts
             retard_stop_time = get(TIME) + 2
             flare_entry_flag = true -- default +2 seconds is initiated, stop resetting the timer.
-            print("flag_starts", flare_entry_flag)
         end
         if not(get(Capt_ra_alt_ft) < 20 and get(EWD_flight_phase) == PHASE_FINAL) then        
             flare_entry_flag = false
             retard_stop_time = get(TIME) -- stop immediately
-            print("flag_resets", flare_entry_flag)
         end
         if (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(Capt_ra_alt_ft) < 20 and get(EWD_flight_phase) == PHASE_FINAL then
             retard_stop_time = get(TIME) + 2
         end
-        print( retard_stop_time - get(TIME))
-
 
         if get(dr_retard) == 0 and get(dr_retard_retard) == 0 then
             if retard_stop_time - get(TIME) > 0 then
