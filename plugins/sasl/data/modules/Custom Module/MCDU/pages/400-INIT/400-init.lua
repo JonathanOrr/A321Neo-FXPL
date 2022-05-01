@@ -13,8 +13,6 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
-include("AOC/functions.lua")
-
 local THIS_PAGE = MCDU_Page:new({id=400})
 
 

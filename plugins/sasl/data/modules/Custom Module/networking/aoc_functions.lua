@@ -35,6 +35,3 @@ function AOC_atis_req_callback(  url ,  contents ,  isOk ,  error , airport)
     contents = string.sub(contents, starting_point, ending_point)
     insert_received_messages(airport.." ATIS", airport.." ATIS", contents)
 end
-
-function AOC_paragraph_split(string) -- this splits the message into displayable content in an mcdu, which has width 24 characters
-end

@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------
 
 include("networking/hoppie_aoc.lua")
-include("AOC/functions.lua")
+include("networking/aoc_functions.lua")
 
 local THIS_PAGE = MCDU_Page:new({id=1051})
 
