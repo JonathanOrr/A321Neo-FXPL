@@ -58,6 +58,7 @@ function THIS_PAGE:R5(mcdu_data)
     end
     mcdu_open_page(mcdu_data, 1050)
     AOC_fetch_atis(arpt, AOC_atis_req_callback)
+    arpt = nil
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

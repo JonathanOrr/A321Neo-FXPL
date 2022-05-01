@@ -29,8 +29,8 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "VATSIM ", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "ATIS REQ>", MCDU_LARGE, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 2, "PRE DEP", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 2, "CLEARENCE>", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 2, "PRE DEP", MCDU_SMALL, ECAM_GREY)
+    self:set_line(mcdu_data, MCDU_RIGHT, 2, "CLEARENCE>", MCDU_LARGE, ECAM_GREY)
 end
 
 function THIS_PAGE:L1(mcdu_data)

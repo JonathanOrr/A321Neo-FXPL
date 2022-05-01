@@ -10,7 +10,20 @@ local function insert_received_messages(from_who, title, message)
         message = string_slice(message, 24)
     }
     local existing_messages = #AOC_sys.msgs
-    AOC_sys.msgs[existing_messages + 1] = table_buffer
+    for i = 1, existing_messages do
+        i = existing_messages - i + 1 -- invert the i loop, so the last ones gets shifted first
+        AOC_sys.msgs[i+1] = AOC_sys.msgs[i] -- shift everything down a slot
+
+        ---------------------------
+        --  1  -  2  -  3  -  4  --
+        ---------------------------
+             ---BECOME
+        ---------------------------------
+        -- NEW -  1  -  2  -  3  -  4  --
+        ---------------------------------
+
+    end
+    AOC_sys.msgs[1] = table_buffer
 end
 
 function AOC_atis_req_callback(  url ,  contents ,  isOk ,  error , airport)
@@ -20,7 +33,6 @@ function AOC_atis_req_callback(  url ,  contents ,  isOk ,  error , airport)
     local ending_point = #contents - 2
 
     contents = string.sub(contents, starting_point, ending_point)
-
     insert_received_messages(airport.." ATIS", airport.." ATIS", contents)
 end
 

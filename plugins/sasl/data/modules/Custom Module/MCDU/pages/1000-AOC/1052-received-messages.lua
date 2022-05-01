@@ -38,7 +38,10 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:left_keys(mcdu_data, key_number)
-    if AOC_sys.msgs[key_number+THIS_PAGE.scroll_offset] == nil then return end
+    if AOC_sys.msgs[key_number+THIS_PAGE.scroll_offset] == nil then 
+        mcdu_send_message(mcdu_data, "NOT ALLOWED", ECAM_WHITE)
+        return 
+    end
     AOC_sys.msgs[key_number+THIS_PAGE.scroll_offset].opened = true
     AOC_sys.reading_msg = key_number+THIS_PAGE.scroll_offset
     mcdu_open_page(mcdu_data, 1053)
