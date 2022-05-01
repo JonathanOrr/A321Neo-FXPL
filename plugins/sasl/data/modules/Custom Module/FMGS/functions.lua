@@ -1060,6 +1060,13 @@ function FMGS_pred_get_decel_point()
     return FMGS_sys.data.pred.appr.steps[#FMGS_sys.data.pred.appr.steps] 
 end
 
+function FMGS_pred_get_flap_1_point()
+    return FMGS_sys.data.pred.appr.steps[#FMGS_sys.data.pred.appr.steps-1] 
+end
+
+function FMGS_pred_get_flap_2_point()
+    return FMGS_sys.data.pred.appr.steps[#FMGS_sys.data.pred.appr.steps-2] 
+end
 -------------------------------------------------------------------------------
 -- Route
 -------------------------------------------------------------------------------

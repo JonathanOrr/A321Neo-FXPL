@@ -100,12 +100,12 @@ FMGS_sys.data = {
             fdp_dist_to_rwy = nil,
             final_angle = 3,    -- Default to 3, always positive (descent angle)
             steps = {
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
+                {},     -- 1000ft
+                {},     -- FLAP FULL (may have skip=true if FLAP 3 config)
+                {},     -- FLAP 3
+                {},     -- FDP
+                {},     -- FLAP 2
+                {},     -- FLAP 1
                 {}      -- DECEL
             }
         }
