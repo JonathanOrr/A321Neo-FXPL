@@ -320,9 +320,9 @@ local function get_spd_alt_cstr(x)
 
     if x.pred then
         if x.pred.ias then
-            spd_cstr = tostring(math.ceil(x.pred.ias))
+            spd_cstr = tostring(Round(x.pred.ias,0))
             if x.pred.cms_segment and x.pred.mach then
-                spd_cstr = "." .. math.ceil(x.pred.mach*100)
+                spd_cstr = "." .. Round(x.pred.mach*100,0)
             end
             if x.cstr_speed_type and x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE then
                 if x.pred.cstr_ias_met then
@@ -332,7 +332,7 @@ local function get_spd_alt_cstr(x)
                 end
             end
         elseif x.pred.mach then
-            spd_cstr = "." .. math.ceil(x.pred.mach*100)
+            spd_cstr = "." .. Round(x.pred.mach*100,0)
         end
     end
     

@@ -964,6 +964,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
     assert(V_END)
 
     local initial_dist_to_consider = 0
+    local in_cms = false
 
 
     if the_big_array[computed_des_idx-1].pred.is_partial then
@@ -982,6 +983,16 @@ local function vertical_profile_descent_update_step89(weight, idx)
         if leg.pred.prop_spd_cstr then
             V_START = math.min(V_START, leg.pred.prop_spd_cstr)
         end
+
+        -- Comply with the mach constraint
+        if MACH_LIMIT then
+            local ias_mach_limit = mach_to_cas(MACH_LIMIT, curr_alt)
+            if V_START > ias_mach_limit then
+                V_START = ias_mach_limit
+                in_cms = true
+            end
+        end
+
         V_START = math.max(V_START, V_END)
         local V_AVG = (V_START+V_END)/2
 
@@ -1016,30 +1027,43 @@ local function vertical_profile_descent_update_step89(weight, idx)
         if dist_to_next_wpt > 0 then
 
             -- First of all let's check if we have to decelerate
-            local no_descent_GS = GS -- Approx
+            local no_descent_GS = GS -- Approx, but the difference to the real is minimal
             local this_wpt_time_approx = nm_to_m(dist_to_next_wpt / kts_to_ms(no_descent_GS))
             if this_wpt_time_approx < 1 then
                 this_wpt_time_approx = 1 -- Just as a safety precaution
             end
+
+            -- Before starting with the decelration, I need to recompute the mach limit
+            -- according to the appro VS we are using
+            if MACH_LIMIT then
+                local max_VS = ms_to_fpm(net_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS))
+                local ias_mach_limit = mach_to_cas(MACH_LIMIT, curr_alt - max_VS*this_wpt_time_approx/60) -- V/S is negative
+                if V_START > ias_mach_limit then
+                    V_START = ias_mach_limit
+                    in_cms = true
+                end
+            end
+
+            -- Now let's compute the theoretical best deceleration
             decel_we_need = kts_to_ms(V_START-V_END) / this_wpt_time_approx
             local h_force_we_need = decel_we_need * weight
 
-            assert(h_force_we_need >= 0)
+            -- However, in some cases, we cannot decelerate so fast, so let's halve the h_force to continue the descent
+            -- This has sense only if h_force_we_need >= 0, otherwise it means the opposite: if h_force_we_need <0 it means
+            -- we would like to accelerate!
             local v_force = net_force + h_force_we_need
-            while v_force > 0 do -- We cannot decelerate so fast, so let's halve the h_force to continue the descent
+            while h_force_we_need >= 0 and v_force > 0 do
                 h_force_we_need = h_force_we_need / 2
                 v_force = net_force + h_force_we_need  
             end
 
-            -- Ok now compute the descent parameters
-            local decel = h_force_we_need / weight
+            -- Ok now compute the actual descent parameters
+            decel_we_need = h_force_we_need / weight    -- This is used later to update V_START and V_END
 
             VS = ms_to_fpm(v_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
             local wind = FMGS_winds_get_descent_at_alt(curr_alt) or {spd=0, dir=0}
             GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
             time  = nm_to_m(dist_to_next_wpt) / kts_to_ms(GS)
-
-            V_END = V_END + ms_to_kts(decel * time)
         end 
 
         curr_alt = curr_alt - VS * time / 60
@@ -1066,14 +1090,21 @@ local function vertical_profile_descent_update_step89(weight, idx)
             overshoot = true
         end
 
-        V_START = V_END + ms_to_kts(decel_we_need * time)
+        -- Finally, let's update the actual values
+        V_END = V_END + ms_to_kts(decel_we_need * time)
+
         leg.pred.altitude = curr_alt
 
+        -- Update values...
+        -- WARNING: Do not use V_START in this function from now on! V_START is the goal value
+        -- but not the real one. We updated V_END, then use V_END!
+
         if not overshoot then
-            leg.pred.ias      = V_START
+            leg.pred.ias      = V_END
             leg.pred.vs       = VS
-            local _, _, final_mach = convert_to_eas_tas_mach(V_START, curr_alt)
+            local _, _, final_mach = convert_to_eas_tas_mach(V_END, curr_alt)
             leg.pred.mach     = final_mach
+            leg.pred.cms_segment = in_cms
         else
             tod_time = time
             tod_fuel = fuel_consumption * time
@@ -1094,7 +1125,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
         local prev_alt = the_big_array[computed_des_idx+1].pred.altitude
         local ratio = (FMGS_sys.data.init.alt_speed_limit_descent[2]-prev_alt)/(curr_alt-prev_alt)
         FMGS_sys.data.pred.descent.lim_wpt = {
-            ias=V_START,
+            ias=V_END,
             altitude=curr_alt,
             time = Math_lerp(the_big_array[computed_des_idx].pred.time, the_big_array[computed_des_idx+1].pred.time, ratio),
             fuel = Math_lerp(the_big_array[computed_des_idx].pred.fuel, the_big_array[computed_des_idx+1].pred.fuel, ratio),
@@ -1107,15 +1138,15 @@ local function vertical_profile_descent_update_step89(weight, idx)
     if idx == 8 then
         computed_des_idx = computed_des_idx + 1
         local next_leg = the_big_array[computed_des_idx-1]
-        next_leg.pred.ias = V_START      
+        next_leg.pred.ias = V_END      
     elseif idx == 9 then -- Add the TOP of DESCENT PSEUDO WPT
         local next_leg = the_big_array[computed_des_idx]
         local prev_leg = the_big_array[computed_des_idx+1]
         computed_des_idx = computed_des_idx + 1
-        local _,_,tod_mach = convert_to_eas_tas_mach(V_START, curr_alt)
+        local _,_,tod_mach = convert_to_eas_tas_mach(V_END, curr_alt)
 
         FMGS_sys.data.pred.descent.tod_wpt = {
-            ias=V_START,
+            ias=V_END,
             mach=tod_mach,
             altitude=curr_alt,
             prev_wpt=the_big_array[computed_des_idx],
@@ -1129,7 +1160,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
                                            is_tod = true,
                                            is_descent = true,
                                            altitude=curr_alt,
-                                           ias=V_START,
+                                           ias=V_END,
                                            mach=tod_mach,
                                            tod_time_step=tod_time,
                                            tod_fuel_step=tod_fuel,

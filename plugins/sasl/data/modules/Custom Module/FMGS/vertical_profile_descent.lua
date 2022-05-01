@@ -29,7 +29,7 @@ function get_target_speed_descent()
     -- Interpolated data from here: https://ansperformance.eu/library/airbus-cost-index.pdf
     local optimal_speed = -0.0003333333333 * cost_index^3 + 0.0308928571429* cost_index^2 +0.7869047619048 * cost_index + 252.1142857142856
     local optimal_mach  = -0.000003392857143 * cost_index * cost_index + 0.000716428571429 * cost_index + 0.764485714285714
-    return optimal_speed, optimal_mach
+    return optimal_speed, math.min(0.80, optimal_mach)
 end
 
 
