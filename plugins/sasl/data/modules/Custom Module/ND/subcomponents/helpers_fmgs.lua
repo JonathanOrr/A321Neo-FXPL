@@ -77,7 +77,7 @@ function ND_draw_active_fpln(data, functions)
         return
     end
 
-    local LINE_SIZE = 2
+    local LINE_SIZE = 3
 
     local already_drawn = {}
     local first_point_drawn = false

@@ -158,7 +158,7 @@ local function draw_track_symbol(data)
         return -- not visible, out of visible area
     end
 
-    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-1154)/2-312,17,1154, {1,1,1})
+    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-1154)/2-312,17,1154, ECAM_GREEN)
 end
 
 local function draw_hdgsel_symbol(data)
@@ -175,7 +175,7 @@ local function draw_hdgsel_symbol(data)
         local start_x = ((data.inputs.heading - data.inputs.hdg_sel)%180 > 0) and size[1]-40 or 40   -- true -> right, false -> left
         
         -- TODO Rotate
-        sasl.gl.drawText(Font_ECAMfont, start_x, 575 , data.inputs.hdg_sel , 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)    
+        sasl.gl.drawText(Font_ECAMfont, start_x, 575 , data.inputs.hdg_sel , 28, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)    
         return -- not visible, out of visible area
     end
 
@@ -202,11 +202,11 @@ local function draw_ranges(data)
 
 
     if data.config.range > ND_RANGE_ZOOM_2 then
-        sasl.gl.drawText(Font_ECAMfont, size[2]/2-370, 320, second_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_ECAMfont, size[2]/2+370, 320, second_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, size[2]/2-370, 320, second_ring, 24, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, size[2]/2+370, 320, second_ring, 24, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     end
-    sasl.gl.drawText(Font_ECAMfont, size[2]/2-240, 250, third_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-    sasl.gl.drawText(Font_ECAMfont, size[2]/2+240, 250, third_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[2]/2-240, 250, third_ring, 24, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[2]/2+240, 250, third_ring, 24, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     
 end
 
@@ -256,7 +256,7 @@ local function draw_poi_array(data, poi, texture, color)
 
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
-        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, true, false, TEXT_ALIGN_LEFT, color)
     end
     
     return modified, poi
@@ -453,7 +453,7 @@ local function draw_oans_arrow(data)
         local R = 460
         local x = 420 + R * math.sin(math.rad(new_angle-180))
         local y = 450 -312 + R * math.cos(math.rad(new_angle-180))
-        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
 end
 

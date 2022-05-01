@@ -36,18 +36,18 @@ local function draw_tcas_altitude(data, acf, poi)
     end
     local color = acf.alert == TCAS_ALERT_TA and COLOR_YELLOW or (acf.alert == TCAS_ALERT_RA and ECAM_RED or ECAM_WHITE)
 
-    sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-40, alt_diff_text, 26, false, false, TEXT_ALIGN_LEFT, color)
+    sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-40, alt_diff_text, 26, true, false, TEXT_ALIGN_LEFT, color)
 
     -- DEBUG INFOs
     if debug_tcas_system then
         local labels = { [0] = "-", "TA", "RA"}
         local labels_act = { [0] = "-", "CL L", "DS L", "CL H", "DS H", "T"}
     
-        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-70, "STATUS: " .. (labels[acf.alert] .. " (" .. acf.alert .. ")") , 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-100, "ACTION: " .. (labels_act[acf.action] .. " (" .. acf.action .. ")") , 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-130, "REASON: " .. (acf.debug_reason or "NIL"), 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-70, "STATUS: " .. (labels[acf.alert] .. " (" .. acf.alert .. ")") , 26, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-100, "ACTION: " .. (labels_act[acf.action] .. " (" .. acf.action .. ")") , 26, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-130, "REASON: " .. (acf.debug_reason or "NIL"), 26, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
         if acf.debug_inhib > 0 then
-            sasl.gl.drawText(Font_ECAMfont, poi.x+25, poi.y-40, "INHIBIT: " .. acf.debug_inhib, 26, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+            sasl.gl.drawText(Font_ECAMfont, poi.x+25, poi.y-40, "INHIBIT: " .. acf.debug_inhib, 26, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
         end
     end
 end

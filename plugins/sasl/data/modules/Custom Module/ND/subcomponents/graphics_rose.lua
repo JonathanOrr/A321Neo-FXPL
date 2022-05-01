@@ -159,8 +159,8 @@ local function draw_ranges(data)
     --if data.config.range > 0 then
         local ext_range = get_range_in_nm(data)
         local int_range = ext_range / 2
-        sasl.gl.drawText(Font_ECAMfont, 250, 250, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_ECAMfont, 350, 350, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 250, 250, ext_range, 24, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 350, 350, int_range, 24, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     --end
 
 end
@@ -170,7 +170,7 @@ local function draw_track_symbol(data)
         return
     end
 
-    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-594)/2,17,594, {1,1,1})
+    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-594)/2,17,594, ECAM_GREEN)
     
 end
 
@@ -236,7 +236,7 @@ local function draw_poi_array(data, poi, texture, color)
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
     
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
-        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, true, false, TEXT_ALIGN_LEFT, color)
     end
     
     return modified, poi
@@ -475,14 +475,16 @@ local function draw_arpt_symbol(data)
         local ur_x = x_end   - x_shift
         local ur_y = y_end   - y_shift
 
-        sasl.gl.drawWideLine(ll_x, ll_y, ul_x, ul_y, 2, ECAM_WHITE)
-        sasl.gl.drawWideLine(ll_x, ll_y, lr_x, lr_y, 2, ECAM_WHITE)
-        sasl.gl.drawWideLine(lr_x, lr_y, ur_x, ur_y, 2, ECAM_WHITE)
-        sasl.gl.drawWideLine(ul_x, ul_y, ur_x, ur_y, 2, ECAM_WHITE)
+        sasl.gl.drawWideLine(ll_x, ll_y, ul_x, ul_y, 3, ECAM_WHITE)
+        sasl.gl.drawWideLine(lr_x, lr_y, ur_x, ur_y, 3, ECAM_WHITE)
+        if data.config.range >= ND_RANGE_160 then
+            sasl.gl.drawWideLine(ll_x, ll_y, lr_x, lr_y, 3, ECAM_WHITE)
+            sasl.gl.drawWideLine(ul_x, ul_y, ur_x, ur_y, 3, ECAM_WHITE)
+        end
 
         local t_x, t_y = (x_end-x_start)/2+x_start+10*x_shift, (y_end-y_start)/2+y_start+10*y_shift
-        sasl.gl.drawText(Font_ECAMfont, t_x, t_y, apt.id, 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(Font_ECAMfont, t_x, t_y-30, sibl and rwy.sibl_name or rwy.name, 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, t_x, t_y, apt.id, 28, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, t_x, t_y-30, sibl and rwy.sibl_name or rwy.name, 28, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
 end
 
@@ -543,7 +545,7 @@ local function draw_oans_arrow(data)
         local R = 230
         local x = 420 + R * math.sin(math.rad(new_angle-180))
         local y = 450 + R * math.cos(math.rad(new_angle-180))
-        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
 end
 

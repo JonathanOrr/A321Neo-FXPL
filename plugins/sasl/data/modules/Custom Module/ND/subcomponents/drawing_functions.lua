@@ -138,15 +138,15 @@ function ND_DRAWING_small_rose(x ,y , rotation)
     end
     for i=1, 12 do
         if (i-1)%3 == 0 then
-            SASL_drawText_rotated(Font_ECAMfont, 0, -17,
+            SASL_drawText_rotated(Font_ECAMfont, -2, -17,
             450 + 340 * math.sin(math.rad((i-1)*30 + rotation)), 
             450 + 340 * math.cos(math.rad((i-1)*30 + rotation)), 
-            (i-1)*30+ rotation, (i-1)*3, 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+            (i-1)*30+ rotation, (i-1)*3, 38, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         else
-            SASL_drawText_rotated(Font_ECAMfont, 0, -15,
+            SASL_drawText_rotated(Font_ECAMfont, -2, -15,
             450 + 340 * math.sin(math.rad((i-1)*30 + rotation)), 
             450 + 340 * math.cos(math.rad((i-1)*30 + rotation)), 
-            (i-1)*30+ rotation, (i-1)*3, 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+            (i-1)*30+ rotation, (i-1)*3, 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         end
     end
 end
@@ -172,15 +172,15 @@ function ND_DRAWING_large_rose(x,y,rotation)
     end
     for i=1, 36 do
         if (i-1)%3 == 0 then
-            SASL_drawText_rotated(Font_ECAMfont, 0, -17,
+            SASL_drawText_rotated(Font_ECAMfont, -2, -17,
             x + 630 * math.sin(math.rad((i-1)*10 + rotation)), 
             y + 630 * math.cos(math.rad((i-1)*10 + rotation)), 
-            (i-1)*10+ rotation, i-1, 42, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+            (i-1)*10+ rotation, i-1, 42, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         else
-            SASL_drawText_rotated(Font_ECAMfont, 0, -15,
+            SASL_drawText_rotated(Font_ECAMfont, -2, -15,
             x + 626 * math.sin(math.rad((i-1)*10 + rotation)), 
             y + 626 * math.cos(math.rad((i-1)*10 + rotation)), 
-            (i-1)*10+ rotation, i-1, 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+            (i-1)*10+ rotation, i-1, 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         end
     end
 end
