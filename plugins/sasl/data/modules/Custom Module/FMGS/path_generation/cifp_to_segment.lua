@@ -24,7 +24,7 @@ local function estimate_vertical_performance(start_alt, end_alt)
 end
 
 local function estimate_distance(minutes, course_reversal)
-   if course_reveral then
+   if course_reversal then
       return math.min(4.3, 3.5 * minutes) -- 4.3 is the minimum
    else
       return 3.5 * minutes -- 3.5 NM per minute
