@@ -60,24 +60,33 @@ local function intersecting_radials(lat1, lon1, lat2, lon2, crs13, crs23)
    lat2  = math.rad(lat2)
    lon1  = -math.rad(lon1)
    lon2  = -math.rad(lon2)
+
    crs13 = math.rad(crs13)
    crs23 = math.rad(crs23)
 
-   local dst12=2*math.asin(math.sqrt((math.sin((lat1-lat2)/2))^2+ math.cos(lat1)*math.cos(lat2)*math.sin((lon1-lon2)/2)^2))
+   local dphi = lat2-lat1
+   local ddelta = lon2 - lon1
 
+   local square1 = (math.sin(dphi/2))^2
+   local square2 = (math.sin(ddelta/2))^2
+   local dst12=2*math.asin(math.sqrt(square1+ math.cos(lat1)*math.cos(lat2)*square2))
 
-   local crs12
-   local crs21
-   if math.sin(lon2-lon1) < 0 then
-      crs12=math.acos((math.sin(lat2)-math.sin(lat1)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat1)))
-      crs21=2.*math.pi-math.acos((math.sin(lat1)-math.sin(lat2)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat2)))
-   else
-      crs12=2.*math.pi-math.acos((math.sin(lat2)-math.sin(lat1)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat1)))
-      crs21=math.acos((math.sin(lat1)-math.sin(lat2)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat2)))
+   if(math.abs(dst12) < 1e-6) then
+      return math.deg(lat1), -math.deg(lon1) -- Coincidental points
    end
+
+   local cos_t_a = (math.sin(lat2) - math.sin(lat1)*math.cos(dst12)) / (math.sin(dst12)*math.cos(lat1))
+   local cos_t_b = (math.sin(lat1) - math.sin(lat2)*math.cos(dst12)) / (math.sin(dst12)*math.cos(lat2))
+   local t_a = math.acos(math.min(math.max(cos_t_a, -1), 1))
+   local t_b = math.acos(math.min(math.max(cos_t_b, -1), 1))
+
+   local crs12 = math.sin(ddelta)>0 and t_a or (2*math.pi-t_a)
+   local crs21 = math.sin(ddelta)>0 and (2*math.pi-t_b) or t_b
+
 
    local ang1=((crs13-crs12+math.pi) % (2.*math.pi)) - math.pi
    local ang2=((crs21-crs23+math.pi) % (2.*math.pi)) - math.pi
+
 
    local lat3, lon3
 
@@ -204,7 +213,7 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, enforce_in
 
    -- This is something unexpected, but let's skip the radial connection
    -- and go direct
-   sasl.logWarning("convert_generic_CF: CF cannot find radial. last_course="..last_course.." outb="..outb.. " INTERCEPT_ANGLE="..INTERCEPT_ANGLE)
+   sasl.logWarning("convert_generic_CF: CF cannot find radial. last_course="..last_course.." outb="..outb.. " INTERCEPT_ANGLE="..INTERCEPT_ANGLE.." radial1="..intercept_radial_1.." radial2="..intercept_radial_2)
    return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
 end
 
@@ -311,6 +320,14 @@ local function convert_generic_FC(x, last_lat, last_lon)
    return prev_connection, new_segment
 end
 
+local function convert_generic_VI_CI(x, last_lat, last_lon, last_course)
+
+      -- In this case I need to advance a little bit to satisfy the VI/CI straight line leg
+      local STD_TURN_RADIUS = 1.385746606 -- in NM @ 210 kts
+      local final_straight_lat, final_straight_lon = Move_along_distance_NM(last_lat, last_lon, STD_TURN_RADIUS, last_course)
+      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=final_straight_lat, end_lon=final_straight_lon, leg_name = x.leg_name, orig_ref=x }
+end
+
 local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_course)
    local converted_legs = {}
    local last_lat = begin_lat
@@ -367,7 +384,7 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       elseif x.leg_type == CIFP_LEG_TYPE_CR or x.leg_type == CIFP_LEG_TYPE_VR then  -- TODO Wind
          leg1 = convert_generic_VR(x, last_lat, last_lon)
       elseif x.leg_type == CIFP_LEG_TYPE_VI or x.leg_type == CIFP_LEG_TYPE_CI then  -- TODO Wind
-         -- No leg produced
+         leg1 = convert_generic_VI_CI(x, last_lat, last_lon, last_outbound_course)
       elseif x.leg_type == CIFP_LEG_TYPE_CF then
          leg1, leg2 = convert_generic_CF(x, last_lat, last_lon, last_outbound_course, enforce_intercept_course)
       elseif x.leg_type == CIFP_LEG_TYPE_FD or x.leg_type == CIFP_LEG_TYPE_CD then
@@ -436,8 +453,7 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
          end
       end
 
-      if  x.leg_type ~= CIFP_LEG_TYPE_IF and x.leg_type ~= CIFP_LEG_TYPE_VI and x.leg_type ~= CIFP_LEG_TYPE_CI and not leg1 and not leg2 then
-         -- VI and CI are special because they don't product a leg (the next one will)
+      if  x.leg_type ~= CIFP_LEG_TYPE_IF and not leg1 and not leg2 then
          sasl.logWarning("convert_generic: it seems I skipped a valid leg")
       end
 
