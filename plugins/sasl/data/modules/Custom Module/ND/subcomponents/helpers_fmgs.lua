@@ -128,6 +128,8 @@ function ND_draw_active_fpln(data, functions)
             -- An helper lambda function...
             local check_and_run = function(poi_special, texture, offset)
                 if prev_orig_ref and prev_orig_ref ~= x.orig_ref and poi_special and x.orig_ref == poi_special.prev_wpt then
+                    assert(prev_orig_ref.lat and prev_orig_ref.lon, "Previous point (" .. (prev_orig_ref.id or "[UNKN]") .. ") doesn't have lat or lon!")
+                    assert(x.orig_ref.lat and x.orig_ref.lon, "Current point (" .. (x.orig_ref.id or "[UNKN]") .. ") doesn't have lat or lon!")
                     local lat, lon = point_from_a_segment_lat_lon(prev_orig_ref.lat, prev_orig_ref.lon, x.orig_ref.lat, x.orig_ref.lon, poi_special.dist_prev_wpt)
                     draw_poi_special(data, functions, lat, lon, offset, texture, ECAM_WHITE)
                 end
@@ -142,8 +144,10 @@ function ND_draw_active_fpln(data, functions)
             check_and_run(FMGS_pred_get_flap_1_point(), image_point_flaps_one, 0)
             check_and_run(FMGS_pred_get_flap_2_point(), image_point_flaps_two, 0)
 
-
-            prev_orig_ref = x.orig_ref
+            if x.orig_ref.lat and x.orig_ref.lon then
+                -- Some waypoints don't have lat/lon information, let's skip them
+                prev_orig_ref = x.orig_ref
+            end
         end
 
     end   
