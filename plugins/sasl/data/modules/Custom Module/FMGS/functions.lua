@@ -480,12 +480,7 @@ function FMGS_arr_get_available_vias(ret_temp_if_avail)
         -- If I DO select a STAR, the listed VIA are all the STAR waypoints that are also IAF points for that approach
         for _,x in ipairs(curr_fpln.apts.arr_cifp.apprs) do
             if x.type == CIFP_TYPE_APPR_APP_TRANS and x.proc_name == curr_fpln.apts.arr_appr.proc_name then
-                for _,y in ipairs(curr_fpln.apts.arr_star.legs) do
-                    if x.trans_name == y.leg_name then
-                        table.insert(toret, x)
-                    end
-                end
-                
+                table.insert(toret, x)
             end
         end
     end
