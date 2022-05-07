@@ -92,12 +92,33 @@ function ND_draw_active_fpln(data, functions)
             local x_start,y_start = functions.get_x_y_heading(data, x.start_lat, x.start_lon, data.inputs.heading)
             local x_end,y_end     = functions.get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
             sasl.gl.drawWideLine(x_start, y_start, x_end, y_end, LINE_SIZE, ECAM_GREEN)
+            if debug_ND_debug_paths then
+                sasl.gl.drawWideLine(x_start-10, y_start-10, x_start+10, y_start+10, 2, ECAM_BLUE)
+                sasl.gl.drawWideLine(x_start-10, y_start+10, x_start+10, y_start-10, 2, ECAM_BLUE)
+                sasl.gl.drawWideLine(x_end-5, y_end-5, x_end+5, y_end+5, 2, ECAM_RED)
+                sasl.gl.drawWideLine(x_end-5, y_end+5, x_end+5, y_end-5, 2, ECAM_RED)
+            end
         elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
             local x_ctr,y_ctr = functions.get_x_y_heading(data, x.ctr_lat, x.ctr_lon, data.inputs.heading)
-            local x_lat,y_lon = functions.get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
             local xy_radius = functions.get_px_per_nm(data) * x.radius
             local heading_offset = data.config.mode == ND_MODE_PLAN and 0 or data.inputs.heading-Local_magnetic_deviation()
             sasl.gl.drawArc(x_ctr, y_ctr, xy_radius-LINE_SIZE/2, xy_radius+LINE_SIZE/2, x.start_angle+heading_offset, x.arc_length_deg, ECAM_GREEN)
+            if debug_ND_debug_paths then
+                if x.start_lat then
+                    local x_start,y_start = functions.get_x_y_heading(data, x.start_lat, x.start_lon, data.inputs.heading)
+                    sasl.gl.drawWideLine(x_start-10, y_start-10, x_start+10, y_start+10, 2, ECAM_BLUE)
+                    sasl.gl.drawWideLine(x_start-10, y_start+10, x_start+10, y_start-10, 2, ECAM_BLUE)
+                end
+                if x.end_lat then
+                    local x_end,y_end     = functions.get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
+                    sasl.gl.drawWideLine(x_end-5, y_end-5, x_end+5, y_end+5, 2, ECAM_RED)
+                    sasl.gl.drawWideLine(x_end-5, y_end+5, x_end+5, y_end-5, 2, ECAM_RED)
+                end
+
+                sasl.gl.drawArc(x_ctr, y_ctr, 4, 5, 0, 360, ECAM_MAGENTA)
+                local text = "ARC " .. (x.id and x.id or "/") .. " r=" .. Round(x.radius, 1) .. " sa=" .. math.floor(x.start_angle) .. " al=" .. math.floor(x.arc_length_deg)
+                sasl.gl.drawText(Font_ECAMfont, x_ctr+6, y_ctr, text, 11, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+            end
         end
 
         local color = first_point_drawn and ECAM_GREEN or ECAM_WHITE

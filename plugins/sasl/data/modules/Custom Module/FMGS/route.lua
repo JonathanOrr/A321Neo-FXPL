@@ -183,7 +183,7 @@ function update_route_turns()
 
     fpln.require_recompute = false
     
-    if fpln.segment_curved_list then
+    if fpln.segment_curved_list and not debug_FMGS_disable_turn_computer then
         -- The list may not exist if the flight plan is incomplete
         create_turns(fpln.segment_curved_list)
     end

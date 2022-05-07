@@ -558,7 +558,7 @@ function update()
             FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
             FMGS_arr_set_appr(FMGS_sys.fpln.temp.apts.arr_cifp.apprs[9], FMGS_sys.fpln.temp.apts.arr.rwys[1], true)
             FMGS_arr_set_star(FMGS_sys.fpln.temp.apts.arr_cifp.stars[22])
-            FMGS_reset_arr_via()
+            FMGS_arr_set_via(FMGS_arr_get_available_vias(true)[2])
             FMGS_reset_arr_trans()
     
             FMGS_reshape_fpln()
