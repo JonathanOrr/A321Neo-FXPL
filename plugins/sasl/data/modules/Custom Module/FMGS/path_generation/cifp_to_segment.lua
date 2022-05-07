@@ -187,14 +187,19 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, enforce_in
    end
 
    -- If not, we have to intercept the new course
-   local INTERCEPT_ANGLE = math.min(heading_diff, 45) -- From 30 to 45
+   local INTERCEPT_ANGLE = 30 -- From 30 to 45
 
-   local goal_out_radial    = (outb+180)%360;
-   local intercept_radial_1 = (outb+INTERCEPT_ANGLE) % 360;
-   local intercept_radial_2 = (outb-INTERCEPT_ANGLE) % 360;
+   local goal_out_radial    = (outb+180+360)%360;
+   local intercept_radial_1 = (outb+INTERCEPT_ANGLE+360) % 360;
+   local intercept_radial_2 = (outb-INTERCEPT_ANGLE+360) % 360;
 
-   if enforce_intercept_course then -- This is true if previous legs are VI or CI
-      intercept_radial_1 = last_course
+   -- We try 3 ways to intercept the course: directly with the last course and at 45/-45 degrees
+
+   -- Try to intercept with the last course
+   local next_lat, next_lon = intersecting_radials(last_lat, last_lon, x.lat, x.lon, last_course, goal_out_radial)
+   if next_lat and next_lon then
+      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+             { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
    end
 
    -- Try to intercept from the bottom (or from the forced ones)
@@ -324,8 +329,36 @@ local function convert_generic_VI_CI(x, last_lat, last_lon, last_course)
 
       -- In this case I need to advance a little bit to satisfy the VI/CI straight line leg
       local STD_TURN_RADIUS = 1.385746606 -- in NM @ 210 kts
-      local final_straight_lat, final_straight_lon = Move_along_distance_NM(last_lat, last_lon, STD_TURN_RADIUS, last_course)
-      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=final_straight_lat, end_lon=final_straight_lon, leg_name = x.leg_name, orig_ref=x }
+      local outb_mag = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
+
+      if math.abs(heading_difference(last_course, outb_mag)) < 1 then
+         return nil -- Almost straight, that's fine
+      end
+
+      local angle_diff   = heading_difference(last_course, outb_mag)
+      local is_left_turn = angle_diff < 0
+      local arc_start    = (last_course+270-(is_left_turn and 180 or 0)+360) % 360
+
+      local ctr_angle    = (arc_start - 180 + 360) % 360
+      local ctr_lat, ctr_lon = Move_along_distance_NM(last_lat, last_lon, STD_TURN_RADIUS, ctr_angle)
+      local end_lat, end_lon = Move_along_distance_NM(ctr_lat, ctr_lon, STD_TURN_RADIUS, (ctr_angle-180+angle_diff) % 360)
+
+
+      local point = { segment_type=FMGS_COMP_SEGMENT_ARC, 
+                      start_lat=last_lat, 
+                      start_lon=last_lon, 
+                      end_lat=end_lat, 
+                      end_lon=end_lon, 
+                      ctr_lat=ctr_lat, 
+                      ctr_lon=ctr_lon, 
+                      radius=STD_TURN_RADIUS,
+                      start_angle=90-arc_start,
+                      arc_length_deg=-angle_diff,
+                      leg_name = x.leg_name,
+                      orig_ref=x}
+
+
+      return point
 end
 
 local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_course)
