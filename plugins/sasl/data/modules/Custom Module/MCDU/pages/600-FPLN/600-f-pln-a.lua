@@ -53,7 +53,8 @@ local function get_efob(x)
 
     local taxi_fuel = FMGS_init_get_taxi_fuel() or 0
     if FMGS_init_get_block_fuel() and x.pred and x.pred.fuel then
-        return Round_fill(FMGS_init_get_block_fuel() - taxi_fuel - x.pred.fuel/1000,1)
+        local fuel = FMGS_init_get_block_fuel() - taxi_fuel - x.pred.fuel/1000
+        return Round_fill(fuel,1)
     end
     return "----"
 end
@@ -102,9 +103,13 @@ function THIS_PAGE:render_dest(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8).. trip_time, MCDU_LARGE)
 
     local trip_dist_num = FMGS_perf_get_pred_trip_dist()
-    local trip_dist = trip_dist_num and math.ceil(trip_dist_num) or "----"
-    local efob = FMGS_perf_get_pred_trip_efob() and Round_fill(FMGS_perf_get_pred_trip_efob(), 1) or "----"
-    self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6), MCDU_LARGE)
+    local trip_dist = trip_dist_num and Fwd_string_fill(""..math.ceil(trip_dist_num), " ", 4) or "----"
+    local efob_num = FMGS_perf_get_pred_trip_efob()
+    local efob = efob_num and Round_fill(efob_num, 1) or "----"
+    local efob_col = efob_num and (efob_num <= 0) and ECAM_ORANGE or ECAM_WHITE
+
+    self:set_line(mcdu_data, MCDU_CENTER, 6, "        " .. trip_dist, MCDU_LARGE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, Fwd_string_fill(efob, " ", 6), MCDU_LARGE, efob_col)
 
 end
 
