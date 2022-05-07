@@ -35,15 +35,19 @@ function get_density_ratio(ref_alt)   -- Get density according to ISA
     return density
 end
 
+-- The following includes need the get_density_ratio!
 include('FMGS/vertical_profile_climb.lua')
 include('FMGS/vertical_profile_cruise.lua')
 include('FMGS/vertical_profile_descent.lua')
-
 
 local EARTH_GRAVITY = 9.80665
 local QUANTUM_BASE_IN_SEC_CLB = 20  -- Predictions are build with this maximum granularity (lower is possible)
 local QUANTUM_BASE_IN_SEC = 60  -- Predictions are build with this maximum granularity (lower is possible)
 
+local function sanitize_weight(weight)
+    local EMPTY_WEIGHT    = 46300   -- Minimum possible weight
+    return math.max(weight, EMPTY_WEIGHT)
+end
 
 -------------------------------------------------------------------------------
 -- Global variables
@@ -263,7 +267,7 @@ local function vertical_profile_takeoff_update()
 
     local rwy_alt = FMGS_sys.fpln.active.apts.dep.alt
 
-    FMGS_sys.data.pred.takeoff.gdot = compute_green_dot(total_to_weight, rwy_alt)
+    FMGS_sys.data.pred.takeoff.gdot = compute_green_dot(sanitize_weight(total_to_weight), rwy_alt)
 
     local _,_,v2 = FMGS_perf_get_v_speeds()
 
@@ -274,20 +278,20 @@ local function vertical_profile_takeoff_update()
     local fuel_consumption
 
     -- Initial climb, from rwy altitude + 30 to 400
-    FMGS_sys.data.pred.takeoff.ROC_init, fuel_consumption = get_ROC_after_TO(rwy_alt, v2, total_to_weight)
+    FMGS_sys.data.pred.takeoff.ROC_init, fuel_consumption = get_ROC_after_TO(rwy_alt, v2, sanitize_weight(total_to_weight))
     FMGS_sys.data.pred.takeoff.time_to_400ft = (400-30) / FMGS_sys.data.pred.takeoff.ROC_init * 60
     FMGS_sys.data.pred.takeoff.dist_to_400ft = FMGS_sys.data.pred.takeoff.time_to_400ft * v2 / 3600
     fuel_consumed = fuel_consumed + fuel_consumption * FMGS_sys.data.pred.takeoff.time_to_400ft
 
     -- Acceleration at 400ft
-    local time,dist,fuel_consumption = get_time_dist_from_V2_to_VSRS(rwy_alt+400, v2, total_to_weight)
+    local time,dist,fuel_consumption = get_time_dist_from_V2_to_VSRS(rwy_alt+400, v2, sanitize_weight(total_to_weight))
     FMGS_sys.data.pred.takeoff.time_to_sec_climb = time
     FMGS_sys.data.pred.takeoff.dist_to_sec_climb = dist
     fuel_consumed = fuel_consumed + fuel_consumption * time
 
     -- Second part of the initial climb to takeoff acceleration altitude
     local acc_alt = FMGS_get_takeoff_acc()
-    time,dist,fuel_consumption = get_time_dist_from_VSRS_to_VACC(rwy_alt+400, FMGS_perf_get_current_takeoff_acc(), v2+10, total_to_weight)
+    time,dist,fuel_consumption = get_time_dist_from_VSRS_to_VACC(rwy_alt+400, FMGS_perf_get_current_takeoff_acc(), v2+10, sanitize_weight(total_to_weight))
     FMGS_sys.data.pred.takeoff.time_to_vacc = time
     FMGS_sys.data.pred.takeoff.dist_to_vacc = dist
     fuel_consumed = fuel_consumed + fuel_consumption * time
@@ -310,8 +314,6 @@ function vertical_profile_climb_update()
     local curr_weight = ( FMGS_sys.data.init.weights.zfw
                         + FMGS_sys.data.init.weights.block_fuel) * 1000
                         - FMGS_sys.data.pred.takeoff.total_fuel_kgs
-
-    assert(curr_weight > FMGS_sys.data.init.weights.zfw)
 
     local _,_,v2 = FMGS_perf_get_v_speeds()
 
@@ -376,7 +378,7 @@ function vertical_profile_climb_update()
         A = 0
 
 
-        thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt,curr_weight)
+        thrust_available = predict_climb_thrust_net_avail(curr_spd,curr_alt,sanitize_weight(curr_weight))
 
 
         local leg = the_big_array[i]
@@ -386,7 +388,7 @@ function vertical_profile_climb_update()
         local D = leg.computed_distance or 0 -- At this point, the distance should be already computed
                                              -- but a bit of defensive programming is not bad
 
-        local target_speed, target_mach = get_target_speed_climb(curr_alt, curr_weight)
+        local target_speed, target_mach = get_target_speed_climb(curr_alt, sanitize_weight(curr_weight))
 
         -- Be sure the target speed is ok with the possible constraint
         target_speed = math.min(target_speed, leg.pred.prop_spd_cstr or 999)
@@ -397,7 +399,7 @@ function vertical_profile_climb_update()
             local thrust_for_acceleration = thrust_available * PERC_ACCELERATION
             thrust_available = thrust_available - thrust_for_acceleration   -- This is the thurst dedicate to climb
 
-            A = thrust_for_acceleration / curr_weight -- [m/s2]
+            A = thrust_for_acceleration / sanitize_weight(curr_weight) -- [m/s2]
             Q = 1   -- Reduce the quantum to increase the precision of the speed change
 
     
@@ -416,14 +418,14 @@ function vertical_profile_climb_update()
                                                     -- This affects only the loop number and precision of
                                                     -- the accelerations
                 A = A - ACC_MACH_REDUCTION
-                thrust_available = thrust_available - (-ACC_MACH_REDUCTION * curr_weight)   -- Reduce speed to remain in valid mach when climbing
+                thrust_available = thrust_available - (-ACC_MACH_REDUCTION * sanitize_weight(curr_weight))   -- Reduce speed to remain in valid mach when climbing
                 cms_segment = true
             end
 
             local _, TAS, _ = convert_to_eas_tas_mach(curr_spd, curr_alt)
             -- Rate of climb at the beginning of the leg
             -- ROC = excess_power_force / weight_force * tas
-            VS = ms_to_fpm(thrust_available / (curr_weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
+            VS = ms_to_fpm(thrust_available / (sanitize_weight(curr_weight) * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
             local wind = FMGS_winds_get_climb_at_alt(curr_alt) or {spd=0, dir=0}
             GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
 
@@ -554,7 +556,6 @@ local function vertical_profile_cruise_update(idx_next_wpt)
     local curr_fuel     = TC.pred.fuel
     local curr_weight   = TC.pred.weight
 
-
     local leg = the_big_array[i]
     if not leg then
         logWarning("This is very bad and crashing will occur. i=", i, "total_legs=", total_legs, "idx_next_wpt=", idx_next_wpt)
@@ -601,8 +602,8 @@ local function vertical_profile_cruise_update(idx_next_wpt)
 
         D = leg.computed_distance or 0
         local dist_to_travel = D - curr_dist
-        local managed_mach = get_target_mach_cruise(cruise_alt, curr_weight)
-        local N1, FF = predict_cruise_N1_at_alt_M(managed_mach, cruise_alt, curr_weight)
+        local managed_mach = get_target_mach_cruise(cruise_alt, sanitize_weight(curr_weight))
+        local N1, FF = predict_cruise_N1_at_alt_M(managed_mach, cruise_alt, sanitize_weight(curr_weight))
 
         local TAS = convert_to_tas(managed_mach, cruise_alt)
         local wind = FMGS_winds_get_cruise_at_alt(cruise_alt, leg) or {spd=0, dir=0}
@@ -631,7 +632,7 @@ local function vertical_profile_cruise_update(idx_next_wpt)
 end
 
 local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt, TAS, mach, VS, flaps, gear)
-    local excess_thrust = fpm_to_ms(VS) * (init_weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
+    local excess_thrust = fpm_to_ms(VS) * (sanitize_weight(init_weight) * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
     -- Let's compute also the GS (we need this later)
     local wind_spd = FMGS_sys.perf.landing.wind or 0
@@ -642,7 +643,7 @@ local function vertical_profile_descent_update_step1_fuel(init_weight, init_alt,
     -- Time to compute the drag and therefore the thrust we need
     local oat = get_arrival_apt_temp()
     local density = get_density_ratio(init_alt)
-    local drag = predict_drag_w_gf(density, TAS, mach, init_weight, flaps, gear)
+    local drag = predict_drag_w_gf(density, TAS, mach, sanitize_weight(init_weight), flaps, gear)
 
     local needed_thrust = math.max(0, drag + excess_thrust)
     local N1_per_engine = predict_engine_N1(mach, density, oat, init_alt, needed_thrust/2)
@@ -663,8 +664,9 @@ end
 
 -- This function update the flight plan legs to match the final approach special points
 local function approach_backupdate_legs(begin_alt, VS, dist, mach, ias_start, ias_end, GS, fuel_consumption)
+    dist = math.max(1e-9,- dist) -- Fix dist sign and sanitize
 
-    dist = - dist -- Fix dist sign
+    -- In this leg we are at begin_alt, climbing at VS, and we are about to do "dist" nm
 
     local next_wpt_dist
 
@@ -674,14 +676,23 @@ local function approach_backupdate_legs(begin_alt, VS, dist, mach, ias_start, ia
         if the_big_array[computed_des_idx].pred.is_partial then
             next_wpt_dist  = next_wpt_dist - the_big_array[computed_des_idx].pred.partial_dist
         end
+        next_wpt_dist = math.max(0, next_wpt_dist)  -- Sanitize
+
+        -- Pay attention: next_wpt_dist may be > or < of dist!
+
+        -- Let us compute the time required to arrive at next_wpt_dist or at the end of this leg
         local this_wpt_time = nm_to_m(math.min(dist,next_wpt_dist)) / kts_to_ms(GS)
 
+        local spd_ratio = math.min(1,next_wpt_dist / dist)
+
         begin_alt = begin_alt - VS * this_wpt_time / 60
-        local ias = math.min(Math_lerp(ias_end, ias_start, next_wpt_dist / dist), FMGS_sys.data.init.alt_speed_limit_descent[1])
+        local ias = math.min(Math_lerp(ias_end, ias_start, spd_ratio), FMGS_sys.data.init.alt_speed_limit_descent[1])
+
         the_big_array[computed_des_idx].pred.altitude = begin_alt
         the_big_array[computed_des_idx].pred.ias      = ias
         the_big_array[computed_des_idx].pred.mach     = mach
         the_big_array[computed_des_idx].pred.vs       = VS
+        ias_end = ias
 
         if the_big_array[computed_des_idx].pred.is_partial then
             the_big_array[computed_des_idx].pred.time     = the_big_array[computed_des_idx].pred.time + this_wpt_time
@@ -711,7 +722,7 @@ local function vertical_profile_descent_update_step1(weight_at_rwy)
     local rwy_alt = FMGS_sys.fpln.active.apts.arr.alt
 
     local flaps = FMGS_get_landing_config()+1
-    local VAPP = compute_vapp(weight_at_rwy)
+    local VAPP = compute_vapp(sanitize_weight(weight_at_rwy))
 
     -- Ok, now the landing slope
     local angle = FMGS_sys.data.pred.appr.final_angle
@@ -722,7 +733,7 @@ local function vertical_profile_descent_update_step1(weight_at_rwy)
     -- ROC = excess_power_force / weight_force * tas
     local VS = -ms_to_fpm(kts_to_ms(TAS) * math.sin(math.rad(angle)))
 
-    local N1, GS, fuel_consumption = vertical_profile_descent_update_step1_fuel(weight_at_rwy, rwy_alt, TAS, mach, VS, flaps, true)
+    local N1, GS, fuel_consumption = vertical_profile_descent_update_step1_fuel(sanitize_weight(weight_at_rwy), rwy_alt, TAS, mach, VS, flaps, true)
 
     local time = 1000 / VS * 60;
     local dist = m_to_nm(kts_to_ms(GS) * time)
@@ -780,17 +791,18 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local gear = true -- i_step < 4
     local V_START
     if i_step == 2 then
-        V_START = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, flaps_start, gear)
+        V_START = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), flaps_start, gear)
     elseif i_step == 3 then
         -- F speed
-        V_START = 1.22 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, 2, false)
+        V_START = 1.22 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), 2, false)
     elseif i_step == 4 then
         -- S speed
-        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, 0, false)
+        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), 0, false)
     end
 
     local V_END = FMGS_sys.data.pred.appr.steps[i_step-1].ias
     local V_AVG = (V_START+V_END)/2
+
     if V_START < V_END then
         -- This is possible for i_step == 4
         V_START = V_END
@@ -808,27 +820,26 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local wind = FMGS_winds_get_descent_at_alt(alt) or {spd=0, dir=0}
     local GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
 
-    local excess_thrust = -fpm_to_ms(VS) * (weight * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
+    local excess_thrust = -fpm_to_ms(VS) * (sanitize_weight(weight) * EARTH_GRAVITY) / kts_to_ms(TAS) -- [N]
 
     -- Time to compute the drag and therefore the thrust we need
     local oat = air_predict_temperature_at_alt(get_arrival_apt_temp(), FMGS_sys.fpln.active.apts.arr.alt, alt)
     local density = get_density_ratio(alt)
-    local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
+    local drag = predict_drag_w_gf(density, TAS, mach, sanitize_weight(weight), flaps_end, gear)
 
     -- In this case I assume to be at idle...
     local N1_minimum = predict_minimum_N1_engine(alt, oat, density, flaps_end, gear)
     local thrust_idle = predict_engine_thrust(mach, density, oat, alt, N1_minimum) * 2
     
     local net_force_horizontal = thrust_idle - drag + excess_thrust
-    local decel = net_force_horizontal / weight    -- Acceleration in m/s2
-
     if net_force_horizontal >= 0 then
         -- TOO STEEP DESCENT
         -- TODO advise pilots?
-        net_force_horizontal = 0
-
-        sasl.logWarning("Step " .. i_step .. " too steep descent: " .. decel )
+        sasl.logWarning("Step " .. i_step .. " net force: " .. net_force_horizontal )
+        net_force_horizontal = -1000   -- Just a negative value to sanitize the following procedure
     end
+
+    local decel = net_force_horizontal / sanitize_weight(weight)    -- Acceleration in m/s2
 
     local time
     local dist
@@ -847,7 +858,7 @@ local function vertical_profile_descent_update_step234(weight, i_step)
             -- We are descending too fast, we need to increase engines
             ias = V_START
             local decel_i_want = kts_to_ms(V_START-V_END) / time
-            local more_thrust_i_need = -(decel-decel_i_want) * weight
+            local more_thrust_i_need = -(decel-decel_i_want) * sanitize_weight(weight)
             local new_thrust = thrust_idle + more_thrust_i_need
             N1_minimum = predict_engine_N1(mach, density, oat, alt, new_thrust/2)
         end
@@ -884,10 +895,10 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local V_START
     if i_step == 5 then
         -- S speed
-        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(weight, 0, false)
+        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), 0, false)
     elseif i_step == 6 then
         -- GDOT
-        V_START = compute_green_dot(weight, alt)
+        V_START = compute_green_dot(sanitize_weight(weight), alt)
     elseif i_step == 7 then
         V_START = FMGS_sys.data.init.alt_speed_limit_descent[1]
     end
@@ -906,7 +917,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     -- Time to compute the drag and therefore the thrust we need
     local oat = air_predict_temperature_at_alt(get_arrival_apt_temp(), FMGS_sys.fpln.active.apts.arr.alt, alt)
     local density = get_density_ratio(alt)
-    local drag = predict_drag_w_gf(density, TAS, mach, weight, flaps_end, gear)
+    local drag = predict_drag_w_gf(density, TAS, mach, sanitize_weight(weight), flaps_end, gear)
 
     -- In this case I assume to be at idle...
     local N1_minimum = predict_minimum_N1_engine(alt, oat, density, flaps_end, gear)
@@ -917,10 +928,17 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local net_force_vertical = net_force * 0.4  -- TODO: This can be tuned to meet alt/speed constraints
     local net_force_horizontal = net_force - net_force_vertical
 
-    local decel = net_force_horizontal / weight    -- Acceleration in m/s2
+    if net_force_horizontal >= 0 then
+        -- TOO STEEP DESCENT
+        -- TODO advise pilots?
+        sasl.logWarning("Step " .. i_step .. " net force: " .. net_force_horizontal )
+        net_force_horizontal = -1000   -- Just a negative value to sanitize the following procedure
+    end
+
+    local decel = net_force_horizontal / sanitize_weight(weight)    -- Acceleration in m/s2
     local time  = kts_to_ms(V_START-V_END) / decel
     
-    local VS = ms_to_fpm(net_force_vertical / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
+    local VS = ms_to_fpm(net_force_vertical / (sanitize_weight(weight) * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
     local wind = FMGS_winds_get_descent_at_alt(alt) or {spd=0, dir=0}
     local GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
     local dist = m_to_nm(kts_to_ms(GS) * time)
@@ -1001,7 +1019,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
         -- Time to compute the drag and therefore the thrust we need
         local oat = air_predict_temperature_at_alt(get_arrival_apt_temp(), FMGS_sys.fpln.active.apts.arr.alt, curr_alt)
         local density = get_density_ratio(curr_alt)
-        local drag = predict_drag(density, TAS, mach, weight)
+        local drag = predict_drag(density, TAS, mach, sanitize_weight(weight))
 
         -- In this case I assume to be at idle...
         local N1_minimum = predict_minimum_N1_engine(curr_alt, oat, density, 0, false)
@@ -1036,7 +1054,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
             -- Before starting with the decelration, I need to recompute the mach limit
             -- according to the appro VS we are using
             if MACH_LIMIT then
-                local max_VS = ms_to_fpm(net_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS))
+                local max_VS = ms_to_fpm(net_force / (sanitize_weight(weight) * EARTH_GRAVITY) * kts_to_ms(TAS))
                 local ias_mach_limit = mach_to_cas(MACH_LIMIT, curr_alt - max_VS*this_wpt_time_approx/60) -- V/S is negative
                 if V_START > ias_mach_limit then
                     V_START = ias_mach_limit
@@ -1046,7 +1064,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
 
             -- Now let's compute the theoretical best deceleration
             decel_we_need = kts_to_ms(V_START-V_END) / this_wpt_time_approx
-            local h_force_we_need = decel_we_need * weight
+            local h_force_we_need = decel_we_need * sanitize_weight(weight)
 
             -- However, in some cases, we cannot decelerate so fast, so let's halve the h_force to continue the descent
             -- This has sense only if h_force_we_need >= 0, otherwise it means the opposite: if h_force_we_need <0 it means
@@ -1058,9 +1076,9 @@ local function vertical_profile_descent_update_step89(weight, idx)
             end
 
             -- Ok now compute the actual descent parameters
-            decel_we_need = h_force_we_need / weight    -- This is used later to update V_START and V_END
+            decel_we_need = h_force_we_need / sanitize_weight(weight)    -- This is used later to update V_START and V_END
 
-            VS = ms_to_fpm(v_force / (weight * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
+            VS = ms_to_fpm(v_force / (sanitize_weight(weight) * EARTH_GRAVITY) * kts_to_ms(TAS)) -- [fpm]
             local wind = FMGS_winds_get_descent_at_alt(curr_alt) or {spd=0, dir=0}
             GS = tas_to_gs(TAS, VS, wind.spd, wind.dir)
             time  = nm_to_m(dist_to_next_wpt) / kts_to_ms(GS)

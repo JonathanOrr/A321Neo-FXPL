@@ -316,7 +316,7 @@ local function draw_apprland_dynamic()
         sasl.gl.drawText(Font_B612MONO_regular, left, 30,  s.dist and Round(s.dist, 1) or "N/A", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
 
-    if FMGS_sys.data.pred.appr.fdp_idx then
+    if FMGS_sys.data.pred.appr.fdp_idx and FMGS_arr_get_appr(false) and FMGS_arr_get_appr(false).legs then
         local l = FMGS_arr_get_appr(false).legs[FMGS_sys.data.pred.appr.fdp_idx]
         local name = (l.id or l.name or "-OPEN F/PLN PAGE-")
         sasl.gl.drawText(Font_B612MONO_regular, 550, 400, "[" .. name .. "]", 14, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
