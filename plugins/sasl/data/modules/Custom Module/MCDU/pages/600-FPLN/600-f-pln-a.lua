@@ -94,8 +94,8 @@ function THIS_PAGE:render_dest(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
 
     local arr_id    = mcdu_data.page_data[600].curr_fpln.apts.arr.id
-    if mcdu_data.page_data[600].curr_fpln.apts.arr_rwy then
-        local rwy, sibl = FMGS_arr_get_rwy(false)
+    local rwy, sibl = FMGS_arr_get_rwy(false)
+    if rwy then
         arr_id = arr_id .. (sibl and rwy.sibl_name or rwy.name)
     end
     local trip_time = mcdu_time_beautify(FMGS_perf_get_pred_trip_time())

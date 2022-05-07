@@ -173,6 +173,7 @@ function appr_type_char_to_idx(x)
     elseif x == CIFP_TYPE_APPR_RWY_DIRECT then
         return 13, "RWY"
     else
+        -- We may end up here if it is not an appr procedure (e.g., missed approach!)
         return nil, nil
     end
 end

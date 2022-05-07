@@ -20,9 +20,18 @@ THIS_PAGE.curr_page = 1
 THIS_PAGE.apprs_length = 0
 THIS_PAGE.apprs_references = {0,0,0,0}
 
-local function extract_rwy_name(rwy_name_with_suffix)
+local function extract_rwy_name(proc_name)
 
-    local rwy_name = rwy_name_with_suffix:sub(1,2)
+    if proc_name == "VORA" or  proc_name == "VORB" or proc_name == "VOR-A" or proc_name == "VOR-B"
+    or proc_name == "NDBB" or proc_name == "CVOR" or proc_name == "VDMA"  or proc_name == "LOCD"
+    or proc_name == "NDAT" or proc_name == "NDB-1" or proc_name == "NDB-2" then
+        -- This is a circle to land approach and must be managed in a different way
+        -- because we don't have a runway
+        return ""
+    end
+
+    local rwy_name_with_suffix = proc_name:sub(2)
+    local rwy_name             = rwy_name_with_suffix:sub(1,2)
 
     if rwy_name_with_suffix:sub(3,3) == "L" then
         rwy_name = rwy_name .. "L"
@@ -85,9 +94,17 @@ function THIS_PAGE:render_apprs(mcdu_data)
     for i,x in ipairs(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs) do
         local type_idx, type_str = appr_type_char_to_idx(x.type)
         if type_idx ~= nil then
-            local rwy_name_with_suffix = x.proc_name:sub(2)
-            local rwy_name = extract_rwy_name(rwy_name_with_suffix)
-            local rwy_info, ils_info, rwy_obj, rwy_sibl = self:get_runway_info(rwy_name)
+            local rwy_name = extract_rwy_name(x.proc_name)
+            local rwy_info, ils_info, rwy_obj, rwy_sibl
+            local rwy_name_with_suffix
+            if #rwy_name > 0 then
+                -- Only if a runway name has been found
+                rwy_name_with_suffix = x.proc_name:sub(2)
+                rwy_info, ils_info, rwy_obj, rwy_sibl= self:get_runway_info(rwy_name)
+            else
+                rwy_name_with_suffix = x.proc_name:sub(4)
+            end
+
             table.insert(apprs_list[type_idx], {name=rwy_name_with_suffix, idx=i, prefix=type_str, rwy_info=rwy_info, ils_info=ils_info, rwy_obj=rwy_obj, rwy_sibl=rwy_sibl})
             THIS_PAGE.apprs_length = THIS_PAGE.apprs_length + 1
         end
