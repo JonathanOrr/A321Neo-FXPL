@@ -43,7 +43,7 @@ function THIS_PAGE:render_trans(mcdu_data, sel_rwy)
             or x.type == CIFP_TYPE_SS_ENR_TRANS_FMS then
 
             if rwy_match then
-                trans_list[x.trans_name] = i
+                table.insert(trans_list, {trans_name = x.trans_name, idx = i})
                 THIS_PAGE.trans_length = THIS_PAGE.trans_length + 1
             end
         end
@@ -51,14 +51,12 @@ function THIS_PAGE:render_trans(mcdu_data, sel_rwy)
 
     THIS_PAGE.trans_references = {0,0,0,0}    -- These will contain the references for buttons
 
-    local i = 0
     local n_line = 2
-    for k,idx in pairs(trans_list) do
-        i = i + 1
+    for i,x in ipairs(trans_list) do
         if i > 4 * (THIS_PAGE.curr_page-1) and i <= 4 * (THIS_PAGE.curr_page) then
-            local arrow = (FMGS_dep_get_trans(true) and FMGS_dep_get_trans(true).trans_name == k) and " " or "→"
-            self:set_line(mcdu_data, MCDU_RIGHT, n_line, k .. arrow, MCDU_LARGE, ECAM_BLUE)
-            THIS_PAGE.trans_references[n_line-1] = idx    -- Let's same the array index so that we can use this for buttons
+            local arrow = (FMGS_dep_get_trans(true) and FMGS_dep_get_trans(true).trans_name == x.trans_name) and " " or "→"
+            self:set_line(mcdu_data, MCDU_RIGHT, n_line, x.trans_name .. arrow, MCDU_LARGE, ECAM_BLUE)
+            THIS_PAGE.trans_references[n_line-1] = x.idx    -- Let's same the array index so that we can use this for buttons
             n_line = n_line + 1
         end
     end
@@ -96,7 +94,7 @@ function THIS_PAGE:render_sid(mcdu_data, sel_rwy, sibl)
             or x.type == CIFP_TYPE_SS_CMN_ROUTE_FMS then
 
             if rwy_match then
-                sid_list[x.proc_name] = i
+                table.insert(sid_list, {proc_name=x.proc_name, idx=i})
                 THIS_PAGE.sid_length = THIS_PAGE.sid_length + 1
             end
         end
@@ -104,14 +102,12 @@ function THIS_PAGE:render_sid(mcdu_data, sel_rwy, sibl)
 
     THIS_PAGE.sid_references = {0,0,0,0}    -- These will contain the references for buttons
 
-    local i = 0
     local n_line = 2
-    for k,idx in pairs(sid_list) do
-        i = i + 1
+    for i,x in ipairs(sid_list) do
         if i > 4 * (THIS_PAGE.curr_page-1) and i <= 4 * (THIS_PAGE.curr_page) then
-            local arrow = (FMGS_dep_get_sid(true) and FMGS_dep_get_sid(true).proc_name == k) and " " or "←"
-            self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. k, MCDU_LARGE, ECAM_BLUE)
-            THIS_PAGE.sid_references[n_line-1] = idx    -- Let's same the array index so that we can use this for buttons
+            local arrow = (FMGS_dep_get_sid(true) and FMGS_dep_get_sid(true).proc_name == x.proc_name) and " " or "←"
+            self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. x.proc_name, MCDU_LARGE, ECAM_BLUE)
+            THIS_PAGE.sid_references[n_line-1] = x.idx    -- Let's same the array index so that we can use this for buttons
             n_line = n_line + 1
         end
     end

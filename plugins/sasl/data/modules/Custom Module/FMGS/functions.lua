@@ -375,7 +375,10 @@ function FMGS_dep_set_trans(trans)
 end
 
 function FMGS_arr_set_appr(appr, rwy, sibling)
-    FMGS_sys.fpln.temp.apts.arr_rwy = {rwy, sibling}
+    if rwy then
+        -- It may be null, if the approach has an unspecified runway (e.g., circle-to-land)
+        FMGS_sys.fpln.temp.apts.arr_rwy = {rwy, sibling}
+    end
 
     FMGS_sys.fpln.temp.apts.arr_appr = itable_shallow_copy_legs(appr)
     FMGS_sys.fpln.temp.apts.arr_map = itable_shallow_copy_legs(appr)

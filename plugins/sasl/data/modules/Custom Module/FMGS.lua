@@ -316,13 +316,13 @@ local function update_cifp_loading()
         if loading_cifp == 1 then
             FMGS_sys.fpln.active.apts.dep_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.active.apts.dep.id)
             -- Add the NO SID / NO TRANS cases
-            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, {
+            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, 1, {
                 type        = CIFP_TYPE_SS_RWY_TRANS_FMS,
                 proc_name   = "NO SID",
                 trans_name  = "ALL",
                 legs = {}
             })
-            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, {
+            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, 1, {
                 type        = CIFP_TYPE_SS_ENR_TRANS_FMS,
                 proc_name   = "ALL",
                 trans_name  = "NO TRANS",
@@ -342,6 +342,15 @@ local function update_cifp_loading()
     if FMGS_sys.fpln.active.apts.arr ~= nil and FMGS_sys.fpln.active.apts.arr_cifp == nil then
         if loading_cifp == 2 then
             FMGS_sys.fpln.active.apts.arr_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.active.apts.arr.id)
+
+            -- Add the NO STAR case
+            table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, 1, {
+                type        = CIFP_TYPE_STAR_RWY_TRANS_FMS,
+                proc_name   = "NO STAR",
+                trans_name  = "ALL",
+                legs = {}
+            })
+
             if FMGS_sys.fpln.temp then
                 FMGS_sys.fpln.temp.apts.arr_cifp = FMGS_sys.fpln.active.apts.arr_cifp
             end
