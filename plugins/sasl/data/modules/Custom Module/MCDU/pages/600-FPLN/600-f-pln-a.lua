@@ -69,20 +69,26 @@ end
 -- DEPARTURE
 -------------------------------------------------------------------------------
 function THIS_PAGE:render_dep(mcdu_data)
-    local arpt_id    = mcdu_data.page_data[600].curr_fpln.apts.dep.id
-    local arpt_alt   = mcdu_data.page_data[600].curr_fpln.apts.dep.alt
+    local arpt       = mcdu_data.page_data[600].curr_fpln.apts.dep
+    self:add_f(mcdu_data, function(line_id)
 
-    local data = {
-        id = arpt_id,
-        time = mcdu_time_beautify(0), 
-        spd = FMGS_perf_get_v_speeds(),
-        efob = FMGS_init_get_block_fuel()-FMGS_init_get_taxi_fuel(),
-        wind = "",
-        alt = tostring(arpt_alt),
-        proc_name = "",
-        is_arpt = true,
-    } 
-    THIS_PAGE:render_single(mcdu_data, 1, data)
+        local arpt_id    = arpt.id
+        local arpt_alt   = arpt.alt
+
+        arpt.is_dep_apt_mcdu = true
+    
+        local data = {
+            id = arpt_id,
+            time = mcdu_time_beautify(0), 
+            spd = FMGS_perf_get_v_speeds(),
+            efob = FMGS_init_get_block_fuel()-FMGS_init_get_taxi_fuel(),
+            wind = "",
+            alt = tostring(arpt_alt),
+            proc_name = "",
+            is_arpt = true,
+        } 
+        THIS_PAGE:render_single(mcdu_data, line_id, data)
+    end, arpt)
 end
 
 -------------------------------------------------------------------------------
@@ -511,7 +517,6 @@ function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, distance, trip_
 end
 
 function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
-    mcdu_data.page_data[600].page_end = false
 
     if FMGS_get_apt_alt() == nil then
         self:add_f(mcdu_data, function(line_id)
@@ -536,7 +541,6 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "---END OF ALTN F-PLN----", MCDU_LARGE)
     end)
  
-    mcdu_data.page_data[600].page_end = true
 end
 
 
@@ -546,31 +550,36 @@ end
 
 function THIS_PAGE:print_render_list(mcdu_data)
 
-    if mcdu_data.page_data[600].goto_last then
-        mcdu_data.page_data[600].goto_last = false
-        mcdu_data.page_data[600].curr_idx = math.max(1, #mcdu_data.page_data[600].render_functions-3)
+    local tot_fun = #mcdu_data.page_data[600].render_functions
+    -- curr_idx represents the top most showed point
+    if mcdu_data.page_data[600].curr_idx > tot_fun then
+        mcdu_data.page_data[600].curr_idx = 1
     end
-
-    local start_i = math.max(1, mcdu_data.page_data[600].curr_idx - 1)
-    local line_id = mcdu_data.page_data[600].curr_idx == 1 and 2 or 1
+    if mcdu_data.page_data[600].curr_idx <= 0 then
+        mcdu_data.page_data[600].curr_idx = tot_fun
+    end
+    
+    local start_i = mcdu_data.page_data[600].curr_idx
+    local line_id = 1
     local end_i = mcdu_data.page_data[600].curr_idx + 5
 
-    local breaked = false
     mcdu_data.page_data[600].ref_lines = {}
-    for i,x in ipairs(mcdu_data.page_data[600].render_functions) do
-        if i >= start_i then
-            if i <= end_i and line_id <= 5 then
-                x[1](line_id)
-                mcdu_data.page_data[600].ref_lines[line_id] = x[2]
-                line_id = line_id + 1
-            else
-                breaked = true
-                break
-            end
+    for i = start_i, start_i+5 do
+        local x
+        if i <= tot_fun then
+            x = mcdu_data.page_data[600].render_functions[i]
+        else
+            x = mcdu_data.page_data[600].render_functions[i-tot_fun]
+        end
+
+        if line_id <= 5 then
+            x[1](line_id)
+            mcdu_data.page_data[600].ref_lines[line_id] = x[2]
+            line_id = line_id + 1
+        else
+            break   -- full
         end
     end
-
-    mcdu_data.page_data[600].page_end = not breaked
 
 end
 
@@ -614,8 +623,6 @@ function THIS_PAGE:render(mcdu_data)
     if not mcdu_data.page_data[600] or mcdu_data.is_page_button_hit then
         mcdu_data.page_data[600] = {}
         mcdu_data.page_data[600].curr_idx  = 1
-        mcdu_data.page_data[600].page_end = false
-        mcdu_data.page_data[600].goto_last = false
         mcdu_data.page_data[600].is_b_page  = false
         mcdu_data.is_page_button_hit = false
     end
@@ -642,12 +649,15 @@ function THIS_PAGE:render(mcdu_data)
     })
 
     self:set_lr_arrows(mcdu_data, true)
+    self:set_updn_arrows_bottom(mcdu_data, false)
 
     if mcdu_data.page_data[600].curr_fpln.apts.dep == nil or mcdu_data.page_data[600].curr_fpln.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "------END OF F-PLN------", MCDU_LARGE)
         return
     end
+    self:set_updn_arrows_bottom(mcdu_data, true)
 
+    THIS_PAGE:render_dep(mcdu_data)
     THIS_PAGE:render_list(mcdu_data)
     THIS_PAGE:print_render_list(mcdu_data)
 
@@ -659,19 +669,12 @@ function THIS_PAGE:render(mcdu_data)
     end
     self:set_line(mcdu_data, MCDU_RIGHT, 1, full_str, MCDU_SMALL)
 
-    if mcdu_data.page_data[600].curr_idx == 1 then
-        THIS_PAGE:render_dep(mcdu_data)
-    end
-
     if not FMGS_does_temp_fpln_exist() then
         THIS_PAGE:render_dest(mcdu_data)
     else
         self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
         self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
     end
-
-    self:set_updn_arrows_bottom(mcdu_data, #mcdu_data.page_data[600].render_functions > 5)
-
 
 end
 
@@ -726,6 +729,21 @@ local function trigger_lat_rev(mcdu_data, id)
 
         local obj = mcdu_data.page_data[600].ref_lines[id]
 
+        if obj.is_dep_apt_mcdu then
+            if mcdu_data.page_data[600].curr_fpln.apts.dep then
+                mcdu_data.lat_rev_subject = {}
+                mcdu_data.lat_rev_subject.type = 1 -- ORIGIN
+                mcdu_data.lat_rev_subject.data = mcdu_data.page_data[600].curr_fpln.apts.dep
+                mcdu_open_page(mcdu_data, 602)
+            else
+                mcdu_data.lat_rev_subject = {}
+                mcdu_data.lat_rev_subject.type = 3 -- PPOS
+                mcdu_open_page(mcdu_data, 602)
+            end
+            return true
+        end
+
+
         if obj.invalid or obj.point_type == POINT_TYPE_PSUEDO then
             return false
         end
@@ -760,6 +778,10 @@ local function trigger_vert_rev(mcdu_data, id)
 
         local obj = mcdu_data.page_data[600].ref_lines[id]
 
+        if obj.is_dep_apt_mcdu then
+            return false
+        end
+
         if obj.invalid then
             return false
         end
@@ -782,24 +804,10 @@ end
 
 
 function THIS_PAGE:L1(mcdu_data)
-    if mcdu_data.page_data[600].curr_idx == 1 then
-        if mcdu_data.page_data[600].curr_fpln.apts.dep then
-            mcdu_data.lat_rev_subject = {}
-            mcdu_data.lat_rev_subject.type = 1 -- ORIGIN
-            mcdu_data.lat_rev_subject.data = mcdu_data.page_data[600].curr_fpln.apts.dep
-            mcdu_open_page(mcdu_data, 602)
-        else
-            mcdu_data.lat_rev_subject = {}
-            mcdu_data.lat_rev_subject.type = 3 -- PPOS
-            mcdu_open_page(mcdu_data, 602)
-        end
-    else
-        if not trigger_lat_rev(mcdu_data, 1) then
-            MCDU_Page:L2(mcdu_data) -- Error
-            return
-        end
+    if not trigger_lat_rev(mcdu_data, 1) then
+        MCDU_Page:L2(mcdu_data) -- Error
+        return
     end
-    
 end
 
 function THIS_PAGE:L2(mcdu_data)
@@ -839,13 +847,9 @@ end
 
 
 function THIS_PAGE:R1(mcdu_data)
-    if mcdu_data.page_data[600].curr_idx == 1 then
+    if not trigger_vert_rev(mcdu_data, 1) then
         MCDU_Page:R1(mcdu_data) -- Error
-    else
-        if not trigger_vert_rev(mcdu_data, 1) then
-            MCDU_Page:R1(mcdu_data) -- Error
-            return
-        end
+        return
     end
 end
 
@@ -884,18 +888,18 @@ function THIS_PAGE:R6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if mcdu_data.page_data[600].curr_idx - 1 > 0 then
-        mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx - 1
+    if not mcdu_data.ud_arrows_btm then
+        MCDU_Page:Slew_Down(mcdu_data) -- Error
     else
-        mcdu_data.page_data[600].goto_last = true
+        mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx - 1
     end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    if not mcdu_data.page_data[600].page_end then
-        mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx + 1
+    if not mcdu_data.ud_arrows_btm then
+        MCDU_Page:Slew_Up(mcdu_data) -- Error
     else
-        mcdu_data.page_data[600].curr_idx = 1
+        mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx + 1
     end
 end
 
