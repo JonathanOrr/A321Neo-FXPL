@@ -758,7 +758,7 @@ local function trigger_lat_rev(mcdu_data, id)
             table.remove(table_obj, obj.ref_id)
             FMGS_reshape_fpln(true)
             FMGS_refresh_pred()
-
+            mcdu_data.clear_the_clear()
         elseif #mcdu_data.entry.text > 0 then
             add_direct_waypoint(mcdu_data, obj)
         else
@@ -792,6 +792,17 @@ local function trigger_vert_rev(mcdu_data, id)
 
         if mcdu_data.page_data[600].curr_fpln.apts.arr and obj.id == mcdu_data.page_data[600].curr_fpln.apts.arr.id then
             return false
+        end
+
+        if mcdu_data.clr then   -- A clear is requested
+            mcdu_data.clear_the_clear()
+            if (obj.cstr_speed_type and obj.cstr_speed_type > CIFP_CSTR_SPD_NONE) or (obj.cstr_alt_type and obj.cstr_alt_type > CIFP_CSTR_ALT_NONE) then
+                obj.cstr_speed_type = CIFP_CSTR_SPD_NONE
+                obj.cstr_alt_type   = CIFP_CSTR_ALT_NONE
+                return true
+            else
+                return false
+            end
         end
 
         mcdu_data.vert_rev_subject = {}
