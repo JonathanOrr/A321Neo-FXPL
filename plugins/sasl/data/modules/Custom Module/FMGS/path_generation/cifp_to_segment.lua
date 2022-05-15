@@ -54,61 +54,6 @@ local function point_from_point_course_distance(lat, lon, crs, dist)
    return lat2, lon2
 end
 
-local function intersecting_radials(lat1, lon1, lat2, lon2, crs13, crs23)
-   assert(lat1 and lat2 and lon1 and lon2 and crs13 and crs23)
-   lat1  = math.rad(lat1)
-   lat2  = math.rad(lat2)
-   lon1  = -math.rad(lon1)
-   lon2  = -math.rad(lon2)
-
-   crs13 = math.rad(crs13)
-   crs23 = math.rad(crs23)
-
-   local dphi = lat2-lat1
-   local ddelta = lon2 - lon1
-
-   local square1 = (math.sin(dphi/2))^2
-   local square2 = (math.sin(ddelta/2))^2
-   local dst12=2*math.asin(math.sqrt(square1+ math.cos(lat1)*math.cos(lat2)*square2))
-
-   if(math.abs(dst12) < 1e-6) then
-      return math.deg(lat1), -math.deg(lon1) -- Coincidental points
-   end
-
-   local cos_t_a = (math.sin(lat2) - math.sin(lat1)*math.cos(dst12)) / (math.sin(dst12)*math.cos(lat1))
-   local cos_t_b = (math.sin(lat1) - math.sin(lat2)*math.cos(dst12)) / (math.sin(dst12)*math.cos(lat2))
-   local t_a = math.acos(math.min(math.max(cos_t_a, -1), 1))
-   local t_b = math.acos(math.min(math.max(cos_t_b, -1), 1))
-
-   local crs12 = math.sin(ddelta)>0 and t_a or (2*math.pi-t_a)
-   local crs21 = math.sin(ddelta)>0 and (2*math.pi-t_b) or t_b
-
-
-   local ang1=((crs13-crs12+math.pi) % (2.*math.pi)) - math.pi
-   local ang2=((crs21-crs23+math.pi) % (2.*math.pi)) - math.pi
-
-
-   local lat3, lon3
-
-   if math.sin(ang1) == 0 and math.sin(ang2) == 0 then
-      sasl.logWarning("ERROR: intersecting_radials: Infinite")
-      sasl.logWarning("Debug data: " .. math.deg(lat1) .. " " .. math.deg(lon1) .. " " .. math.deg(lat2) .. " " .. math.deg(lon2) .. " " .. math.deg(crs13) .. " " .. math.deg(crs23))
-      return nil, nil  -- Infinite intersections
-   elseif math.sin(ang1) * math.sin(ang2) < 0 then
-      return nil, nil  -- Ambiguous intersection
-   else
-      ang1=math.abs(ang1)
-      ang2=math.abs(ang2)
-      local ang3=math.acos(-math.cos(ang1)*math.cos(ang2)+math.sin(ang1)*math.sin(ang2)*math.cos(dst12)) 
-      local dst13=math.atan2(math.sin(dst12)*math.sin(ang1)*math.sin(ang2),math.cos(ang2)+math.cos(ang1)*math.cos(ang3))
-      lat3=math.asin(math.sin(lat1)*math.cos(dst13)+math.cos(lat1)*math.sin(dst13)*math.cos(crs13))
-      local dlon=math.atan2(math.sin(crs13)*math.sin(dst13)*math.cos(lat1),math.cos(dst13)-math.sin(lat1)*math.sin(lat3))
-      lon3=((lon1-dlon+math.pi) % (2*math.pi)) - math.pi
-   end
-
-   return math.deg(lat3), -math.deg(lon3)
-end
-
 local function head_mag_to_true(deg)
    return deg + last_mag_decl
 end
