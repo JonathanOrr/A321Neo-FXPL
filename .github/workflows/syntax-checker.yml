@@ -1,4 +1,4 @@
-name: test
+name: SyntaxChecker
 
 on: [push, pull_request]
 
