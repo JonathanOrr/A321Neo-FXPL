@@ -244,7 +244,7 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_
    -- This is something unexpected, but let's skip the radial connection
    -- and go direct
    sasl.logWarning("convert_generic_CF: CF cannot find radial.", last_lat, last_lon, last_course, intercept_previous_course)
-   return extra, { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+   return extra, { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
 end
 
 local function convert_generic_FD_CD(x, last_lat, last_lon)
@@ -346,7 +346,7 @@ local function convert_generic_FC(x, last_lat, last_lon)
    local rte_dme = x.rte_hold_in_time and estimate_distance(x.rte_hold / 10.) or x.rte_hold / 10.
 
    local new_lat, new_lon = Move_along_distance_NM(x.lat, x.lon, rte_dme, outb)
-   print("FC LEG DEBUG", last_lat, last_lon, x.lat, x.lon, new_lat, new_lon, "dist", rte_dme, "", outb)
+   x.fly_over_wpt = true -- Be sure it's a fly over to avoid turning before the distance
    local new_segment = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=x.lat, start_lon=x.lon, end_lat=new_lat, end_lon=new_lon, leg_name = x.leg_name, orig_ref=x }
    return prev_connection, new_segment
 end
