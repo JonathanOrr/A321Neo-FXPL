@@ -128,8 +128,8 @@ function TestLibGeo:test_intersecting_radials_6()
     local res_lat, res_lon = intersecting_radials(lat1, lon1, lat2, lon2, angle1, angle2)
     lu.assertEquals( type(res_lat), 'number' )
     lu.assertEquals( type(res_lon), 'number' )
-    lu.assertAlmostEquals( res_lat, 50.178611, 1e-4)
-    lu.assertAlmostEquals( res_lon, -10.188611,1e-4)
+    lu.assertAlmostEquals( res_lat, 50.178611, 1e-3)
+    lu.assertAlmostEquals( res_lon, -10.188611,1e-3)
 end
 
 -- class TestLibGeo
