@@ -157,6 +157,11 @@ local function convert_generic_VI_CI(x, last_lat, last_lon, last_course, spd)
    return point
 end
 
+local function intersecting_sanity_check(lat1, lon1, lat2, lon2)
+   local MAX_ALLOWED_NM = 100
+   return get_distance_nm(lat1, lon1, lat2, lon2) < MAX_ALLOWED_NM
+end
+
 local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_previous_course, intercept_previous_x)
    assert(last_course)
 
@@ -171,66 +176,71 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_
    local temp_last_lon = last_lon
    local extra
 
-   repeat 
-      if intercept_previous_course then
-         extra = convert_generic_VI_CI(intercept_previous_x, last_lat, last_lon, intercept_previous_course, speed)
-         print("Intercepting prev course ", intercept_previous_course, " with speed ", speed, " radius ", extra and extra.radius or "???")
+   -- First of all I try the intercept with 30 deg, then, if it doesn't work, I'll try with 45
 
-         if extra then
-            temp_last_lat = extra.end_lat
-            temp_last_lon = extra.end_lon
-            last_course = extra.orig_ref.outb_mag_in_true and extra.orig_ref.outb_mag/10 or head_mag_to_true(extra.orig_ref.outb_mag/10)
-            print("if extra then", temp_last_lat, temp_last_lon, last_course)
+   local INTERCEPT_ANGLE = 30 -- From 30 to 45
 
+   while INTERCEPT_ANGLE <= 45 do
+      repeat 
+         if intercept_previous_course then
+            extra = convert_generic_VI_CI(intercept_previous_x, last_lat, last_lon, intercept_previous_course, speed)
+            print("Intercepting prev course ", intercept_previous_course, " with speed ", speed, " radius ", extra and extra.radius or "???")
+
+            if extra then
+               temp_last_lat = extra.end_lat
+               temp_last_lon = extra.end_lon
+               last_course = extra.orig_ref.outb_mag_in_true and extra.orig_ref.outb_mag/10 or head_mag_to_true(extra.orig_ref.outb_mag/10)
+               print("if extra then", temp_last_lat, temp_last_lon, last_course)
+
+            end
+
+            -- Recompute the speed for the next try
+            i = i + 1
+            speed = speed + (i%2 == 0 and - i * 10 or i * 10)
+         else
+            speed = 999 -- Exit immediately from the loop
          end
 
-         -- Recompute the speed for the next try
-         i = i + 1
-         speed = speed + (i%2 == 0 and - i * 10 or i * 10)
-      else
-         speed = 999 -- Exit immediately from the loop
-      end
+         local heading_diff = math.abs(heading_difference(last_course, outb))
+         print(temp_last_lat, temp_last_lon, "Heading diff is ", heading_diff)
+         if heading_diff < 5 then
+            -- Simple case, just keep the heading
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
 
-      local heading_diff = math.abs(heading_difference(last_course, outb))
-      print(temp_last_lat, temp_last_lon, "Heading diff is ", heading_diff)
-      if heading_diff < 5 then
-         -- Simple case, just keep the heading
-         return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
-      end
+         -- If not, we have to intercept the new course
 
-      -- If not, we have to intercept the new course
-      local INTERCEPT_ANGLE = 30 -- From 30 to 45
+         local goal_out_radial    = (outb+180+360)%360;
+         local intercept_radial_1 = (outb+INTERCEPT_ANGLE+360) % 360;
+         local intercept_radial_2 = (outb-INTERCEPT_ANGLE+360) % 360;
 
-      local goal_out_radial    = (outb+180+360)%360;
-      local intercept_radial_1 = (outb+INTERCEPT_ANGLE+360) % 360;
-      local intercept_radial_2 = (outb-INTERCEPT_ANGLE+360) % 360;
+         -- We try 3 ways to intercept the course: directly with the last course and at 45/-45 degrees
 
-      -- We try 3 ways to intercept the course: directly with the last course and at 45/-45 degrees
+         -- Try to intercept with the last course
+         print("Intersecting", temp_last_lat, temp_last_lon, x.lat, x.lon, last_course, goal_out_radial  )
+         local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, last_course, goal_out_radial)
+         if next_lat and next_lon and intersecting_sanity_check(x.lat, x.lon, next_lat, next_lon ) then
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+                  { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
 
-      -- Try to intercept with the last course
-      print("Intersecting", temp_last_lat, temp_last_lon, x.lat, x.lon, last_course, goal_out_radial  )
-      local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, last_course, goal_out_radial)
-      if next_lat and next_lon then
-         return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
-               { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
-      end
+         -- Try to intercept from the bottom (or from the forced ones)
+         local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, intercept_radial_1, goal_out_radial)
+         if next_lat and next_lon then
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+                  { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
+         
+         -- Try to intercept from the top
+         local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, intercept_radial_2, goal_out_radial)
+         if next_lat and next_lon then
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+                  { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
 
-      -- Try to intercept from the bottom (or from the forced ones)
-      local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, intercept_radial_1, goal_out_radial)
-      if next_lat and next_lon then
-         return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
-               { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
-      end
-      
-      -- Try to intercept from the top
-      local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, intercept_radial_2, goal_out_radial)
-      if next_lat and next_lon then
-         return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
-               { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
-      end
-
-   until speed > 280 -- Note: this is not the actual speed at which the aircraft will turn, it's how large is the turn
-
+      until speed > 280 -- Note: this is not the actual speed at which the aircraft will turn, it's how large is the turn
+      INTERCEPT_ANGLE = INTERCEPT_ANGLE + 15
+   end
    -- This is something unexpected, but let's skip the radial connection
    -- and go direct
    sasl.logWarning("convert_generic_CF: CF cannot find radial.", last_lat, last_lon, last_course, intercept_previous_course)
@@ -331,11 +341,12 @@ local function convert_generic_FC(x, last_lat, last_lon)
       prev_connection = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
    end
 
-   local outb_mag = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
+   local outb = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
 
    local rte_dme = x.rte_hold_in_time and estimate_distance(x.rte_hold / 10.) or x.rte_hold / 10.
 
-   local new_lat, new_lon = Move_along_distance_NM(x.lat, x.lon, rte_dme, outb_mag)
+   local new_lat, new_lon = Move_along_distance_NM(x.lat, x.lon, rte_dme, outb)
+   print("FC LEG DEBUG", last_lat, last_lon, x.lat, x.lon, new_lat, new_lon, "dist", rte_dme, "", outb)
    local new_segment = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=x.lat, start_lon=x.lon, end_lat=new_lat, end_lon=new_lon, leg_name = x.leg_name, orig_ref=x }
    return prev_connection, new_segment
 end
