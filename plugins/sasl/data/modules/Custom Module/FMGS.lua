@@ -126,6 +126,7 @@ FMGS_sys.fpln = {
             dep=nil,        -- As returned by AvionicsBay, runways included
             dep_cifp=nil,   -- All the loaded CIFP
             dep_rwy=nil,
+            dep_rwy_pt=nil, -- First point after dep runway. Computed by vertical profile
             dep_sid=nil,    -- Selected SID for departure
             dep_trans=nil,  -- Selected Transition for departure
             
@@ -379,6 +380,11 @@ local function update_cifp_loading()
 end
 
 
+local function update_takeoff_preliminary() 
+    if FMGS_sys.data.pred.require_update then
+        vertical_profile_update_pre_path()
+    end
+end
 
 local function update_predictions()
     if FMGS_sys.data.pred.require_update then
@@ -422,7 +428,14 @@ end
 
 function update()
     perf_measure_start("FMGS:update()")
+
+    -- WARNING: Do not use RETURN in this function: some function calls rely on the fact
+    -- that subsequent calls are made (update_takeoff_predictions/update_predictions)
+
     update_status()
+
+    update_takeoff_preliminary()    -- Takeoff predictions can be computed without the route and we need them
+                                    -- before computing the route (to know where the first after T/O point is)
     update_route()
     update_cifp_loading()
 

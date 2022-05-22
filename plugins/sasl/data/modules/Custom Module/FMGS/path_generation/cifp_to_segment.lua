@@ -165,8 +165,6 @@ end
 local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_previous_course, intercept_previous_x)
    assert(last_course)
 
-   print("convert_generic_CF", last_lat, last_lon, last_course, intercept_previous_course)
-
    local outb = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
 
    local speed = 210
@@ -184,14 +182,11 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_
       repeat 
          if intercept_previous_course then
             extra = convert_generic_VI_CI(intercept_previous_x, last_lat, last_lon, intercept_previous_course, speed)
-            print("Intercepting prev course ", intercept_previous_course, " with speed ", speed, " radius ", extra and extra.radius or "???")
 
             if extra then
                temp_last_lat = extra.end_lat
                temp_last_lon = extra.end_lon
                last_course = extra.orig_ref.outb_mag_in_true and extra.orig_ref.outb_mag/10 or head_mag_to_true(extra.orig_ref.outb_mag/10)
-               print("if extra then", temp_last_lat, temp_last_lon, last_course)
-
             end
 
             -- Recompute the speed for the next try
@@ -202,7 +197,6 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_
          end
 
          local heading_diff = math.abs(heading_difference(last_course, outb))
-         print(temp_last_lat, temp_last_lon, "Heading diff is ", heading_diff)
          if heading_diff < 5 then
             -- Simple case, just keep the heading
             return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
@@ -217,7 +211,6 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_
          -- We try 3 ways to intercept the course: directly with the last course and at 45/-45 degrees
 
          -- Try to intercept with the last course
-         print("Intersecting", temp_last_lat, temp_last_lon, x.lat, x.lon, last_course, goal_out_radial  )
          local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, last_course, goal_out_radial)
          if next_lat and next_lon and intersecting_sanity_check(x.lat, x.lon, next_lat, next_lon ) then
             return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
@@ -410,10 +403,8 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       elseif x.leg_type == CIFP_LEG_TYPE_VI or x.leg_type == CIFP_LEG_TYPE_CI then  -- TODO Wind
          intercept_previous_course = last_outbound_course
          intercept_previous_x = x
-         print(x.id, "VI/CI: ", intercept_previous_course)
       elseif x.leg_type == CIFP_LEG_TYPE_CF then
          leg1, leg2, leg3 = convert_generic_CF(x, last_lat, last_lon, last_outbound_course, intercept_previous_course, intercept_previous_x)
-         print(x.id, "CF")
          intercept_previous_course = nil
          intercept_previous_x = nil
       elseif x.leg_type == CIFP_LEG_TYPE_FD or x.leg_type == CIFP_LEG_TYPE_CD then
@@ -517,65 +508,73 @@ end
 
 function convert_from_FMGS_data(fpln)
 
-    local apts = FMGS_sys.fpln.active.apts
+   local apts = FMGS_sys.fpln.active.apts
 
-    local rwy_lon = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
-    local rwy_lat = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
-    local rwy_s_lon = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
-    local rwy_s_lat = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
-    local bearing = (not apts.dep_rwy[2]) and apts.dep_rwy[1].bearing or (apts.dep_rwy[1].bearing + 180) % 360
- 
-    last_mag_decl = apts.dep_rwy[1].mag_decl or 0
- 
-    local last_lat = rwy_lat
-    local last_lon = rwy_lon
-    local last_ob = bearing                              -- Outbound course
-    local last_c_alt = apts.dep.alt -- Last @ constraints altitude
-    local i_legs
-    local segments
- 
-    local final_list = {}
- 
-    local parse_section = function(name, str_desc)
-       i_legs = apts[name] and apts[name].legs
-       segments, last_lat, last_lon, last_ob, last_c_alt = convert_generic(i_legs,last_lat,last_lon,last_c_alt,last_ob)
- 
-       if debug_FMGS_path_generation then
-          print(str_desc)
-          debug_print_segments(segments)
-       end
-       for i,x in ipairs(segments) do
-          table.insert(final_list, x)
-       end
-    end
- 
-    table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_RWY_LINE, start_lat=rwy_s_lat, start_lon=rwy_s_lon, end_lat=rwy_lat, end_lon=rwy_lon, orig_ref = {}})   
- 
-    parse_section("dep_sid", "-- DEP SID --")
-    parse_section("dep_trans", "-- DEP TRANS --")
- 
- 
-    for i,x in ipairs(FMGS_sys.fpln.active.legs) do
-       if not x.discontinuity then
-          local seg = { segment_type=FMGS_COMP_SEGMENT_ENROUTE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.id, orig_ref=x }
-          last_lat = x.lat
-          last_lon = x.lon
-          table.insert(final_list, seg)
-       end
-    end
- 
-    if #FMGS_sys.fpln.active.legs >= 2 then
-       last_ob = get_bearing(final_list[#final_list].start_lat,final_list[#final_list].start_lon,final_list[#final_list].end_lat,final_list[#final_list].end_lon)
-    end
- 
-    parse_section("arr_trans", "-- ARR TRANS --")
-    parse_section("arr_star", "-- ARR STAR --")
-    parse_section("arr_via", "-- ARR VIA --")
-    parse_section("arr_appr", "-- ARR APPR --")
-    
-    if debug_FMGS_path_generation then
-       table.save( final_list, "final_list.lua" )
-    end
-    return final_list
+   local rwy_lon = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
+   local rwy_lat = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
+   local rwy_s_lon = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
+   local rwy_s_lat = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
+   local bearing = (not apts.dep_rwy[2]) and apts.dep_rwy[1].bearing or (apts.dep_rwy[1].bearing + 180) % 360
+
+   last_mag_decl = apts.dep_rwy[1].mag_decl or 0
+
+   local last_lat = rwy_lat
+   local last_lon = rwy_lon
+   local last_ob = bearing                              -- Outbound course
+   local last_c_alt = apts.dep.alt -- Last @ constraints altitude
+   local i_legs
+   local segments
+
+   local final_list = {}
+
+   local parse_section = function(name, str_desc)
+      i_legs = apts[name] and apts[name].legs
+      segments, last_lat, last_lon, last_ob, last_c_alt = convert_generic(i_legs,last_lat,last_lon,last_c_alt,last_ob)
+
+      if debug_FMGS_path_generation then
+         print(str_desc)
+         debug_print_segments(segments)
+      end
+      for i,x in ipairs(segments) do
+         table.insert(final_list, x)
+      end
+   end
+
+   table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_RWY_LINE, start_lat=rwy_s_lat, start_lon=rwy_s_lon, end_lat=rwy_lat, end_lon=rwy_lon, orig_ref = {}})   
+
+   if FMGS_sys.fpln.active.apts.dep_rwy_pt then
+      local init_pt = FMGS_sys.fpln.active.apts.dep_rwy_pt -- Initial climb point acceleration altitude
+      last_lat = init_pt.lat
+      last_lon = init_pt.lon
+      last_c_alt = init_pt.pred.altitude
+      table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=rwy_lat, start_lon=rwy_lon, end_lat=init_pt.lat, end_lon=init_pt.lon, orig_ref = init_pt})   
+   end
+
+   parse_section("dep_sid", "-- DEP SID --")
+   parse_section("dep_trans", "-- DEP TRANS --")
+
+
+   for i,x in ipairs(FMGS_sys.fpln.active.legs) do
+      if not x.discontinuity then
+         local seg = { segment_type=FMGS_COMP_SEGMENT_ENROUTE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.id, orig_ref=x }
+         last_lat = x.lat
+         last_lon = x.lon
+         table.insert(final_list, seg)
+      end
+   end
+
+   if #FMGS_sys.fpln.active.legs >= 2 then
+      last_ob = get_bearing(final_list[#final_list].start_lat,final_list[#final_list].start_lon,final_list[#final_list].end_lat,final_list[#final_list].end_lon)
+   end
+
+   parse_section("arr_trans", "-- ARR TRANS --")
+   parse_section("arr_star", "-- ARR STAR --")
+   parse_section("arr_via", "-- ARR VIA --")
+   parse_section("arr_appr", "-- ARR APPR --")
+   
+   if debug_FMGS_path_generation then
+      table.save( final_list, "final_list.lua" )
+   end
+   return final_list
  
 end

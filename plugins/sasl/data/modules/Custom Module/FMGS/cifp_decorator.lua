@@ -185,6 +185,8 @@ function decorate_cifp_point(apt_ref, x)    -- Load LAT/LON of all the entities 
            x.leg_type == CIFP_LEG_TYPE_VM
     then
         -- Nothing to do for these legs
+    elseif x.leg_type == CIFP_LEG_TYPE_NULL then
+        -- Nothing to do for null legs
     else
         assert(false, "Unknown CIFP leg type, this shouldn't occur.")
     end

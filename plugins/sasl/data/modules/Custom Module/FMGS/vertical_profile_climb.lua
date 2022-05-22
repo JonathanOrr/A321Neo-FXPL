@@ -147,3 +147,42 @@ function get_target_speed_climb(altitude, gross_weight)
     optimal_mach = math.min(optimal_mach, cruise_mach)
     return optimal_speed, optimal_mach
 end
+
+function create_first_point_after_rwy()
+    assert(FMGS_sys.fpln.active.apts.dep)
+    assert(FMGS_sys.fpln.active.apts.dep_rwy)
+    assert(FMGS_sys.data.pred.takeoff.dist_to_vacc)
+    local apt = FMGS_sys.fpln.active.apts.dep
+    local dist = FMGS_sys.data.pred.takeoff.dist_to_vacc
+    local time = FMGS_sys.data.pred.takeoff.time_to_vacc
+    local rwy  = FMGS_sys.fpln.active.apts.dep_rwy
+    local lat = rwy[2] and rwy[1].lat or rwy[1].s_lat
+    local lon = rwy[2] and rwy[1].lon or rwy[1].s_lon
+    local mag = (rwy[2] and 180 or 0) + rwy[1].bearing
+    local _,_,v2 = FMGS_perf_get_v_speeds()
+    local acc_alt = FMGS_get_takeoff_acc()
+    local fuel = FMGS_sys.data.init.weights.block_fuel * 1000 - FMGS_sys.data.pred.takeoff.total_fuel_kgs
+    local new_lat, new_lon = Move_along_distance_NM(lat, lon, dist, mag)
+
+    local x = {
+        computed_distance = dist,
+        lat = new_lat,
+        lon = new_lon,
+        airway_name = string.sub(apt.id, 1, 3) .. Fwd_string_fill(tostring(Round(mag)), "0", 0),
+        id = tostring(math.floor(acc_alt)),
+        is_trk = false,
+        bearing = mag,
+        fly_over_wpt = true,
+        leg_type = CIFP_LEG_TYPE_NULL,
+
+        pred = {
+            ias = v2 + 10,
+            altitude = apt.alt + acc_alt,
+            time = time,
+            fuel = fuel
+        }
+    }
+    
+    FMGS_sys.fpln.active.apts.dep_rwy_pt = x
+
+end

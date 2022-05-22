@@ -121,8 +121,13 @@ function update_route()
     local dep_rwy, sibl = FMGS_dep_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)
     if dep_rwy then
         init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
+
+        if FMGS_sys.fpln.active.apts.dep_rwy_pt then
+            dist, init_pt  = update_cifp(fpln.apts.dep, {legs={FMGS_sys.fpln.active.apts.dep_rwy_pt}}, init_pt)
+            total_distance = total_distance + dist
+        end
     end
-    
+
     dist, init_pt  = update_cifp(fpln.apts.dep, fpln.apts.dep_sid, init_pt)
     total_distance = total_distance + dist
     dist, init_pt  = update_cifp(fpln.apts.dep, fpln.apts.dep_trans, init_pt)

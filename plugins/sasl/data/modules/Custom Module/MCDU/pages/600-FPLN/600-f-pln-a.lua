@@ -181,6 +181,15 @@ end
 -- Prepare list
 -------------------------------------------------------------------------------
 function THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
+
+    if FMGS_sys.fpln.active.apts.dep_rwy_pt then
+        local x = FMGS_sys.fpln.active.apts.dep_rwy_pt
+        x.ref_id = 0
+        x.point_type = POINT_TYPE_PSUEDO
+        table.insert(list_messages, x)
+    end
+
+
     if mcdu_data.page_data[600].curr_fpln.apts.dep_sid then
         for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs) do
             x.ref_id = i
@@ -449,14 +458,14 @@ function THIS_PAGE:render_list(mcdu_data)
                     alt = alt_cstr,
                     alt_col = alt_cstr_col,
                     proc_name = proc,
-                    bearing = nil,
-                    is_trk = nil,
+                    bearing = x.bearing and x.bearing or nil,
+                    is_trk = x.is_trk ~= nil and x.is_trk or nil,
                     distance = distance,
                     is_arpt = false,
                     is_the_first = i == 2,
                     spd_cstr_status = spd_cstr_status,
                     alt_cstr_status = alt_cstr_status
-                } 
+                }
                 THIS_PAGE:render_single(mcdu_data, line_id, data)
             end, x)
         end

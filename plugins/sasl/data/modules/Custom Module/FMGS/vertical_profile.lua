@@ -214,6 +214,8 @@ end
 local function vertical_profile_reset()
     FMGS_sys.data.pred.invalid = false
 
+    FMGS_sys.fpln.active.apts.dep_rwy_pt = nil
+
     FMGS_sys.data.pred.trip_fuel = nil
     FMGS_sys.data.pred.trip_time = nil
     FMGS_sys.data.pred.efob      = nil
@@ -1313,38 +1315,41 @@ local function update_overall_predictions()
     end
 end
 
-function vertical_profile_update()
-
-    -- Start with reset
-    vertical_profile_reset()
+local function run_basic_checks()
     FMGS_sys.pred_internals.why_prediction_failed = 0
 
     if not FMGS_sys.fpln.active or not FMGS_sys.fpln.active.apts.dep then
         -- No F/PLN or no departure airtport?
         FMGS_sys.pred_internals.why_prediction_failed = 1
-        return
+        return false
     end
 
     if not FMGS_sys.fpln.active.apts.dep_rwy then
         FMGS_sys.pred_internals.why_prediction_failed = 9
-        return
+        return false
     end
 
     if not FMGS_sys.data.init.weights.zfw or not FMGS_sys.data.init.weights.block_fuel or not FMGS_sys.data.init.weights.taxi_fuel then
         -- We need the weight and fuel my man
         FMGS_sys.pred_internals.why_prediction_failed = 2
-        return
+        return false
     end
 
     if not FMGS_sys.data.init.crz_fl then
         -- We need also the Cruise FL...
         FMGS_sys.pred_internals.why_prediction_failed = 3
-        return
+        return false
     end
 
-    if not FMGS_sys.fpln.active.apts.arr or not FMGS_sys.fpln.active.apts.arr_appr then
-        -- No approach / arr airtport?
-        FMGS_sys.pred_internals.why_prediction_failed = 4
+    return true
+
+end
+
+function vertical_profile_update_pre_path()
+    -- Start with reset
+    vertical_profile_reset()
+
+    if not run_basic_checks() then
         return
     end
 
@@ -1354,6 +1359,20 @@ function vertical_profile_update()
     if not fuel_consumed or fuel_consumed > FMGS_sys.data.init.weights.block_fuel*1000 then
         FMGS_sys.pred_internals.why_prediction_failed = 5
         return -- Cannot make any other prediction
+    end
+
+    create_first_point_after_rwy() -- Fill FMGS_sys.fpln.active.apts.dep_rwy_pt
+end
+
+function vertical_profile_update()
+    if not run_basic_checks() or FMGS_sys.pred_internals.why_prediction_failed ~= 0 then
+        return
+    end
+
+    if not FMGS_sys.fpln.active.apts.arr or not FMGS_sys.fpln.active.apts.arr_appr then
+        -- No approach / arr airtport?
+        FMGS_sys.pred_internals.why_prediction_failed = 4
+        return
     end
 
     prepare_the_common_big_array()
