@@ -86,13 +86,17 @@ function THIS_PAGE:render(mcdu_data)
             self:set_line(mcdu_data, MCDU_LEFT, 2, " DES SPD LIM", MCDU_SMALL)
         end
 
-        if FMGS_sys.data.init.alt_speed_limit_climb then
+        local alt_speed_limit
+        if mcdu_data.page_data[608].is_clb_or_desc == 1 then
+            alt_speed_limit = FMGS_init_get_alt_speed_limit_climb()
+        elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
+            alt_speed_limit = FMGS_init_get_alt_speed_limit_descent()
+        end
+        if alt_speed_limit then
             -- ex: 210/5000 or 210/50.
-            local text = FMGS_sys.data.init.alt_speed_limit_climb[1].."/"..FMGS_sys.data.init.alt_speed_limit_climb[2]
-            text = (FMGS_sys.data.init.alt_speed_limit_climb[1] == 250 and FMGS_sys.data.init.alt_speed_limit_climb[2] == 10000) and mcdu_format_force_to_small(text) or text
+            local text = alt_speed_limit[1].."/"..alt_speed_limit[2]
+            text = (alt_speed_limit[1] == 250 and alt_speed_limit[2] == 10000) and mcdu_format_force_to_small(text) or text
             self:set_line(mcdu_data, MCDU_LEFT, 2, text, MCDU_LARGE, ECAM_MAGENTA)
-        else
-            self:set_line(mcdu_data, MCDU_LEFT, 2, "[  ]/[     ]", MCDU_LARGE, ECAM_MAGENTA)
         end
     end
 
@@ -174,10 +178,12 @@ end
 function THIS_PAGE:L2(mcdu_data)
     if mcdu_data.clr then   -- A clear is requested
         if mcdu_data.page_data[608].is_clb_or_desc == 1 then
-            FMGS_sys.data.init.alt_speed_limit_climb = nil
+            FMGS_init_reset_alt_speed_limit_climb()
+            mcdu_data.clear_the_clear()
             return
         elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
-            FMGS_sys.data.init.alt_speed_limit_descent = nil
+            FMGS_init_reset_alt_speed_limit_descent()
+            mcdu_data.clear_the_clear()
             return
         end
     else
@@ -188,12 +194,11 @@ function THIS_PAGE:L2(mcdu_data)
             if b < 1000 then
                 b = b * 100
             end
-            local new_limit = {tonumber(a), b}
             if mcdu_data.page_data[608].is_clb_or_desc == 1 then
-                FMGS_sys.data.init.alt_speed_limit_climb = new_limit
+                FMGS_init_set_alt_speed_limit_climb(tonumber(a), b)
                 return
             elseif mcdu_data.page_data[608].is_clb_or_desc == 2 then
-                FMGS_sys.data.init.alt_speed_limit_descent = new_limit
+                FMGS_init_set_alt_speed_limit_descent(tonumber(a), b)
                 return
             end
         end
@@ -206,23 +211,28 @@ function THIS_PAGE:L3(mcdu_data)
     local subject = mcdu_data.vert_rev_subject
     if mcdu_data.clr then   -- A clear is requested
         subject.data.cstr_speed_type = CIFP_CSTR_SPD_NONE
-        mcdu_open_page(mcdu_data, 600)
+        mcdu_data.clear_the_clear()
+        FMGS_refresh_pred()
     else
         local a = mcdu_get_entry(mcdu_data, {"!!!"}, false)
         a = tonumber(a)
         if a == nil then
-            MCDU_Page:L3(mcdu_data) -- Error
+            mcdu_send_message(mcdu_data, "FORMAT ERROR")
             return
         end
 
+        if a > 400 or a < 120 then
+            mcdu_send_message(mcdu_data, "OUT OF RANGE")
+            return
+        end
         if mcdu_data.page_data[608].is_clb_or_desc > 0 then
             subject.data.cstr_speed_type = CIFP_CSTR_SPD_BELOW
             subject.data.cstr_speed = a
-            mcdu_open_page(mcdu_data, 600)
         else
             mcdu_data.page_data[608].ask_clb_des = true
             mcdu_data.page_data[608].to_set_spd = {CIFP_CSTR_SPD_BELOW, a}
         end
+        FMGS_refresh_pred()
     end
 end
 
@@ -236,7 +246,8 @@ function THIS_PAGE:R3(mcdu_data)
 
     if mcdu_data.clr then   -- A clear is requested
         subject.data.cstr_alt_type = CIFP_CSTR_ALT_NONE
-        mcdu_open_page(mcdu_data, 600)
+        mcdu_data.clear_the_clear()
+        FMGS_refresh_pred()
     else
         local cstr_type = CIFP_CSTR_ALT_AT
         local entry = mcdu_data.entry.text
@@ -247,9 +258,7 @@ function THIS_PAGE:R3(mcdu_data)
         end
         local a = mcdu_parse_entry(string.sub(entry, cstr_type ~= CIFP_CSTR_ALT_AT and 2 or 1, -1), {"altitude"})
         a = tonumber(a)
-        if a then
-            a = a * 100;
-
+        if a and a >= 500 and a <= 40000 then
             if mcdu_data.page_data[608].is_clb_or_desc > 0 then
                 subject.data.cstr_alt_type  = cstr_type
                 subject.data.cstr_altitude1 = a
@@ -259,6 +268,10 @@ function THIS_PAGE:R3(mcdu_data)
                 mcdu_data.page_data[608].to_set_alt = {cstr_type, a}
             end
             mcdu_data.entry = {text="", color=nil}
+            FMGS_refresh_pred()
+        elseif a then
+            mcdu_send_message(mcdu_data, "OUT OF RANGE")
+            return -- Error
         else
             mcdu_send_message(mcdu_data, "FORMAT ERROR")
             return -- Error

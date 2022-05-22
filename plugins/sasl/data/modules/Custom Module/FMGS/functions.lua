@@ -199,6 +199,35 @@ function FMGS_init_get_land_weight()
     end
 end
 
+function FMGS_init_reset_alt_speed_limit_climb()
+    FMGS_sys.data.init.alt_speed_limit_climb = {250, 10000} -- To default data
+    FMGS_refresh_pred()
+end
+
+function FMGS_init_reset_alt_speed_limit_descent()
+    FMGS_sys.data.init.alt_speed_limit_descent = {250, 10000} -- To default data
+    FMGS_refresh_pred()
+end
+
+function FMGS_init_set_alt_speed_limit_climb(spd, alt)
+    FMGS_sys.data.init.alt_speed_limit_climb = {spd, alt}
+    FMGS_refresh_pred()
+end
+
+function FMGS_init_set_alt_speed_limit_descent(spd, alt)
+    FMGS_sys.data.init.alt_speed_limit_descent = {spd, alt}
+    FMGS_refresh_pred()
+end
+
+function FMGS_init_get_alt_speed_limit_climb()
+    return FMGS_sys.data.init.alt_speed_limit_climb
+end
+
+function FMGS_init_get_alt_speed_limit_descent()
+    return FMGS_sys.data.init.alt_speed_limit_descent
+end
+
+
 -------------------------------------------------------------------------------
 -- Predictions
 -------------------------------------------------------------------------------
