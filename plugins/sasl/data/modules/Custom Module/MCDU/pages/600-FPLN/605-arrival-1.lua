@@ -124,7 +124,7 @@ function THIS_PAGE:render_apprs(mcdu_data)
                 local top_line = Aft_string_fill(arrow .. full_name, " ", 11) .. (data.rwy_info and data.rwy_info[1] .. mcdu_format_force_to_small("M") or "")
                 local bottom_line = "   " .. Aft_string_fill(data.rwy_info and Fwd_string_fill(""..data.rwy_info[2], "0", 3) or "", " ", 5)
                 if data.ils_info then
-                    bottom_line = bottom_line .. (data.ils_info[1] and data.ils_info[1] or "") .. (data.ils_info[2] and "/".. data.ils_info[2] or "")
+                    bottom_line = bottom_line .. " " .. (data.ils_info[1] and data.ils_info[1] or "") .. (data.ils_info[2] and "/".. data.ils_info[2] or "")
                 end
                 
                 self:set_line(mcdu_data, MCDU_LEFT, n_line, top_line, MCDU_LARGE, ECAM_BLUE)

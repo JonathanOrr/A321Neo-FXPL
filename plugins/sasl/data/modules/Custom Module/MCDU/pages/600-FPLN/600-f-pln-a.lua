@@ -34,18 +34,18 @@ local function get_wind_str(leg)
     local format_wind_num = function(num) return Fwd_string_fill(Round(num,0).."", " ", 3) end
 
     if not leg.pred or not leg.pred.altitude then
-        return err_str
+        return err_str, ECAM_WHITE
     elseif is_climb then
         local wind = FMGS_winds_get_climb_at_alt(leg.pred.altitude)
-        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str
+        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str, wind and ECAM_GREEN or ECAM_WHITE
     elseif is_descent then
         local wind = FMGS_winds_get_descent_at_alt(leg.pred.altitude)
-        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str
+        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str, wind and ECAM_GREEN or ECAM_WHITE
     elseif leg.winds then
         local wind = FMGS_winds_get_cruise_at_alt(leg.pred.altitude, leg.winds)
-        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str
+        return wind and (format_wind_num(wind.dir) .. "°/" .. format_wind_num(wind.spd)) or err_str, wind and ECAM_GREEN or ECAM_WHITE
     else
-        return err_str
+        return err_str, ECAM_WHITE
     end
 end
 
@@ -150,7 +150,7 @@ function THIS_PAGE:render_single(mcdu_data, i, data)
 
     self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
     self:add_multi_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, data.spd and main_col or ECAM_WHITE)
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, mcdu_data.page_data[600].is_b_page and main_col or (data.alt_col or main_col))
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, mcdu_data.page_data[600].is_b_page and (data.wind_col or main_col) or (data.alt_col or main_col))
 
     if not mcdu_data.page_data[600].is_b_page and data.spd_cstr_status and data.spd_cstr_status > 0 then
         self:add_multi_line(mcdu_data, MCDU_CENTER, i, "   " .. mcdu_format_force_to_small("*"), MCDU_LARGE, data.spd_cstr_status == CSTR_MET and ECAM_MAGENTA or ECAM_ORANGE)
@@ -411,11 +411,13 @@ function THIS_PAGE:render_list(mcdu_data)
             local efob = get_efob(x)
             self:add_f(mcdu_data, function(line_id)
                 local spd_cstr_str = (spd_cstr_req_elipses and line_id ~= 1) and "\"" or spd_cstr
+                local wind_str, wind_col = get_wind_str(x)
                 local data = {
                     id = name,
                     time = time,
                     efob = efob,
-                    wind = get_wind_str(x), 
+                    wind = wind_str,
+                    wind_col = wind_col,
                     spd = spd_cstr_str,
                     alt = alt_cstr,
                     alt_col = alt_cstr_col,
@@ -449,11 +451,13 @@ function THIS_PAGE:render_list(mcdu_data)
             self:add_f(mcdu_data, function(line_id)
                 local spd_cstr_str = (spd_cstr_req_elipses and line_id ~= 1) and "\"" or spd_cstr
                 local time = x.pred and mcdu_time_beautify(x.pred.time) or "----"
+                local wind_str, wind_col = get_wind_str(x)
                 local data = {
                     id = name,
                     time = time, 
                     efob = efob,
-                    wind = get_wind_str(x), 
+                    wind = wind_str,
+                    wind_col = wind_col, 
                     spd = spd_cstr_str,
                     alt = alt_cstr,
                     alt_col = alt_cstr_col,

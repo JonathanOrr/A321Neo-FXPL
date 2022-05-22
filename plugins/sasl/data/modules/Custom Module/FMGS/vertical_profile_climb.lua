@@ -161,7 +161,7 @@ function create_first_point_after_rwy()
     local mag = (rwy[2] and 180 or 0) + rwy[1].bearing
     local _,_,v2 = FMGS_perf_get_v_speeds()
     local acc_alt = FMGS_get_takeoff_acc()
-    local fuel = FMGS_sys.data.init.weights.block_fuel * 1000 - FMGS_sys.data.pred.takeoff.total_fuel_kgs
+    local fuel = FMGS_sys.data.pred.takeoff.total_fuel_kgs
     local new_lat, new_lon = Move_along_distance_NM(lat, lon, dist, mag)
 
     local x = {
