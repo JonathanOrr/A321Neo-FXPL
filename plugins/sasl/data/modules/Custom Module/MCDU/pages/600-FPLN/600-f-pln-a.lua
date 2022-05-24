@@ -140,7 +140,9 @@ function THIS_PAGE:render_single(mcdu_data, i, data)
     data.time = data.is_arpt and data.time or mcdu_format_force_to_small(data.time) -- TIME is small only for airports
     data.efob = data.is_arpt and data.efob or mcdu_format_force_to_small(data.efob) -- EFOB is small only for airports
 
-    local left_side  = Aft_string_fill(data.id, " ", 8) .. (mcdu_data.page_data[600].is_b_page and data.efob or data.time)
+    local efob_time_computed = (mcdu_data.page_data[600].is_b_page and data.efob or data.time) ~= "----"
+    local left_side  = Aft_string_fill(data.id, " ", 8)
+    local left_side_b = "        " .. (mcdu_data.page_data[600].is_b_page and data.efob or data.time)
     local ctr_side   = mcdu_data.page_data[600].is_b_page and "" or (data.spd and data.spd or "---")
     local right_side = mcdu_data.page_data[600].is_b_page and data.wind or ("/" .. Fwd_string_fill(data.alt or "", " ", 6))
     if not data.is_arpt then
@@ -148,7 +150,8 @@ function THIS_PAGE:render_single(mcdu_data, i, data)
         right_side = mcdu_format_force_to_small(right_side)
     end
 
-    self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, i, left_side_b, MCDU_LARGE, efob_time_computed and main_col or ECAM_WHITE)
     self:add_multi_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, data.spd and main_col or ECAM_WHITE)
     self:add_multi_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, mcdu_data.page_data[600].is_b_page and (data.wind_col or main_col) or (data.alt_col or main_col))
 
@@ -652,11 +655,9 @@ function THIS_PAGE:render(mcdu_data)
         end
         mcdu_data.page_data[600].in_direct_add = nil
     end
-
-    local from_ppos = mcdu_data.page_data[600].curr_idx == 1 and (mcdu_data.page_data[600].curr_fpln.apts.dep and "FROM" or "PPOS") or ""
     
     self:set_multi_title(mcdu_data, {
-        {txt=Aft_string_fill(from_ppos, " ", 22), col=ECAM_WHITE, size=MCDU_SMALL},
+        {txt=Aft_string_fill("FROM", " ", 22), col=ECAM_WHITE, size=MCDU_SMALL},
         {txt=Aft_string_fill(mcdu_data.page_data[600].curr_fpln == FMGS_does_temp_fpln_exist() and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
         {txt=Fwd_string_fill(FMGS_init_get_flt_nbr() and FMGS_init_get_flt_nbr() or "", " ", 20) .. "  ", col=ECAM_WHITE, size=MCDU_SMALL}
     })
@@ -665,6 +666,19 @@ function THIS_PAGE:render(mcdu_data)
     self:set_updn_arrows_bottom(mcdu_data, false)
 
     if mcdu_data.page_data[600].curr_fpln.apts.dep == nil or mcdu_data.page_data[600].curr_fpln.apts.arr == nil then
+        local data = {
+            id = "PPOS",
+            time = "----",
+            efob = "----",
+            wind = "---",
+            spd = "",
+            alt = "-----",
+            wind_col = ECAM_WHITE,
+            alt_col = ECAM_WHITE,
+            proc_name = "",
+            is_arpt = true
+        } 
+        self:render_single(mcdu_data, 1, data)
         self:set_line(mcdu_data, MCDU_LEFT, 2, "------END OF F-PLN------", MCDU_LARGE)
         return
     end
