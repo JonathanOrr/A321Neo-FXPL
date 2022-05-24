@@ -16,10 +16,12 @@
 
 local THIS_PAGE = MCDU_Page:new({id=603})
 
-THIS_PAGE.curr_page = 1
-
 function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 1)
+
+    if not mcdu_data.page_data[THIS_PAGE.id] then
+        mcdu_data.page_data[THIS_PAGE.id] = { curr_page = 1 }
+    end
 
     local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
 
@@ -67,7 +69,7 @@ function THIS_PAGE:render(mcdu_data)
     local n = 2
     local last_showed = true
     for i,rwy in ipairs(mcdu_data.lat_rev_subject.data.rwys) do
-        if i > 2 * (THIS_PAGE.curr_page-1) and i <= 2 * (THIS_PAGE.curr_page) then
+        if i > 2 * (mcdu_data.page_data[THIS_PAGE.id].curr_page-1) and i <= 2 * (mcdu_data.page_data[THIS_PAGE.id].curr_page) then
 
             local arrow = (sel_rwy and rwy.name == sel_rwy.name and not sibl) and " " or "←"
             self:set_line(mcdu_data, MCDU_LEFT, n, arrow .. Aft_string_fill(rwy.name, " ", 9) .. math.floor(rwy.distance) .. "M", MCDU_LARGE, ECAM_BLUE)
@@ -95,7 +97,7 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:sel_rwy(mcdu_data, i)
-    local start_rwy = 2*(THIS_PAGE.curr_page-1)
+    local start_rwy = 2*(mcdu_data.page_data[THIS_PAGE.id].curr_page-1)
     
     local sel_rwy_i = start_rwy + math.ceil(i/2)
     if sel_rwy_i > 2*#mcdu_data.lat_rev_subject.data.rwys then
@@ -129,18 +131,18 @@ function THIS_PAGE:L6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if THIS_PAGE.curr_page <= 1 then
+    if mcdu_data.page_data[THIS_PAGE.id].curr_page <= 1 then
         MCDU_Page:Slew_Up(mcdu_data)
     else
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page - 1
+        mcdu_data.page_data[THIS_PAGE.id].curr_page = mcdu_data.page_data[THIS_PAGE.id].curr_page - 1
     end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    if math.ceil(#mcdu_data.lat_rev_subject.data.rwys / 2) <= THIS_PAGE.curr_page then
+    if math.ceil(#mcdu_data.lat_rev_subject.data.rwys / 2) <= mcdu_data.page_data[THIS_PAGE.id].curr_page then
         MCDU_Page:Slew_Down(mcdu_data)
     else
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+        mcdu_data.page_data[THIS_PAGE.id].curr_page = mcdu_data.page_data[THIS_PAGE.id].curr_page + 1
     end
 end
 

@@ -16,10 +16,6 @@
 
 local THIS_PAGE = MCDU_Page:new({id=605})
 
-THIS_PAGE.curr_page = 1
-THIS_PAGE.apprs_length = 0
-THIS_PAGE.apprs_references = {0,0,0,0}
-
 local function extract_rwy_name(proc_name)
 
     if proc_name == "VORA" or  proc_name == "VORB" or proc_name == "VOR-A" or proc_name == "VOR-B"
@@ -44,10 +40,10 @@ local function extract_rwy_name(proc_name)
     return rwy_name
 end
 
-function THIS_PAGE:get_runway_info(rwy_name)
+function THIS_PAGE:get_runway_info(mcdu_data, rwy_name)
     local rwy_info, ils_info, rwy_obj, rwy_sibl
 
-    for k,x in ipairs(THIS_PAGE.curr_fpln.apts.arr.rwys) do
+    for k,x in ipairs(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.arr.rwys) do
         if x.name == rwy_name then
             rwy_info = {math.floor(x.distance), math.floor(x.bearing)}
             rwy_obj = x
@@ -62,7 +58,7 @@ function THIS_PAGE:get_runway_info(rwy_name)
         end
     end
 
-    for k,x in ipairs(THIS_PAGE.curr_fpln.apts.arr_cifp.rwys) do
+    for k,x in ipairs(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.arr_cifp.rwys) do
         if x.name == rwy_name then
 
             local nav_aid  = AvionicsBay.navaids.get_by_name(NAV_ID_LOC, x.loc_ident, false)
@@ -80,18 +76,18 @@ function THIS_PAGE:get_runway_info(rwy_name)
 end
 
 function THIS_PAGE:render_apprs(mcdu_data)
-    if not THIS_PAGE.curr_fpln.apts.arr_cifp then
+    if not mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.arr_cifp then
         return  -- This should not happen
     end
     
     local apprs_list = {}
-    THIS_PAGE.apprs_length = 0
+    mcdu_data.page_data[THIS_PAGE.id].apprs_length = 0
     
     for i=1,20 do
         apprs_list[i] = {}
     end
 
-    for i,x in ipairs(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs) do
+    for i,x in ipairs(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.arr_cifp.apprs) do
         local type_idx, type_str = appr_type_char_to_idx(x.type)
         if type_idx ~= nil then
             local rwy_name = extract_rwy_name(x.proc_name)
@@ -100,13 +96,13 @@ function THIS_PAGE:render_apprs(mcdu_data)
             if #rwy_name > 0 then
                 -- Only if a runway name has been found
                 rwy_name_with_suffix = x.proc_name:sub(2)
-                rwy_info, ils_info, rwy_obj, rwy_sibl= self:get_runway_info(rwy_name)
+                rwy_info, ils_info, rwy_obj, rwy_sibl= self:get_runway_info(mcdu_data, rwy_name)
             else
                 rwy_name_with_suffix = x.proc_name:sub(4)
             end
 
             table.insert(apprs_list[type_idx], {name=rwy_name_with_suffix, idx=i, prefix=type_str, rwy_info=rwy_info, ils_info=ils_info, rwy_obj=rwy_obj, rwy_sibl=rwy_sibl})
-            THIS_PAGE.apprs_length = THIS_PAGE.apprs_length + 1
+            mcdu_data.page_data[THIS_PAGE.id].apprs_length = mcdu_data.page_data[THIS_PAGE.id].apprs_length + 1
         end
     end
     
@@ -117,7 +113,7 @@ function THIS_PAGE:render_apprs(mcdu_data)
     for _,data_content in ipairs(apprs_list) do
         for _,data in pairs(data_content) do
             i = i + 1
-            if i > 3 * (THIS_PAGE.curr_page-1) and i <= 3 * (THIS_PAGE.curr_page) then
+            if i > 3 * (mcdu_data.page_data[THIS_PAGE.id].curr_page-1) and i <= 3 * (mcdu_data.page_data[THIS_PAGE.id].curr_page) then
                 local full_name = data.prefix .. data.name
                 local select_appr_name = dest_get_selected_appr_procedure()
                 local arrow = (select_appr_name and select_appr_name == full_name) and " " or "←"
@@ -159,12 +155,16 @@ end
 function THIS_PAGE:render(mcdu_data)
 
     if not mcdu_data.page_data[605] then
-        mcdu_data.page_data[605] = {}
+        mcdu_data.page_data[605] = {
+            curr_page = 1,
+            apprs_length = 0,
+            apprs_references = {0,0,0,0}
+        }
     end
 
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 4)
-    THIS_PAGE.main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
-    THIS_PAGE.curr_fpln = FMGS_get_current_fpln()
+    mcdu_data.page_data[THIS_PAGE.id].main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
+    mcdu_data.page_data[THIS_PAGE.id].curr_fpln = FMGS_get_current_fpln()
 
     self:set_lr_arrows(mcdu_data, true)
 
@@ -205,7 +205,7 @@ function THIS_PAGE:sel_appr(mcdu_data, i)
     FMGS_reset_arr_star()
     FMGS_reset_arr_via()
     FMGS_reset_arr_trans()
-    FMGS_arr_set_appr(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs[data.idx], data.rwy_obj, data.rwy_sibl)
+    FMGS_arr_set_appr(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.arr_cifp.apprs[data.idx], data.rwy_obj, data.rwy_sibl)
     mcdu_open_page(mcdu_data, 606)
 end
 
@@ -224,18 +224,18 @@ function THIS_PAGE:L6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if THIS_PAGE.curr_page <= 1 then
+    if mcdu_data.page_data[THIS_PAGE.id].curr_page <= 1 then
         MCDU_Page:Slew_Down(mcdu_data)
     else
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page - 1
+        mcdu_data.page_data[THIS_PAGE.id].curr_page = mcdu_data.page_data[THIS_PAGE.id].curr_page - 1
     end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    if math.floor(THIS_PAGE.apprs_length / 3) <= THIS_PAGE.curr_page then
+    if math.floor(mcdu_data.page_data[THIS_PAGE.id].apprs_length / 3) <= mcdu_data.page_data[THIS_PAGE.id].curr_page then
         MCDU_Page:Slew_Up(mcdu_data)
     else
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+        mcdu_data.page_data[THIS_PAGE.id].curr_page = mcdu_data.page_data[THIS_PAGE.id].curr_page + 1
     end
 end
 
