@@ -17,12 +17,18 @@
 -------------------------------------------------------------------------------
 
 include('FMGS/route.lua')
+include('FMGS/limits.lua')
+include('FMGS/vertical_profile.lua')
+include('FMGS/constraints_checker.lua')
+
+local TIME_TO_GET_WIND = 5 -- in seconds
 
 local loading_cifp = 0
 
 local config = {
     status = FMGS_MODE_OFF,
     phase  = FMGS_PHASE_PREFLIGHT,
+    takeoff_time = nil,     -- In simulator time, from get(TIME)
     master = 0,
     backup_req = false,
     gps_primary = false,
@@ -33,27 +39,86 @@ FMGS_sys.config = config
 FMGS_sys.data = {
     init = {
         flt_nbr = nil,
-        cost_index = nil,
-        crz_fl = nil,
-        crz_temp = nil,
+        cost_index = 10,
+        crz_fl = 27000,
+        crz_temp = 0,
         tropo = 36090,
         weights = {
             taxi_fuel = 0.2,
-            zfw   = nil, -- zero fuel weight
+            zfw   = 68.0, -- zero fuel weight
             zfwcg = nil, -- zero fuel weight center of gravity
-            block_fuel = nil, -- Existing known fuel load
+            block_fuel = 12.0, -- Existing known fuel load
             rsv_fuel_perc = 5.0,
             rsv_fuel      = nil,
-        }
+            min_dest_fob  = nil,
+        },
+        alt_speed_limit_climb   = {250, 10000},
+        alt_speed_limit_descent = {250, 10000}
     },
-    
+
+    limits = {
+        max_alt = nil,
+        opt_alt = nil
+    },
+
     pred = {    -- Various predictions
+                ----------------------------------------------------------------------
+                -- NOTE! ADD the default value also to vertical_profile_reset() !
+                ----------------------------------------------------------------------
+        invalid = false,
         trip_fuel = nil,
         trip_time = nil,
         trip_dist = nil,
-        efob = nil,
+        efob = nil,         -- At destination
+        require_update = false,
+
+        takeoff = {
+            gdot = nil,
+            ROC_init = nil,
+            total_fuel_kgs = nil,
+            time_to_400ft = 0,  -- In secs  -- From RWY to 400ft
+            dist_to_400ft = 0,  -- In nm    -- From RWY to 400ft
+            time_to_sec_climb = 0,  -- In secs -- Accelerate at 400ft
+            dist_to_sec_climb = 0,  -- In nm   -- Accelerate at 400ft
+            time_to_vacc = 0,  -- In secs   -- Climb from 400 to acc alt
+            dist_to_vacc = 0,  -- In nm     -- Climb from 400 to acc alt
+        },
+
+        climb = {
+            total_fuel_kgs = nil,
+            lim_wpt = nil, -- The 10000ft/250kts point
+            toc_wpt = nil
+        },
+
+        descent = {
+            tod_wpt = nil,
+            lim_wpt = nil, -- The 10000ft/250kts point
+        },
+
+        appr = {
+            fdp_idx = nil,
+            fdp_dist_to_rwy = nil,
+            final_angle = 3,    -- Default to 3, always positive (descent angle)
+            steps = {
+                {},     -- 1000ft
+                {},     -- FLAP FULL (may have skip=true if FLAP 3 config)
+                {},     -- FLAP 3
+                {},     -- FDP
+                {},     -- FLAP 2
+                {},     -- FLAP 1
+                {}      -- DECEL
+            }
+        }
     },
+
+    nav_accuracy = 0.0,
+
+    -- Winds (cruise winds are in each WPT)
+    winds_climb = {},
+    winds_descent = {},
+    winds_req_in_progress_time = -1  -- <0 if not in progress, get(TIME) if yes
 }
+
 FMGS_sys.fpln = {
 
     active = {
@@ -61,6 +126,7 @@ FMGS_sys.fpln = {
             dep=nil,        -- As returned by AvionicsBay, runways included
             dep_cifp=nil,   -- All the loaded CIFP
             dep_rwy=nil,
+            dep_rwy_pt=nil, -- First point after dep runway. Computed by vertical profile
             dep_sid=nil,    -- Selected SID for departure
             dep_trans=nil,  -- Selected Transition for departure
             
@@ -83,8 +149,11 @@ FMGS_sys.fpln = {
         -- {discontinuity = true}
 
         legs = {
---            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333},
-            {discontinuity = true}
+            {ptr_type = FMGS_PTR_WPT, id="LAGEN", lat=44.394166667, lon=8.498055556, flt_phase = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="ANAKI", lat=44.201111111, lon=8.725555556, flt_phase = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="IXITO", lat=44.134722222, lon=8.803611111, flt_phase = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="UNITA", lat=43.944444444, lon=9.025000000, flt_phase = { is_climb=false, is_descent=false }},
+            {ptr_type = FMGS_PTR_WPT, id="TIDKA", lat=43.800000000, lon=9.191944444, flt_phase = { is_climb=false, is_descent=false }},
         },
         
         
@@ -108,7 +177,7 @@ FMGS_sys.perf = {
     takeoff = {
         v1 = nil,
         vr = nil,
-        v2 = nil,
+        v2 = 160,
         v1_popped = nil,    -- This is for MCDU visualization purposes only
         vr_popped = nil,    -- This is for MCDU visualization purposes only
         v2_popped = nil,    -- This is for MCDU visualization purposes only
@@ -123,7 +192,7 @@ FMGS_sys.perf = {
         toshift = nil,
         flaps = nil,
         ths = nil, --This is a number not a string (not DNXXX or UPXXX), safe to compare
-        flex_temp = nil,
+        flex_temp = nil
     },
     landing = {
         qnh = nil,
@@ -134,10 +203,10 @@ FMGS_sys.perf = {
         wind = nil,
         trans_alt = 10000,
         user_trans_alt = nil,
-        vapp = 143,
+        vapp = nil,
         user_vapp = nil,
         landing_config = 4, -- 3 is 3, 4 is full
-        vls = 138
+        vls = nil
     },
     go_around = {
         thr_red = 1500,
@@ -167,6 +236,42 @@ local function update_gps_primary()
     end
 end
 
+local function update_nav_accuracy()
+    local err = 0
+    if FMGS_sys.config.gps_primary then
+        if GPS_sys[1].status == GPS_STATUS_NAV then
+            err = GPS_sys[1].est_error
+        end
+        if GPS_sys[2].status == GPS_STATUS_NAV then
+            err = err + GPS_sys[2].est_error
+        end
+        err = math.abs(err * 111.111 * 0.539957);    -- Approx meters per degree (to NM)
+    else
+        -- TODO DME and VOR improvements
+        local n = 0
+        for i=1,3 do
+            if ADIRS_sys[i].ir_status == IR_STATUS_ALIGNED then
+                err = err + ADIRS_sys[i].ir_drift
+                n = n + 1
+            end
+        end
+        if n > 0 then
+            err = math.abs(err / n)
+        end
+    end
+    FMGS_sys.data.nav_accuracy = err
+end
+
+local function update_phase()
+    if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT then
+        -- TODO add in `and` with "SRS takeoff mode engaged"
+
+        if ENG.dyn[1].n1 > 85 or ENG.dyn[2].n1 > 85 or adirs_get_avg_gs() > 90 then
+            FMGS_sys.config.phase = FMGS_PHASE_TAKEOFF
+            FMGS_sys.config.takeoff_time = get(TIME)
+        end
+    end
+end
 
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
@@ -192,11 +297,13 @@ local function update_status()
         FMGS_sys.config.master = 0
     end
 
+    update_phase()
     update_gps_primary()
+    update_nav_accuracy()
 
 end
 
-local function update_cifp()
+local function update_cifp_loading()
     if not AvionicsBay.is_initialized() or not AvionicsBay.is_ready() then
         return
     end
@@ -210,13 +317,13 @@ local function update_cifp()
         if loading_cifp == 1 then
             FMGS_sys.fpln.active.apts.dep_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.active.apts.dep.id)
             -- Add the NO SID / NO TRANS cases
-            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, {
+            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, 1, {
                 type        = CIFP_TYPE_SS_RWY_TRANS_FMS,
                 proc_name   = "NO SID",
                 trans_name  = "ALL",
                 legs = {}
             })
-            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, {
+            table.insert(FMGS_sys.fpln.active.apts.dep_cifp.sids, 1, {
                 type        = CIFP_TYPE_SS_ENR_TRANS_FMS,
                 proc_name   = "ALL",
                 trans_name  = "NO TRANS",
@@ -236,6 +343,15 @@ local function update_cifp()
     if FMGS_sys.fpln.active.apts.arr ~= nil and FMGS_sys.fpln.active.apts.arr_cifp == nil then
         if loading_cifp == 2 then
             FMGS_sys.fpln.active.apts.arr_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.active.apts.arr.id)
+
+            -- Add the NO STAR case
+            table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, 1, {
+                type        = CIFP_TYPE_STAR_RWY_TRANS_FMS,
+                proc_name   = "NO STAR",
+                trans_name  = "ALL",
+                legs = {}
+            })
+
             if FMGS_sys.fpln.temp then
                 FMGS_sys.fpln.temp.apts.arr_cifp = FMGS_sys.fpln.active.apts.arr_cifp
             end
@@ -263,11 +379,73 @@ local function update_cifp()
 
 end
 
+
+local function update_takeoff_preliminary() 
+    if FMGS_sys.data.pred.require_update then
+        vertical_profile_update_pre_path()
+    end
+end
+
+local function update_predictions()
+    if FMGS_sys.data.pred.require_update then
+        vertical_profile_update()
+        decorate_legs_with_constraints()
+        FMGS_sys.data.pred.require_update = false
+    end
+end
+
+local function update_wind_uplink()
+    if FMGS_sys.data.winds_req_in_progress_time < 0 then
+        return
+    end
+    if get(TIME) - FMGS_sys.data.winds_req_in_progress_time < TIME_TO_GET_WIND then
+        return
+    end
+
+    FMGS_sys.data.winds_req_in_progress_time = -1
+    FMGS_sys.data.winds_climb = {
+        {alt = Round(get(Wind_layer_1_alt)*3.28084, 0), spd = Round(get(Wind_layer_1_speed), 0), dir = Round(get(Wind_layer_1_dir),0) },
+        {alt = Round(get(Wind_layer_2_alt)*3.28084, 0), spd = Round(get(Wind_layer_2_speed), 0), dir = Round(get(Wind_layer_2_dir),0) },
+        {alt = Round(get(Wind_layer_3_alt)*3.28084, 0), spd = Round(get(Wind_layer_3_speed), 0), dir = Round(get(Wind_layer_3_dir),0) }
+    }
+
+    table.sort(FMGS_sys.data.winds_climb, function(a, b) return a.alt < b.alt end)
+
+    FMGS_sys.data.winds_descent = {
+        FMGS_sys.data.winds_climb[1],
+        FMGS_sys.data.winds_climb[2],
+        FMGS_sys.data.winds_climb[3]
+    }
+
+    for i,x in ipairs(FMGS_sys.fpln.active.legs) do
+        x.winds = {FMGS_sys.data.winds_climb[3]}
+    end
+
+    FMGS_refresh_pred()
+    MCDU.send_message("WIND DATA UPLINK", ECAM_WHITE)
+
+end
+
 function update()
     perf_measure_start("FMGS:update()")
+
+    -- WARNING: Do not use RETURN in this function: some function calls rely on the fact
+    -- that subsequent calls are made (update_takeoff_predictions/update_predictions)
+
     update_status()
+
+    update_takeoff_preliminary()    -- Takeoff predictions can be computed without the route and we need them
+                                    -- before computing the route (to know where the first after T/O point is)
     update_route()
-    update_cifp()
-    
+    update_cifp_loading()
+
+    update_limits()
+    update_predictions()
+
+    update_route_turns()
+
+
+    update_wind_uplink()
+
     perf_measure_stop("FMGS:update()")
 end

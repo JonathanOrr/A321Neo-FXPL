@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 
+local debug_leg_names = {"IF", "TF", "CF", "DF", "FA", "FC", "FD", "FM", "CA", "CD", "CI", "CR", "RF", "AF", "VA", "VD", "VI", "VM", "VR", "PI", "HA", "HF", "HM" }
 local last_mag_decl = 0
 
 local function estimate_vertical_performance(start_alt, end_alt)
@@ -24,7 +25,7 @@ local function estimate_vertical_performance(start_alt, end_alt)
 end
 
 local function estimate_distance(minutes, course_reversal)
-   if course_reveral then
+   if course_reversal then
       return math.min(4.3, 3.5 * minutes) -- 4.3 is the minimum
    else
       return 3.5 * minutes -- 3.5 NM per minute
@@ -52,52 +53,6 @@ local function point_from_point_course_distance(lat, lon, crs, dist)
    lon2 = math.deg(lon2)
    
    return lat2, lon2
-end
-
-local function intersecting_radials(lat1, lon1, lat2, lon2, crs13, crs23)
-   assert(lat1 and lat2 and lon1 and lon2 and crs13 and crs23)
-   lat1  = math.rad(lat1)
-   lat2  = math.rad(lat2)
-   lon1  = -math.rad(lon1)
-   lon2  = -math.rad(lon2)
-   crs13 = math.rad(crs13)
-   crs23 = math.rad(crs23)
-
-   local dst12=2*math.asin(math.sqrt((math.sin((lat1-lat2)/2))^2+ math.cos(lat1)*math.cos(lat2)*math.sin((lon1-lon2)/2)^2))
-
-
-   local crs12
-   local crs21
-   if math.sin(lon2-lon1) < 0 then
-      crs12=math.acos((math.sin(lat2)-math.sin(lat1)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat1)))
-      crs21=2.*math.pi-math.acos((math.sin(lat1)-math.sin(lat2)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat2)))
-   else
-      crs12=2.*math.pi-math.acos((math.sin(lat2)-math.sin(lat1)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat1)))
-      crs21=math.acos((math.sin(lat1)-math.sin(lat2)*math.cos(dst12))/(math.sin(dst12)*math.cos(lat2)))
-   end
-
-   local ang1=((crs13-crs12+math.pi) % (2.*math.pi)) - math.pi
-   local ang2=((crs21-crs23+math.pi) % (2.*math.pi)) - math.pi
-
-   local lat3, lon3
-
-   if math.sin(ang1) == 0 and math.sin(ang2) == 0 then
-      sasl.logWarning("ERROR: intersecting_radials: Infinite")
-      sasl.logWarning("Debug data: " .. math.deg(lat1) .. " " .. math.deg(lon1) .. " " .. math.deg(lat2) .. " " .. math.deg(lon2) .. " " .. math.deg(crs13) .. " " .. math.deg(crs23))
-      return nil, nil  -- Infinite intersections
-   elseif math.sin(ang1) * math.sin(ang2) < 0 then
-      return nil, nil  -- Ambiguous intersection
-   else
-      ang1=math.abs(ang1)
-      ang2=math.abs(ang2)
-      local ang3=math.acos(-math.cos(ang1)*math.cos(ang2)+math.sin(ang1)*math.sin(ang2)*math.cos(dst12)) 
-      local dst13=math.atan2(math.sin(dst12)*math.sin(ang1)*math.sin(ang2),math.cos(ang2)+math.cos(ang1)*math.cos(ang3))
-      lat3=math.asin(math.sin(lat1)*math.cos(dst13)+math.cos(lat1)*math.sin(dst13)*math.cos(crs13))
-      local dlon=math.atan2(math.sin(crs13)*math.sin(dst13)*math.cos(lat1),math.cos(dst13)-math.sin(lat1)*math.sin(lat3))
-      lon3=((lon1-dlon+math.pi) % (2*math.pi)) - math.pi
-   end
-
-   return math.deg(lat3), -math.deg(lon3)
 end
 
 local function head_mag_to_true(deg)
@@ -166,45 +121,123 @@ local function convert_generic_VR(x, last_lat, last_lon)
    end
 end
 
-local function convert_generic_CF(x, last_lat, last_lon, last_course, enforce_intercept_course)
+local function convert_generic_VI_CI(x, last_lat, last_lon, last_course, spd)
+
+   -- In this case I need to advance a little bit to satisfy the VI/CI straight line leg
+   local STD_TURN_RADIUS = spd * spd / (8.84*3600)
+   local outb_mag = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
+
+   if math.abs(heading_difference(last_course, outb_mag)) < 1 then
+      -- Almost straight
+      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=last_lat, end_lon=last_lon, leg_name = x.leg_name, orig_ref=x }
+   end
+
+   local angle_diff   = heading_difference(last_course, outb_mag)
+   local is_left_turn = angle_diff < 0
+   local arc_start    = (last_course+270-(is_left_turn and 180 or 0)+360) % 360
+
+   local ctr_angle    = (arc_start - 180 + 360) % 360
+   local ctr_lat, ctr_lon = Move_along_distance_NM(last_lat, last_lon, STD_TURN_RADIUS, ctr_angle)
+   local end_lat, end_lon = Move_along_distance_NM(ctr_lat, ctr_lon, STD_TURN_RADIUS, (ctr_angle-180+angle_diff) % 360)
+
+   local point = { segment_type=FMGS_COMP_SEGMENT_ARC, 
+                   start_lat=last_lat, 
+                   start_lon=last_lon, 
+                   end_lat=end_lat, 
+                   end_lon=end_lon, 
+                   ctr_lat=ctr_lat, 
+                   ctr_lon=ctr_lon, 
+                   radius=STD_TURN_RADIUS,
+                   start_angle=90-arc_start,
+                   arc_length_deg=-angle_diff,
+                   leg_name = x.leg_name,
+                   orig_ref=x}
+
+
+   return point
+end
+
+local function intersecting_sanity_check(lat1, lon1, lat2, lon2)
+   local MAX_ALLOWED_NM = 100
+   return get_distance_nm(lat1, lon1, lat2, lon2) < MAX_ALLOWED_NM
+end
+
+local function convert_generic_CF(x, last_lat, last_lon, last_course, intercept_previous_course, intercept_previous_x)
    assert(last_course)
 
    local outb = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
 
-   if math.floor(last_course) == math.floor(outb) then
-      -- Simple case, just keep the heading
-      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+   local speed = 210
+   local i = 0
+
+   local temp_last_lat = last_lat
+   local temp_last_lon = last_lon
+   local extra
+
+   -- First of all I try the intercept with 30 deg, then, if it doesn't work, I'll try with 45
+
+   local INTERCEPT_ANGLE = 30 -- From 30 to 45
+
+   while INTERCEPT_ANGLE <= 45 do
+      repeat 
+         if intercept_previous_course then
+            extra = convert_generic_VI_CI(intercept_previous_x, last_lat, last_lon, intercept_previous_course, speed)
+
+            if extra then
+               temp_last_lat = extra.end_lat
+               temp_last_lon = extra.end_lon
+               last_course = extra.orig_ref.outb_mag_in_true and extra.orig_ref.outb_mag/10 or head_mag_to_true(extra.orig_ref.outb_mag/10)
+            end
+
+            -- Recompute the speed for the next try
+            i = i + 1
+            speed = speed + (i%2 == 0 and - i * 10 or i * 10)
+         else
+            speed = 999 -- Exit immediately from the loop
+         end
+
+         local heading_diff = math.abs(heading_difference(last_course, outb))
+         if heading_diff < 5 then
+            -- Simple case, just keep the heading
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
+
+         -- If not, we have to intercept the new course
+
+         local goal_out_radial    = (outb+180+360)%360;
+         local intercept_radial_1 = (outb+INTERCEPT_ANGLE+360) % 360;
+         local intercept_radial_2 = (outb-INTERCEPT_ANGLE+360) % 360;
+
+         -- We try 3 ways to intercept the course: directly with the last course and at 45/-45 degrees
+
+         -- Try to intercept with the last course
+         local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, last_course, goal_out_radial)
+         if next_lat and next_lon and intersecting_sanity_check(x.lat, x.lon, next_lat, next_lon ) then
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+                  { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
+
+         -- Try to intercept from the bottom (or from the forced ones)
+         local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, intercept_radial_1, goal_out_radial)
+         if next_lat and next_lon then
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+                  { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
+         
+         -- Try to intercept from the top
+         local next_lat, next_lon = intersecting_radials(temp_last_lat, temp_last_lon, x.lat, x.lon, intercept_radial_2, goal_out_radial)
+         if next_lat and next_lon then
+            return extra,{ segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+                  { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+         end
+
+      until speed > 280 -- Note: this is not the actual speed at which the aircraft will turn, it's how large is the turn
+      INTERCEPT_ANGLE = INTERCEPT_ANGLE + 15
    end
-
-   -- If not, we have to intercept the new course
-   local INTERCEPT_ANGLE = 45 -- From 30 to 45
-
-   local goal_out_radial    = (outb+180)%360;
-   local intercept_radial_1 = (outb+INTERCEPT_ANGLE) % 360;
-   local intercept_radial_2 = (outb-INTERCEPT_ANGLE) % 360;
-
-   if enforce_intercept_course then -- This is true if previous legs are VI or CI
-      intercept_radial_1 = last_course
-   end
-
-   -- Try to intercept from the bottom (or from the forced ones)
-   local next_lat, next_lon = intersecting_radials(last_lat, last_lon, x.lat, x.lon, intercept_radial_1, goal_out_radial)
-   if next_lat and next_lon then
-      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
-             { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
-   end
-   
-   -- Try to intercept from the top
-   local next_lat, next_lon = intersecting_radials(last_lat, last_lon, x.lat, x.lon, intercept_radial_2, goal_out_radial)
-   if next_lat and next_lon then
-      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
-             { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
-   end
-
    -- This is something unexpected, but let's skip the radial connection
    -- and go direct
-   sasl.logWarning("convert_generic_CF: CF cannot find radial")
-   return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
+   sasl.logWarning("convert_generic_CF: CF cannot find radial.", last_lat, last_lon, last_course, intercept_previous_course)
+   return extra, { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=temp_last_lat, start_lon=temp_last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
 end
 
 local function convert_generic_FD_CD(x, last_lat, last_lon)
@@ -277,7 +310,7 @@ local function convert_generic_AF(x, last_lat, last_lon)
    local start_lat, start_lon = Move_along_distance_NM(ctr_lat, ctr_lon, dme, in_radial)  -- TODO MAG on radial
 
    local prev_connection
-   if start_lat ~= last_last or start_lon ~= last_lon then
+   if start_lat ~= last_lat or start_lon ~= last_lon then
       prev_connection = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=start_lat, end_lon=start_lon, leg_name = x.leg_name, orig_ref=x }
    end
 
@@ -301,14 +334,16 @@ local function convert_generic_FC(x, last_lat, last_lon)
       prev_connection = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
    end
 
-   local outb_mag = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
+   local outb = x.outb_mag_in_true and x.outb_mag/10 or head_mag_to_true(x.outb_mag/10)
 
    local rte_dme = x.rte_hold_in_time and estimate_distance(x.rte_hold / 10.) or x.rte_hold / 10.
 
-   local new_lat, new_lon = Move_along_distance_NM(x.lat, x.lon, rte_dme, outb_mag)
+   local new_lat, new_lon = Move_along_distance_NM(x.lat, x.lon, rte_dme, outb)
+   x.fly_over_wpt = true -- Be sure it's a fly over to avoid turning before the distance
    local new_segment = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=x.lat, start_lon=x.lon, end_lat=new_lat, end_lon=new_lon, leg_name = x.leg_name, orig_ref=x }
    return prev_connection, new_segment
 end
+
 
 local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_course)
    local converted_legs = {}
@@ -316,10 +351,10 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
    local last_lon = begin_lon
    local last_at_cstr_alt = begin_alt
    local last_outbound_course = begin_course
-   local enforce_intercept_course = false
+   local intercept_previous_course, intercept_previous_x
 
    if not i_legs then
-      return {}, begin_lat, begin_lon, begin_alt, begin_course
+      return {}, begin_lat, begin_lon, begin_course, begin_alt
    end
 
    if debug_FMGS_path_generation then
@@ -336,13 +371,12 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       end
 
 
-      local leg1, leg2
+      local leg1, leg2, leg3
 
       if x.leg_type == CIFP_LEG_TYPE_IF then
          -- Here we have two cases:
          -- - We have a previous point, just go direct to the IF fix then
          -- - This is the first point ever (in this save it and do nothing)
-
          if last_lat and last_lon and last_lat ~= x.lat and last_lon ~= x.lon  then
             -- Let's consider it similar to a TF leg
             leg1 = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
@@ -355,7 +389,7 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       elseif x.leg_type == CIFP_LEG_TYPE_TF or x.leg_type == CIFP_LEG_TYPE_DF then
          -- For TF the outb_mag may or may not be valid (optional field)
          -- we enforce it with the correct computation 
-         x.outb_mag = get_earth_bearing(last_lat, last_lon, x.lat, x.lon)
+         x.outb_mag = get_earth_bearing(last_lat, last_lon, x.lat, x.lon)*10
          x.outb_mag_in_true = true
          leg1 = { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
       elseif x.leg_type == CIFP_LEG_TYPE_RF then
@@ -367,9 +401,12 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       elseif x.leg_type == CIFP_LEG_TYPE_CR or x.leg_type == CIFP_LEG_TYPE_VR then  -- TODO Wind
          leg1 = convert_generic_VR(x, last_lat, last_lon)
       elseif x.leg_type == CIFP_LEG_TYPE_VI or x.leg_type == CIFP_LEG_TYPE_CI then  -- TODO Wind
-         -- No leg produced
+         intercept_previous_course = last_outbound_course
+         intercept_previous_x = x
       elseif x.leg_type == CIFP_LEG_TYPE_CF then
-         leg1, leg2 = convert_generic_CF(x, last_lat, last_lon, last_outbound_course, enforce_intercept_course)
+         leg1, leg2, leg3 = convert_generic_CF(x, last_lat, last_lon, last_outbound_course, intercept_previous_course, intercept_previous_x)
+         intercept_previous_course = nil
+         intercept_previous_x = nil
       elseif x.leg_type == CIFP_LEG_TYPE_FD or x.leg_type == CIFP_LEG_TYPE_CD then
          leg1, leg2 = convert_generic_FD_CD(x, last_lat, last_lon)
       elseif x.leg_type == CIFP_LEG_TYPE_FC then
@@ -407,37 +444,27 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
          sasl.logWarning("convert_generic: skipped leg: " .. x.leg_type)
       end
 
-      enforce_intercept_course = x.leg_type == CIFP_LEG_TYPE_VI or x.leg_type == CIFP_LEG_TYPE_CI
-
-      -- Add the leg
-      if leg1 then
-         table.insert(converted_legs, leg1)
-         if leg1.end_lat and leg1.end_lon then 
-            last_lat = leg1.end_lat
-            last_lon = leg1.end_lon
-         elseif leg1.lat and leg1.lon then
-            last_lat = leg1.lat
-            last_lon = leg1.lon
-         else
-            sasl.logWarning("convert_generic: Primary leg valid but no end point")
+      local add_the_leg = function(leg, id)
+         if leg then
+            table.insert(converted_legs, leg)
+            if leg.end_lat and leg.end_lon then 
+               last_lat = leg.end_lat
+               last_lon = leg.end_lon
+            elseif leg.lat and leg.lon then
+               last_lat = leg.lat
+               last_lon = leg.lon
+            else
+               sasl.logWarning("convert_generic: Leg " .. id .. " valid but no end point")
+            end
          end
       end
 
-      if leg2 then
-         table.insert(converted_legs, leg2)
-         if leg2.end_lat and leg2.end_lon then 
-            last_lat = leg2.end_lat
-            last_lon = leg2.end_lon
-         elseif leg2.lat and leg2.lon then
-            last_lat = leg2.lat
-            last_lon = leg2.lon
-         else
-            sasl.logWarning("convert_generic: Secondary leg valid but no end point")
-         end
-      end
+      add_the_leg(leg1, 1)
+      add_the_leg(leg2, 2)
+      add_the_leg(leg3, 3)
 
-      if  x.leg_type ~= CIFP_LEG_TYPE_IF and x.leg_type ~= CIFP_LEG_TYPE_VI and x.leg_type ~= CIFP_LEG_TYPE_CI and not leg1 and not leg2 then
-         -- VI and CI are special because they don't product a leg (the next one will)
+      if not (x.leg_type == CIFP_LEG_TYPE_IF or x.leg_type == CIFP_LEG_TYPE_CI or x.leg_type == CIFP_LEG_TYPE_VI)
+         and not leg1 and not leg2 and not leg3 then
          sasl.logWarning("convert_generic: it seems I skipped a valid leg")
       end
 
@@ -481,66 +508,73 @@ end
 
 function convert_from_FMGS_data(fpln)
 
-    local apts = FMGS_sys.fpln.active.apts
+   local apts = FMGS_sys.fpln.active.apts
 
-    local rwy_lon = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
-    local rwy_lat = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
-    local rwy_s_lon = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
-    local rwy_s_lat = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
-    local bearing = (not apts.dep_rwy[2]) and apts.dep_rwy[1].bearing or (apts.dep_rwy[1].bearing + 180) % 360
- 
-    last_mag_decl = apts.dep_rwy[1].mag_decl or 0
- 
-    local last_lat = rwy_lat
-    local last_lon = rwy_lon
-    local last_ob = bearing                              -- Outbound course
-    local last_c_alt = apts.dep.alt -- Last @ constraints altitude
-    local i_legs
-    local segments
- 
-    local final_list = {}
- 
-    local parse_section = function(name, str_desc)
-       i_legs = apts[name] and apts[name].legs
- 
-       segments, last_lat, last_lon, last_ob, last_c_alt = convert_generic(i_legs,last_lat,last_lon,last_c_alt,last_ob)
- 
-       if debug_FMGS_path_generation then
-          print(str_desc)
-          debug_print_segments(segments)
-       end
-       for i,x in ipairs(segments) do
-          table.insert(final_list, x)
-       end
-    end
- 
-    table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_RWY_LINE, start_lat=rwy_s_lat, start_lon=rwy_s_lon, end_lat=rwy_lat, end_lon=rwy_lon, orig_ref = {}})   
- 
-    parse_section("dep_sid", "-- DEP SID --")
-    parse_section("dep_trans", "-- DEP TRANS --")
- 
- 
-    for i,x in ipairs(FMGS_sys.fpln.active.legs) do
-       if not x.discontinuity then
-          local seg = { segment_type=FMGS_COMP_SEGMENT_ENROUTE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.id, orig_ref=x }
-          last_lat = x.lat
-          last_lon = x.lon
-          table.insert(final_list, seg)
-       end
-    end
- 
-    if #FMGS_sys.fpln.active.legs >= 2 then
-       last_ob = get_bearing(final_list[#final_list].start_lat,final_list[#final_list].start_lon,final_list[#final_list].end_lat,final_list[#final_list].end_lon)
-    end
- 
-    parse_section("arr_trans", "-- ARR TRANS --")
-    parse_section("arr_star", "-- ARR STAR --")
-    parse_section("arr_via", "-- ARR VIA --")
-    parse_section("arr_appr", "-- ARR APPR --")
-    
-    if debug_FMGS_path_generation then
-       table.save( final_list, "final_list.lua" )
-    end
-    return final_list
+   local rwy_lon = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
+   local rwy_lat = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
+   local rwy_s_lon = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
+   local rwy_s_lat = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
+   local bearing = (not apts.dep_rwy[2]) and apts.dep_rwy[1].bearing or (apts.dep_rwy[1].bearing + 180) % 360
+
+   last_mag_decl = apts.dep_rwy[1].mag_decl or 0
+
+   local last_lat = rwy_lat
+   local last_lon = rwy_lon
+   local last_ob = bearing                              -- Outbound course
+   local last_c_alt = apts.dep.alt -- Last @ constraints altitude
+   local i_legs
+   local segments
+
+   local final_list = {}
+
+   local parse_section = function(name, str_desc)
+      i_legs = apts[name] and apts[name].legs
+      segments, last_lat, last_lon, last_ob, last_c_alt = convert_generic(i_legs,last_lat,last_lon,last_c_alt,last_ob)
+
+      if debug_FMGS_path_generation then
+         print(str_desc)
+         debug_print_segments(segments)
+      end
+      for i,x in ipairs(segments) do
+         table.insert(final_list, x)
+      end
+   end
+
+   table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_RWY_LINE, start_lat=rwy_s_lat, start_lon=rwy_s_lon, end_lat=rwy_lat, end_lon=rwy_lon, orig_ref = {}})   
+
+   if FMGS_sys.fpln.active.apts.dep_rwy_pt then
+      local init_pt = FMGS_sys.fpln.active.apts.dep_rwy_pt -- Initial climb point acceleration altitude
+      last_lat = init_pt.lat
+      last_lon = init_pt.lon
+      last_c_alt = init_pt.pred.altitude
+      table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=rwy_lat, start_lon=rwy_lon, end_lat=init_pt.lat, end_lon=init_pt.lon, orig_ref = init_pt})   
+   end
+
+   parse_section("dep_sid", "-- DEP SID --")
+   parse_section("dep_trans", "-- DEP TRANS --")
+
+
+   for i,x in ipairs(FMGS_sys.fpln.active.legs) do
+      if not x.discontinuity then
+         local seg = { segment_type=FMGS_COMP_SEGMENT_ENROUTE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.id, orig_ref=x }
+         last_lat = x.lat
+         last_lon = x.lon
+         table.insert(final_list, seg)
+      end
+   end
+
+   if #FMGS_sys.fpln.active.legs >= 2 then
+      last_ob = get_bearing(final_list[#final_list].start_lat,final_list[#final_list].start_lon,final_list[#final_list].end_lat,final_list[#final_list].end_lon)
+   end
+
+   parse_section("arr_trans", "-- ARR TRANS --")
+   parse_section("arr_star", "-- ARR STAR --")
+   parse_section("arr_via", "-- ARR VIA --")
+   parse_section("arr_appr", "-- ARR APPR --")
+   
+   if debug_FMGS_path_generation then
+      table.save( final_list, "final_list.lua" )
+   end
+   return final_list
  
 end

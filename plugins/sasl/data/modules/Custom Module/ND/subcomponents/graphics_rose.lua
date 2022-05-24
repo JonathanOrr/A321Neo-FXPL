@@ -159,8 +159,8 @@ local function draw_ranges(data)
     --if data.config.range > 0 then
         local ext_range = get_range_in_nm(data)
         local int_range = ext_range / 2
-        sasl.gl.drawText(Font_ECAMfont, 250, 250, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_ECAMfont, 350, 350, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 250, 250, ext_range, 24, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 350, 350, int_range, 24, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     --end
 
 end
@@ -170,7 +170,7 @@ local function draw_track_symbol(data)
         return
     end
 
-    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-594)/2,17,594, {1,1,1})
+    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-594)/2,17,594, ECAM_GREEN)
     
 end
 
@@ -236,11 +236,12 @@ local function draw_poi_array(data, poi, texture, color)
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
     
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
-        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_ECAMfont, poi.x+20, poi.y-20, poi.id, 32, true, false, TEXT_ALIGN_LEFT, color)
     end
     
     return modified, poi
 end
+
 
 local function draw_airports(data)
     if data.config.extra_data ~= ND_DATA_ARPT then
@@ -439,80 +440,6 @@ local function draw_terrain(data)
     sasl.gl.drawRectangle(0, 450, 900, 450, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
-local function draw_active_fpln(data)   -- This is just a test
-
-    local active_legs = FMGS_get_enroute_legs()
-
-
-    -- For each point in the FPLN...
-    for k,x in ipairs(active_legs) do
-
-        if not x.discontinuity then
-
-            local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
-            x.x = c_x
-            x.y = c_y
-            
-            local color = ECAM_GREEN
-
-            if x.ptr_type == FMGS_PTR_WPT then
-                draw_poi_array(data, x, image_point_wpt, color)
-            elseif x.ptr_type == FMGS_PTR_NDB then
-                draw_poi_array(data, x, image_point_ndb, color)
-            elseif x.ptr_type == FMGS_PTR_VOR then
-                draw_poi_array(data, x, x.is_coupled_dme and image_point_vor_dme or image_point_vor_only, color)
-            elseif x.ptr_type == FMGS_PTR_APT then
-                draw_poi_array(data, x, image_point_apt, color)
-            elseif x.ptr_type == FMGS_PTR_COORDS then
-            
-            end
-        end
-    end
-
-    -- Now let's draw the flight path
-    local curved_route =  FMGS_get_active_curved_route() 
-    if not curved_route then
-        return
-    end
-
-    local LINE_SIZE = 2
-
-    local already_drawn = {}
-    local first_point_drawn = false
-
-    for i,x in ipairs(curved_route) do
-        if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE or x.segment_type == FMGS_COMP_SEGMENT_RWY_LINE then
-            local x_start,y_start = rose_get_x_y_heading(data, x.start_lat, x.start_lon, data.inputs.heading)
-            local x_end,y_end     = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
-            sasl.gl.drawWideLine(x_start, y_start, x_end, y_end, LINE_SIZE, ECAM_GREEN)
-        elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
-            local x_ctr,y_ctr = rose_get_x_y_heading(data, x.ctr_lat, x.ctr_lon, data.inputs.heading)
-            local x_lat,y_lon = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
-            local xy_radius = rose_get_px_per_nm(data) * x.radius
-            sasl.gl.drawArc(x_ctr, y_ctr, xy_radius-LINE_SIZE/2, xy_radius+LINE_SIZE/2, x.start_angle+data.inputs.heading-Local_magnetic_deviation(), x.arc_length_deg, ECAM_GREEN)
-        end
-
-        local color = first_point_drawn and ECAM_GREEN or ECAM_WHITE
-
-        if x.orig_ref and x.orig_ref.leg_name_poi and not already_drawn[x.orig_ref.leg_name] then
-            already_drawn[x.orig_ref.leg_name] = true
-            first_point_drawn = true
-
-            local poi = x.orig_ref.leg_name_poi
-
-            if poi.ptr_type == FMGS_PTR_WPT then
-                draw_poi_array(data, poi, image_point_wpt, color)
-            elseif poi.ptr_type == FMGS_PTR_NDB then
-                draw_poi_array(data, poi, image_point_ndb, color)
-            elseif poi.ptr_type == FMGS_PTR_VOR then
-                draw_poi_array(data, poi, poi.is_coupled_dme and image_point_vor_dme or image_point_vor_only, color)
-            end
-            poi.x = nil
-            poi.y = nil
-        end
-    end   
-
-end
 
 local function draw_arpt_symbol(data)
     local apt = FMGS_get_apt_dep()
@@ -548,17 +475,28 @@ local function draw_arpt_symbol(data)
         local ur_x = x_end   - x_shift
         local ur_y = y_end   - y_shift
 
-        sasl.gl.drawWideLine(ll_x, ll_y, ul_x, ul_y, 2, ECAM_WHITE)
-        sasl.gl.drawWideLine(ll_x, ll_y, lr_x, lr_y, 2, ECAM_WHITE)
-        sasl.gl.drawWideLine(lr_x, lr_y, ur_x, ur_y, 2, ECAM_WHITE)
-        sasl.gl.drawWideLine(ul_x, ul_y, ur_x, ur_y, 2, ECAM_WHITE)
+        sasl.gl.drawWideLine(ll_x, ll_y, ul_x, ul_y, 3, ECAM_WHITE)
+        sasl.gl.drawWideLine(lr_x, lr_y, ur_x, ur_y, 3, ECAM_WHITE)
+        if data.config.range >= ND_RANGE_160 then
+            sasl.gl.drawWideLine(ll_x, ll_y, lr_x, lr_y, 3, ECAM_WHITE)
+            sasl.gl.drawWideLine(ul_x, ul_y, ur_x, ur_y, 3, ECAM_WHITE)
+        end
 
         local t_x, t_y = (x_end-x_start)/2+x_start+10*x_shift, (y_end-y_start)/2+y_start+10*y_shift
-        sasl.gl.drawText(Font_ECAMfont, t_x, t_y, apt.id, 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(Font_ECAMfont, t_x, t_y-30, sibl and rwy.sibl_name or rwy.name, 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, t_x, t_y, apt.id, 28, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, t_x, t_y-30, sibl and rwy.sibl_name or rwy.name, 28, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
 end
 
+local function draw_active_fpln(data)
+    local functions = {
+        draw_poi_array = draw_poi_array,
+        get_x_y_heading = rose_get_x_y_heading,
+        get_px_per_nm = rose_get_px_per_nm
+    }
+
+    ND_draw_active_fpln(data, functions)
+end
 
 local function draw_pois(data)
 
@@ -568,6 +506,10 @@ local function draw_pois(data)
     
     if data.misc.map_not_avail then
         return -- No POI is map not avail
+    end
+
+    if data.config.mode ~= ND_MODE_NAV then
+        return -- No POI in LS or VOR mode
     end
 
     
@@ -603,7 +545,7 @@ local function draw_oans_arrow(data)
         local R = 230
         local x = 420 + R * math.sin(math.rad(new_angle-180))
         local y = 450 + R * math.cos(math.rad(new_angle-180))
-        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
 end
 

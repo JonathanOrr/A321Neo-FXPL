@@ -168,7 +168,7 @@ local function convert_awys_array(rawdata, awy_array)
     end
 end
 
-local function convert_cifp_array(rawdata, cifp_arr)
+local function convert_cifp_array(rawdata, cifp_arr, is_clb)
     if rawdata then
         return {
             data = cifp_arr.data,
@@ -221,7 +221,11 @@ local function convert_cifp_array(rawdata, cifp_arr)
                 approach_if  = l.approach_if,
                 approach_faf = l.approach_faf,
                 holding_fix  = l.holding_fix,
-                first_missed_app = l.first_missed_app
+                first_missed_app = l.first_missed_app,
+
+                -- The following is used in the prediction part to know
+                -- if a point belongs to the climb or descent phase
+                flt_phase = { is_climb=is_clb, is_descent=not is_clb }
             })
         end
         
@@ -462,9 +466,9 @@ local function expose_functions()
         local cifp_data = AvionicsBay.c.get_cifp(arpt_id)
         
         return {
-            sids  = convert_cifp_array(rawdata, cifp_data.sids),
-            stars = convert_cifp_array(rawdata, cifp_data.stars),
-            apprs = convert_cifp_array(rawdata, cifp_data.apprs),
+            sids  = convert_cifp_array(rawdata, cifp_data.sids, true),
+            stars = convert_cifp_array(rawdata, cifp_data.stars, false),
+            apprs = convert_cifp_array(rawdata, cifp_data.apprs, false),
             rwys  = convert_cifp_rwy_array(rawdata, cifp_data.rwys)
         }
     end

@@ -183,6 +183,8 @@ end
 
 function THIS_PAGE:L1(mcdu_data)
     if mcdu_data.lat_rev_subject.type == TYPE_ORIGIN then
+        mcdu_data.page_data[603] = nil -- Reset page data
+        mcdu_data.page_data[604] = nil -- Reset page data
         mcdu_open_page(mcdu_data, 603)
     else
         MCDU_Page:L1(mcdu_data) -- Error
@@ -191,6 +193,8 @@ end
 
 function THIS_PAGE:R1(mcdu_data)
     if mcdu_data.lat_rev_subject.type == TYPE_DEST then
+        mcdu_data.page_data[605] = nil -- Reset page data
+        mcdu_data.page_data[606] = nil -- Reset page data
         mcdu_open_page(mcdu_data, 605)
     else
         MCDU_Page:R1(mcdu_data) -- Error

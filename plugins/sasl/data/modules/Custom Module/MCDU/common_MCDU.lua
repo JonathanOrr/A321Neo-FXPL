@@ -94,13 +94,13 @@ function common_draw(mcdu_data)
             font = Font_MCDUSmall
         end
 
-        sasl.gl.drawText(font, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
+        sasl.gl.drawText(font, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, true, false, line.disp_text_align, line.disp_color)
     end
 
     --draw scratchpad
     if mcdu_data.entry.text ~= "" then
         mcdu_data.entry.color = mcdu_data.entry.color or ECAM_WHITE
-        sasl.gl.drawText(Font_MCDU, draw_get_x(1), draw_get_y(12), mcdu_data.entry.text, MCDU_DISP_TEXT_SIZE[MCDU_LARGE], false, false, TEXT_ALIGN_LEFT, mcdu_data.entry.color)
+        sasl.gl.drawText(Font_MCDU, draw_get_x(1), draw_get_y(12), mcdu_data.entry.text, MCDU_DISP_TEXT_SIZE[MCDU_LARGE], true, false, TEXT_ALIGN_LEFT, mcdu_data.entry.color)
     end
 
     if mcdu_data.lr_arrows then

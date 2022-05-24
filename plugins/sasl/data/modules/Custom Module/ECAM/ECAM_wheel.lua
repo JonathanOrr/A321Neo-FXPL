@@ -61,8 +61,8 @@ local function draw_brakes_and_tires()
         sasl.gl.drawText(Font_ECAMfont, size[1]/2-200+26, size[2]/2-165, L_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+200+26, size[2]/2-165, R_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+360+26, size[2]/2-165, RR_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_ECAMfont, size[1]/2+80+26, size[2]/2+175, NL_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_ECAMfont, size[1]/2-80+26, size[2]/2+175, NR_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-80+26, size[2]/2+175, NL_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+80+26, size[2]/2+175, NR_psi, 30, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
     else
         sasl.gl.drawText(Font_ECAMfont, size[1]/2-360, size[2]/2-165, "XX", 30, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)

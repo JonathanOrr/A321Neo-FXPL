@@ -21,6 +21,7 @@ POINT_TYPE_ARR_TRANS     = 4
 POINT_TYPE_ARR_STAR      = 5
 POINT_TYPE_ARR_VIA       = 6
 POINT_TYPE_ARR_APPR      = 7
+POINT_TYPE_PSUEDO        = 8 -- Pseudo WPTs like T/C etc.
 
 function cifp_is_a_fix(x)
     assert(x)
@@ -100,28 +101,51 @@ function cifp_convert_leg_name(x)
     return "UKWN (" .. leg_type .. ")"
 end
 
+function cifp_alt_to_text(alt, in_fl, type)
+    if in_fl then
+        alt = alt * 100
+    end
+    if (type == 1 and alt > FMGS_perf_get_current_trans_alt()) 
+       or (type == 2 and alt > FMGS_perf_get_current_landing_trans_alt())
+       or type == 0 then
+        return "FL" .. math.floor(alt / 100)
+    else
+        return ""..alt
+    end
+end
+
 function cifp_convert_alt_cstr(x)
-    local fl_prefix_1 = x.cstr_altitude1_fl and "FL" or ""
-    local fl_prefix_2 = x.cstr_altitude2_fl and "FL" or ""
-    
+
+    local clb_desc_type = 0
+    if x.flt_phase_user and x.flt_phase_user.is_climb then
+        clb_desc_type = 1
+    elseif x.flt_phase_user and x.flt_phase_user.is_descent then
+        clb_desc_type = 2
+    elseif x.flt_phase and x.flt_phase.is_climb then
+        clb_desc_type = 1
+    elseif x.flt_phase and x.flt_phase.is_descent then
+        clb_desc_type = 2
+    end
+
     if     x.cstr_alt_type == CIFP_CSTR_ALT_NONE then
         return nil, nil
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE or x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW then
-            return Fwd_string_fill("+" .. fl_prefix_1 .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
+            return Fwd_string_fill("+" .. cifp_alt_to_text(x.cstr_altitude1, x.cstr_altitude1_fl,clb_desc_type), " ", 5), ECAM_MAGENTA
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_BELOW then
-        return Fwd_string_fill("-" .. fl_prefix_1 .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
+        return Fwd_string_fill("-" .. cifp_alt_to_text(x.cstr_altitude1, x.cstr_altitude1_fl,clb_desc_type)," ", 5),  ECAM_MAGENTA
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_AT or x.cstr_alt_type == CIFP_CSTR_ALT_GLIDE then
         if x.cstr_altitude1 ~= 0 then
-            return Fwd_string_fill(fl_prefix_1 .. tostring(x.cstr_altitude1), " ", 5), ECAM_GREEN
+            return Fwd_string_fill(cifp_alt_to_text(x.cstr_altitude1, x.cstr_altitude1_fl,clb_desc_type), " ", 5), ECAM_GREEN
         end
     elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND then
-        return Fwd_string_fill("+" .. fl_prefix_2 .. x.cstr_altitude2, " ", 5), ECAM_MAGENTA
+        return Fwd_string_fill("+" .. cifp_alt_to_text(x.cstr_altitude2, x.cstr_altitude2_fl,clb_desc_type), " ", 5), ECAM_MAGENTA
     end
 
     return nil, nil
 end
 
 function appr_type_char_to_idx(x)
+    assert(x~=nil)
     if x == CIFP_TYPE_APPR_MLS then
         return 1, "MLS"
     elseif x == CIFP_TYPE_APPR_ILS then
@@ -149,6 +173,7 @@ function appr_type_char_to_idx(x)
     elseif x == CIFP_TYPE_APPR_RWY_DIRECT then
         return 13, "RWY"
     else
+        -- We may end up here if it is not an appr procedure (e.g., missed approach!)
         return nil, nil
     end
 end
@@ -160,6 +185,10 @@ function dest_get_selected_appr_procedure()
         return nil
     end
     local _, type_str = appr_type_char_to_idx(appr_obj.type)
+    if type_str == nil then
+        logWarning("Approach procedure type is invalid: this shouldn't happen.")
+        return nil
+    end
     local rwy_name_with_suffix = appr_obj.proc_name:sub(2)
     local appr_name = type_str .. rwy_name_with_suffix
     return appr_name

@@ -19,9 +19,9 @@ local B612_MONO_bold = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 --sim datarefs
 local vvi = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 
-local roll_artstab = globalProperty("a321neo/dynamics/FBW/inputs/autoflight_roll")
-local pitch_artstab = globalProperty("a321neo/dynamics/FBW/inputs/autoflight_pitch")
-local yaw_artstab = globalProperty("a321neo/dynamics/FBW/inputs/autoflight_yaw")
+local roll_artstab = globalProperty("sim/joystick/yoke_roll_ratio")
+local pitch_artstab = globalProperty("sim/joystick/yoke_pitch_ratio")
+local yaw_artstab = globalProperty("sim/joystick/yoke_heading_ratio")
 
 local aircraft_roll = globalProperty("sim/flightmodel/position/true_phi")
 local aircraft_pitch = globalProperty("sim/flightmodel/position/true_theta")

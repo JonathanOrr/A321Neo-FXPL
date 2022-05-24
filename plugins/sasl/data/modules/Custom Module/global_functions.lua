@@ -286,7 +286,7 @@ function Table_extrapolate(tab, x)  -- This works like Table_interpolate, but it
 
     assert(b > 1)
     if b == 2 then
-        logWarning("Don't use table interpolate for just 2 values, use Math_rescale_* functions.")
+        logWarning("Don't use table extrapolate for just 2 values, use Math_rescale_* functions.")
     end
 
     if x < tab[a][1] then

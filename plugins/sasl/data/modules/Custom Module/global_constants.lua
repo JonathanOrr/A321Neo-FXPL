@@ -359,6 +359,7 @@ CIFP_TYPE_APPR_MISSED = 'Z'
 CIFP_TYPE_APPR_RWY_DIRECT = '*' -- This is not in CIFP, but generated
 
 ------ LEGS
+CIFP_LEG_TYPE_NULL = 0 -- This is not a real leg, we need for internal purposes
 CIFP_LEG_TYPE_IF = 1
 CIFP_LEG_TYPE_TF = 2
 CIFP_LEG_TYPE_CF = 3
@@ -382,7 +383,6 @@ CIFP_LEG_TYPE_PI = 20
 CIFP_LEG_TYPE_HA = 21
 CIFP_LEG_TYPE_HF = 22
 CIFP_LEG_TYPE_HM = 23
-
 
 CIFP_CSTR_ALT_NONE = 0
 CIFP_CSTR_ALT_ABOVE = 1

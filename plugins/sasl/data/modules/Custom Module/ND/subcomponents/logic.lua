@@ -268,6 +268,7 @@ local function update_plan_coords(data)
     local mcdu_data = data.id == ND_CAPT and MCDU.captain_side_data or MCDU.fo_side_data
 
     if mcdu_data.curr_page == 600 and mcdu_data.page_data[600].ref_lines then
+        local obj_prev = mcdu_data.page_data[600].ref_lines[1]
         local obj = mcdu_data.page_data[600].ref_lines[2]
         if obj and not obj.invalid and obj.lat and obj.lon then
             data.plan_ctr_lat = obj.lat
@@ -275,6 +276,12 @@ local function update_plan_coords(data)
         elseif obj and obj.leg_name_poi then
             data.plan_ctr_lat = obj.leg_name_poi.lat
             data.plan_ctr_lon = obj.leg_name_poi.lon
+        elseif obj_prev and not obj_prev.invalid and obj_prev.lat and obj_prev.lon then
+            data.plan_ctr_lat = obj_prev.lat
+            data.plan_ctr_lon = obj_prev.lon
+        elseif obj_prev and obj.leg_name_poi then
+            data.plan_ctr_lat = obj_prev.leg_name_poi.lat
+            data.plan_ctr_lon = obj_prev.leg_name_poi.lon
         else
             update_plan_coords_plane(data)
         end

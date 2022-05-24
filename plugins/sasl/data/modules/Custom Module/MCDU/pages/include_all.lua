@@ -35,7 +35,9 @@ for i=1,dir_list_len do
 
         local pages_len = #pages_list
         for i=1,pages_len do
-            if pages_list[i].type == "file" then
+            if pages_list[i].type == "file" and pages_list[i].name:find(".", 1, true) ~= 1 then
+                -- The second condition is necessary to avoid including files starting with '.',
+                -- for instance, the automatically created files by Mac
                 include("MCDU/pages/" .. dir_name .. "/" .. pages_list[i].name)
             end
         end

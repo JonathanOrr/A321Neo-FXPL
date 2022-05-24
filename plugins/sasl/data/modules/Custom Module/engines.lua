@@ -402,23 +402,22 @@ local function update_egt()
 
 end
 
-local function update_ff()
-    local eng_1_n1 = ENG.dyn[1].n1
+local function update_ff_engine(eng)
+    local eng_1_n1 = ENG.dyn[eng].n1
     if eng_1_n1 > ENG_N1_LL_IDLE then
         -- when engines are avail, use fuel flow from X-Plane
-        ENG.dyn[1].ff = eng_model_get_FF(1)
+        ENG.dyn[eng].ff = eng_model_get_FF(eng)
     else
         -- during startup use our fuel flow values
-        ENG.dyn[1].ff = eng_FF_off[1]
+        ENG.dyn[eng].ff = eng_FF_off[eng]
     end
 
-    local eng_2_n1 = ENG.dyn[2].n1
-    if eng_2_n1 > ENG_N1_LL_IDLE then
-        ENG.dyn[2].ff = eng_model_get_FF(2)
-    else
-        ENG.dyn[2].ff = eng_FF_off[2]
-    end
- 
+    set(Eng_FF, ENG.dyn[eng].ff, eng)
+end
+
+local function update_ff()
+    update_ff_engine(1)
+    update_ff_engine(2)
 end
 
 local function update_avail()
