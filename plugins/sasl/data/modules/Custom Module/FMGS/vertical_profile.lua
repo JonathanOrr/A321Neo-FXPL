@@ -1361,7 +1361,9 @@ function vertical_profile_update_pre_path()
         return -- Cannot make any other prediction
     end
 
-    create_first_point_after_rwy() -- Fill FMGS_sys.fpln.active.apts.dep_rwy_pt
+    --create_first_point_after_rwy() -- Fill FMGS_sys.fpln.active.apts.dep_rwy_pt
+    -- BUG: This is temporary disabled because if there is a previous point it creates strange
+    -- segments. We need to know when we should create this point and when not.
 end
 
 function vertical_profile_update()

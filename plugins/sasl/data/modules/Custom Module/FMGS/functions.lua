@@ -592,7 +592,7 @@ function FMGS_insert_temp_fpln()
     check_rwy_change_triggers()
     FMGS_sys.fpln.active = FMGS_sys.fpln.temp
     if FMGS_sys.fpln.active.apts.dep_sid then
-        FMGS_sys.perf.takeoff.trans_alt = FMGS_sys.fpln.active.apts.dep_sid.trans_alt
+        FMGS_sys.perf.takeoff.trans_alt = FMGS_sys.fpln.active.apts.dep_sid.trans_alt or 10000
     end
     FMGS_erase_temp_fpln()
     FMGS_refresh_pred()

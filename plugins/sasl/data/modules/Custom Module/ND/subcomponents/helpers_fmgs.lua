@@ -93,8 +93,10 @@ function ND_draw_active_fpln(data, functions)
             local x_end,y_end     = functions.get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
             sasl.gl.drawWideLine(x_start, y_start, x_end, y_end, LINE_SIZE, ECAM_GREEN)
             if debug_ND_debug_paths then
+                sasl.gl.drawText(Font_ECAMfont, x_start+10, y_start, x.orig_ref.id or "UKNWN", 11, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
                 sasl.gl.drawWideLine(x_start-10, y_start-10, x_start+10, y_start+10, 2, ECAM_BLUE)
                 sasl.gl.drawWideLine(x_start-10, y_start+10, x_start+10, y_start-10, 2, ECAM_BLUE)
+                sasl.gl.drawText(Font_ECAMfont, x_end-10, y_end, x.orig_ref.id or "UKNWN", 11, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
                 sasl.gl.drawWideLine(x_end-5, y_end-5, x_end+5, y_end+5, 2, ECAM_RED)
                 sasl.gl.drawWideLine(x_end-5, y_end+5, x_end+5, y_end-5, 2, ECAM_RED)
             end
@@ -118,6 +120,7 @@ function ND_draw_active_fpln(data, functions)
                 sasl.gl.drawArc(x_ctr, y_ctr, 4, 5, 0, 360, ECAM_MAGENTA)
                 local text = "ARC " .. (x.id and x.id or "/") .. " r=" .. Round(x.radius, 1) .. " sa=" .. math.floor(x.start_angle) .. " al=" .. math.floor(x.arc_length_deg)
                 sasl.gl.drawText(Font_ECAMfont, x_ctr+6, y_ctr, text, 11, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+                sasl.gl.drawText(Font_ECAMfont, x_ctr+6, y_ctr+11, x.orig_ref.id or "UKNWN", 11, true, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
             end
         end
 
