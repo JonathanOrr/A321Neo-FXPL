@@ -19,9 +19,15 @@ local THIS_PAGE = MCDU_Page:new({id=300})
 
 function THIS_PAGE:render(mcdu_data)
     if FMGS_get_phase() == FMGS_PHASE_PREFLIGHT or FMGS_get_phase() == FMGS_PHASE_DONE then
-        mcdu_open_page(mcdu_data, 300 + FMGS_PHASE_TAKEOFF)
+        mcdu_open_page(mcdu_data, 302)
+    elseif FMGS_get_phase() == FMGS_PHASE_CLIMB or FMGS_get_phase() == FMGS_PHASE_CRUISE then
+        mcdu_open_page(mcdu_data, 303)
+    elseif FMGS_get_phase() == FMGS_PHASE_DESCENT then
+        mcdu_open_page(mcdu_data, 305)
+    elseif FMGS_get_phase() == FMGS_PHASE_APPROACH then
+        mcdu_open_page(mcdu_data, 306)
     else
-        mcdu_open_page(mcdu_data, 300 + FMGS_get_phase())
+        mcdu_open_page(mcdu_data, 302) -- Just in case
     end
 end
 

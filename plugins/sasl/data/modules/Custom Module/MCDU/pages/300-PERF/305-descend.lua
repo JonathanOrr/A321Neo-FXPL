@@ -16,7 +16,17 @@ local THIS_PAGE = MCDU_Page:new({id=305})
 
 function THIS_PAGE:render(mcdu_data)
 
-    local fms_is_in_descend_phase = false --IF THE FMS IS BEYOND CLIMB PHASE, WHICH IS AFTER CLIMB. USED TO DECIDE WETHER TO SHOW ACTIVATE APPR PHASE ON L6
+    if not mcdu_data.page_data[305] then
+        mcdu_data.page_data[305] = {confirm_appr = false}
+    end
+
+    if mcdu_data.is_page_button_hit then
+        mcdu_data.page_data[305].confirm_appr = false
+    end
+    mcdu_data.is_page_button_hit = false
+
+
+    local fms_is_in_descend_phase = FMGS_get_phase() == FMGS_PHASE_DESCENT or FMGS_get_phase() == FMGS_PHASE_GOAROUND
     local descend_speed_mode = true -- SPEED, TRUE IS MANAGED, FALSE IS SELECTED!
     local arrival_data = {2038, 10.3} --TIME, EFB_OFF
     local prediction_altitude = 15000
@@ -110,8 +120,13 @@ function THIS_PAGE:render(mcdu_data)
     --  L6  --
     ----------
     if fms_is_in_descend_phase then
-        self:set_line(mcdu_data, MCDU_LEFT, 6, " ACTIVATE", MCDU_SMALL, ECAM_BLUE)
-        self:set_line(mcdu_data, MCDU_LEFT, 6, "←APPR PHASE", MCDU_LARGE, ECAM_BLUE)
+        if mcdu_data.page_data[305].confirm_appr then
+            self:set_line(mcdu_data, MCDU_LEFT, 6, " CONFIRM", MCDU_SMALL, ECAM_ORANGE)
+            self:set_line(mcdu_data, MCDU_LEFT, 6, "*APPR PHASE", MCDU_LARGE, ECAM_ORANGE)
+        else
+            self:set_line(mcdu_data, MCDU_LEFT, 6, " ACTIVATE", MCDU_SMALL, ECAM_BLUE)
+            self:set_line(mcdu_data, MCDU_LEFT, 6, "←APPR PHASE", MCDU_LARGE, ECAM_BLUE)
+        end
     else
         self:set_line(mcdu_data, MCDU_LEFT, 6, " PREV", MCDU_SMALL, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_LEFT, 6, "<PHASE", MCDU_LARGE, ECAM_WHITE)
@@ -123,12 +138,28 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "PHASE>", MCDU_LARGE, ECAM_WHITE)
 end
 
+
 function THIS_PAGE:L6(mcdu_data)
-    mcdu_open_page(mcdu_data, 303)
+    local fms_is_in_descend_phase = FMGS_get_phase() == FMGS_PHASE_DESCENT or FMGS_get_phase() == FMGS_PHASE_GOAROUND
+    if fms_is_in_descend_phase then
+        if mcdu_data.page_data[305].confirm_appr then
+            FMGS_signal_phase_update(FMGS_PHASE_EVENT_APPR_MANUAL)
+        else
+            mcdu_data.page_data[305].confirm_appr = true
+        end
+    else
+        mcdu_open_page(mcdu_data, 303)
+    end
 end
 
 function THIS_PAGE:R6(mcdu_data)
-    mcdu_open_page(mcdu_data, 306)
+    local fms_is_in_descend_phase = FMGS_get_phase() == FMGS_PHASE_DESCENT or FMGS_get_phase() == FMGS_PHASE_GOAROUND
+    if fms_is_in_descend_phase and mcdu_data.page_data[305].confirm_appr then
+        mcdu_data.page_data[305].confirm_appr = false
+    else
+        mcdu_open_page(mcdu_data, 306)
+    end
 end
+
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
