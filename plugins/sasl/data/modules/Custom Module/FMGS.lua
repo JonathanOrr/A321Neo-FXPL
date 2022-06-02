@@ -99,6 +99,7 @@ FMGS_sys.data = {
             fdp_idx = nil,
             fdp_dist_to_rwy = nil,
             final_angle = 3,    -- Default to 3, always positive (descent angle)
+            next_step = 7,  -- Next online step
             steps = {
                 {},     -- 1000ft
                 {},     -- FLAP FULL (may have skip=true if FLAP 3 config)
@@ -262,15 +263,53 @@ local function update_nav_accuracy()
     FMGS_sys.data.nav_accuracy = err
 end
 
+
 local function update_phase()
+    -- IMPORTANT: See also event-based switches in FMGS_signal_phase_update()
+
     if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT then
         -- TODO add in `and` with "SRS takeoff mode engaged"
-
         if ENG.dyn[1].n1 > 85 or ENG.dyn[2].n1 > 85 or adirs_get_avg_gs() > 90 then
             FMGS_sys.config.phase = FMGS_PHASE_TAKEOFF
             FMGS_sys.config.takeoff_time = get(TIME)
         end
+    elseif FMGS_sys.config.phase == FMGS_PHASE_TAKEOFF then
+        -- TODO add in `or` "AP engagement of another vertical mode"
+        local takeoff_acc_alt = FMGS_perf_get_current_takeoff_acc() + (FMGS_get_apt_dep() and FMGS_get_apt_dep().alt or 0)
+        if adirs_get_avg_alt() >= takeoff_acc_alt then
+            FMGS_sys.config.phase = FMGS_PHASE_CLIMB
+        end
+    elseif FMGS_sys.config.phase == FMGS_PHASE_CLIMB then
+        if adirs_get_avg_alt() >= FMGS_sys.data.init.crz_fl - 100 then
+            FMGS_sys.config.phase = FMGS_PHASE_CRUISE
+        end
+    elseif FMGS_sys.config.phase == FMGS_PHASE_CRUISE then
+        if FMGS_sys.data.pred.trip_dist <= 200 then -- TODO add in `or` with all engines ok and AP selected altitude < max(FL200, highest des alt cstr) 
+            FMGS_sys.config.phase = FMGS_PHASE_DESCENT
+        end
+    elseif FMGS_sys.config.phase == FMGS_PHASE_DESCENT then
+        if adirs_get_avg_alt() <= 9500 and FMGS_sys.data.pred.appr.next_step < 7 then
+            FMGS_sys.config.phase = FMGS_PHASE_APPROACH
+        end
+    elseif FMGS_sys.config.phase == FMGS_PHASE_APPROACH then
+        if get(Lever_in_TOGA) == 1 then
+            FMGS_sys.config.phase = FMGS_PHASE_GOAROUND
+        elseif get(All_on_ground) == 1 then 
+            if not FMGS_sys.config.landing_time then
+                FMGS_sys.config.landing_time = get(TIME)
+            elseif (get(TIME) - FMGS_sys.config.landing_time) > 30 then
+                FMGS_sys.config.phase = FMGS_PHASE_DONE
+            end
+        end
+    elseif FMGS_sys.config.phase == FMGS_PHASE_GOAROUND then
+        FMGS_sys.config.landing_time = nil
+        -- See FMGS_signal_phase_update()
+    elseif FMGS_sys.config.phase == FMGS_PHASE_DONE then
+        -- See FMGS_signal_phase_update()
+    else
+        assert(false, "Non existend FMGS phase")
     end
+
 end
 
 local function update_status()
