@@ -153,7 +153,7 @@ function Set_anim_value(current_value, target, min, max, speed)
 end
 
 function Set_anim_value_linear_range(current_value, target, min, max, linear_spd, curved_spd)
-    assert(linear_spd >= 0 and curved_spd >=0, "Anim value speed must be > 0!")
+    assert(linear_spd >= 0 and curved_spd >=0, "Anim value speed must be >= 0!")
 
     local limited_target = Math_clamp(target, min, max)
 
@@ -169,7 +169,7 @@ function Set_anim_value_no_lim(current_value, target, speed)
 end
 
 local function Set_linear_anim_value_internal(current_value, target, min, max, speed, speed_m)
-    assert(speed >= 0 and speed_m >= 0, "Anim value speed must be > 0!")
+    assert(speed >= 0 and speed_m >= 0, "Anim value speed must be >= 0!")
     target = Math_clamp(target, min, max)
     if speed_m ~= 0 and speed ~= 0 then
         if target - current_value < (speed + (speed * 0.005)) * speed_m and target - current_value > -(speed + (speed * 0.005)) * speed_m then

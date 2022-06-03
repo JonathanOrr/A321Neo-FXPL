@@ -15,6 +15,41 @@
 
 local sequencer_data = {}
 
+local function remove_point_from_fpln(point)
+    
+    local search_f = function(point, obj)
+        if not obj or not obj.legs then
+            return false
+        end
+
+        for i,x in ipairs(obj.legs) do
+            if x == point.orig_ref then
+                table.remove(obj.legs, i)
+                FMGS_refresh_pred()    
+                return true
+            end
+        end
+
+        return false
+    end
+
+    if search_f(point, FMGS_sys.fpln.active.apts.dep_sid) then
+        return true
+    elseif search_f(point, FMGS_sys.fpln.active.apts.dep_trans) then
+        return true
+    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_trans) then
+        return true
+    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_star) then
+        return true
+    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_via) then
+        return true
+    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_appr) then
+        return true
+    else
+        return false
+    end
+end
+
 function update_sequencing()
     if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT or FMGS_sys.config.phase == FMGS_PHASE_DONE then
         sequencer_data = {}    -- Reset derivatives
@@ -66,10 +101,18 @@ function update_sequencing()
     end
 
     if (target_dist - sequencer_data.prev_target) > 0 and (future_dist - sequencer_data.prev_future)  < 0 
-        or (target_dist == future_dist and future_dist < 0.5) -- This condition is necessary when two point coincides
+        or (math.abs(target_dist-future_dist) < 1e-5 and future_dist < 0.5) -- This condition is necessary when two point coincides
     then
         -- Time to switch
         FMGS_sys.fpln.active.segment_curved_list_curr = offset+1
+
+        if past_point.orig_ref ~= target_point.orig_ref then
+            -- We remove a point only if the previous segment belongs to a different F/PLN
+            -- item. So if we are in A -> B -> C and not A -> A -> B (A,B,C means their orig_ref) 
+            if remove_point_from_fpln(past_point) then
+                FMGS_sys.fpln.active.segment_curved_list_curr = 1
+            end
+        end
         sequencer_data = {}
     else
         sequencer_data.prev_target = target_dist

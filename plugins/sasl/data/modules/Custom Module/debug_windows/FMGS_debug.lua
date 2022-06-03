@@ -316,7 +316,7 @@ local function draw_page_online()
     sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-270, "ONLINE PREDICTIONS & GUIDANCE", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
 
     local offset = FMGS_sys.fpln.active.segment_curved_list_curr or 1
-    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-290, Fwd_string_fill("OFF=" .. offset, " ", 7) .. "       PAST          TARGET        NEXT", 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-290, Fwd_string_fill("OFF=" .. offset, " ", 7) .. "       PAST          TARGET        FUTURE", 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-310, "Sequencing:  ", 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
 
     if not FMGS_sys.fpln.active.segment_curved_list then
