@@ -49,6 +49,7 @@ local function sanitize_weight(weight)
     return math.max(weight, EMPTY_WEIGHT)
 end
 
+
 -------------------------------------------------------------------------------
 -- Global variables
 -------------------------------------------------------------------------------
@@ -206,6 +207,59 @@ local function prepare_the_common_big_array()
         end
     end
 
+end
+
+-------------------------------------------------------------------------------
+-- Online inputs
+-------------------------------------------------------------------------------
+
+
+local function get_input_for_predictions()
+    if FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+
+        local my_pos = adirs_get_any_fmgs()
+
+        assert(my_pos[1], my_pos[2])
+
+        local my_lat = my_pos[1]
+        local my_lon = my_pos[2]
+    
+        local dist_to_next_wpt = #the_big_array > 1 and get_distance_nm(my_lat, my_lon, the_big_array[2].lat, the_big_array[2].lon) or 0
+
+        return get(Gross_weight), 
+               adirs_get_avg_alt(),
+               adirs_get_avg_ias(),
+               adirs_get_avg_mach(),
+               0,   -- Time prediction is from now
+               -dist_to_next_wpt
+    else
+        local _,_,v2 = FMGS_perf_get_v_speeds()
+
+        -- Compute the initial weight as the takeoff weight - the fuel consumed at takeoff and initial climb
+        local after_to_weight = ( FMGS_sys.data.init.weights.zfw
+                              + FMGS_sys.data.init.weights.block_fuel) * 1000
+                              - FMGS_sys.data.pred.takeoff.total_fuel_kgs
+
+
+        -- First, let's understand where we are considering the initial climb
+        local curr_time =
+            FMGS_sys.data.pred.takeoff.time_to_400ft+
+            FMGS_sys.data.pred.takeoff.time_to_sec_climb+ 
+            FMGS_sys.data.pred.takeoff.time_to_vacc
+
+        local traveled_nm = 
+            FMGS_sys.data.pred.takeoff.dist_to_400ft    +
+            FMGS_sys.data.pred.takeoff.dist_to_sec_climb+
+            FMGS_sys.data.pred.takeoff.dist_to_vacc
+
+
+        return after_to_weight,
+               FMGS_perf_get_current_takeoff_acc(),
+               v2+10,
+               0, -- Current mach doesn't matter for T/O
+               curr_time,
+               traveled_nm
+    end
 end
 
 -------------------------------------------------------------------------------
@@ -535,16 +589,23 @@ function vertical_profile_climb_update(curr_weight, curr_alt, curr_spd, curr_mac
 end
 
 local function vertical_profile_cruise_update(idx_next_wpt)
-    local TC = the_big_array[idx_next_wpt-1]
-    assert(TC.pred and TC.pred.dist_prev_wpt, "Ehi T/C is not the T/C!")
-    local i = idx_next_wpt
+
+    local curr_weight, curr_alt, curr_spd, curr_mach, curr_time, traveled_nm = get_input_for_predictions()
+    local curr_fuel = 0
     local cruise_alt = FMGS_sys.data.init.crz_fl
-    local curr_spd      = TC.pred.ias
-    local curr_mach     = TC.pred.mach
-    local curr_dist     = TC.pred.dist_prev_wpt
-    local curr_time     = TC.pred.time
-    local curr_fuel     = TC.pred.fuel
-    local curr_weight   = TC.pred.weight
+
+    local i = idx_next_wpt
+
+    if i > 1 then -- There is a climb phase
+        local TC = the_big_array[idx_next_wpt-1]
+        assert(TC.pred and TC.pred.dist_prev_wpt, "Ehi T/C is not the T/C!")
+        curr_spd      = TC.pred.ias
+        curr_mach     = TC.pred.mach
+        curr_dist     = TC.pred.dist_prev_wpt
+        curr_time     = TC.pred.time
+        curr_fuel     = TC.pred.fuel
+        curr_weight   = TC.pred.weight
+    end
 
     local leg = the_big_array[i]
     if not leg then
@@ -1358,52 +1419,18 @@ function vertical_profile_update_pre_path()
     end
 end
 
-local function get_input_for_predictions()
-    if FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+local function sanitize_last_clb()
 
-        local my_pos = adirs_get_any_fmgs()
+    -- If we are in flight, not reached the FL yet, we need to be sure at least 1 point in
+    -- the big array is actually a climb segment.
 
-        assert(my_pos[1], my_pos[2])
-
-        local my_lat = my_pos[1]
-        local my_lon = my_pos[2]
-    
-        local dist_to_next_wpt = #the_big_array > 1 and get_distance_nm(my_lat, my_lon, the_big_array[2].lat, the_big_array[2].lon) or 0
-
-        return get(Gross_weight), 
-               adirs_get_avg_alt(),
-               adirs_get_avg_ias(),
-               adirs_get_avg_mach(),
-               0,   -- Time prediction is from now
-               -dist_to_next_wpt
-    else
-        local _,_,v2 = FMGS_perf_get_v_speeds()
-
-        -- Compute the initial weight as the takeoff weight - the fuel consumed at takeoff and initial climb
-        local after_to_weight = ( FMGS_sys.data.init.weights.zfw
-                              + FMGS_sys.data.init.weights.block_fuel) * 1000
-                              - FMGS_sys.data.pred.takeoff.total_fuel_kgs
-
-
-        -- First, let's understand where we are considering the initial climb
-        local curr_time =
-            FMGS_sys.data.pred.takeoff.time_to_400ft+
-            FMGS_sys.data.pred.takeoff.time_to_sec_climb+ 
-            FMGS_sys.data.pred.takeoff.time_to_vacc
-
-        local traveled_nm = 
-            FMGS_sys.data.pred.takeoff.dist_to_400ft    +
-            FMGS_sys.data.pred.takeoff.dist_to_sec_climb+
-            FMGS_sys.data.pred.takeoff.dist_to_vacc
-
-
-        return after_to_weight,
-               FMGS_perf_get_current_takeoff_acc(),
-               v2+10,
-               0, -- Current mach doesn't matter for T/O
-               curr_time,
-               traveled_nm
+    if not last_clb_idx or last_clb_idx <= 0 then
+        if adirs_get_avg_alt() < FMGS_sys.data.init.crz_fl-100 then
+           the_big_array[1].flt_phase_user = { is_climb=true }
+           last_clb_idx = 1
+        end
     end
+
 end
 
 function vertical_profile_update()
@@ -1425,27 +1452,35 @@ function vertical_profile_update()
 
     prepare_the_common_big_array()
 
-    if not last_clb_idx or not first_des_idx or last_clb_idx <= 0 or first_des_idx <= 0 then
+    local curr_weight, curr_alt, curr_spd, curr_mach, curr_time, traveled_nm  = get_input_for_predictions()
+
+    local idx_next_wpt = 1
+
+    if FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+        sanitize_last_clb()
+    end
+
+    if last_clb_idx and last_clb_idx > 0 then
+        FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_climb_update(curr_weight, curr_alt, curr_spd, curr_mach, curr_time, traveled_nm)
+        if not FMGS_sys.data.pred.climb.total_fuel_kgs then
+            -- Error, like cruise FL is too high
+            FMGS_sys.data.pred.invalid = true
+            FMGS_sys.pred_internals.why_prediction_failed = 7
+            return -- This is very bad
+        end
+    end
+
+    local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
+
+    if not first_des_idx or first_des_idx <= 0 then
         FMGS_sys.pred_internals.why_prediction_failed = 6
         return -- Cannot make any other prediction as I don't find climb or descent segments
     end
 
-
-    local curr_weight, curr_alt, curr_spd, curr_mach, curr_time, traveled_nm  = get_input_for_predictions()
-
-    local idx_next_wpt
-    FMGS_sys.data.pred.climb.total_fuel_kgs, idx_next_wpt = vertical_profile_climb_update(curr_weight, curr_alt, curr_spd, curr_mach, curr_time, traveled_nm)
-    if not FMGS_sys.data.pred.climb.total_fuel_kgs then
-        -- Error, like cruise FL is too high
-        FMGS_sys.data.pred.invalid = true
-        FMGS_sys.pred_internals.why_prediction_failed = 7
-    end
-
     if not FMGS_sys.data.pred.invalid then
-        local approx_weight_at_TOD = vertical_profile_cruise_update(idx_next_wpt)
-
-        vertical_profile_descent_update(approx_weight_at_TOD)
+            vertical_profile_descent_update(approx_weight_at_TOD)
     end
+
     -- FMGS_sys.data.pred.invalid may change
     if not FMGS_sys.data.pred.invalid then
 
