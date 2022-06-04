@@ -53,7 +53,7 @@ end
 
 function update_sequencing()
     if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT or FMGS_sys.config.phase == FMGS_PHASE_DONE then
-        FMGS_sys.fpln.active.sequenced_after_takeoff = false
+        FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff = false
         sequencer_data = {}    -- Reset derivatives
         return -- No leg sequencing when on ground
     end
@@ -67,12 +67,7 @@ function update_sequencing()
         return -- Not sufficient number of points to sequencing
     end
 
-    local my_pos = adirs_get_gpirs(1) -- Captain side here
-
-    if not my_pos[1] or not my_pos[2] then
-        my_pos = adirs_get_gpirs(2) -- F/O side here
-    end
-
+    local my_pos = adirs_get_any_fmgs()
 
     if not my_pos[1] or not my_pos[2] then
         sequencer_data = {}    -- Reset derivatives
@@ -82,7 +77,7 @@ function update_sequencing()
     local my_lat = my_pos[1]
     local my_lon = my_pos[2]
 
-    local offset = FMGS_sys.fpln.active.segment_curved_list_curr or 1
+    local offset = FMGS_sys.fpln.active.sequencer.segment_curved_list_curr or 1
 
     local past_point   = FMGS_sys.fpln.active.segment_curved_list[offset+0]
     local target_point = FMGS_sys.fpln.active.segment_curved_list[offset+1]
@@ -106,14 +101,14 @@ function update_sequencing()
         or (math.abs(target_dist-future_dist) < 1e-5 and future_dist < 0.5) -- This condition is necessary when two point coincides
     then
         -- Time to switch
-        FMGS_sys.fpln.active.sequenced_after_takeoff = true
-        FMGS_sys.fpln.active.segment_curved_list_curr = offset+1
+        FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff = true
+        FMGS_sys.fpln.active.sequencer.segment_curved_list_curr = offset+1
 
         if past_point.orig_ref ~= target_point.orig_ref then
             -- We remove a point only if the previous segment belongs to a different F/PLN
             -- item. So if we are in A -> B -> C and not A -> A -> B (A,B,C means their orig_ref) 
             if remove_point_from_fpln(past_point) then
-                FMGS_sys.fpln.active.segment_curved_list_curr = 1
+                FMGS_sys.fpln.active.sequencer.segment_curved_list_curr = 1
             end
         end
         sequencer_data = {}

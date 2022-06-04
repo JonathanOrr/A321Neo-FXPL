@@ -590,6 +590,9 @@ function FMGS_create_temp_fpln()
     FMGS_sys.fpln.temp.legs     = FMGS_sys.fpln.active.legs
     FMGS_sys.fpln.temp.next_leg = FMGS_sys.fpln.active.next_leg
 
+    FMGS_sys.fpln.temp.segment_curved_list = FMGS_sys.fpln.active.segment_curved_list
+    FMGS_sys.fpln.temp.sequencer = FMGS_sys.fpln.active.sequencer
+
 end
 
 function FMGS_create_copy_temp_fpln()

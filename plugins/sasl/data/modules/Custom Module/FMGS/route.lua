@@ -119,7 +119,7 @@ function update_route()
     local init_pt
 
     local dep_rwy, sibl = FMGS_dep_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)
-    if dep_rwy and not fpln.sequenced_after_takeoff then
+    if dep_rwy and not fpln.sequencer.sequenced_after_takeoff then
         init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
 
         if FMGS_sys.fpln.active.apts.dep_rwy_pt then
