@@ -25,7 +25,8 @@ local function remove_point_from_fpln(point)
         for i,x in ipairs(obj.legs) do
             if x == point.orig_ref then
                 table.remove(obj.legs, i)
-                FMGS_refresh_pred()    
+                FMGS_sys.fpln.active.require_recompute = true
+                FMGS_refresh_pred()
                 return true
             end
         end
@@ -52,6 +53,7 @@ end
 
 function update_sequencing()
     if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT or FMGS_sys.config.phase == FMGS_PHASE_DONE then
+        FMGS_sys.fpln.active.sequenced_after_takeoff = false
         sequencer_data = {}    -- Reset derivatives
         return -- No leg sequencing when on ground
     end
@@ -104,6 +106,7 @@ function update_sequencing()
         or (math.abs(target_dist-future_dist) < 1e-5 and future_dist < 0.5) -- This condition is necessary when two point coincides
     then
         -- Time to switch
+        FMGS_sys.fpln.active.sequenced_after_takeoff = true
         FMGS_sys.fpln.active.segment_curved_list_curr = offset+1
 
         if past_point.orig_ref ~= target_point.orig_ref then

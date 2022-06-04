@@ -684,7 +684,10 @@ function THIS_PAGE:render(mcdu_data)
     end
     self:set_updn_arrows_bottom(mcdu_data, true)
 
-    THIS_PAGE:render_dep(mcdu_data)
+    if not FMGS_sys.fpln.active.sequenced_after_takeoff then
+        -- Show the departure airport only if the airport has no been yet sequenced
+        THIS_PAGE:render_dep(mcdu_data)
+    end
     THIS_PAGE:render_list(mcdu_data)
     THIS_PAGE:print_render_list(mcdu_data)
 
