@@ -91,12 +91,21 @@ local function fpln_recompute_distances_fplnlegs(fpln, prev_point)
 end
 
 local function perform_FPLN_conversion(fpln)
+    print("perform_FPLN_conversion")
     local segment_list = convert_from_FMGS_data(fpln)
 
     local converted_segment_list = convert_holds(segment_list)
     converted_segment_list = convert_pi(converted_segment_list)
 
     fpln.segment_curved_list = converted_segment_list
+
+    FMGS_sys.fpln.active.sequencer.segment_curved_list_target = nil
+
+
+    for i,x in ipairs(FMGS_sys.fpln.active.segment_curved_list)  do
+        print("segment_curved_list", i, x, x.orig_ref, x.orig_ref.id )
+    end
+
 end
 
 function update_route()

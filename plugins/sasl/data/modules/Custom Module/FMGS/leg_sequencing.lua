@@ -15,40 +15,54 @@
 
 local sequencer_data = {}
 
-local function remove_point_from_fpln(point)
+local function remove_point_from_fpln(tgt_point)
     
-    local search_f = function(point, obj)
+    local total_deleted = 0
+
+    print("REMOVING TARGET IS ", tgt_point.orig_ref.id)
+
+    local search_f = function(deleting, tgt_point, obj)
+
         if not obj or not obj.legs then
             return false
         end
 
-        for i,x in ipairs(obj.legs) do
-            if x == point.orig_ref then
+        if deleting then
+            obj.legs = {}
+            return true
+        end
+
+        for i = #obj.legs, 1, -1 do
+            local x = obj.legs[i]
+
+            print("EXPLORE", i, x.id)
+            if deleting then
+                print("REMOVED", i, x.id)
                 table.remove(obj.legs, i)
-                FMGS_sys.fpln.active.require_recompute = true
-                FMGS_refresh_pred()
-                return true
+                total_deleted = total_deleted + 1
+            elseif x == tgt_point.orig_ref then
+                print("START DEL", i, x.id)
+                deleting = true
             end
         end
 
-        return false
+        return deleting
     end
 
-    if search_f(point, FMGS_sys.fpln.active.apts.dep_sid) then
-        return true
-    elseif search_f(point, FMGS_sys.fpln.active.apts.dep_trans) then
-        return true
-    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_trans) then
-        return true
-    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_star) then
-        return true
-    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_via) then
-        return true
-    elseif search_f(point, FMGS_sys.fpln.active.apts.arr_appr) then
-        return true
-    else
-        return false
-    end
+    local deleting = false
+
+    deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.arr_appr)
+    deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.arr_via)
+    deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.arr_star)
+    deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.arr_trans)
+    deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active)
+    deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.dep_trans)
+    print("--- DEP SID ---")
+    deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.dep_sid)
+
+    print("Total deleted", total_deleted)
+    return total_deleted
+
 end
 
 function update_sequencing()
@@ -77,11 +91,38 @@ function update_sequencing()
     local my_lat = my_pos[1]
     local my_lon = my_pos[2]
 
-    local offset = FMGS_sys.fpln.active.sequencer.segment_curved_list_curr or 1
+    local target_point = FMGS_sys.fpln.active.sequencer.segment_curved_list_target
 
-    local past_point   = FMGS_sys.fpln.active.segment_curved_list[offset+0]
-    local target_point = FMGS_sys.fpln.active.segment_curved_list[offset+1]
-    local future_point = FMGS_sys.fpln.active.segment_curved_list[offset+2]
+    if not target_point then
+        local prev = nil
+        for i,x in ipairs(FMGS_sys.fpln.active.segment_curved_list) do
+            if prev and prev.orig_ref ~= x.orig_ref then
+                target_point = x
+                break
+            end
+            prev = x
+        end
+        FMGS_sys.fpln.active.sequencer.segment_curved_list_target = target_point
+    end
+
+    local offset = nil
+
+    for i,x in ipairs(FMGS_sys.fpln.active.segment_curved_list) do
+        if x == target_point then
+            offset = i
+            break
+        end
+    end
+
+    if not offset or offset <= 1 then
+        return -- This shouldn't be possible
+    end
+
+    -- For deug only
+    FMGS_sys.fpln.active.sequencer.segment_curved_list_curr = offset
+
+    local past_point   = FMGS_sys.fpln.active.segment_curved_list[offset-1] -- -1 not a problem, offset > 1
+    local future_point = FMGS_sys.fpln.active.segment_curved_list[offset+1]
     local target_dist = get_distance_nm(my_lat, my_lon, target_point.end_lat, target_point.end_lon)
 
     if target_dist > 5 then
@@ -101,16 +142,17 @@ function update_sequencing()
         or (math.abs(target_dist-future_dist) < 1e-5 and future_dist < 0.5) -- This condition is necessary when two point coincides
     then
         -- Time to switch
-        FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff = true
-        FMGS_sys.fpln.active.sequencer.segment_curved_list_curr = offset+1
+        FMGS_sys.fpln.active.sequencer.segment_curved_list_target = future_point
 
-        if past_point.orig_ref ~= target_point.orig_ref then
-            -- We remove a point only if the previous segment belongs to a different F/PLN
-            -- item. So if we are in A -> B -> C and not A -> A -> B (A,B,C means their orig_ref) 
-            if remove_point_from_fpln(past_point) then
-                FMGS_sys.fpln.active.sequencer.segment_curved_list_curr = 1
-            end
+        if FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+            local total_deleted = remove_point_from_fpln(target_point)
         end
+
+
+        FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff = true
+
+        FMGS_sys.fpln.active.require_recompute = true
+        FMGS_refresh_pred()
         sequencer_data = {}
     else
         sequencer_data.prev_target = target_dist

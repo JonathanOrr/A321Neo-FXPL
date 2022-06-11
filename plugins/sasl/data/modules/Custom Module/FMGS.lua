@@ -166,7 +166,8 @@ FMGS_sys.fpln = {
 
         sequencer = {
             sequenced_after_takeoff = false, -- At least one leg has been sequenced after T/O?
-            segment_curved_list_curr = nil,  -- Where we are in the list of curved segment? (Should be used only in leg_sequencing.lua)
+            segment_curved_list_target = nil,  -- Where we are in the list of curved segment? (Should be used only in leg_sequencing.lua)
+            segment_curved_list_curr = nil, -- For debug only
         }
     },
     
@@ -290,7 +291,7 @@ local function update_phase()
             FMGS_sys.config.phase = FMGS_PHASE_CRUISE
         end
     elseif FMGS_sys.config.phase == FMGS_PHASE_CRUISE then
-        if FMGS_sys.data.pred.trip_dist <= 200 then -- TODO add in `or` with all engines ok and AP selected altitude < max(FL200, highest des alt cstr) 
+        if FMGS_sys.data.pred.trip_dist and FMGS_sys.data.pred.trip_dist <= 200 then -- TODO add in `or` with all engines ok and AP selected altitude < max(FL200, highest des alt cstr) 
             FMGS_sys.config.phase = FMGS_PHASE_DESCENT
         end
     elseif FMGS_sys.config.phase == FMGS_PHASE_DESCENT then

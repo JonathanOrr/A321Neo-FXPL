@@ -540,14 +540,18 @@ function convert_from_FMGS_data(fpln)
       end
    end
 
-   table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_RWY_LINE, start_lat=rwy_s_lat, start_lon=rwy_s_lon, end_lat=rwy_lat, end_lon=rwy_lon, orig_ref = {}})   
+   if not FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+      table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_RWY_LINE, start_lat=rwy_s_lat, start_lon=rwy_s_lon, end_lat=rwy_lat, end_lon=rwy_lon, orig_ref = {}})   
+   end
 
    if FMGS_sys.fpln.active.apts.dep_rwy_pt then
       local init_pt = FMGS_sys.fpln.active.apts.dep_rwy_pt -- Initial climb point acceleration altitude
       last_lat = init_pt.lat
       last_lon = init_pt.lon
       last_c_alt = init_pt.pred.altitude
-      table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=rwy_lat, start_lon=rwy_lon, end_lat=init_pt.lat, end_lon=init_pt.lon, orig_ref = init_pt})   
+      if not FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+         table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=rwy_lat, start_lon=rwy_lon, end_lat=init_pt.lat, end_lon=init_pt.lon, orig_ref = init_pt})   
+      end
    end
 
    parse_section("dep_sid", "-- DEP SID --")

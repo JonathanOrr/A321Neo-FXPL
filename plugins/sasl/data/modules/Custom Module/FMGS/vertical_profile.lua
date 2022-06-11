@@ -224,7 +224,10 @@ local function get_input_for_predictions()
         local my_lat = my_pos[1]
         local my_lon = my_pos[2]
     
-        local dist_to_next_wpt = #the_big_array > 1 and get_distance_nm(my_lat, my_lon, the_big_array[2].lat, the_big_array[2].lon) or 0
+        local dist_to_next_wpt = 0
+        if #the_big_array > 1 and the_big_array[2].lat and the_big_array[2].lon then
+            dist_to_next_wpt = get_distance_nm(my_lat, my_lon, the_big_array[2].lat, the_big_array[2].lon)
+        end
 
         return get(Gross_weight), 
                adirs_get_avg_alt(),
@@ -886,7 +889,7 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     if net_force_horizontal >= 0 then
         -- TOO STEEP DESCENT
         -- TODO advise pilots?
-        sasl.logWarning("Step " .. i_step .. " net force: " .. net_force_horizontal )
+        -- sasl.logWarning("Step " .. i_step .. " net force: " .. net_force_horizontal )
         net_force_horizontal = -1000   -- Just a negative value to sanitize the following procedure
     end
 
@@ -1198,7 +1201,7 @@ local function vertical_profile_descent_update_step89(weight, idx)
             altitude=curr_alt,
             time = Math_lerp(the_big_array[computed_des_idx].pred.time, the_big_array[computed_des_idx+1].pred.time, ratio),
             fuel = Math_lerp(the_big_array[computed_des_idx].pred.fuel, the_big_array[computed_des_idx+1].pred.fuel, ratio),
-            dist_prev_wpt = the_big_array[computed_des_idx].pred.partial_dist * ratio,
+            dist_prev_wpt = (the_big_array[computed_des_idx].pred.partial_dist or 0) * ratio,
             prev_wpt=the_big_array[computed_des_idx+1],
         }
     end
