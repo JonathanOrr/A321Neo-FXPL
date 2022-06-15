@@ -60,7 +60,10 @@ local function remove_point_from_fpln(tgt_point)
     print("--- DEP SID ---")
     deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.dep_sid)
 
-    print("Total deleted", total_deleted)
+    while (#FMGS_sys.fpln.active.segment_curved_list > 0 and FMGS_sys.fpln.active.segment_curved_list[1].orig_ref ~= tgt_point.orig_ref) do
+        table.remove(FMGS_sys.fpln.active.segment_curved_list, 1)
+    end
+
     return total_deleted
 
 end
@@ -144,14 +147,14 @@ function update_sequencing()
         -- Time to switch
         FMGS_sys.fpln.active.sequencer.segment_curved_list_target = future_point
 
-        if FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
-            local total_deleted = remove_point_from_fpln(target_point)
+        if FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff and future_point.orig_ref ~= target_point.orig_ref then
+            -- I delete the old point only if we have a switch between origin points
+            remove_point_from_fpln(target_point)
         end
 
 
         FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff = true
 
-        FMGS_sys.fpln.active.require_recompute = true
         FMGS_refresh_pred()
         sequencer_data = {}
     else
