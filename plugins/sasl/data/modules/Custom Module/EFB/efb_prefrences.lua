@@ -142,12 +142,12 @@ end
 EFB.pref_get_simbrief_id = EFB_PREFRENCES_get_simbrief_id
 
 function EFB_PREFRENCES_SAVE()
-    table.save(efb_graphics_table, moduleDirectory .. "/Custom Module/saved_configs/EFB_prefrences.cfg")
+    table.save(efb_graphics_table, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences.cfg")
 end
 EFB.pref_save = EFB_PREFRENCES_SAVE
 
 function EFB_PREFRENCES_LOAD()
-    local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_prefrences.cfg")
+    local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences.cfg")
     if table_load_buffer ~= nil then
         efb_graphics_table = table_load_buffer
     else
