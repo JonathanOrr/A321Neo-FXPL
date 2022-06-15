@@ -1,5 +1,28 @@
 include("libs/string-slice.lua")
 
+AOC_sys = {
+    reading_msg = 0,
+    msgs = {
+    --        {
+    --            message={
+    --                "MESSAGE 1",
+    --                "TO DO. THE DEED HAD ",
+    --                "ALREADY BEEN DONE AND ",
+    --                "THERE WAS NO GOING BACK ",
+    --                "IT NOW HAD BEEN BECOME ",
+    --                "A QUESTION OF HOW THEY ",
+    --                "WERE GOING TO BE ABLE",
+    --                "TO GET OUT OF THIS ",
+    --                "SITUATION AND ESCAPE ",
+    --            },
+    --            time=1234,
+    --            title="MESSAGE 1",
+    --            opened=false,
+    --            from_who = "SENDER"
+    --        },
+    },
+}
+
 local function insert_received_messages(from_who, title, message)
     local time = (get(ZULU_hours) < 10 and "0"..get(ZULU_hours) or get(ZULU_hours)) ..":".. (get(ZULU_mins) < 10 and "0"..get(ZULU_mins) or get(ZULU_mins))
     local table_buffer = {
