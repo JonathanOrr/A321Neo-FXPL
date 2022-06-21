@@ -282,6 +282,9 @@ local function draw_page_pred_errors()
     sasl.gl.drawFrame (450, size[2]-230, 500, 150, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-100, "PREDICTION PROBLEMS", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
 
+    if not FMGS_sys.pred_internals then
+        return
+    end
 
     local reason_fail
     if FMGS_sys.pred_internals.why_prediction_failed == 0 then

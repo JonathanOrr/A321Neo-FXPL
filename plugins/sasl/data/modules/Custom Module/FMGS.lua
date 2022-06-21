@@ -23,6 +23,7 @@ include('FMGS/constraints_checker.lua')
 include('FMGS/leg_sequencing.lua')
 
 local TIME_TO_GET_WIND = 5 -- in seconds
+local PREDICTION_UPDATE_INTERVAL_SEC = 10 -- in seconds
 
 local loading_cifp = 0
 
@@ -437,6 +438,11 @@ local function update_predictions()
         vertical_profile_update()
         decorate_legs_with_constraints()
         FMGS_sys.data.pred.require_update = false
+        FMGS_sys.data.pred.last_update = get(TIME)
+    else
+        if FMGS_sys.data.pred.last_update and (get(TIME) - FMGS_sys.data.pred.last_update > PREDICTION_UPDATE_INTERVAL_SEC) then
+            FMGS_sys.data.pred.require_update = true
+        end
     end
 end
 

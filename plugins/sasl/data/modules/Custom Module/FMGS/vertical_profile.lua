@@ -1045,7 +1045,8 @@ local function vertical_profile_descent_update_step89(weight, idx)
 
     local upper_limit = idx == 8 and FMGS_sys.data.init.alt_speed_limit_descent[2] or FMGS_sys.data.init.crz_fl
 
-    local tod_time, tod_fuel
+    local tod_time=0
+    local tod_fuel=0
 
     while curr_alt < upper_limit do
         computed_des_idx = computed_des_idx - 1
