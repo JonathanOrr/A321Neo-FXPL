@@ -83,9 +83,8 @@ function ND_draw_active_fpln(data, functions)
     local LINE_SIZE = 3
 
     local already_drawn = {}
-    local first_point_drawn = false
-
     local prev_orig_ref = nil
+    local prev_orig_ref_done_white = false
 
     for i,x in ipairs(curved_route) do
         if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE or x.segment_type == FMGS_COMP_SEGMENT_RWY_LINE then
@@ -124,13 +123,23 @@ function ND_draw_active_fpln(data, functions)
             end
         end
 
-        local color = first_point_drawn and ECAM_GREEN or ECAM_WHITE
+        local color = ECAM_GREEN
+
+        if not prev_orig_ref then
+            prev_orig_ref = x.orig_ref
+        elseif not prev_orig_ref_done_white then
+            if prev_orig_ref ~= x.orig_ref then
+                color = ECAM_WHITE
+                prev_orig_ref_done_white = true
+            end
+        end
+
 
         if x.orig_ref and x.orig_ref.leg_name_poi and not already_drawn[x.orig_ref.leg_name] then
             already_drawn[x.orig_ref.leg_name] = true
-            first_point_drawn = true
 
             local poi = x.orig_ref.leg_name_poi
+
             if poi.ptr_type == FMGS_PTR_WPT then
                 functions.draw_poi_array(data, poi, image_point_wpt, color)
             elseif poi.ptr_type == FMGS_PTR_NDB then

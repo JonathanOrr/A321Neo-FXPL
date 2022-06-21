@@ -19,8 +19,6 @@ local function remove_point_from_fpln(tgt_point)
     
     local total_deleted = 0
 
-    print("REMOVING TARGET IS ", tgt_point.orig_ref.id)
-
     local search_f = function(deleting, tgt_point, obj)
 
         if not obj or not obj.legs then
@@ -35,13 +33,10 @@ local function remove_point_from_fpln(tgt_point)
         for i = #obj.legs, 1, -1 do
             local x = obj.legs[i]
 
-            print("EXPLORE", i, x.id)
             if deleting then
-                print("REMOVED", i, x.id)
                 table.remove(obj.legs, i)
                 total_deleted = total_deleted + 1
             elseif x == tgt_point.orig_ref then
-                print("START DEL", i, x.id)
                 deleting = true
             end
         end
@@ -57,7 +52,6 @@ local function remove_point_from_fpln(tgt_point)
     deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.arr_trans)
     deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active)
     deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.dep_trans)
-    print("--- DEP SID ---")
     deleting = search_f(deleting, tgt_point, FMGS_sys.fpln.active.apts.dep_sid)
 
     while (#FMGS_sys.fpln.active.segment_curved_list > 0 and FMGS_sys.fpln.active.segment_curved_list[1].orig_ref ~= tgt_point.orig_ref) do

@@ -292,8 +292,12 @@ end
 
 function THIS_PAGE:prepare_list(mcdu_data)
     local list_messages = {
-        {invalid=true} -- First one is always empty (it represents the departure airport)
     }
+
+    if not FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+         -- First one is always empty (it represents the departure airport)
+        table.insert(list_messages, {invalid=true})
+    end
 
     THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
 
