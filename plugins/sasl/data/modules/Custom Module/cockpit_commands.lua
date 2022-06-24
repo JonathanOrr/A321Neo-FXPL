@@ -274,10 +274,14 @@ ENG_cmd_master_toggle_2= createCommand("a321neo/cockpit/engine/master_toggle_2",
 ENG_cmd_mode_ignite    = sasl.createCommand("a321neo/cockpit/engine/mode_ignite", "engine mode selector IGN/START")
 ENG_cmd_mode_norm      = sasl.createCommand("a321neo/cockpit/engine/mode_norm", "engine mode selector NORM")
 ENG_cmd_mode_crank     = sasl.createCommand("a321neo/cockpit/engine/mode_crank", "engine mode selector CRANK")
+ENG_cmd_mode_keepon_ignite = sasl.createCommand("a321neo/cockpit/engine/mode_ignite_keep", "engine mode keep IGN/START")
+ENG_cmd_mode_keepon_crank  = sasl.createCommand("a321neo/cockpit/engine/mode_crank_keep", "engine mode keep CRANK")
 ENG_cmd_master_on_1    = sasl.createCommand("a321neo/cockpit/engine/master_on_1", "Master Switch ENG1 on")
 ENG_cmd_master_off_1   = sasl.createCommand("a321neo/cockpit/engine/master_off_1", "Master Switch ENG1 off")
 ENG_cmd_master_on_2    = sasl.createCommand("a321neo/cockpit/engine/master_on_2", "Master Switch ENG2 on")
 ENG_cmd_master_off_2   = sasl.createCommand("a321neo/cockpit/engine/master_off_2", "Master Switch ENG2 off")
+ENG_cmd_master_keepon_1= sasl.createCommand("a321neo/cockpit/engine/master_on_keep_1", "Master Switch ENG 1 keep on")
+ENG_cmd_master_keepon_2= sasl.createCommand("a321neo/cockpit/engine/master_on_keep_2", "Master Switch ENG 2 keep on")
 
 -- APU
 APU_cmd_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")

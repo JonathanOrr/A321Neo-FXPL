@@ -108,7 +108,7 @@ function THIS_PAGE:render_star(mcdu_data, sel_rwy, sibl)
             or x.type == CIFP_TYPE_STAR_CMN_ROUTE_FMS then
     
             if rwy_match then
-                star_list[x.proc_name] = i
+                table.insert(star_list, {proc_name = x.proc_name, idx= i})
                 mcdu_data.page_data[606].star_length = mcdu_data.page_data[606].star_length + 1
             end
         end
@@ -116,15 +116,13 @@ function THIS_PAGE:render_star(mcdu_data, sel_rwy, sibl)
 
     mcdu_data.page_data[606].star_references = {0,0,0}    -- These will contain the references for buttons
 
-    local i = 0
     local n_line = 3
     local curr_page = mcdu_data.page_data[606].curr_page
-    for k,idx in pairs(star_list) do
-        i = i + 1
+    for i,x in pairs(star_list) do
         if i > 3 * (curr_page-1) and i <= 3 * (curr_page) then
-            local arrow = (FMGS_arr_get_star(true) and FMGS_arr_get_star(true).proc_name == k) and " " or "←"
-            self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. k, MCDU_LARGE, ECAM_BLUE)
-            mcdu_data.page_data[606].star_references[n_line-2] = idx    -- Let's same the array index so that we can use this for buttons
+            local arrow = (FMGS_arr_get_star(true) and FMGS_arr_get_star(true).proc_name == x.proc_name) and " " or "←"
+            self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. x.proc_name, MCDU_LARGE, ECAM_BLUE)
+            mcdu_data.page_data[606].star_references[n_line-2] = x.idx    -- Let's same the array index so that we can use this for buttons
             n_line = n_line + 1
         end
     end

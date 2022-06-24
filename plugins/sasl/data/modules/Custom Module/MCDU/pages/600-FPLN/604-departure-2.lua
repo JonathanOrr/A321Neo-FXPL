@@ -16,26 +16,20 @@
 
 local THIS_PAGE = MCDU_Page:new({id=604})
 
-THIS_PAGE.curr_page = 1
-THIS_PAGE.sid_length = 0
-THIS_PAGE.eosid = nil
-THIS_PAGE.sid_references = {0,0,0,0}
-THIS_PAGE.trans_references = {0,0,0,0}
-
 function THIS_PAGE:render_trans(mcdu_data, sel_rwy)
     if not sel_rwy or not FMGS_dep_get_sid(true) then
         return -- No runways or sid selected
     end
     
     local trans_list = {}
-    THIS_PAGE.trans_length = 0
+    mcdu_data.page_data[THIS_PAGE.id].trans_length = 0
     
-    if not THIS_PAGE.curr_fpln.apts.dep_cifp then
+    if not mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.dep_cifp then
         return  -- This should not happen
     end
 
     -- Extract the trans
-    for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_cifp.sids) do
+    for i,x in ipairs(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.dep_cifp.sids) do
     
         local rwy_match = x.proc_name == FMGS_dep_get_sid(true).proc_name or x.proc_name == "ALL"
         if     x.type == CIFP_TYPE_SS_ENR_TRANS
@@ -43,22 +37,20 @@ function THIS_PAGE:render_trans(mcdu_data, sel_rwy)
             or x.type == CIFP_TYPE_SS_ENR_TRANS_FMS then
 
             if rwy_match then
-                trans_list[x.trans_name] = i
-                THIS_PAGE.trans_length = THIS_PAGE.trans_length + 1
+                table.insert(trans_list, {trans_name = x.trans_name, idx = i})
+                mcdu_data.page_data[THIS_PAGE.id].trans_length = mcdu_data.page_data[THIS_PAGE.id].trans_length + 1
             end
         end
     end
 
-    THIS_PAGE.trans_references = {0,0,0,0}    -- These will contain the references for buttons
+    mcdu_data.page_data[THIS_PAGE.id].trans_references = {0,0,0,0}    -- These will contain the references for buttons
 
-    local i = 0
     local n_line = 2
-    for k,idx in pairs(trans_list) do
-        i = i + 1
-        if i > 4 * (THIS_PAGE.curr_page-1) and i <= 4 * (THIS_PAGE.curr_page) then
-            local arrow = (FMGS_dep_get_trans(true) and FMGS_dep_get_trans(true).trans_name == k) and " " or "→"
-            self:set_line(mcdu_data, MCDU_RIGHT, n_line, k .. arrow, MCDU_LARGE, ECAM_BLUE)
-            THIS_PAGE.trans_references[n_line-1] = idx    -- Let's same the array index so that we can use this for buttons
+    for i,x in ipairs(trans_list) do
+        if i > 4 * (mcdu_data.page_data[THIS_PAGE.id].curr_page-1) and i <= 4 * (mcdu_data.page_data[THIS_PAGE.id].curr_page) then
+            local arrow = (FMGS_dep_get_trans(true) and FMGS_dep_get_trans(true).trans_name == x.trans_name) and " " or "→"
+            self:set_line(mcdu_data, MCDU_RIGHT, n_line, x.trans_name .. arrow, MCDU_LARGE, ECAM_BLUE)
+            mcdu_data.page_data[THIS_PAGE.id].trans_references[n_line-1] = x.idx    -- Let's same the array index so that we can use this for buttons
             n_line = n_line + 1
         end
     end
@@ -72,10 +64,10 @@ function THIS_PAGE:render_sid(mcdu_data, sel_rwy, sibl)
     end
     
     local sid_list = {}
-    THIS_PAGE.sid_length = 0
-    THIS_PAGE.eosid = nil
+    mcdu_data.page_data[THIS_PAGE.id].sid_length = 0
+    mcdu_data.page_data[THIS_PAGE.id].eosid = nil
     
-    if not THIS_PAGE.curr_fpln.apts.dep_cifp then
+    if not mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.dep_cifp then
         return  -- This should not happen
     end
 
@@ -83,11 +75,11 @@ function THIS_PAGE:render_sid(mcdu_data, sel_rwy, sibl)
     local rwid_both = rwid:sub(1,-2) .. "B" -- B stands for L, R, and C. If the runway doesn't have it, it doesn't matter, cannot match
 
     -- Extract the sids
-    for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_cifp.sids) do
+    for i,x in ipairs(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.dep_cifp.sids) do
     
         local rwy_match = x.trans_name == rwid or x.trans_name == rwid_both or x.trans_name == "ALL"
         if x.type == CIFP_TYPE_SS_ENG_OUT and rwy_match then
-            THIS_PAGE.eosid = x
+            mcdu_data.page_data[THIS_PAGE.id].eosid = x
         elseif x.type == CIFP_TYPE_SS_RWY_TRANS
             or x.type == CIFP_TYPE_SS_CMN_ROUTE
             or x.type == CIFP_TYPE_SS_RWY_TRANS_RNAV
@@ -96,22 +88,20 @@ function THIS_PAGE:render_sid(mcdu_data, sel_rwy, sibl)
             or x.type == CIFP_TYPE_SS_CMN_ROUTE_FMS then
 
             if rwy_match then
-                sid_list[x.proc_name] = i
-                THIS_PAGE.sid_length = THIS_PAGE.sid_length + 1
+                table.insert(sid_list, {proc_name=x.proc_name, idx=i})
+                mcdu_data.page_data[THIS_PAGE.id].sid_length = mcdu_data.page_data[THIS_PAGE.id].sid_length + 1
             end
         end
     end
 
-    THIS_PAGE.sid_references = {0,0,0,0}    -- These will contain the references for buttons
+    mcdu_data.page_data[THIS_PAGE.id].sid_references = {0,0,0,0}    -- These will contain the references for buttons
 
-    local i = 0
     local n_line = 2
-    for k,idx in pairs(sid_list) do
-        i = i + 1
-        if i > 4 * (THIS_PAGE.curr_page-1) and i <= 4 * (THIS_PAGE.curr_page) then
-            local arrow = (FMGS_dep_get_sid(true) and FMGS_dep_get_sid(true).proc_name == k) and " " or "←"
-            self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. k, MCDU_LARGE, ECAM_BLUE)
-            THIS_PAGE.sid_references[n_line-1] = idx    -- Let's same the array index so that we can use this for buttons
+    for i,x in ipairs(sid_list) do
+        if i > 4 * (mcdu_data.page_data[THIS_PAGE.id].curr_page-1) and i <= 4 * (mcdu_data.page_data[THIS_PAGE.id].curr_page) then
+            local arrow = (FMGS_dep_get_sid(true) and FMGS_dep_get_sid(true).proc_name == x.proc_name) and " " or "←"
+            self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. x.proc_name, MCDU_LARGE, ECAM_BLUE)
+            mcdu_data.page_data[THIS_PAGE.id].sid_references[n_line-1] = x.idx    -- Let's same the array index so that we can use this for buttons
             n_line = n_line + 1
         end
     end
@@ -121,10 +111,20 @@ end
 function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 1)
 
+    if not mcdu_data.page_data[THIS_PAGE.id] then
+        mcdu_data.page_data[THIS_PAGE.id] = {
+            curr_page = 1,
+            sid_length = 0,
+            eosid = nil,
+            sid_references = {0,0,0,0},
+            trans_references = {0,0,0,0}
+        }
+    end
+
     self:set_lr_arrows(mcdu_data, true)
 
-    THIS_PAGE.main_col  = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
-    THIS_PAGE.curr_fpln = FMGS_get_current_fpln()
+    mcdu_data.page_data[THIS_PAGE.id].main_col  = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
+    mcdu_data.page_data[THIS_PAGE.id].curr_fpln = FMGS_get_current_fpln()
 
     local subject_id = mcdu_data.lat_rev_subject.data.id
 
@@ -145,19 +145,19 @@ function THIS_PAGE:render(mcdu_data)
     local trans = FMGS_dep_get_trans(true)
 
     if sel_rwy then
-        self:set_line(mcdu_data, MCDU_LEFT, 1, sibl and sel_rwy.sibl_name or sel_rwy.name, MCDU_LARGE, THIS_PAGE.main_col)
+        self:set_line(mcdu_data, MCDU_LEFT, 1, sibl and sel_rwy.sibl_name or sel_rwy.name, MCDU_LARGE, mcdu_data.page_data[THIS_PAGE.id].main_col)
     else
         self:set_line(mcdu_data, MCDU_LEFT, 1, "---", MCDU_LARGE)
     end
     if sid then
         local name = sid.proc_name == "NO SID" and "NONE" or sid.proc_name
-        self:set_line(mcdu_data, MCDU_CENTER, 1, Aft_string_fill(name, " ", 7), MCDU_LARGE, THIS_PAGE.main_col)
+        self:set_line(mcdu_data, MCDU_CENTER, 1, Aft_string_fill(name, " ", 7), MCDU_LARGE, mcdu_data.page_data[THIS_PAGE.id].main_col)
     else
         self:set_line(mcdu_data, MCDU_CENTER, 1, "------  ", MCDU_LARGE)
     end
     if trans then
         local name = trans.trans_name == "NO TRANS" and "NONE" or trans.trans_name
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, name, MCDU_LARGE, THIS_PAGE.main_col)
+        self:set_line(mcdu_data, MCDU_RIGHT, 1, name, MCDU_LARGE, mcdu_data.page_data[THIS_PAGE.id].main_col)
     else
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "------", MCDU_LARGE)
     end
@@ -179,8 +179,8 @@ function THIS_PAGE:render(mcdu_data)
     end
 
     self:set_line(mcdu_data, MCDU_CENTER, 6, "EOSID", MCDU_SMALL)
-    if THIS_PAGE.eosid then
-        self:set_line(mcdu_data, MCDU_CENTER, 6, THIS_PAGE.eosid.proc_name, MCDU_LARGE, THIS_PAGE.main_col)
+    if mcdu_data.page_data[THIS_PAGE.id].eosid then
+        self:set_line(mcdu_data, MCDU_CENTER, 6, mcdu_data.page_data[THIS_PAGE.id].eosid.proc_name, MCDU_LARGE, mcdu_data.page_data[THIS_PAGE.id].main_col)
     else
         self:set_line(mcdu_data, MCDU_CENTER, 6, " NONE", MCDU_LARGE, ECAM_WHITE)
     end
@@ -193,10 +193,10 @@ function THIS_PAGE:sel_sid(mcdu_data, i)
         FMGS_reset_dep_trans()
     end
     
-    if THIS_PAGE.sid_references[i] > 0 then
-        FMGS_dep_set_sid(THIS_PAGE.curr_fpln.apts.dep_cifp.sids[THIS_PAGE.sid_references[i]])
+    if mcdu_data.page_data[THIS_PAGE.id].sid_references[i] > 0 then
+        FMGS_dep_set_sid(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.dep_cifp.sids[mcdu_data.page_data[THIS_PAGE.id].sid_references[i]])
         FMGS_reset_dep_trans()
-        THIS_PAGE.curr_page = 1
+        mcdu_data.page_data[THIS_PAGE.id].curr_page = 1
     else
         MCDU_Page:L2(mcdu_data) -- Error
     end
@@ -208,8 +208,8 @@ function THIS_PAGE:sel_trans(mcdu_data, i)
         FMGS_create_copy_temp_fpln()
     end
 
-    if THIS_PAGE.trans_references[i] > 0 then
-        FMGS_dep_set_trans(THIS_PAGE.curr_fpln.apts.dep_cifp.sids[THIS_PAGE.trans_references[i]])
+    if mcdu_data.page_data[THIS_PAGE.id].trans_references[i] > 0 then
+        FMGS_dep_set_trans(mcdu_data.page_data[THIS_PAGE.id].curr_fpln.apts.dep_cifp.sids[mcdu_data.page_data[THIS_PAGE.id].trans_references[i]])
     else
         MCDU_Page:R2(mcdu_data) -- Error
     end
@@ -255,19 +255,18 @@ function THIS_PAGE:R6(mcdu_data)
     mcdu_open_page(mcdu_data, 600)
 end
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if THIS_PAGE.curr_page <= 1 then
+    if mcdu_data.page_data[THIS_PAGE.id].curr_page <= 1 then
         MCDU_Page:Slew_Down(mcdu_data)
     else
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page - 1
+        mcdu_data.page_data[THIS_PAGE.id].curr_page = mcdu_data.page_data[THIS_PAGE.id].curr_page - 1
     end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    print(THIS_PAGE.sid_length / 4, THIS_PAGE.curr_page)
-    if math.ceil(THIS_PAGE.sid_length / 4) <= THIS_PAGE.curr_page then
+    if math.ceil(mcdu_data.page_data[THIS_PAGE.id].sid_length / 4) <= mcdu_data.page_data[THIS_PAGE.id].curr_page then
         MCDU_Page:Slew_Up(mcdu_data)
     else
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+        mcdu_data.page_data[THIS_PAGE.id].curr_page = mcdu_data.page_data[THIS_PAGE.id].curr_page + 1
     end
 end
 

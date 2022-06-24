@@ -44,10 +44,13 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 2, "TRIP /TIME", MCDU_SMALL, ECAM_WHITE)
     local trip_fuel = FMGS_perf_get_pred_trip_fuel()
     local trip_time = FMGS_perf_get_pred_trip_time()
+    
     if trip_fuel == nil or trip_time == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "---.-/----", MCDU_LARGE, ECAM_WHITE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 2, Round_fill(trip_fuel,1) .. "/" .. trip_time, MCDU_LARGE, ECAM_BLUE)
+        trip_fuel = Fwd_string_fill(Round_fill(FMGS_perf_get_pred_trip_fuel(), 1), " ", 5)
+        trip_time = mcdu_time_beautify(trip_time)
+        self:set_line(mcdu_data, MCDU_LEFT, 2, trip_fuel .. "/" .. trip_time, MCDU_LARGE, ECAM_BLUE)
     end
 
 

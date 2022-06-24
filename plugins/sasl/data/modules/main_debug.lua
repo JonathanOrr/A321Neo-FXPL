@@ -47,6 +47,12 @@ debug_kill_blowers = false
 -- Enable the debugging (in console) of path generation algorithm
 debug_FMGS_path_generation = false
 
+-- Disable the turn generation (does not include CIFP coded turns!)
+debug_FMGS_disable_turn_computer = false
+
+-- Show on ND the debug info for the path construction
+debug_ND_debug_paths = false
+
 --
 --
 -- Do not touch after this line

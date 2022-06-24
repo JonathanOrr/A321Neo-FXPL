@@ -13,15 +13,34 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+-- Predictor function for SVM
 
-local THIS_PAGE = MCDU_Page:new({id=403})
+function predict_svm_gaussian(model, x)
 
-function THIS_PAGE:render(mcdu_data)
-    self:set_title(mcdu_data, "CLIMB WIND")
-
+    local bias  = model.bias;
+    local alpha = model.alpha;
+    local SV    = model.SV;
+    local Mu    = model.Mu;
+    local Sg    = model.Sg;
     
-    self:set_line(mcdu_data, MCDU_LEFT, 4, "PAGE NOT YET IMPLEMENTED", MCDU_LARGE, ECAM_MAGENTA)
+    -- Input standardization
+    local input = {}
+    for i,_x in ipairs(x) do
+        input[i] = (_x - Mu[i]) / Sg[i]
+    end
+
+    local sum = bias;
+    for n,a in ipairs(alpha) do  -- For each Lagrangian multiplier
+        -- Compute the norm
+        local norm = 0
+        for i = 1,#input do
+            norm = norm + (SV[n][i] - input[i]) ^ 2
+        end
+        norm = math.sqrt(norm)
+
+        local G = math.exp(-norm);
+        sum = sum + a * G;
+    end
+
+    return sum
 end
-
-
-mcdu_pages[THIS_PAGE.id] = THIS_PAGE

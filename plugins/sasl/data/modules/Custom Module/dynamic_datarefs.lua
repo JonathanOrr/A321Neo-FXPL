@@ -306,6 +306,8 @@ Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reve
 Eng_fan_angle   = createGlobalPropertyfa("a321neo/dynamics/engines/fan_angle", 2) -- For blender model 0-359
 Eng_is_starting = createGlobalPropertyia("a321neo/dynamics/engines/is_starting", 2) -- For FMOD boolean 1/0
 
+Eng_FF = globalProperty("sim/flightmodel/engine/ENGN_FF_")
+
 -- Engine startup config stuff
 ENG_config_cooling_time = createGlobalPropertyi("a321neo/config/eng/initial_cooling", 0, false, true, false)
 ENG_config_egt_drop = createGlobalPropertyi("a321neo/config/eng/pw1100_egt_drop", 0, false, true, false)
@@ -581,6 +583,12 @@ Turbulence_ratio = globalProperty("sim/weather/wind_turbulence_percent")
 Wind_layer_1_alt = globalProperty("sim/weather/wind_altitude_msl_m[0]")
 Wind_layer_2_alt = globalProperty("sim/weather/wind_altitude_msl_m[1]")
 Wind_layer_3_alt = globalProperty("sim/weather/wind_altitude_msl_m[2]")
+Wind_layer_1_speed = globalProperty("sim/weather/wind_speed_kt[0]")
+Wind_layer_2_speed = globalProperty("sim/weather/wind_speed_kt[1]")
+Wind_layer_3_speed = globalProperty("sim/weather/wind_speed_kt[2]")
+Wind_layer_1_dir = globalProperty("sim/weather/wind_direction_degt[0]")
+Wind_layer_2_dir = globalProperty("sim/weather/wind_direction_degt[1]")
+Wind_layer_3_dir = globalProperty("sim/weather/wind_direction_degt[2]")
 Wind_layer_1_turbulence = globalProperty("sim/weather/turbulence[0]")
 Wind_layer_2_turbulence = globalProperty("sim/weather/turbulence[1]")
 Wind_layer_3_turbulence = globalProperty("sim/weather/turbulence[2]")

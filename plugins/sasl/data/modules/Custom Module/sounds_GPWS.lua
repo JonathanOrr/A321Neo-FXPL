@@ -427,6 +427,9 @@ function set_alt_callouts()
 
 end
 
+local flare_entry_flag = false
+local retard_stop_time = 0
+
 function update_retard()
 
     if get(Aft_wheel_on_ground) == 1 then
@@ -438,8 +441,22 @@ function update_retard()
     else
 
         -- TODO Change to 10ft instead of 20ft when AP is on
+
+        -- trigger once on flare entry
+        if get(Capt_ra_alt_ft) < 20 and get(EWD_flight_phase) == PHASE_FINAL and not flare_entry_flag then --timer starts
+            retard_stop_time = get(TIME) + 2
+            flare_entry_flag = true -- default +2 seconds is initiated, stop resetting the timer.
+        end
+        if not(get(Capt_ra_alt_ft) < 20 and get(EWD_flight_phase) == PHASE_FINAL) then        
+            flare_entry_flag = false
+            retard_stop_time = get(TIME) -- stop immediately
+        end
+        if (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(Capt_ra_alt_ft) < 20 and get(EWD_flight_phase) == PHASE_FINAL then
+            retard_stop_time = get(TIME) + 2
+        end
+
         if get(dr_retard) == 0 and get(dr_retard_retard) == 0 then
-            if get(Capt_ra_alt_ft) < 20 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+            if retard_stop_time - get(TIME) > 0 then
                 set(dr_retard_retard, 1)
             end 
         else

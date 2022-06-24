@@ -14,26 +14,6 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=404})
-
-function THIS_PAGE:render(mcdu_data)
-    self:set_title(mcdu_data, "ROUTE")
-
-    local dep_apt = FMGS_get_apt_dep()
-    local arr_apt = FMGS_get_apt_arr()
-    assert(dep_apt and arr_apt)
-
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, "FROM/TO  ", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, dep_apt.id .. "/" .. arr_apt.id, MCDU_LARGE, ECAM_BLUE)
-
-    self:set_line(mcdu_data, MCDU_LEFT, 1, " CO RTE", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_LEFT, 1, "NONE", MCDU_LARGE, ECAM_GREEN)
-    
-    self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE)
+function compute_green_dot(weight, altitude)
+    return (1.5 * weight / 1000 + 110) + Math_clamp_lower((altitude - 20000) / 1000, 0)
 end
-
-function THIS_PAGE:L6(mcdu_data)
-    mcdu_open_page(mcdu_data, 400)
-end
-
-mcdu_pages[THIS_PAGE.id] = THIS_PAGE

@@ -19,6 +19,7 @@
 include("FMGS/functions.lua")
 include("libs/table.save.lua")
 include("debug_windows/FMGS_debug_vertical_profile.lua")
+include("debug_windows/FMGS_debug_constraints.lua")
 
 size = {1000, 600}
 
@@ -31,17 +32,6 @@ local load_result_color = ECAM_GREEN
 local BTN_WIDTH  = 150
 local BTN_HEIGHT = 39
 
--- vertical profile page
-local trip_distance = 500
-vprof_view_start = 0 -- ratio, 0-1 from start to end of leg
-vprof_view_end = 1
-local starting_px = 0
-local width_px = 0
-local hook_mouse = 0 -- 0 = nothing, 1 = start, 2 = end
-local MOUSE_X = 0
-local MOUSE_Y = 0
-
-
 local function draw_main_menu()
 
     sasl.gl.drawFrame (10, size[2]-40, BTN_WIDTH, BTN_HEIGHT, curr_page == 1 and UI_LIGHT_BLUE or UI_WHITE)
@@ -51,30 +41,13 @@ local function draw_main_menu()
     sasl.gl.drawText(Font_B612MONO_regular, 20+(3/2*BTN_WIDTH), size[2]-27, "Flight Plan", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
     sasl.gl.drawFrame (30+BTN_WIDTH*2, size[2]-40, BTN_WIDTH, BTN_HEIGHT, curr_page == 3 and UI_LIGHT_BLUE or UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 30+(5/2*BTN_WIDTH), size[2]-27, "Performance", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 30+(5/2*BTN_WIDTH), size[2]-27, "Constraints", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
     sasl.gl.drawFrame (40+BTN_WIDTH*3, size[2]-40, BTN_WIDTH, BTN_HEIGHT, curr_page == 4 and UI_LIGHT_BLUE or UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 40+(7/2*BTN_WIDTH), size[2]-27, "Vert. Profile", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
 end
 
-local function mouse_hold(x,y)
-    MOUSE_X = x
-    MOUSE_Y = y
-    if curr_page == 4 then
-        if x >= starting_px - 10 and x <= starting_px + 10 and y >= 440 and y <= 470 then
-            hook_mouse = 1
-        elseif x >= starting_px + width_px - 10 and x <= starting_px + width_px + 10 and y >= 440 and y <= 470 then
-            hook_mouse = 2
-        end
-    end
-end
-
-local function mouse_up(x,y)
-    if curr_page == 4 then
-        hook_mouse = 0
-    end
-end
 
 local function mouse_down(x,y)
     if x >=10 and x<=10+BTN_WIDTH and y >= size[2]-40 then
@@ -94,8 +67,8 @@ local function mouse_down(x,y)
                 load_result_color = ECAM_ORANGE
                 FMGS_reset_dep_arr_airports()
                 FMGS_set_apt_dep("LIML")
-                FMGS_set_apt_arr("LIML")
-                FMGS_set_apt_alt("LIMC")
+                FMGS_set_apt_arr("LIRP")
+                FMGS_set_apt_alt("LIRC")
                 FMGS_create_temp_fpln()
                 FMGS_dep_set_rwy(FMGS_sys.fpln.temp.apts.dep.rwys[1], true)
             else
@@ -136,6 +109,20 @@ local function mouse_down(x,y)
             curr_detail = FMGS_sys.fpln.active.apts.arr_rwy
             curr_detail_2 = nil
         end
+    elseif curr_page == 4 then
+        if x >=10 and x<=10+BTN_WIDTH and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(1)
+        elseif x >=20+BTN_WIDTH and x<=20+BTN_WIDTH*2 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(2)
+        elseif x >=30+BTN_WIDTH*2 and x<=30+BTN_WIDTH*3 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(3)
+        elseif x >=40+BTN_WIDTH*3 and x<=40+BTN_WIDTH*4 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(4)
+        elseif x >=50+BTN_WIDTH*4 and x<=50+BTN_WIDTH*5 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(5)
+        elseif x >=60+BTN_WIDTH*5 and x<=60+BTN_WIDTH*6 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(6)
+        end
     end
 end
 
@@ -170,21 +157,21 @@ local function draw_page_config()
     ----------------------
     sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-140, "Phase:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
     local text = "UKNWN"
-    if FMGS_sys.config.status == FMGS_PHASE_PREFLIGHT    then
+    if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT    then
         text = "PREFLIGHT"
-    elseif FMGS_sys.config.status == FMGS_PHASE_TAKEOFF then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_TAKEOFF then
         text = "TAKEOFF"
-    elseif FMGS_sys.config.status == FMGS_PHASE_CLIMB then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_CLIMB then
         text = "CLIMB"
-    elseif FMGS_sys.config.status == FMGS_PHASE_CRUISE then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_CRUISE then
         text = "CRUISE"
-    elseif FMGS_sys.config.status == FMGS_PHASE_DESCENT then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_DESCENT then
         text = "DESCENT"
-    elseif FMGS_sys.config.status == FMGS_PHASE_APPROACH then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_APPROACH then
         text = "APPROACH"
-    elseif FMGS_sys.config.status == FMGS_PHASE_GOAROUND then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_GOAROUND then
         text = "GOAROUND"
-    elseif FMGS_sys.config.status == FMGS_PHASE_DONE then
+    elseif FMGS_sys.config.phase == FMGS_PHASE_DONE then
         text = "DONE"
     end
     sasl.gl.drawText(Font_B612MONO_regular, 80, size[2]-140, text, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
@@ -267,20 +254,54 @@ local function draw_page_pred()
     sasl.gl.drawFrame (10, size[2]-570, 400, 150, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-440, "PREDICTIONS", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-460, "Trip Fuel:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-460, FMGS_sys.data.pred.trip_fuel or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-460, "Trip Fuel (kgs):", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-460, FMGS_sys.data.pred.trip_fuel and Round(FMGS_sys.data.pred.trip_fuel*1000, 2) or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-480, "Trip Time:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-480, FMGS_sys.data.pred.trip_time or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-480, "Trip Time (s):", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-480, FMGS_sys.data.pred.trip_time and math.floor(FMGS_sys.data.pred.trip_time) or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-500, "Trip Dist:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-500, FMGS_sys.data.pred.trip_dist or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-500, "Trip Dist (nm):", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-500, FMGS_sys.data.pred.trip_dist and Round(FMGS_sys.data.pred.trip_dist, 1) or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
     sasl.gl.drawText(Font_B612MONO_regular, 20, size[2]-520, "EFOB:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 120, size[2]-520, FMGS_sys.data.pred.efob or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-
+    sasl.gl.drawText(Font_B612MONO_regular, 150, size[2]-520, FMGS_sys.data.pred.efob or "---", 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
 
 end
+
+local function draw_page_pred_errors()
+
+    sasl.gl.drawFrame (450, size[2]-230, 500, 150, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-100, "PREDICTION PROBLEMS", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
+
+
+    local reason_fail
+    if FMGS_sys.pred_internals.why_prediction_failed == 0 then
+        reason_fail = "NO FAIL"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 1 then
+        reason_fail = "MISSING DEPARTURE APT"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 2 then
+        reason_fail = "MISSING ZFW or Block or Taxi Fuel"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 3 then
+        reason_fail = "MISSING CRZ FL"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 4 then
+        reason_fail = "MISSING ARR. AIRPORT or Appr Proc."
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 5 then
+        reason_fail = "MISSING V2 or Fuel is too low for TO"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 6 then
+        reason_fail = "Not even 1 CLB or DES wpt exists"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 7 then
+        reason_fail = "CRZ FL too high (step 1)"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 8 then
+        reason_fail = "CRZ FL too high (step 2)"
+    elseif FMGS_sys.pred_internals.why_prediction_failed == 9 then
+        reason_fail = "Missing departure runway"
+    end
+
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-120, "Why prediction failed:", 12, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 640, size[2]-120, reason_fail, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+
+end
+
 
 local function draw_ab_info()
 
@@ -373,17 +394,19 @@ local function draw_page_fpln_column(x, fpln)
     ----------------
     local arr = fpln.apts.arr
     sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-510, arr and (arr.name .. "("..arr.id..")") or "APT NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr and UI_LIGHT_BLUE or {.6,.6,.6})
-    local arr_rwy = fpln.apts.arr_rwy
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-530, arr_rwy and (arr_rwy[2] and (arr_rwy[1].sibl_name .. " [S]") or dep_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
-
+    if fpln.apts.arr_rwy then
+        local arr_rwy = fpln.apts.arr_rwy
+        sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-530, arr_rwy and (arr_rwy[2] and (arr_rwy[1].sibl_name .. " [S]") or arr_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
+    end
     ----------------
     -- ALTERNATE
     ----------------
     local alt = fpln.apts.alt
     sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-560, alt and (alt.name .. "("..alt.id..")") or "APT NOT SET", 12, false, false, TEXT_ALIGN_LEFT, alt and UI_LIGHT_BLUE or {.6,.6,.6})
-    local alt_rwy = fpln.apts.alt_rwy
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-580, alt_rwy and (alt_rwy[2] and (alt_rwy[1].sibl_name .. " [S]") or dep_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, alt_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
-
+    if fpln.apts.alt_rwy then
+        local alt_rwy = fpln.apts.alt_rwy
+        sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-580, alt_rwy and (alt_rwy[2] and (alt_rwy[1].sibl_name .. " [S]") or alt_rwy[1].name) or "RWY NOT SET", 12, false, false, TEXT_ALIGN_LEFT, alt_rwy and UI_LIGHT_BLUE or {.6,.6,.6})
+    end
 end
 
 local function draw_page_fpln()
@@ -501,29 +524,6 @@ local function draw_leg_details()
 
 end
 
-local function draw_vprof_background()
-    sasl.gl.drawFrame (50, 440, 850, 30, UI_BRIGHT_GREY)
-    for i=1, 5 do
-        incr = (i-1) * 80
-        sasl.gl.drawWideLine (50,60 + incr,900,60 + incr, 1, UI_BRIGHT_GREY)
-        sasl.gl.drawText(Font_B612MONO_regular, 910, 50 + incr + 3, (i-1)*10000, 16, false, false, TEXT_ALIGN_LEFT,UI_BRIGHT_GREY)
-    end
-
-    starting_px = Math_rescale_no_lim(0, 50, 1, 900, vprof_view_start)
-    starting_px = math.min(870, starting_px)
-    width_px = Math_rescale_no_lim(0, 50, 1, 900, vprof_view_end) - starting_px
-    width_px = math.max(30, width_px)
-    sasl.gl.drawFrame (starting_px, 440, width_px, 30, UI_WHITE)
-end
-
-local function update_vprof_background()
-    if hook_mouse == 1 then
-        vprof_view_start =  Math_clamp(Math_rescale_no_lim(50, 0, 900, 1, MOUSE_X), 0, 1)
-    elseif hook_mouse == 2 then
-        vprof_view_end = Math_clamp(Math_rescale_no_lim(50, 0, 900, 1, MOUSE_X),0,1)
-    end
-end
-
 
 function draw()
 
@@ -534,19 +534,16 @@ function draw()
         draw_page_config()
         draw_page_data()
         draw_page_pred()
+        draw_page_pred_errors()
     elseif curr_page == 2 then
         draw_page_fpln()
         draw_leg_details()
+    elseif curr_page == 3 then
+        draw_cstrs()
     elseif curr_page == 4 then
-        draw_vprof_background()
-        draw_vprof_actual()
+        draw_vprof()
     end
 
-end
-
-function onMouseHold( component,  x,  y,  button,  parentX,  parentY)
-    mouse_hold(x,y)
-    return 0
 end
 
 function onMouseDown (component , x , y , button , parentX , parentY)
@@ -554,22 +551,21 @@ function onMouseDown (component , x , y , button , parentX , parentY)
     return 0
 end
 
-function onMouseUp( component,  x,  y, button,  parentX,  parentY)
-    mouse_up(x,y)
-    return 0
-end
-
 function update()
     if load_result_color == ECAM_ORANGE then
-        if FMGS_sys.fpln.temp.apts.dep_cifp then
+        if FMGS_sys.fpln.temp.apts.dep_cifp and FMGS_sys.fpln.temp.apts.arr_cifp then
             FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
             FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
+            FMGS_arr_set_appr(FMGS_sys.fpln.temp.apts.arr_cifp.apprs[9], FMGS_sys.fpln.temp.apts.arr.rwys[1], true)
+            FMGS_arr_set_star(FMGS_sys.fpln.temp.apts.arr_cifp.stars[22])
+            FMGS_arr_set_via(FMGS_arr_get_available_vias(true)[2])
+            FMGS_reset_arr_trans()
+    
             FMGS_reshape_fpln()
             FMGS_insert_temp_fpln()
             load_result_color = ECAM_GREEN
             load_result = "LOADED"
         end
     end
-    update_vprof_background()
-    update_vprof_actual()
+    update_vprof()
 end

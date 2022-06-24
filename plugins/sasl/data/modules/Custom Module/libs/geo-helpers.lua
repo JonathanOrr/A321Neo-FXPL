@@ -156,7 +156,7 @@ end
 
 function heading_difference(hdg1,hdg2) -- range -180 to 180, difference between 2 bearings, +ve is right turn, -ve is left.
     local turn = 0
-        turn =  (hdg1-hdg2)%360
+    turn =  (hdg1-hdg2)%360
     turn = turn > 180 and (360-turn) or -turn
     return turn
 end
@@ -165,3 +165,57 @@ function mid_point(lat1, lon1, lat2, lon2)
     return (lat1+lat2)/2,(lon1+lon2)/2
 end
 
+
+function intersecting_radials(lat1, lon1, lat2, lon2, crs13, crs23)
+    assert(lat1 and lat2 and lon1 and lon2 and crs13 and crs23)
+    lat1  = math.rad(lat1)
+    lat2  = math.rad(lat2)
+    lon1  = -math.rad(lon1)
+    lon2  = -math.rad(lon2)
+ 
+    crs13 = math.rad(crs13)
+    crs23 = math.rad(crs23)
+ 
+    local dphi   = lat1 - lat2
+    local ddelta = lon1 - lon2
+ 
+    local square1 = (math.sin(dphi/2))^2
+    local square2 = (math.sin(ddelta/2))^2
+    local dst12=2*math.asin(math.sqrt(square1+ math.cos(lat1)*math.cos(lat2)*square2))
+ 
+    if(math.abs(dst12) < 1e-6) then
+       return math.deg(lat1), -math.deg(lon1) -- Coincidental points
+    end
+ 
+    local cos_t_a = (math.sin(lat2) - math.sin(lat1)*math.cos(dst12)) / (math.sin(dst12)*math.cos(lat1))
+    local cos_t_b = (math.sin(lat1) - math.sin(lat2)*math.cos(dst12)) / (math.sin(dst12)*math.cos(lat2))
+    local t_a = math.acos(math.min(math.max(cos_t_a, -1), 1))
+    local t_b = math.acos(math.min(math.max(cos_t_b, -1), 1))
+ 
+    local crs12 = math.sin(lon2-lon1)<0 and t_a or (2*math.pi-t_a)
+    local crs21 = math.sin(lon2-lon1)<0 and (2*math.pi-t_b) or t_b
+ 
+ 
+    local ang1=((crs13-crs12+math.pi) % (2.*math.pi)) - math.pi
+    local ang2=((crs21-crs23+math.pi) % (2.*math.pi)) - math.pi
+ 
+ 
+    local lat3, lon3
+ 
+    if math.sin(ang1) == 0 and math.sin(ang2) == 0 then
+       return nil, nil  -- Infinite intersections
+    elseif math.sin(ang1) * math.sin(ang2) < 0 then 
+       return nil, nil  -- Ambiguous intersection
+    else
+       ang1=math.abs(ang1)
+       ang2=math.abs(ang2)
+       local ang3=math.acos(-math.cos(ang1)*math.cos(ang2)+math.sin(ang1)*math.sin(ang2)*math.cos(dst12)) 
+       local dst13=math.atan2(math.sin(dst12)*math.sin(ang1)*math.sin(ang2),math.cos(ang2)+math.cos(ang1)*math.cos(ang3))
+       lat3=math.asin(math.sin(lat1)*math.cos(dst13)+math.cos(lat1)*math.sin(dst13)*math.cos(crs13))
+       local dlon=math.atan2(math.sin(crs13)*math.sin(dst13)*math.cos(lat1),math.cos(dst13)-math.sin(lat1)*math.sin(lat3))
+       lon3=((lon1-dlon+math.pi) % (2*math.pi)) - math.pi
+    end
+ 
+    return math.deg(lat3), -math.deg(lon3)
+ end
+ 

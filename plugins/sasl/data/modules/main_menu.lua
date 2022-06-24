@@ -109,6 +109,9 @@ function Show_hide_Cinetracker()
   Cinetracker_window:setIsVisible(not Cinetracker_window:isVisible())
 end
 
+function Show_hide_Exporter()
+  Exporter_window:setIsVisible(not Exporter_window:isVisible())
+end
 
 
 function IRs_instaneous_align()
@@ -210,6 +213,7 @@ Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
 Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
 --ShowHideFBWUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW UI", Show_hide_FBW_UI)
 ShowHidePIDUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide PID UI", Show_hide_PID_UI)
+ShowHideExporter	= sasl.appendMenuItem(Menu_debug, "Show/Hide Data Exporter", Show_hide_Exporter)
 ShowHideADIRSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ADIRS Debug", Show_hide_ADIRS_debug)
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)

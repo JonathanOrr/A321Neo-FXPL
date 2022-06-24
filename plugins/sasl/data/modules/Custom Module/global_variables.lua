@@ -34,6 +34,12 @@
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
+-- DO NOT initialize any sub-variable here! You must add ONLY my_var = {} 
+-- (with very few exceptions).
+-- Try to follow the naming convention: these are global variables, we don't
+-- want to pollute the main namespace!
+-------------------------------------------------------------------------------
+
 
 -- Performance array (used only when debug_performance_measure in main_debug.lua is `true`)
 Perf_array = {}
@@ -52,6 +58,7 @@ FMGS_sys = {}
 GPS_sys = {}
 RA_sys = {}
 TCAS_sys = {}
+AOC_sys = {}
 
  -- do NOT name anything else as "EFB", this is super important, used to store functions. See efb_prefrences.lua 
 EFB = {}
@@ -68,7 +75,7 @@ AvionicsBay = {}
 MCDU = {}
 
 FCTL = {}
-FBW = {
+FBW = { -- TODO: This initialization should be removed from here and moved to a FBW file
     rates = {},
     fctl = {
         surfaces = {},

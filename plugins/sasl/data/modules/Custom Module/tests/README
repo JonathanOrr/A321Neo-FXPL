@@ -1,0 +1,4 @@
+This folder contains the unit test suite of the project, based on LuaUnit.
+
+DO NOT try to run these scripts with SASL, they are not meant to be used in X-Plane.
+Use LuaJIT command line instead (or GitHub actions).

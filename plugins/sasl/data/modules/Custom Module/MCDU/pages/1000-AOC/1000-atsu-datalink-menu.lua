@@ -19,15 +19,16 @@ local THIS_PAGE = MCDU_Page:new({id=1000})
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "ATSU DATALINK")
 
-    
-    self:set_line(mcdu_data, MCDU_LEFT, 4, "PAGE NOT YET IMPLEMENTED", MCDU_LARGE, ECAM_MAGENTA)
+    self:set_line(mcdu_data, MCDU_LEFT, 1, "<ATC MENU", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, "AOC MENU>", MCDU_LARGE, ECAM_WHITE)
+end
 
-    self:new_multi_line(mcdu_data, MCDU_LEFT, 2, MCDU_LARGE)
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "GREEN", MCDU_LARGE, ECAM_GREEN)
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "      RED", MCDU_LARGE, ECAM_RED)
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "          BLUE", MCDU_LARGE, ECAM_BLUE)
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "               MAGENTA", MCDU_LARGE, ECAM_MAGENTA)
+function THIS_PAGE:L1(mcdu_data)
+    mcdu_open_page(mcdu_data, 1001)
+end
 
+function THIS_PAGE:R1(mcdu_data)
+    mcdu_open_page(mcdu_data, 1050)
 end
 
 
