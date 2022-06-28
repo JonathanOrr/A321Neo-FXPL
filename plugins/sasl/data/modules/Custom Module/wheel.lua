@@ -169,6 +169,16 @@ local function update_gear_status()
     end
 end
 
+local function compute_wheel_speeds()
+    local C_tire_radius = 0.38 --m
+    local L_tire_radius = 0.62 --m
+    local R_tire_radius = 0.62 --m
+
+    set(Wheel_spd_kts_C, get(Wheel_rot_rate_C) * C_tire_radius * 1.944)
+    set(Wheel_spd_kts_L, get(Wheel_rot_rate_L) * L_tire_radius * 1.944)
+    set(Wheel_spd_kts_R, get(Wheel_rot_rate_R) * R_tire_radius * 1.944)
+end
+
 local function update_pb_lights()
 	--update Brake fan button states follwing 00, 01, 10, 11
 	
@@ -536,6 +546,7 @@ function update()
     update_computer_status_and_pwr()
     
     update_gear_status()
+    compute_wheel_speeds()
     update_pb_lights()
 
 	--convert m/s to kts

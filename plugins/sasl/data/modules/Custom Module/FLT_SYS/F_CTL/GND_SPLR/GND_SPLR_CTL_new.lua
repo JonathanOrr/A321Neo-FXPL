@@ -1,3 +1,6 @@
+get(Cockpit_throttle_lever_L)
+get(Cockpit_throttle_lever_R)
+
 local function GND_SPLR_ARM()
     set(Ground_spoilers_armed, BoolToNum(get(SPDBRK_HANDLE_RATIO) <= -0.25))
 end

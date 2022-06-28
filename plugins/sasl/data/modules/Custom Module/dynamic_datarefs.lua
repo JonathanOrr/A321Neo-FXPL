@@ -69,6 +69,14 @@ Wheel_skidding_C    = createGlobalPropertyf("a321neo/dynamics/wheel/tire_skid_C"
 Wheel_skidding_L    = createGlobalPropertyf("a321neo/dynamics/wheel/tire_skid_L", 0, false, true, false)
 Wheel_skidding_R    = createGlobalPropertyf("a321neo/dynamics/wheel/tire_skid_R", 0, false, true, false)
 
+Wheel_rot_rate_C = globalProperty("sim/flightmodel2/gear/tire_rotation_speed_rad_sec[0]")--rad/s
+Wheel_rot_rate_L = globalProperty("sim/flightmodel2/gear/tire_rotation_speed_rad_sec[1]")--rad/s
+Wheel_rot_rate_R = globalProperty("sim/flightmodel2/gear/tire_rotation_speed_rad_sec[2]")--rad/s
+
+Wheel_spd_kts_C = createGlobalPropertyf("a321neo/dynamics/wheel/spd_kts_C", 0, false, true, false)
+Wheel_spd_kts_L = createGlobalPropertyf("a321neo/dynamics/wheel/spd_kts_L", 0, false, true, false)
+Wheel_spd_kts_R = createGlobalPropertyf("a321neo/dynamics/wheel/spd_kts_R", 0, false, true, false)
+
 Wheel_skid_speed_C  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[0]")
 Wheel_skid_speed_L  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[1]")
 Wheel_skid_speed_R  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[2]")
