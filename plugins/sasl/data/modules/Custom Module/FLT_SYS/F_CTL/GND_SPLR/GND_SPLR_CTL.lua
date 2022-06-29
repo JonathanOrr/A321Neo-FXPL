@@ -1,42 +1,63 @@
+local one_MLG_prev = 0
+local both_MLG_prev = 0
+
+local one_MLG_delta = 0
+local both_MLG_delta = 0
+
+local function compute_MLG_deltas()
+    one_MLG_delta  = get(Either_Aft_on_ground) - one_MLG_prev
+    both_MLG_delta = get(Aft_wheel_on_ground) - both_MLG_prev
+
+    one_MLG_prev  = get(Either_Aft_on_ground)
+    both_MLG_prev = get(Aft_wheel_on_ground)
+end
+
 local function GND_SPLR_ARM()
     set(Ground_spoilers_armed, BoolToNum(get(SPDBRK_HANDLE_RATIO) <= -0.25))
 end
 
 local function PLD()
-    local one_or_more_thrust_lev_on_reverse = (get(Cockpit_throttle_lever_L) < THR_IDLE_START or get(Cockpit_throttle_lever_R) < THR_IDLE_START)
-    local all_thrust_lev_lower_or_at_idle = (get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END)
-    local one_MLG_pressed = get(Either_Aft_on_ground) == 1
-    local RA_less_than_6 = RA_sys.all_RA_user() < 6
+    local A_1   = (get(Cockpit_throttle_lever_L) < THR_IDLE_START or get(Cockpit_throttle_lever_R) < THR_IDLE_START)
+    local A_2   = (get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END)
+    local B_1_1 = one_MLG_delta == 1
+    local B_1_2 = RA_sys.all_RA_user() < 6
+    local B_2   = get(Ground_spoilers_mode) == 1
 
-    if (one_or_more_thrust_lev_on_reverse and all_thrust_lev_lower_or_at_idle) and
-       ((one_MLG_pressed and RA_less_than_6) or get(Ground_spoilers_mode) == 1) then
-        set(Ground_spoilers_mode, 1)
+    if A_1 and A_2 and
+       ((B_1_1 and B_1_2) or B_2) then
+        return true
     else
-        set(Ground_spoilers_mode, 0)
+        return false
     end
 end
 
 local function GIS()
-    local GND_SPLR_armed = get(Ground_spoilers_armed) == 1
-    local one_or_more_thrust_lev_on_reverse = (get(Cockpit_throttle_lever_L) < THR_IDLE_START or get(Cockpit_throttle_lever_R) < THR_IDLE_START)
-    local all_thrust_lev_lower_or_at_idle = (get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END)
-    local both_MLG_pressed = get(Aft_wheel_on_ground) == 1
-    local RA_less_than_6 = RA_sys.all_RA_user() < 6
-    local LR_wheel_spd_72_and_more = get(Wheel_spd_kts_L) >= 72 or get(Wheel_spd_kts_R) >= 72
+    local A_1_1   = get(Ground_spoilers_armed) == 1
+    local A_1_2   = (get(Cockpit_throttle_lever_L) < THR_IDLE_START or get(Cockpit_throttle_lever_R) < THR_IDLE_START)
+    local A_2     = (get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END)
+    local B_1_1_1 = both_MLG_delta == 1
+    local B_1_1_2 = RA_sys.all_RA_user() < 6
+    local B_1_2   = get(Wheel_spd_kts_L) >= 72 or get(Wheel_spd_kts_R) >= 72
+    local B_2     = get(Ground_spoilers_mode) == 2
 
-    if ((GND_SPLR_armed or one_or_more_thrust_lev_on_reverse) and
-       all_thrust_lev_lower_or_at_idle)
+    if (A_1_1 or A_1_2) and A_2
        and
-       (((both_MLG_pressed and RA_less_than_6) or LR_wheel_spd_72_and_more) or
-       get(Ground_spoilers_mode) == 2) then
-        set(Ground_spoilers_mode, 2)
+       ((B_1_1_1 and B_1_1_2) or B_1_2 or B_2) then
+        return true
     else
-        set(Ground_spoilers_mode, 0)
+        return false
     end
 end
 
 function update()
+    compute_MLG_deltas()
     GND_SPLR_ARM()
-    PLD()
-    GIS()
+
+    if PLD() then
+        set(Ground_spoilers_mode, 1)
+    elseif GIS() then
+        set(Ground_spoilers_mode, 2)
+    else
+        set(Ground_spoilers_mode, 0)
+    end
 end
