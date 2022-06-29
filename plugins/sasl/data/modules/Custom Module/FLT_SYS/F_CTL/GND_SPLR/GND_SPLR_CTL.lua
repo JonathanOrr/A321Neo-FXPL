@@ -49,10 +49,7 @@ local function GIS()
     end
 end
 
-function update()
-    compute_MLG_deltas()
-    GND_SPLR_ARM()
-
+local function GND_SPLR_CTL()
     if PLD() then
         set(Ground_spoilers_mode, 1)
     elseif GIS() then
@@ -60,4 +57,10 @@ function update()
     else
         set(Ground_spoilers_mode, 0)
     end
+end
+
+function update()
+    compute_MLG_deltas()
+    GND_SPLR_ARM()
+    GND_SPLR_CTL()
 end
