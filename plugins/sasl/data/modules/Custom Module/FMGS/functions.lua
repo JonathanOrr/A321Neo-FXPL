@@ -85,6 +85,14 @@ function FMGS_get_takeoff_time()
     return FMGS_sys.config.takeoff_time
 end
 
+function FMGC_get_single_status(i)
+    local tbl = {
+        FMGS_sys.config.FMGC1_status,
+        FMGS_sys.config.FMGC2_status
+    }
+
+    return tbl[i]
+end
 
 function FMGS_get_status()
     return FMGS_sys.config.status

@@ -26,6 +26,8 @@ local TIME_TO_GET_WIND = 5 -- in seconds
 local loading_cifp = 0
 
 local config = {
+    FMGC1_status = false,
+    FMGC2_status = false,
     status = FMGS_MODE_OFF,
     phase  = FMGS_PHASE_PREFLIGHT,
     takeoff_time = nil,     -- In simulator time, from get(TIME)
@@ -277,9 +279,12 @@ local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
     --       This has no sense in our aircraft, so this mode doesn't exist.
 
-    local fmgc_1_works = get(FAILURE_FMGC_1) == 0 and get(DC_shed_ess_pwrd) == 1
-    local fmgc_2_works = get(FAILURE_FMGC_2) == 0 and get(DC_bus_2_pwrd) == 1
-    
+    FMGS_sys.config.FMGC1_status = get(FAILURE_FMGC_1) == 0 and get(DC_shed_ess_pwrd) == 1
+    FMGS_sys.config.FMGC2_status = get(FAILURE_FMGC_2) == 0 and get(DC_bus_2_pwrd) == 1
+
+    local fmgc_1_works = FMGS_sys.config.FMGC1_status
+    local fmgc_2_works = FMGS_sys.config.FMGC2_status
+
     if fmgc_1_works and fmgc_2_works then
         FMGS_sys.config.status = FMGS_MODE_DUAL
         FMGS_sys.config.master = 1  -- TODO: It depends on AP and FD selections
