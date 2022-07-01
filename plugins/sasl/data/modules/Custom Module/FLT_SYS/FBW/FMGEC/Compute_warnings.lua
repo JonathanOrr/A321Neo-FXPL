@@ -15,7 +15,7 @@ local function SPEED_SPEED_SPEED()
 
     local delta_vls = 0
 
-    delta_vls = (adirs_get_avg_pitch() - FBW.FAC_COMPUTATION.MIXED.aoa) * -6 + 26 / Math_clamp_higher(adirs_get_avg_ias_trend(), 0)
+    delta_vls = (adirs_get_avg_pitch() - FBW.FMGEC.MIXED.aoa) * -6 + 26 / Math_clamp_higher(adirs_get_avg_ias_trend(), 0)
     delta_vls = Math_clamp(delta_vls, -10, 10)
 
     if adirs_get_avg_ias() < (get(VLS) + delta_vls) then
@@ -42,11 +42,11 @@ local function STALL_STALL()
     local ALT_LAW = {8,    13}
 
     if get(FBW_total_control_law) == FBW_NORMAL_LAW then
-        if FBW.FAC_COMPUTATION.MIXED.aoa > NRM_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+        if FBW.FMGEC.MIXED.aoa > NRM_LAW[(get(Slats) <= 15/27) and 1 or 2] then
             set(GPWS_mode_stall, 1)
         end
     else
-        if FBW.FAC_COMPUTATION.MIXED.aoa > ALT_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+        if FBW.FMGEC.MIXED.aoa > ALT_LAW[(get(Slats) <= 15/27) and 1 or 2] then
             set(GPWS_mode_stall, 1)
         end
     end

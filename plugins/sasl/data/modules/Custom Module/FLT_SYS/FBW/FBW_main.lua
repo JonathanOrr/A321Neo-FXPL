@@ -23,7 +23,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FLT_computer")
-addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FAC_computation")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FMGEC")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/sensor_filtering")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/law_reconfig")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/LAT")
@@ -77,7 +77,7 @@ components = {
 
     FCTL_main {},
     law_reconfig {},
-    FAC_compute_main {},
+    FMGEC_main {},
 
     lateral_augmentation {},
     vertical_augmentation {},

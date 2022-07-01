@@ -4,14 +4,14 @@ local last_flap_lever_pos = 0
 local VLS_update_timer = 0
 local VLS_update_time_s = 0.15
 
-FBW.FAC_COMPUTATION.COMPUTE_VLS = function()
+FBW.FMGEC.COMPUTE_VLS = function()
     local VLS_flaps_spd_lerp_table = {
-        {0.0*27 + 0,  1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false)},
-        {0.7*27 + 0,  Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FAC_COMPUTATION.Extract_vs1g(get(Aircraft_total_weight_kgs), 1, false)},
-        {0.7*27 + 10, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FAC_COMPUTATION.Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false)},
-        {0.8*27 + 14, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FAC_COMPUTATION.Extract_vs1g(get(Aircraft_total_weight_kgs), 3, false)},
-        {0.8*27 + 21, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * Math_rescale(0, FBW.FAC_COMPUTATION.Extract_vs1g(get(Aircraft_total_weight_kgs), 4, false), 1, FBW.FAC_COMPUTATION.Extract_vs1g(get(Aircraft_total_weight_kgs), 4, true), (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3)},
-        {1.0*27 + 30, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FAC_COMPUTATION.Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
+        {0.0*27 + 0,  1.28 * FBW.FMGEC.Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false)},
+        {0.7*27 + 0,  Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FMGEC.Extract_vs1g(get(Aircraft_total_weight_kgs), 1, false)},
+        {0.7*27 + 10, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FMGEC.Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false)},
+        {0.8*27 + 14, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FMGEC.Extract_vs1g(get(Aircraft_total_weight_kgs), 3, false)},
+        {0.8*27 + 21, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * Math_rescale(0, FBW.FMGEC.Extract_vs1g(get(Aircraft_total_weight_kgs), 4, false), 1, FBW.FMGEC.Extract_vs1g(get(Aircraft_total_weight_kgs), 4, true), (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3)},
+        {1.0*27 + 30, Math_rescale(0, 1.23, 1, 1.13, VLS_reduced_ratio) * FBW.FMGEC.Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
     }
     local VLS_spdbrake_fx_lerp_table = {
         {0.0*27 + 0,  20},
@@ -56,7 +56,7 @@ function update()
 
     --VLS & stall speeds(configuration dependent)
     if VLS_update_timer >= VLS_update_time_s then
-        FBW.FAC_COMPUTATION.COMPUTE_VLS()
+        FBW.FMGEC.COMPUTE_VLS()
 
         --reset timer
         VLS_update_timer = 0

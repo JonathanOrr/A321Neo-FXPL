@@ -60,7 +60,7 @@ end
 function compute_vapp(weight_at_rwy)
     -- Then we need the Vapp speed
     local flaps = FMGS_get_landing_config() + 1
-    local VLS = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(weight_at_rwy, flaps, true)
+    local VLS = 1.28 * FBW.FMGEC.Extract_vs1g(weight_at_rwy, flaps, true)
     FMGS_set_landing_vls(VLS)
     local APPR_CORR = 5 -- TODO:
     -- - 5kt if A/THR is ON

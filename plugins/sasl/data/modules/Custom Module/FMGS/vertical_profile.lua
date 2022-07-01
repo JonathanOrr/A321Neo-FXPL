@@ -16,7 +16,7 @@
 -- Short description: Vertical profile computation
 -------------------------------------------------------------------------------
 
-include("FLT_SYS/FBW/FAC_computation/common_functions.lua");
+include("FLT_SYS/FBW/FMGEC/common_functions.lua");
 include("FMGS/predictors/engine_thrust.lua")
 include("FMGS/predictors/drag.lua")
 include("libs/speed_helpers.lua")
@@ -793,13 +793,13 @@ local function vertical_profile_descent_update_step234(weight, i_step)
     local gear = true -- i_step < 4
     local V_START
     if i_step == 2 then
-        V_START = 1.28 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), flaps_start, gear)
+        V_START = 1.28 * FBW.FMGEC.Extract_vs1g(sanitize_weight(weight), flaps_start, gear)
     elseif i_step == 3 then
         -- F speed
-        V_START = 1.22 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), 2, false)
+        V_START = 1.22 * FBW.FMGEC.Extract_vs1g(sanitize_weight(weight), 2, false)
     elseif i_step == 4 then
         -- S speed
-        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), 0, false)
+        V_START = 1.23 * FBW.FMGEC.Extract_vs1g(sanitize_weight(weight), 0, false)
     end
 
     local V_END = FMGS_sys.data.pred.appr.steps[i_step-1].ias
@@ -897,7 +897,7 @@ local function vertical_profile_descent_update_step567(weight, i_step)
     local V_START
     if i_step == 5 then
         -- S speed
-        V_START = 1.23 * FBW.FAC_COMPUTATION.Extract_vs1g(sanitize_weight(weight), 0, false)
+        V_START = 1.23 * FBW.FMGEC.Extract_vs1g(sanitize_weight(weight), 0, false)
     elseif i_step == 6 then
         -- GDOT
         V_START = compute_green_dot(sanitize_weight(weight), alt)

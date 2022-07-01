@@ -1,3 +1,5 @@
+include('FMGS/functions.lua')
+
 local aoa_filtering_table = {
     CA_ALPHA = {
         x = 0,
@@ -64,9 +66,9 @@ local function FILTER_ALPHA()--to smooth out the AoA so that the info is usable
     --filter display AoA for readable purposes
     aoa_filtering_table.CA_ALPHA.x = adirs_get_aoa(PFD_CAPT)
     aoa_filtering_table.FO_ALPHA.x = adirs_get_aoa(PFD_FO)
-    aoa_filtering_table.FAC_1_ALPHA.x = FBW.FAC_COMPUTATION.FAC_1.aoa
-    aoa_filtering_table.FAC_2_ALPHA.x = FBW.FAC_COMPUTATION.FAC_2.aoa
-    aoa_filtering_table.MIXED_ALPHA.x = FBW.FAC_COMPUTATION.MIXED.aoa
+    aoa_filtering_table.FAC_1_ALPHA.x = FBW.FMGEC.FMGEC_1.aoa
+    aoa_filtering_table.FAC_2_ALPHA.x = FBW.FMGEC.FMGEC_2.aoa
+    aoa_filtering_table.MIXED_ALPHA.x = FBW.FMGEC.MIXED.aoa
     set(Filtered_CA_AoA,        low_pass_filter(aoa_filtering_table.CA_ALPHA))
     set(Filtered_FO_AoA,        low_pass_filter(aoa_filtering_table.FO_ALPHA))
     set(Filtered_FAC_1_AoA,     low_pass_filter(aoa_filtering_table.FAC_1_ALPHA))
@@ -180,24 +182,24 @@ function update()
 
     COMPUTE_BUSS_ALPHA()
     COMPUTE_A0_AFLOOR()
-    COMPUTE_APROT_AMAX(FAC_1_Aprot_AoA,     FAC_1_Amax_AoA,     FBW.FAC_COMPUTATION.FAC_1.mach)
-    COMPUTE_APROT_AMAX(FAC_2_Aprot_AoA,     FAC_2_Amax_AoA,     FBW.FAC_COMPUTATION.FAC_2.mach)
-    COMPUTE_APROT_AMAX(FAC_MIXED_Aprot_AoA, FAC_MIXED_Amax_AoA, FBW.FAC_COMPUTATION.MIXED.mach)
+    COMPUTE_APROT_AMAX(FAC_1_Aprot_AoA,     FAC_1_Amax_AoA,     FBW.FMGEC.FMGEC_1.mach)
+    COMPUTE_APROT_AMAX(FAC_2_Aprot_AoA,     FAC_2_Amax_AoA,     FBW.FMGEC.FMGEC_2.mach)
+    COMPUTE_APROT_AMAX(FAC_MIXED_Aprot_AoA, FAC_MIXED_Amax_AoA, FBW.FMGEC.MIXED.mach)
 
     --update smooth values of alpha speeds
-    COMPUTE_SMOOTH_VALPHAs(FAC_1_Vaprot_VSW,     FAC_1_Valpha_MAX,     FBW.FAC_COMPUTATION.FAC_1.ias, FAC_1_Aprot_AoA,     FAC_1_Amax_AoA,     Filtered_FAC_1_AoA)
-    COMPUTE_SMOOTH_VALPHAs(FAC_2_Vaprot_VSW,     FAC_2_Valpha_MAX,     FBW.FAC_COMPUTATION.FAC_2.ias, FAC_2_Aprot_AoA,     FAC_2_Amax_AoA,     Filtered_FAC_2_AoA)
-    COMPUTE_SMOOTH_VALPHAs(FAC_MIXED_Vaprot_VSW, FAC_MIXED_Valpha_MAX, FBW.FAC_COMPUTATION.MIXED.ias, FAC_MIXED_Aprot_AoA, FAC_MIXED_Amax_AoA, Filtered_FAC_MIXED_AoA)
+    COMPUTE_SMOOTH_VALPHAs(FAC_1_Vaprot_VSW,     FAC_1_Valpha_MAX,     FBW.FMGEC.FMGEC_1.ias, FAC_1_Aprot_AoA,     FAC_1_Amax_AoA,     Filtered_FAC_1_AoA)
+    COMPUTE_SMOOTH_VALPHAs(FAC_2_Vaprot_VSW,     FAC_2_Valpha_MAX,     FBW.FMGEC.FMGEC_2.ias, FAC_2_Aprot_AoA,     FAC_2_Amax_AoA,     Filtered_FAC_2_AoA)
+    COMPUTE_SMOOTH_VALPHAs(FAC_MIXED_Vaprot_VSW, FAC_MIXED_Valpha_MAX, FBW.FMGEC.MIXED.ias, FAC_MIXED_Aprot_AoA, FAC_MIXED_Amax_AoA, Filtered_FAC_MIXED_AoA)
 
     --VLS & alpha speeds update timer(accirding to video at 25fps updates every 3 <-> 4 frames: https://www.youtube.com/watch?v=3Suxhj9wQio&ab_channel=a321trainingteam)
     ALPHA_SPD_update_timer = ALPHA_SPD_update_timer + get(DELTA_TIME)
 
     --VLS & stall speeds(configuration dependent)
     --on liftoff for 5 seconds the Aprot value is the same as Amax(FCOM 1.27.20.P4 or DSC 27-20-10-20 P4/6)
-    --[[if ALPHA_SPD_update_timer >= ALPHA_SPD_update_time_s then
+    if ALPHA_SPD_update_timer >= ALPHA_SPD_update_time_s then
         --update the delayed speeds
-        local FAC_1_MON_AVAIL = FBW.FLT_computer.FAC[1].MON_CHANEL_avail()
-        local FAC_2_MON_AVAIL = FBW.FLT_computer.FAC[2].MON_CHANEL_avail()
+        local FAC_1_MON_AVAIL = FMGC_get_single_status(1)
+        local FAC_2_MON_AVAIL = FMGC_get_single_status(2)
 
         if FAC_1_MON_AVAIL and FAC_2_MON_AVAIL then
             set(CA_Vaprot_VSW, get(FAC_1_Vaprot_VSW))
@@ -223,5 +225,5 @@ function update()
 
         --reset timer
         ALPHA_SPD_update_timer = 0
-    end]]
+    end
 end

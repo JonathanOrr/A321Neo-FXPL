@@ -1,4 +1,4 @@
-FBW.FAC_COMPUTATION.Extract_vs1g = function(gross_weight, config, gear_down)
+FBW.FMGEC.Extract_vs1g = function(gross_weight, config, gear_down)
     if config == 0 then--clean
         return 274.5826 + (79.54455 - 274.5826) / (1 + ((gross_weight / 1000) / 86.96515)^1.689565)
     elseif config == 1 then--1
@@ -20,7 +20,7 @@ end
 
 function update()
     --set VS1G
-    set(Current_VS1G, FBW.FAC_COMPUTATION.Extract_vs1g(
+    set(Current_VS1G, FBW.FMGEC.Extract_vs1g(
         get(Aircraft_total_weight_kgs),
         get(Flaps_internal_config),
         (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 == 1

@@ -1,9 +1,9 @@
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FAC_computation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FMGEC")
 
-FBW.FAC_COMPUTATION = {}
-FBW.FAC_COMPUTATION.FAC_1 = {}
-FBW.FAC_COMPUTATION.FAC_2 = {}
-FBW.FAC_COMPUTATION.MIXED = {}
+FBW.FMGEC = {}
+FBW.FMGEC.FMGEC_1 = {}
+FBW.FMGEC.FMGEC_2 = {}
+FBW.FMGEC.MIXED = {}
 
 components = {
     Vote_inputs {},
@@ -20,16 +20,16 @@ function update()
     updateAll(components)
 
     if get(Print_mixed_fac_input) == 1 then
-        print("FAC 1:")
-        for key, value in pairs(FBW.FAC_COMPUTATION.FAC_1) do
+        print("FMGEC 1:")
+        for key, value in pairs(FBW.FMGEC.FMGEC_1) do
             print(key .. ": " .. tostring(value))
         end
-        print("FAC 2:")
-        for key, value in pairs(FBW.FAC_COMPUTATION.FAC_2) do
+        print("FMGEC 2:")
+        for key, value in pairs(FBW.FMGEC.FMGEC_2) do
             print(key .. ": " .. tostring(value))
         end
         print("MIXED:")
-        for key, value in pairs(FBW.FAC_COMPUTATION.MIXED) do
+        for key, value in pairs(FBW.FMGEC.MIXED) do
             print(key .. ": " .. tostring(value))
         end
     end
