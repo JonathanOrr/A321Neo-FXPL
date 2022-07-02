@@ -363,7 +363,7 @@ end
 ----------------------------------------------------------------------------------------------------
 -- AoA
 ----------------------------------------------------------------------------------------------------
-local function is_aoa_valid(i)
+function adirs_is_aoa_valid(i)
     local oth1 = (i) % 3 + 1
     local oth2 = (oth1) % 3 + 1
     local i_off =    not (ADIRS_sys[i].ir_status    == IR_STATUS_ALIGNED or ADIRS_sys[i].ir_status    == IR_STATUS_ATT_ALIGNED) or get(ADIRS_sys[i].fail_aoa_dataref)    == 1
@@ -399,7 +399,7 @@ local function is_aoa_valid(i)
 end
 
 function adirs_get_avg_aoa()
-    return voter("aoa", is_aoa_valid)
+    return voter("aoa", adirs_is_aoa_valid)
 end
 
 function adirs_how_many_aoa_working()
@@ -419,13 +419,13 @@ function adirs_aoa_disagree()
     local TOTAL_DISAGREE = 0
 
     if (ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[1].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_CAPT) == 0 then
-        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_aoa_valid(1) and 0 or 1)
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (adirs_is_aoa_valid(1) and 0 or 1)
     end
     if (ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[2].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_FO) == 0 then
-        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_aoa_valid(2) and 0 or 1)
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (adirs_is_aoa_valid(2) and 0 or 1)
     end
     if (ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[3].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_STBY) == 0 then
-        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_aoa_valid(3) and 0 or 1)
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (adirs_is_aoa_valid(3) and 0 or 1)
     end
 
     if TOTAL_DISAGREE >= (adirs_how_many_aoa_working() - 1) then
@@ -438,10 +438,10 @@ end
 ----------------------------------------------------------------------------------------------------
 -- ADR
 ----------------------------------------------------------------------------------------------------
-local function is_adr_valid(i)
+function adirs_is_adr_valid(i)
     local oth1 = (i) % 3 + 1
     local oth2 = (oth1) % 3 + 1
-    local i_off =    ADIRS_sys[i].adr_status == ADR_STATUS_OFF    or ADIRS_sys[i].adr_status == ADR_STATUS_FAULT
+    local i_off    = ADIRS_sys[i].adr_status == ADR_STATUS_OFF    or ADIRS_sys[i].adr_status == ADR_STATUS_FAULT
     local oth1_off = ADIRS_sys[oth1].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth1].adr_status == ADR_STATUS_FAULT
     local oth2_off = ADIRS_sys[oth2].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth2].adr_status == ADR_STATUS_FAULT
     local only_one_active = oth1_off and oth2_off
@@ -454,64 +454,80 @@ local function is_adr_valid(i)
         return true --if there is only one ADR left, the system can't tell which is correct
     end
 
-    if (i == 1 and get(FAILURE_SENSOR_STATIC_CAPT_ERR) == 1) or
-       (i == 2 and get(FAILURE_SENSOR_STATIC_FO_ERR) == 1) or
-       (i == 3 and get(FAILURE_SENSOR_STATIC_STBY_ERR) == 1) then
-        return false    -- I need to cheat here: the altitude of x-plane altimeter depends on the
-                        -- baro settings, but it's better not to run a voter on a value that depends
-                        -- on the pilot input
-    end
+    -- I need to cheat here: the altitude of x-plane altimeter depends on the
+    -- baro settings, but it's better not to run a voter on a value that depends
+    -- on the pilot input
+    local static_errs = {
+        FAILURE_SENSOR_STATIC_CAPT_ERR,
+        FAILURE_SENSOR_STATIC_FO_ERR,
+        FAILURE_SENSOR_STATIC_STBY_ERR,
+    }
 
-    local ias_margin = 3
-    local ias1    = ADIRS_sys[i].ias
-    local ias2 = ADIRS_sys[oth1].ias
-    local ias3 = ADIRS_sys[oth2].ias
-
-    local mach_margin = 0.05
-    local mach1 = ADIRS_sys[i].mach
-    local mach2 = ADIRS_sys[oth1].mach
-    local mach3 = ADIRS_sys[oth2].mach
-
-    local ias_1v2 = false
-    local ias_1v3 = false
-    local mach_1v2 = false
-    local mach_1v3 = false
+    local self_v_oth1 = false
+    local self_v_oth2 = false
 
     if not oth1_off then
-        ias_1v2 =  math.abs(ias1  -  ias2) < ias_margin
-        mach_1v2 = math.abs(mach1 - mach2) < mach_margin
+        self_v_oth1 = get(static_errs[i]) == 0 and get(static_errs[oth1]) == 0
     end
     if not oth2_off then
-        ias_1v3 =  math.abs(ias1  -  ias3) < ias_margin
-        mach_1v3 = math.abs(mach1 - mach3) < mach_margin
+        self_v_oth2 = get(static_errs[i]) == 0 and get(static_errs[oth2]) == 0
     end
 
-    return ((mach_1v2 or mach_1v3) and
-           (ias_1v2   or ias_1v3))
+    if not self_v_oth1 and not self_v_oth2 then
+        return false
+    end
+
+    --compare general ADR data--
+    local compare = {
+        {data = "ias",  margin = 3},
+        {data = "mach", margin = 0.05},
+    }
+
+    for key, val in pairs(compare) do
+        local selfData = ADIRS_sys[i][val.data]
+        local oth1Data = ADIRS_sys[oth1][val.data]
+        local oth2Data = ADIRS_sys[oth2][val.data]
+
+        self_v_oth1 = false
+        self_v_oth2 = false
+
+        if not oth1_off then
+            self_v_oth1 = math.abs(selfData  -  oth1Data) < val.margin
+        end
+        if not oth2_off then
+            self_v_oth2 = math.abs(selfData  -  oth2Data) < val.margin
+        end
+
+        if not self_v_oth1 and not self_v_oth2 then
+            return false
+        end
+    end
+
+    return true
 end
 
 function adirs_get_avg_ias()
-    return voter("ias", is_adr_valid)
+    return voter("ias", adirs_is_adr_valid)
 end
 
 function adirs_get_avg_ias_trend()
-    return voter("ias_trend", is_adr_valid)
+    return voter("ias_trend", adirs_is_adr_valid)
 end
 
 function adirs_get_avg_tas()
-    return voter("tas", is_adr_valid)
+    return voter("tas", adirs_is_adr_valid)
 end
 
 function adirs_get_avg_alt()
-    return voter("alt", is_adr_valid)
+    return voter("alt", adirs_is_adr_valid)
 end
 
 function adirs_get_avg_vs()
-    return voter("vs", is_adr_valid)
+    return voter("vs", adirs_is_adr_valid)
 end
 
 function adirs_get_avg_mach()
-    return voter("mach", is_adr_valid)
+    return voter("mach", adirs_is_adr_valid)
 end
 
 function adirs_adr_params_disagree()
@@ -523,13 +539,13 @@ function adirs_adr_params_disagree()
     local TOTAL_DISAGREE = 0
 
     if ADIRS_sys[1].adr_status == ADR_STATUS_ON then
-        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_adr_valid(1) and 0 or 1)
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (adirs_is_adr_valid(1) and 0 or 1)
     end
     if ADIRS_sys[2].adr_status == ADR_STATUS_ON then
-        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_adr_valid(2) and 0 or 1)
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (adirs_is_adr_valid(2) and 0 or 1)
     end
     if ADIRS_sys[3].adr_status == ADR_STATUS_ON then
-        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_adr_valid(3) and 0 or 1)
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (adirs_is_adr_valid(3) and 0 or 1)
     end
 
     if TOTAL_DISAGREE >= (adirs_how_many_adrs_work() - 1) then
@@ -561,40 +577,34 @@ local function is_ir_valid(i)
         return true --if there is only one IR left, the system can't tell which is correct
     end
 
-    local margin = 5
-    local pitch1 = ADIRS_sys[i].pitch
-    local pitch2 = ADIRS_sys[oth1].pitch
-    local pitch3 = ADIRS_sys[oth2].pitch
+    --compare general IR data--
+    local compare = {
+        {data = "pitch", margin = 5},
+        {data = "roll",  margin = 5},
+        {data = "hdg",   margin = 5},
+    }
 
-    local roll1 = ADIRS_sys[i].roll
-    local roll2 = ADIRS_sys[oth1].roll
-    local roll3 = ADIRS_sys[oth2].roll
+    for key, val in pairs(compare) do
+        local selfData = ADIRS_sys[i][val.data]
+        local oth1Data = ADIRS_sys[oth1][val.data]
+        local oth2Data = ADIRS_sys[oth2][val.data]
 
-    local hdg1 = ADIRS_sys[i].hdg
-    local hdg2 = ADIRS_sys[oth1].hdg
-    local hdg3 = ADIRS_sys[oth2].hdg
+        local self_v_oth1 = false
+        local self_v_oth2 = false
 
-    local pitch_1v2 = false
-    local pitch_1v3 = false
-    local roll_1v2 = false
-    local roll_1v3 = false
-    local hdg_1v2 = false
-    local hdg_1v3 = false
+        if not oth1_off then
+            self_v_oth1 = math.abs(selfData  -  oth1Data) < val.margin
+        end
+        if not oth2_off then
+            self_v_oth2 = math.abs(selfData  -  oth2Data) < val.margin
+        end
 
-    if not oth1_off then
-        pitch_1v2 = math.abs(pitch1 - pitch2) < margin
-        roll_1v2 =  math.abs(roll1  -  roll2) < margin
-        hdg_1v2 =   math.abs(hdg1   -   hdg2) < margin
-    end
-    if not oth2_off then
-        pitch_1v3 = math.abs(pitch1 - pitch3) < margin
-        roll_1v3 =  math.abs(roll1  -  roll3) < margin
-        hdg_1v3 =   math.abs(hdg1   -   hdg3) < margin
+        if not self_v_oth1 and not self_v_oth2 then
+            return false
+        end
     end
 
-    return ((pitch_1v2 or pitch_1v3) and
-           (roll_1v2   or  roll_1v3) and
-           (hdg_1v2    or  hdg_1v3))
+    return true
 end
 
 function adirs_get_avg_pitch()
