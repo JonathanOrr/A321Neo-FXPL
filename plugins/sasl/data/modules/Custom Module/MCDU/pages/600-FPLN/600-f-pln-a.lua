@@ -257,8 +257,8 @@ local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper
     for i,x in ipairs(list_messages) do
         if x == pseudo_wpt.prev_wpt then
             assert(pseudo_wpt.dist_prev_wpt, "dist_prev_wpt is mandatory for pseudo wpts, but not present in " .. name .. "/" .. (pseudo_wpt.id or "[UNKN]"))
-            list_messages[i].temp_computed_distance = list_messages[i].computed_distance - pseudo_wpt.dist_prev_wpt
-            table.insert(list_messages, i, {id=name, 
+            list_messages[i+1].temp_computed_distance = list_messages[i+1].computed_distance - pseudo_wpt.dist_prev_wpt
+            table.insert(list_messages, i+1, {id=name, 
                                             airway_name=upper_name, -- May be nil
                                             pred={  time=pseudo_wpt.time, 
                                                     ias=pseudo_wpt.ias, 

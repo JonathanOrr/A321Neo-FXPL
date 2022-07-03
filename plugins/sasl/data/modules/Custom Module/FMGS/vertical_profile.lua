@@ -569,7 +569,7 @@ function vertical_profile_climb_update(curr_weight, curr_alt, curr_spd, curr_mac
         time=curr_time,
         fuel=total_fuel_cons,
         altitude=cruise_alt,
-        prev_wpt=the_big_array[i],
+        prev_wpt=the_big_array[i-1],
         dist_prev_wpt=curr_dist,
         weight=curr_weight
     }
