@@ -20,8 +20,8 @@ function Slats_flaps_calc_and_control()
 
     --surface speeds
     local flaps_full_deploy_time = 20
-    local slat_spd = slat_ratios[#slat_ratios] / flaps_full_deploy_time
-    local flap_spd = flap_angles[#flap_angles] / flaps_full_deploy_time
+    local slat_spd = slat_ratios[#slat_ratios] / flaps_full_deploy_time * FCTL.SLAT_FLAP.STAT.SLAT.def_spd_factor
+    local flap_spd = flap_angles[#flap_angles] / flaps_full_deploy_time * FCTL.SLAT_FLAP.STAT.FLAP.def_spd_factor
 
     --positions--
     local slat_ratio_to_slat = {
@@ -80,40 +80,6 @@ function Slats_flaps_calc_and_control()
     if get(Any_wheel_on_ground) == 1 and adirs_get_avg_ias() < 60 then--inhibition
         set(Slat_alpha_locked, 0)
     end
-
-    --make ecam slats or flaps indication yellow refer to FCOM 1.27.50 P6
-    if get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail) then
-        if (get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450) or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
-            set(Slats_ecam_amber, 1)
-        else
-            set(Slats_ecam_amber, 0)
-        end
-
-        if (get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450) or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
-            set(Flaps_ecam_amber, 1)
-        else
-            set(Flaps_ecam_amber, 0)
-        end
-    else
-        set(Slats_ecam_amber, 0)
-        set(Flaps_ecam_amber, 0)
-    end
-
-    --SPEEDs logic--
-    local hyd_spd = {
-        {0,      0},
-        {1450, 0.5},
-        {2900,   1},
-    }
-    local sfcc_spd = {
-        {0,   0},
-        {1, 0.5},
-        {2,   1},
-    }
-    slat_spd = slat_spd * Table_interpolate(hyd_spd, get(Hydraulic_G_press) + get(Hydraulic_B_press))
-    slat_spd = slat_spd * Table_interpolate(sfcc_spd, get(SFCC_1_status) + get(SFCC_2_status))
-    flap_spd = flap_spd * Table_interpolate(hyd_spd, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
-    flap_spd = flap_spd * Table_interpolate(sfcc_spd, get(SFCC_1_status) + get(SFCC_2_status))
 
     --slat alpha inhibit
     slat_spd = slat_spd * (1 - get(Slat_alpha_locked))

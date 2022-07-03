@@ -542,6 +542,7 @@ Print_splr_status =                     createGlobalPropertyi("a321neo/dynamics/
 Print_elev_status =                     createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_elev_control_status", 0, false, true, false)
 Print_ths_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_ths_control_status", 0, false, true, false)
 Print_rud_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_rud_control_status", 0, false, true, false)
+Print_slat_flap_status =                createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_slat_flap_control_status", 0, false, true, false)
 Print_print_main_fcc_status =           createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_main_fcc_status", 0, false, true, false)
 Print_mixed_fac_input =                 createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_mixed_fac_input", 0, false, true, false)
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
@@ -718,9 +719,7 @@ Left_outboard_flaps =        globalProperty("sim/flightmodel/controls/wing2l_fla
 Left_inboard_flaps =         globalProperty("sim/flightmodel/controls/wing1l_fla1def")
 Right_inboard_flaps =        globalProperty("sim/flightmodel/controls/wing1r_fla1def")
 Right_outboard_flaps =       globalProperty("sim/flightmodel/controls/wing2r_fla2def")
-Slats_ecam_amber = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_ecam_amber", 0, false, true, false)--slats indication on the ecam is amber
 Slats_in_transit = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
-Flaps_ecam_amber = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
 Flaps_in_transit = 	         createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
 Flaps_deployed_angle =       createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 14, 21, 25
 --hstabs

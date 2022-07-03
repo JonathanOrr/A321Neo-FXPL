@@ -70,7 +70,7 @@ local inf_messages = {
            get(AC_bus_1_pwrd) == 0 or get(DC_bus_2_pwrd) == 0 or
            get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
            get(FAILURE_FCTL_ELAC_1) == 1 or get(FAILURE_FCTL_ELAC_2) == 1 or
-           get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
+           not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled or
            get(FAILURE_FCTL_LAIL) == 1 or get(FAILURE_FCTL_RAIL) == 1 or
            get(FAILURE_HYD_B_pump) == 1 or
            get(FAILURE_HYD_B_low_air) == 1 or
@@ -100,7 +100,7 @@ local inf_messages = {
     end },
 
     { text="CTR TK FEED: MAN ONLY", cond=function() return
-       get(Slats_ecam_amber) == 1 or
+       not FCTL.SLAT_FLAP.STAT.SLAT.controlled or
        not PB.ovhd.fuel_MODE_SEL.status_top and not PB.ovhd.fuel_MODE_SEL.status_bottom and get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000) or
        get(FAILURE_FUEL, L_TK_PUMP_1) == 1 and get(FAILURE_FUEL, L_TK_PUMP_2) == 1 or
        (get(Fuel_quantity[tank_LEFT]) < 750 or get(Fuel_quantity[tank_RIGHT]) < 750) and
@@ -109,7 +109,7 @@ end },
 
     { text="FUEL CONSUMPT INCRSD", cond=function() return
        --get(FAILURE_FCTL_ELAC_1) == 1 or get(FAILURE_FCTL_ELAC_2) == 1 or
-       get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
+       not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled or
        get(AC_bus_1_pwrd) == 0 or
        get(DC_bus_2_pwrd) == 0 and get(DC_ess_bus_pwrd) == 0 or
        get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
@@ -160,7 +160,7 @@ end },
     -- F/CTL
     { text="SLATS SLOW", cond=function() return
            (get(AC_bus_1_pwrd) == 0 or
-           get(Slats_ecam_amber) == 1 or
+           not FCTL.SLAT_FLAP.STAT.SLAT.controlled or
            get(FAILURE_HYD_B_pump) == 1 or
            get(FAILURE_HYD_B_low_air) == 1 or
            get(Hydraulic_B_qty) < 0.31 or
@@ -285,14 +285,14 @@ end },
     
     { text="ENG 1 APPR IDLE ONLY", cond=function() return
            (get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1) or get(DC_ess_bus_pwrd) == 0 or
-           get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
+           not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled or
            get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1 or
            get(DC_ess_bus_pwrd) == 0
     end },
     
     { text="ENG 2 APPR IDLE ONLY", cond=function() return
            (get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1) or get(AC_bus_2_pwrd) == 0 or get(DC_bus_2_pwrd) == 0 or get(DC_ess_bus_pwrd) == 0 or
-           get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
+           not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled or
            get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1 or
            get(AC_bus_1_pwrd) == 0 or
            get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or

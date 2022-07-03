@@ -430,7 +430,8 @@ MessageGroup_FBW_FLAPS_FAULT = {
 
     is_active = function()
         -- First of all reset the booelans
-        return get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1
+        return (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) and 
+               (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail))
     end,
 
     is_inhibited = function()

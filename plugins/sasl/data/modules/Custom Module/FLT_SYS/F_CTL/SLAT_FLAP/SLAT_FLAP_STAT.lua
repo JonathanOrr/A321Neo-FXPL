@@ -1,7 +1,8 @@
-FCTL.AIL.STAT = {
-    L  = {
+FCTL.SLAT_FLAP.STAT = {
+    SLAT = {
         controlled = true,
         data_avail = true,
+        def_spd_factor = 0,
         total_hyd_press = 0,
         failure_dataref = FAILURE_FCTL_LAIL,
         hyd_sys = {
@@ -9,27 +10,28 @@ FCTL.AIL.STAT = {
             Hydraulic_B_press,
         },
         computer_priority = {
-            {ELAC_1_status, Hydraulic_B_press},
-            {ELAC_2_status, Hydraulic_G_press},
+            {SFCC_1_status, Hydraulic_B_press},
+            {SFCC_2_status, Hydraulic_G_press},
         }
     },
-    R  = {
+    FLAP = {
         controlled = true,
         data_avail = true,
+        def_spd_factor = 0,
         total_hyd_press = 0,
         failure_dataref = FAILURE_FCTL_RAIL,
         hyd_sys = {
             Hydraulic_G_press,
-            Hydraulic_B_press,
+            Hydraulic_Y_press,
         },
         computer_priority = {
-            {ELAC_1_status, Hydraulic_G_press},
-            {ELAC_2_status, Hydraulic_B_press},
+            {SFCC_2_status, Hydraulic_Y_press},
+            {SFCC_1_status, Hydraulic_G_press},
         }
     },
 }
 
-local function COMPUTE_AIL_STAT(fctl_table)
+local function COMPUTE_SLAT_FLAP_STAT(fctl_table)
     for key, val in pairs(fctl_table) do
         local ACTIVE_CTL_PAIRS = 0
         local ACTIVE_COMPUTER = 0
@@ -37,10 +39,11 @@ local function COMPUTE_AIL_STAT(fctl_table)
             --count the number of active computers--
             if get(val.computer_priority[i][1]) == 1 then
                 ACTIVE_COMPUTER = ACTIVE_COMPUTER + 1
-            end
-            --count the number of active control pairs--
-            if get(val.computer_priority[i][1]) == 1 and get(val.computer_priority[i][2]) >= 1450 then
-                ACTIVE_CTL_PAIRS = ACTIVE_CTL_PAIRS + 1
+
+                --count the number of active control pairs--
+                if get(val.computer_priority[i][2]) >= 1450 then
+                    ACTIVE_CTL_PAIRS = ACTIVE_CTL_PAIRS + 1
+                end
             end
         end
 
@@ -64,11 +67,17 @@ local function COMPUTE_AIL_STAT(fctl_table)
             val.data_avail = false
         end
 
+        --calculate surface deflection speed factor--
+        local hyd_spd_factor = val.total_hyd_press / (3000 * 2)
+        local cmp_spd_factor = ACTIVE_CTL_PAIRS / 2
+        val.def_spd_factor = math.min(hyd_spd_factor, cmp_spd_factor)
+
         --debugging--
-        if get(Print_ail_status) == 1 then
-            print(key .. " AIL:")
+        if get(Print_slat_flap_status) == 1 then
+            print(key .. ":")
             print("CONTROLLED:   " .. tostring(val.controlled))
             print("DATA AVIAL:   " .. tostring(val.data_avail))
+            print("DEF SPD FAC:  " .. tostring(val.def_spd_factor))
             print("ACT PAIR:     " .. ACTIVE_CTL_PAIRS)
             print("ACT COMPUTER: " .. ACTIVE_COMPUTER)
             print("TOTAL PRESS:  " .. val.total_hyd_press)
@@ -77,5 +86,5 @@ local function COMPUTE_AIL_STAT(fctl_table)
 end
 
 function update()
-    COMPUTE_AIL_STAT(FCTL.AIL.STAT)
+    COMPUTE_SLAT_FLAP_STAT(FCTL.SLAT_FLAP.STAT)
 end

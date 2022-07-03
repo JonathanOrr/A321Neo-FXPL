@@ -552,8 +552,8 @@ end
 
 local function draw_slat_flap_legend()
 
-    local slat_fail = get(Slats_ecam_amber) == 1
-    local flap_fail = get(Flaps_ecam_amber) == 1
+    local slat_fail = not FCTL.SLAT_FLAP.STAT.SLAT.controlled and (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail))
+    local flap_fail = not FCTL.SLAT_FLAP.STAT.FLAP.controlled and (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail))
     local slat_misaligned = false -- TODO if misaligned (and wingip brake)
     local flap_misaligned = false -- TODO if misaligned (and wingip brake)
     local a_lock = get(Slat_alpha_locked) == 1
@@ -576,6 +576,10 @@ local function draw_slat_flap_legend()
 end
 
 local function draw_slat_flap_indications()
+    --make ecam slats or flaps indication yellow refer to FCOM 1.27.50 P6
+    local slat_fail = not FCTL.SLAT_FLAP.STAT.SLAT.controlled and (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail))
+    local flap_fail = not FCTL.SLAT_FLAP.STAT.FLAP.controlled and (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail))
+
     local slats_positions = { 0, 0.7, 0.7, 0.8, 0.8, 1 }
     local flaps_positions = { 0,   0,  10,  14,  21, 30}
     local slat_flap_configs = { "0", "1", "1+F", "2", "3", "FULL" }
@@ -616,10 +620,10 @@ local function draw_slat_flap_indications()
     end
 
     sasl.gl.setClipArea (size[1]/2 + 5, size[2]/2 - 122, 156, 71)
-    sasl.gl.drawTexture(EWD_slat_img, size[1]/2+Math_rescale(0, 121, 1, 5, Table_interpolate(slat_anim_ratio, get(Slats))), size[2]/2-Math_rescale(0, 81, 1, 122, Table_interpolate(slat_anim_ratio, get(Slats))), 156, 71, get(Slats_ecam_amber) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawTexture(EWD_slat_img, size[1]/2+Math_rescale(0, 121, 1, 5, Table_interpolate(slat_anim_ratio, get(Slats))), size[2]/2-Math_rescale(0, 81, 1, 122, Table_interpolate(slat_anim_ratio, get(Slats))), 156, 71, slat_fail and ECAM_ORANGE or ECAM_GREEN)
     sasl.gl.resetClipArea ()
     sasl.gl.setClipArea (size[1]/2 + 178, size[2]/2 - 120, 219, 69)
-    sasl.gl.drawTexture(EWD_flap_img, size[1]/2+Math_rescale(0, -8, 1, 178, Table_interpolate(flaps_anim_ratio, get(Flaps_deployed_angle))), size[2]/2-Math_rescale(0, 78, 1, 120, Table_interpolate(flaps_anim_ratio, get(Flaps_deployed_angle))), 219, 69, get(Flaps_ecam_amber) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawTexture(EWD_flap_img, size[1]/2+Math_rescale(0, -8, 1, 178, Table_interpolate(flaps_anim_ratio, get(Flaps_deployed_angle))), size[2]/2-Math_rescale(0, 78, 1, 120, Table_interpolate(flaps_anim_ratio, get(Flaps_deployed_angle))), 219, 69, flap_fail and ECAM_ORANGE or ECAM_GREEN)
     sasl.gl.resetClipArea ()
 
     if rounded_slat_ratio ~= slats_positions[get(Flaps_internal_config) + 1] then

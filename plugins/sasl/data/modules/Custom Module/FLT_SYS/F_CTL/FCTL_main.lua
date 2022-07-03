@@ -29,14 +29,14 @@ function onModuleShutdown()--reset things back so other planes will work
 end
 
 components = {
-    INPUT_MAIN    {},
-    SLAT_FLAP_CTL {},
-    AIL_MAIN      {},
-    GND_SPLR_MAIN {},
-    SPLR_MAIN     {},
-    ELEV_MAIN     {},
-    THS_MAIN      {},
-    RUD_MAIN      {},
+    INPUT_MAIN     {},
+    SLAT_FLAP_MAIN {},
+    AIL_MAIN       {},
+    GND_SPLR_MAIN  {},
+    SPLR_MAIN      {},
+    ELEV_MAIN      {},
+    THS_MAIN       {},
+    RUD_MAIN       {},
 }
 
 function update()

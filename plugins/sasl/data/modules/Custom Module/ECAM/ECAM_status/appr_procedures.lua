@@ -167,7 +167,7 @@ local appr_proc_messages = {
         indent_lvl = 0,
         cond = function()
             return
-            (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) 
             and get(Flaps_handle_position) < 4 or
             flaps_slats_fault_in_config_0() or
             G_is_low_pressure() and Y_is_low_pressure() 
@@ -185,7 +185,7 @@ local appr_proc_messages = {
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
                 (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
-                (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+                (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled)
             and get(Flaps_handle_position) == 4 or
             stabliser_is_jammed() or
             Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
@@ -300,7 +300,7 @@ local appr_proc_messages = {
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
                 elec_in_emer_config()
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
-                (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) or
+                (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) or
                 (get(FAILURE_FCTL_SEC_1) == 1 and
                 get(FAILURE_FCTL_SEC_2) == 1) or
                 spdbrk_2_or_3_and_4_fault() or
@@ -392,7 +392,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 
+            return not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled 
         end
     },
     {
@@ -401,7 +401,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            return (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) 
             and get(Flaps_handle_position) < 4
         end
     },
@@ -411,7 +411,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            return (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) 
             and get(Flaps_handle_position) == 4
         end
     },
@@ -422,7 +422,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            return (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) 
         end
     },
     
@@ -432,7 +432,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            return (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) 
         end
     },
 

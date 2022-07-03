@@ -8,7 +8,7 @@ local SPDBRK_HIGHSPD_AIR_SPD = {1, 1, 1, 1, 1}
 -------------------------------------------------------------------------------
 -- ROLL SPOILERS & SPD BRAKES
 -------------------------------------------------------------------------------
-local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight)
+local function SPLR_CTL(lateral_input, spdbrk_input, in_auto_flight)
     --during a touch and go one of the thrust levers has to be advanced beyond 20 degrees to disarm the spoilers
 
     local L_SPLR_CONTROLLED = {

@@ -283,11 +283,11 @@ local inop_systems_desc = {
     },
     {
      text = "SLATS", nr = 1,
-     cond_1 = function() return get(Slats_ecam_amber) == 1 end,
+     cond_1 = function() return not FCTL.SLAT_FLAP.STAT.SLAT.controlled and (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail))  end,
     },
     {
      text = "FLAPS", nr = 1,
-     cond_1 = function() return get(Flaps_ecam_amber) == 1 end,
+     cond_1 = function() return not FCTL.SLAT_FLAP.STAT.FLAP.controlled and (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail)) end,
     },
     {
      text = "ELAC",

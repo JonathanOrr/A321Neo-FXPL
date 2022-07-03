@@ -5,7 +5,7 @@ local function all_engine_failure()
 end
 
 local function flaps_slats_fault_in_config_0()
-    return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) and get(Flaps_deployed_angle) == 0
+    return (not FCTL.SLAT_FLAP.STAT.SLAT.controlled or not FCTL.SLAT_FLAP.STAT.FLAP.controlled) and get(Flaps_deployed_angle) == 0
 end
 
 local function spdbrk_2_or_3_and_4_fault() --fcom 5231
