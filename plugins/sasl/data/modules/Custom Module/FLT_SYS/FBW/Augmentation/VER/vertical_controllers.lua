@@ -109,7 +109,7 @@ FBW.vertical.controllers = {
                         return 0.047
                     elseif 14 <= FLAP_DEF and FLAP_DEF < 21 then
                         return 0.049
-                    elseif 21 <= FLAP_DEF and FLAP_DEF <= 30 then
+                    elseif 21 <= FLAP_DEF and FLAP_DEF <= 34 then
                         return 0.028
                     end
                 end,

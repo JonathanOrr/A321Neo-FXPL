@@ -7,7 +7,7 @@ function Slats_flaps_calc_and_control()
         10,
         14,
         21,
-        30
+        34
     }
     local flap_angles = {
         0,
@@ -15,7 +15,7 @@ function Slats_flaps_calc_and_control()
         10,
         14,
         21,
-        30,
+        34,
     }
 
     --surface speeds
@@ -29,7 +29,7 @@ function Slats_flaps_calc_and_control()
         {10, 0.7},
         {14, 0.8},
         {21, 0.8},
-        {30,   1},
+        {34,   1},
     }
 
     --configuration logic--
@@ -50,28 +50,24 @@ function Slats_flaps_calc_and_control()
             else
                 set(Flaps_internal_config, 1)-- 1
             end
+        elseif get(Flaps_handle_position) == 0 then
+            set(Flaps_internal_config, 0)-- 0
         else
-            if get(Flaps_handle_position) == 0 then
-                set(Flaps_internal_config, 0)--0
-            elseif get(Flaps_handle_position) == 2 then
-                set(Flaps_internal_config, 3)--2
-            elseif get(Flaps_handle_position) == 3 then
-                set(Flaps_internal_config, 4)--3
-            elseif get(Flaps_handle_position) == 4 then
-                set(Flaps_internal_config, 5)--full
-            end
+            set(Flaps_internal_config, get(Flaps_handle_position) + 1)-- 2 -> FULL
         end
     else
-        if get(Flaps_internal_config) == 1 and adirs_get_avg_ias() <= 100 and get(Override_flap_auto_extend_and_retract) == 0 then--go to 1+F
-            set(Flaps_internal_config, 2)
-        end
-        if get(Flaps_internal_config) == 2 and adirs_get_avg_ias() >= 210 and get(Override_flap_auto_extend_and_retract) == 0 then--back to 1
-            set(Flaps_internal_config, 1)
+        if get(Override_flap_auto_extend_and_retract) == 0 then
+            if get(Flaps_internal_config) == 1 and adirs_get_avg_ias() <= 100 then--go to 1+F
+                set(Flaps_internal_config, 2)
+            end
+            if get(Flaps_internal_config) == 2 and adirs_get_avg_ias() >= 210 then--back to 1
+                set(Flaps_internal_config, 1)
+            end
         end
     end
 
     --slat alpha/speed lock
-    if last_flaps_handle_pos == 1 and flaps_handle_delta == -1 and (adirs_get_avg_aoa() > 8 or adirs_get_avg_ias() < 165) then
+    if get(Flaps_handle_position) == 0 and flaps_handle_delta < 0 and (adirs_get_avg_aoa() > 8 or adirs_get_avg_ias() < 165) then
         set(Slat_alpha_locked, 1)
     end
     if get(Slat_alpha_locked) == 1 and (adirs_get_avg_aoa() < 7.1 or adirs_get_avg_ias() > 171) then--de-activation

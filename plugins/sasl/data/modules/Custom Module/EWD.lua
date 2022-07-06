@@ -581,7 +581,7 @@ local function draw_slat_flap_indications()
     local flap_fail = not FCTL.SLAT_FLAP.STAT.FLAP.controlled and (get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail))
 
     local slats_positions = { 0, 0.7, 0.7, 0.8, 0.8, 1 }
-    local flaps_positions = { 0,   0,  10,  14,  21, 30}
+    local flaps_positions = { 0,   0,  10,  14,  21, 34}
     local slat_flap_configs = { "0", "1", "1+F", "2", "3", "FULL" }
     local slat_anim_ratio = {
         {0, 0},
@@ -594,7 +594,7 @@ local function draw_slat_flap_indications()
         {10, 0.3},
         {14, 0.52},
         {21, 0.76},
-        {30, 1}
+        {34, 1}
     }
 
     --stop approximation--
