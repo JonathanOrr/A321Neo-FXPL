@@ -229,5 +229,15 @@ ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Sh
 ShowHideLnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide LNAV Debug", Show_hide_Lnav_Debug)
 ShowHideGPWSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide MAGIC Debug", Show_hide_MAGIC_Debug)
 
+Menu_FLT_SYS_item	= sasl.appendMenuItem (Menu_debug, "FLT SYS")
+Menu_FLT_SYS = sasl.createMenu("", Menu_debug, Menu_FLT_SYS_item)
 
+FLT_SYS_FCTL_debug_item = sasl.appendMenuItem (Menu_FLT_SYS, "F-CTL")
+FLT_SYS_FCTL_debug = sasl.createMenu("", Menu_FLT_SYS, FLT_SYS_FCTL_debug_item)
+FLT_SYS_FBW_debug_item = sasl.appendMenuItem (Menu_FLT_SYS, "FBW")
+FLT_SYS_FBW_debug = sasl.createMenu("", Menu_FLT_SYS, FLT_SYS_FBW_debug_item)
 
+--F-CTL debug--
+sasl.appendMenuItem(FLT_SYS_FCTL_debug, "GND SPLR DEBUG", function ()
+  GND_SPLR_debug_window:setIsVisible(not GND_SPLR_debug_window:isVisible())
+end)

@@ -478,3 +478,20 @@ Exporter_window = contextWindow {
     exporter {position = { 0 , 0 , 200 , 100 }}
   };
 }
+
+--FLT SYS debug windows--
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/Debug")
+
+GND_SPLR_debug_window = contextWindow {
+  name = "F-CTL GND SPLR DEBUG";
+  position = { 100 , 100 , 700 , 500 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 700 , 500 };
+  maximumSize = { 700 , 500 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    GND_SPLR {position = { 0 , 0 , 700 , 500 }}
+  };
+}
