@@ -53,7 +53,7 @@ local function ND_draw_active_reset_specials(data)
         {poi=FMGS_pred_get_decel_point(),  img=image_point_decel,     img_off=0,  drawn=false, leg_offset=0},
         {poi=FMGS_pred_get_flap_1_point(), img=image_point_flaps_one, img_off=0,  drawn=false, leg_offset=0},
         {poi=FMGS_pred_get_flap_2_point(), img=image_point_flaps_two, img_off=0,  drawn=false, leg_offset=0}
-    } 
+    }
 end
 
 local function ND_draw_active_fpln_specials(data, functions, prev_orig_ref, x)
@@ -63,11 +63,12 @@ local function ND_draw_active_fpln_specials(data, functions, prev_orig_ref, x)
         local poi = special.poi
 
         if prev_orig_ref == poi.prev_wpt or special.drawing then
+
             local segment_length
             if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE then
                 segment_length = get_distance_nm(x.start_lat,x.start_lon,x.end_lat,x.end_lon)
             elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
-                segment_length = x.radius * math.rad(x.arc_length_deg)
+                segment_length = x.radius * math.abs(math.rad(x.arc_length_deg))
             else
                 segment_length = 0  
             end
@@ -77,12 +78,12 @@ local function ND_draw_active_fpln_specials(data, functions, prev_orig_ref, x)
             -- Time to draw it?
             if special.leg_offset > poi.dist_prev_wpt then
                 local lat, lon
-                local dist_diff = poi.dist_prev_wpt - (special.leg_offset - segment_length) -- Remaining different of distance
+                local dist_diff = poi.dist_prev_wpt - (special.leg_offset - segment_length) -- Remaining difference of distance
                 assert(dist_diff >= 0)
                 if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE then
                     lat, lon = point_from_a_segment_lat_lon(x.start_lat,x.start_lon,x.end_lat,x.end_lon, dist_diff)
                 elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
-                    lat, lon = point_from_a_arc_lat_lon(x.ctr_lat, x.ctr_lon, x.radius, x.start_angle, x.arc_length_deg, poi.dist_prev_wpt)
+                    lat, lon = point_from_a_arc_lat_lon(x.ctr_lat, x.ctr_lon, x.radius, x.start_angle, x.arc_length_deg, dist_diff)
                 end
                 if lat and lon then
                     draw_poi_special(data, functions, lat, lon, special.img_off, special.img, ECAM_WHITE)

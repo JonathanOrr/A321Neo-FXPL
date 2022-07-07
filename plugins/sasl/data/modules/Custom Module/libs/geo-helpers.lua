@@ -158,13 +158,16 @@ end
 
 function point_from_a_arc_lat_lon(ctr_lat, ctr_lon, arc_radius_nm, arc_start_angle, arc_length_deg, distance_nm)  -- APPROXIMATED! Only for short distances
 
-    local arc_length_rad = math.rad(arc_length_deg)
+    assert(arc_radius_nm >= 0)
+    assert(distance_nm >= 0)
+
+    local arc_length_rad = math.abs(math.rad(arc_length_deg))
     local arc_length_nm  = arc_length_rad * arc_radius_nm
-    local perc = math.min(1, arc_length_nm / distance_nm)   -- This shouldn't be larger than 1
+    local perc = math.min(1, distance_nm > 0 and (arc_length_nm / distance_nm) or 0)   -- This shouldn't be larger than 1
     if arc_length_nm < distance_nm then
         sasl.logWarning("point_from_a_arc_lat_lon: distance_nm > arc_length_nm")
     end
-    local perc_rad    = arc_length_rad*perc
+    local perc_rad    = arc_length_rad*perc * (arc_length_deg >= 0 and 1 or -1)
     local final_angle = perc_rad + math.rad(arc_start_angle)
 
     local lat3, lon3 = Move_along_distance_NM(ctr_lat, ctr_lon, arc_radius_nm, math.deg(final_angle))
