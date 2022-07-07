@@ -16,6 +16,7 @@
 include('ADIRS_data_source.lua')
 include('FMGS/vertical_profile_climb.lua')
 include('FMGS/vertical_profile_descent.lua')
+include('FMGS/functions.lua')
 
 function FMGS_get_current_target_speed()
     -- This function returns only the FMGS calculated speed, it does not care about the (potential) FCU setting
@@ -28,7 +29,7 @@ function FMGS_get_current_target_speed()
     local altitude = adirs_get_avg_alt()
 
     local _,_,v2  = FMGS_perf_get_v_speeds()
-    local dep_rwy_alt = FMGS_sys.fpln.active.apts and FMGS_sys.fpln.active.apts.dep.alt or 0
+    local dep_rwy_alt = FMGS_sys.fpln.active.apts.dep and FMGS_sys.fpln.active.apts.dep.alt or 0
 
     local gear_is_out = get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment) > 0.
     local VS = FBW.FAC_COMPUTATION.Extract_vs1g(get(Gross_weight), get(Flaps_internal_config), gear_is_out)
