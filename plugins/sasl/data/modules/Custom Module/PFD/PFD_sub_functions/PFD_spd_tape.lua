@@ -221,6 +221,10 @@ local function draw_airspeed_tape(airspeed, x, y, PFD_table)
 end
 
 local function draw_target_spd(x, y, PFD_table)
+
+    -- TODO: This should become cyan when selected by FCU
+
+    -- TODO: ECON speed range
     if PFD_table.target_speed then
         local offset_y = y + size[2]/2 - 9 + Math_rescale_no_lim(-43, -240, 42, 240, PFD_table.target_speed - adirs_get_ias(PFD_table.Screen_ID))
         local offset_x = x + size[1]/2-336

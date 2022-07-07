@@ -17,6 +17,7 @@ include('ADIRS_data_source.lua')
 include('FMGS/vertical_profile_climb.lua')
 include('FMGS/vertical_profile_descent.lua')
 include('FMGS/functions.lua')
+include("libs/speed_helpers.lua")
 
 function FMGS_get_current_target_speed()
     -- This function returns only the FMGS calculated speed, it does not care about the (potential) FCU setting
@@ -48,8 +49,8 @@ function FMGS_get_current_target_speed()
         local ias, mach  = get_target_speed_climb(altitude, get(Gross_weight))
         return ias, mach
     elseif  FMGS_sys.config.phase == FMGS_PHASE_CRUISE then
-        local mach = get_target_mach_cruise(alt_feet, gross_weight)
-        local ias  = mach_to_cas(mach, alt_feet)
+        local mach = get_target_mach_cruise(altitude, get(Gross_weight))
+        local ias  = mach_to_cas(mach, altitude)
         return ias, mach
     elseif  FMGS_sys.config.phase == FMGS_PHASE_DESCENT then
         local ias, mach = get_target_speed_descent()
