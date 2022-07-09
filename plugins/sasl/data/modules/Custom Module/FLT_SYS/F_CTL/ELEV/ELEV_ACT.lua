@@ -10,7 +10,8 @@ local ELEV_STOKE     = 60   -- in mm
 local STALL_LOAD     = 2.77 -- 10kN
 local ELEV_CURR_SPD = {0,0}
 local ELEV_TBL = {FCTL.ELEV.STAT.L, FCTL.ELEV.STAT.R}
-local ELEV_NO_HYD_SPD = 8   -- in °/s
+local DAMPING_CONST = 0.058
+local ELEV_NO_HYD_SPD = 1   -- in °/s
 local NO_HYD_RECTR_TAS = 80 -- in kts
 
 -- Cache some functions to speed-up computation
@@ -19,6 +20,7 @@ local masin = math.asin
 local msin  = math.sin
 local mcos  = math.cos
 local mrad  = math.rad
+local mexp  = math.exp
 
 local function elev_deg2mm(deg)  -- Convert aileron deg to actuator mm
     local mm_TBL = {
@@ -129,7 +131,11 @@ FCTL.ELEV.ACT = function (REQ_DEF, index)-- index: 1: L, 2: R
     else
         -- No HYD at all
         local LOCAL_AIRSPD_KTS = mcos(mrad(get(Beta))) * get(TAS_ms) * 1.94384
-        local DAMPING_DEF_TGT = Math_rescale(0, ELEV_MAX_DN, NO_HYD_RECTR_TAS, mcos(mrad(get(Beta))) * -get(Alpha) - get(THS_DEF), LOCAL_AIRSPD_KTS)
+        local DAMPING_ANGLE = mcos(mrad(get(Beta))) * ((ELEV_MAX_UP * 2) / (1 + mexp(-DAMPING_CONST * -get(Alpha))) - ELEV_MAX_UP) - get(THS_DEF)
+
+        print(mcos(mrad(get(Beta))) * -get(Alpha) - get(THS_DEF), DAMPING_ANGLE)
+
+        local DAMPING_DEF_TGT = Math_rescale(0, ELEV_MAX_DN, NO_HYD_RECTR_TAS, DAMPING_ANGLE, LOCAL_AIRSPD_KTS)
         Set_dataref_linear_anim(DEF_DATAREF, DAMPING_DEF_TGT, -ELEV_MAX_UP, ELEV_MAX_DN, ELEV_NO_HYD_SPD * (1 - ELEV_STUCK))
     end
 end
