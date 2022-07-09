@@ -91,8 +91,8 @@ function draw()
     sasl.gl.drawLine(260, 80, 290, 40, (B_1_1_1 and B_1_1_2) and (B_2 and UI_LIGHT_BLUE or ECAM_HIGH_GREEN) or ECAM_WHITE)
     sasl.gl.drawLine(230, 25, 290, 40, B_1_2 and UI_LIGHT_BLUE or ECAM_WHITE)
 
-    sasl.gl.drawLine(650, 30, 650, 110, B_2 and UI_LIGHT_BLUE or ECAM_WHITE)
-    sasl.gl.drawLine(300, 30, 650, 30, B_2 and UI_LIGHT_BLUE or ECAM_WHITE)
+    sasl.gl.drawLine(650, 45, 650, 110, B_2 and UI_LIGHT_BLUE or ECAM_WHITE)
+    sasl.gl.drawLine(350, 45, 650, 45, B_2 and UI_LIGHT_BLUE or ECAM_WHITE)
 
     sasl.gl.drawCircle(650, 110, 5, true, B_2 and UI_LIGHT_BLUE or ECAM_WHITE)
 end
