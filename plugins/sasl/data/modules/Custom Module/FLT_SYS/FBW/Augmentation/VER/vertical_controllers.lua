@@ -1,3 +1,34 @@
+local function ELEV_BP()
+    local elev_rat_table = {
+        {-30,  1},
+        {0,    0},
+        {17,  -1},
+    }
+
+    local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
+    local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
+
+    local elev_rat = 0
+
+    if L_ELEV_OK and R_ELEV_OK then
+        elev_rat = (
+            Table_interpolate(elev_rat_table, get(L_elevator)) +
+            Table_interpolate(elev_rat_table, get(R_elevator))
+        ) / 2
+    elseif L_ELEV_OK and not R_ELEV_OK then
+        elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
+    elseif not L_ELEV_OK and R_ELEV_OK then
+        elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
+    else
+        elev_rat = (
+            Table_interpolate(elev_rat_table, get(L_elevator)) +
+            Table_interpolate(elev_rat_table, get(R_elevator))
+        ) / 2
+    end
+
+    return elev_rat
+end
+
 FBW.vertical.controllers = {
     Rotation_PID = {
         output = 0,
@@ -32,34 +63,7 @@ FBW.vertical.controllers = {
             )
         end,
         bp = function ()
-            local elev_rat_table = {
-                {-30,  1},
-                {0,    0},
-                {17,  -1},
-            }
-
-            local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
-            local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
-
-            local elev_rat = 0
-
-            if L_ELEV_OK and R_ELEV_OK then
-                elev_rat = (
-                    Table_interpolate(elev_rat_table, get(L_elevator)) +
-                    Table_interpolate(elev_rat_table, get(R_elevator))
-                ) / 2
-            elseif L_ELEV_OK and not R_ELEV_OK then
-                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
-            elseif not L_ELEV_OK and R_ELEV_OK then
-                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
-            else
-                elev_rat = (
-                    Table_interpolate(elev_rat_table, get(L_elevator)) +
-                    Table_interpolate(elev_rat_table, get(R_elevator))
-                ) / 2
-            end
-
-            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = elev_rat
+            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = ELEV_BP()
         end,
     },
 
@@ -248,34 +252,7 @@ FBW.vertical.controllers = {
             end
         end,
         bp = function ()
-            local elev_rat_table = {
-                {-30,  1},
-                {0,    0},
-                {17,  -1},
-            }
-
-            local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
-            local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
-
-            local elev_rat = 0
-
-            if L_ELEV_OK and R_ELEV_OK then
-                elev_rat = (
-                    Table_interpolate(elev_rat_table, get(L_elevator)) +
-                    Table_interpolate(elev_rat_table, get(R_elevator))
-                ) / 2
-            elseif L_ELEV_OK and not R_ELEV_OK then
-                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
-            elseif not L_ELEV_OK and R_ELEV_OK then
-                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
-            else
-                elev_rat = (
-                    Table_interpolate(elev_rat_table, get(L_elevator)) +
-                    Table_interpolate(elev_rat_table, get(R_elevator))
-                ) / 2
-            end
-
-            FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = elev_rat
+            FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = ELEV_BP()
         end,
     },
 
@@ -312,34 +289,7 @@ FBW.vertical.controllers = {
             )
         end,
         bp = function ()
-            local elev_rat_table = {
-                {-30,  1},
-                {0,    0},
-                {17,  -1},
-            }
-
-            local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
-            local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
-
-            local elev_rat = 0
-
-            if L_ELEV_OK and R_ELEV_OK then
-                elev_rat = (
-                    Table_interpolate(elev_rat_table, get(L_elevator)) +
-                    Table_interpolate(elev_rat_table, get(R_elevator))
-                ) / 2
-            elseif L_ELEV_OK and not R_ELEV_OK then
-                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
-            elseif not L_ELEV_OK and R_ELEV_OK then
-                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
-            else
-                elev_rat = (
-                    Table_interpolate(elev_rat_table, get(L_elevator)) +
-                    Table_interpolate(elev_rat_table, get(R_elevator))
-                ) / 2
-            end
-
-            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = elev_rat
+            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = ELEV_BP()
         end,
     },
 

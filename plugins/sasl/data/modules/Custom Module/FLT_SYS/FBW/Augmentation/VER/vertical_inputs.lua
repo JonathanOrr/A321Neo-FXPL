@@ -2,7 +2,6 @@ FBW.vertical.inputs = {
     X_to_G = function (x)
         local mrad = math.rad
         local mcos = math.cos
-        --local max_G = get(Flaps_internal_config) > 1 and 2 or 2
         local max_G = get(Flaps_internal_config) > 1 and 1 / mcos(mrad(60)) or 1 / mcos(mrad(67))
         local min_G = get(Flaps_internal_config) > 1 and 0 or -1
 
