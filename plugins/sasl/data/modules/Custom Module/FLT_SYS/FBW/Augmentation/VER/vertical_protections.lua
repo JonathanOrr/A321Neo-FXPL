@@ -97,18 +97,18 @@ FBW.vertical.protections = {
                 local time_to_move_demand = 2.5
 
                 --set alpha/V demand target
-                local target_V   = get(FAC_MIXED_Vaprot_VSW)
-                local target_AoA = get(FAC_MIXED_Aprot_AoA)
+                local target_V   = get(FMGEC_MIXED_Vaprot_VSW)
+                local target_AoA = get(FMGEC_MIXED_Aprot_AoA)
                 if FBW.vertical.protections.General.AoA.H_AOA_PROT_ACTIVE then
-                    target_V   = Math_rescale(0, get(FAC_MIXED_Vaprot_VSW), 1, get(FAC_MIXED_Valpha_MAX), X)
-                    target_AoA = Math_rescale(0,         get(FAC_MIXED_Aprot_AoA), 1,          get(FAC_MIXED_Amax_AoA), X)
+                    target_V   = Math_rescale(0, get(FMGEC_MIXED_Vaprot_VSW), 1, get(FMGEC_MIXED_Valpha_MAX), X)
+                    target_AoA = Math_rescale(0,         get(FMGEC_MIXED_Aprot_AoA), 1,          get(FMGEC_MIXED_Amax_AoA), X)
                 end
 
                 --set output--
                 FBW.vertical.protections.General.AoA.AOA_V_SP = Set_linear_anim_value(FBW.vertical.protections.General.AoA.AOA_V_SP, target_V, 0, 1000, 1 / time_to_move_demand)
-                FBW.vertical.protections.General.AoA.AOA_V_SP = math.min(math.max(FBW.vertical.protections.General.AoA.AOA_V_SP, get(FAC_MIXED_Vaprot_VSW)), get(FAC_MIXED_Valpha_MAX))
+                FBW.vertical.protections.General.AoA.AOA_V_SP = math.min(math.max(FBW.vertical.protections.General.AoA.AOA_V_SP, get(FMGEC_MIXED_Vaprot_VSW)), get(FMGEC_MIXED_Valpha_MAX))
                 FBW.vertical.protections.General.AoA.AOA_SP   = Set_linear_anim_value(FBW.vertical.protections.General.AoA.AOA_SP, target_AoA, 0, 100, 1 / time_to_move_demand)
-                FBW.vertical.protections.General.AoA.AOA_SP   = math.min(math.max(FBW.vertical.protections.General.AoA.AOA_SP, get(FAC_MIXED_Aprot_AoA)), get(FAC_MIXED_Amax_AoA))
+                FBW.vertical.protections.General.AoA.AOA_SP   = math.min(math.max(FBW.vertical.protections.General.AoA.AOA_SP, get(FMGEC_MIXED_Aprot_AoA)), get(FMGEC_MIXED_Amax_AoA))
             end,
 
             Q = {
@@ -136,7 +136,7 @@ FBW.vertical.protections = {
                     alpha_demand_Q = Math_clamp(alpha_demand_Q, -MAX_ALPHA_DEMAND_Q, MAX_ALPHA_DEMAND_Q)
 
                     --blend ratio between the inputed Q and the alpha demand Q--
-                    local blend_ratio = Math_rescale(get(FAC_MIXED_Aprot_AoA) - ENTRY_MARGIN, 0, get(FAC_MIXED_Aprot_AoA), 1, FILTERED_AOA)
+                    local blend_ratio = Math_rescale(get(FMGEC_MIXED_Aprot_AoA) - ENTRY_MARGIN, 0, get(FMGEC_MIXED_Aprot_AoA), 1, FILTERED_AOA)
                     blend_ratio = Math_rescale(-0.5, 0, 0, blend_ratio, X)
                     --CHECK H_AOA_PROT STATUS--
                     if blend_ratio == 0 then
@@ -163,7 +163,7 @@ FBW.vertical.protections = {
                     --properties
                     local ENTRY_MARGIN = 1
 
-                    local blend_ratio = Math_rescale(get(FAC_MIXED_Aprot_AoA) - ENTRY_MARGIN, 0, get(FAC_MIXED_Aprot_AoA), 1, FILTERED_AOA)
+                    local blend_ratio = Math_rescale(get(FMGEC_MIXED_Aprot_AoA) - ENTRY_MARGIN, 0, get(FMGEC_MIXED_Aprot_AoA), 1, FILTERED_AOA)
                     blend_ratio = Math_rescale(-0.5, 0, 0, blend_ratio, x)
                     --CHECK H_AOA_PROT STATUS--
                     if blend_ratio == 0 then
@@ -218,7 +218,7 @@ FBW.vertical.protections = {
         VSW = function (X)
             local DN_RATIO = Math_rescale(0, math.min(-0.1, X), 0.2, X, X)
 
-            local PROT_X = Math_rescale(get(FAC_MIXED_Vaprot_VSW) - 10, DN_RATIO, get(FAC_MIXED_Vaprot_VSW), X, FBW.filtered_sensors.IAS.filtered)
+            local PROT_X = Math_rescale(get(FMGEC_MIXED_Vaprot_VSW) - 10, DN_RATIO, get(FMGEC_MIXED_Vaprot_VSW), X, FBW.filtered_sensors.IAS.filtered)
 
             return PROT_X
         end,

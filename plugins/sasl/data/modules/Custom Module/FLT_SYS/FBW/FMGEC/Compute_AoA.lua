@@ -172,9 +172,9 @@ local function COMPUTE_APROT_AMAX(aprot_dataref, amax_dataref, MACH)
     set(amax_dataref,  Table_interpolate(amax_alphas,  get(Slats)*27 + get(Flaps_deployed_angle)))
 end
 
-local function COMPUTE_SMOOTH_VALPHAs(VAPROT_dataref, VAMAX_dataref, IAS, APROT_ALPHA_dataref, AMAX_ALPHA_dataref, ALPHA_dataref)
-    set(VAPROT_dataref, Math_clamp_higher(IAS * math.sqrt(Math_clamp_lower((get(ALPHA_dataref) - get(A0_AoA)) / (get(APROT_ALPHA_dataref) - get(A0_AoA)), 0)), get(VMAX)))
-    set(VAMAX_dataref,  Math_clamp_higher(IAS * math.sqrt(Math_clamp_lower((get(ALPHA_dataref) - get(A0_AoA)) / (get(AMAX_ALPHA_dataref)  - get(A0_AoA)), 0)), get(VMAX)))
+local function COMPUTE_SMOOTH_VALPHAs(VAPROT, VAMAX, IAS, APROT_ALPHA, AMAX_ALPHA, ALPHA)
+    set(VAPROT, Math_clamp_higher(IAS * math.sqrt(Math_clamp_lower((get(ALPHA) - get(A0_AoA)) / (get(APROT_ALPHA) - get(A0_AoA)), 0)), get(VMAX)))
+    set(VAMAX,  Math_clamp_higher(IAS * math.sqrt(Math_clamp_lower((get(ALPHA) - get(A0_AoA)) / (get(AMAX_ALPHA)  - get(A0_AoA)), 0)), get(VMAX)))
 end
 
 function update()
@@ -182,14 +182,14 @@ function update()
 
     COMPUTE_BUSS_ALPHA()
     COMPUTE_A0_AFLOOR()
-    COMPUTE_APROT_AMAX(FAC_1_Aprot_AoA,     FAC_1_Amax_AoA,     FBW.FMGEC.FMGEC_1.mach)
-    COMPUTE_APROT_AMAX(FAC_2_Aprot_AoA,     FAC_2_Amax_AoA,     FBW.FMGEC.FMGEC_2.mach)
-    COMPUTE_APROT_AMAX(FAC_MIXED_Aprot_AoA, FAC_MIXED_Amax_AoA, FBW.FMGEC.MIXED.mach)
+    COMPUTE_APROT_AMAX(FMGEC1_Aprot_AoA,     FMGEC1_Amax_AoA,     FBW.FMGEC.FMGEC_1.mach)
+    COMPUTE_APROT_AMAX(FMGEC2_Aprot_AoA,     FMGEC2_Amax_AoA,     FBW.FMGEC.FMGEC_2.mach)
+    COMPUTE_APROT_AMAX(FMGEC_MIXED_Aprot_AoA, FMGEC_MIXED_Amax_AoA, FBW.FMGEC.MIXED.mach)
 
     --update smooth values of alpha speeds
-    COMPUTE_SMOOTH_VALPHAs(FAC_1_Vaprot_VSW,     FAC_1_Valpha_MAX,     FBW.FMGEC.FMGEC_1.ias, FAC_1_Aprot_AoA,     FAC_1_Amax_AoA,     Filtered_FAC_1_AoA)
-    COMPUTE_SMOOTH_VALPHAs(FAC_2_Vaprot_VSW,     FAC_2_Valpha_MAX,     FBW.FMGEC.FMGEC_2.ias, FAC_2_Aprot_AoA,     FAC_2_Amax_AoA,     Filtered_FAC_2_AoA)
-    COMPUTE_SMOOTH_VALPHAs(FAC_MIXED_Vaprot_VSW, FAC_MIXED_Valpha_MAX, FBW.FMGEC.MIXED.ias, FAC_MIXED_Aprot_AoA, FAC_MIXED_Amax_AoA, Filtered_FAC_MIXED_AoA)
+    COMPUTE_SMOOTH_VALPHAs(FMGEC1_Vaprot_VSW,     FMGEC1_Valpha_MAX,     FBW.FMGEC.FMGEC_1.ias, FMGEC1_Aprot_AoA,     FMGEC1_Amax_AoA,     Filtered_FAC_1_AoA)
+    COMPUTE_SMOOTH_VALPHAs(FMGEC2_Vaprot_VSW,     FMGEC2_Valpha_MAX,     FBW.FMGEC.FMGEC_2.ias, FMGEC2_Aprot_AoA,     FMGEC2_Amax_AoA,     Filtered_FAC_2_AoA)
+    COMPUTE_SMOOTH_VALPHAs(FMGEC_MIXED_Vaprot_VSW, FMGEC_MIXED_Valpha_MAX, FBW.FMGEC.MIXED.ias,   FMGEC_MIXED_Aprot_AoA, FMGEC_MIXED_Amax_AoA, Filtered_FAC_MIXED_AoA)
 
     --VLS & alpha speeds update timer(accirding to video at 25fps updates every 3 <-> 4 frames: https://www.youtube.com/watch?v=3Suxhj9wQio&ab_channel=a321trainingteam)
     ALPHA_SPD_update_timer = ALPHA_SPD_update_timer + get(DELTA_TIME)
@@ -202,20 +202,20 @@ function update()
         local FAC_2_MON_AVAIL = FMGC_get_single_status(2)
 
         if FAC_1_MON_AVAIL and FAC_2_MON_AVAIL then
-            set(CA_Vaprot_VSW, get(FAC_1_Vaprot_VSW))
-            set(CA_Valpha_MAX, get(FAC_1_Valpha_MAX))
-            set(FO_Vaprot_VSW, get(FAC_2_Vaprot_VSW))
-            set(FO_Valpha_MAX, get(FAC_2_Valpha_MAX))
+            set(CA_Vaprot_VSW, get(FMGEC1_Vaprot_VSW))
+            set(CA_Valpha_MAX, get(FMGEC1_Valpha_MAX))
+            set(FO_Vaprot_VSW, get(FMGEC2_Vaprot_VSW))
+            set(FO_Valpha_MAX, get(FMGEC2_Valpha_MAX))
         elseif FAC_1_MON_AVAIL and not FAC_2_MON_AVAIL then
-            set(CA_Vaprot_VSW, get(FAC_1_Vaprot_VSW))
-            set(CA_Valpha_MAX, get(FAC_1_Valpha_MAX))
-            set(FO_Vaprot_VSW, get(FAC_1_Vaprot_VSW))
-            set(FO_Valpha_MAX, get(FAC_1_Valpha_MAX))
+            set(CA_Vaprot_VSW, get(FMGEC1_Vaprot_VSW))
+            set(CA_Valpha_MAX, get(FMGEC1_Valpha_MAX))
+            set(FO_Vaprot_VSW, get(FMGEC1_Vaprot_VSW))
+            set(FO_Valpha_MAX, get(FMGEC1_Valpha_MAX))
         elseif not FAC_1_MON_AVAIL and FAC_2_MON_AVAIL then
-            set(CA_Vaprot_VSW, get(FAC_2_Vaprot_VSW))
-            set(CA_Valpha_MAX, get(FAC_2_Valpha_MAX))
-            set(FO_Vaprot_VSW, get(FAC_2_Vaprot_VSW))
-            set(FO_Valpha_MAX, get(FAC_2_Valpha_MAX))
+            set(CA_Vaprot_VSW, get(FMGEC2_Vaprot_VSW))
+            set(CA_Valpha_MAX, get(FMGEC2_Valpha_MAX))
+            set(FO_Vaprot_VSW, get(FMGEC2_Vaprot_VSW))
+            set(FO_Valpha_MAX, get(FMGEC2_Valpha_MAX))
         else
             set(CA_Vaprot_VSW, 0)
             set(CA_Valpha_MAX, 0)
