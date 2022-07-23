@@ -459,5 +459,49 @@ FBW_PID_arrays = {
         Desired_output = 0,
         Actual_output = 0,
     },
+
+    FBW_AoA_PID = {
+        P_gain = 0.035,
+        I_gain = 0.040,
+        D_gain = 0.020,
+        B_gain = 1,
+        Schedule_gains = false,
+        Schedule_table = {
+            P = {
+                {0.00, 0.000},
+            },
+            I = {
+                {0.00, 0.000},
+            },
+            D = {
+                {0.00, 0.000},
+            },
+        },
+        Limited_integral = true,
+        Min_out = -1,
+        Max_out = 1,
+        filter_inputs = true,
+        error_freq = 0.25,
+        dpvdt_freq = 0.25,
+        highpass_inputs = false,
+        PV = 0,
+        Error = 0,
+        Proportional = 0,
+        Integral = 0,
+        Derivative = 0,
+        Backpropagation = 0,
+        feedfwd = 0,
+        Desired_output = 0,
+        Actual_output = 0,
+    },
+    AoA_STABILITY_FF = {
+        FF_gain          = -0.060,
+        derive_feedfwd   = true,
+        filter_feedfwd   = true,
+        feedfwd_freq     = 0.25,
+        highpass_feedfwd = false,
+        feedfwd_pv       = 0,
+        feedfwd          = 0,
+    },
 }
 

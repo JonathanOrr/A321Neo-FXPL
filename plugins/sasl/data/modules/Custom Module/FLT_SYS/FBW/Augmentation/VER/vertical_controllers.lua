@@ -210,12 +210,27 @@ FBW.vertical.controllers = {
                 return
             end
 
-            FBW.vertical.controllers.Flight_PID.Q_OUTPUT = FBW_PID_BP(
+            --[[FBW.vertical.controllers.Flight_PID.Q_OUTPUT = FBW_PID_BP(
                 FBW_PID_arrays.FBW_PITCH_RATE_PID,
                 FBW.vertical.inputs.Flight.Q_INPUT(),
                 FBW.rates.Pitch.x,
                 FBW.filtered_sensors.IAS.filtered
+            )]]
+
+            -----------------------------------------------AoA CTL----------------------------------------------------
+            PID_COMPUTE (
+                FBW_PID_arrays.FBW_AoA_PID,
+                Math_rescale(0, get(FAC_MIXED_Aprot_AoA), 1, get(FAC_MIXED_Amax_AoA), get(Total_input_pitch)),
+                get(Alpha)
             )
+
+            --[[PID_FF (
+                FBW_PID_arrays.AoA_STABILITY_FF,
+                FBW_PID_arrays.FBW_AoA_PID,
+                get(IAS)
+            )]]
+
+            FBW.vertical.controllers.Flight_PID.Q_OUTPUT = PID_OUTPUT_FF(FBW_PID_arrays.FBW_AoA_PID)
 
             ------------------------------------------------C* CTL----------------------------------------------------
             PID_COMPUTE (
@@ -241,11 +256,20 @@ FBW.vertical.controllers = {
             FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT = PID_OUTPUT_FF (FBW_PID_arrays.FBW_CSTAR_PID)
             ----------------------------------------------------------------------------------------------------------
 
+            print("SP AoA " .. Round_fill(Math_rescale(0, get(FAC_MIXED_Aprot_AoA), 1, get(FAC_MIXED_Amax_AoA), get(Total_input_pitch)), 2))
+
+            print("C* " .. Round_fill(FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT, 2), "AoA " .. Round_fill(FBW.vertical.controllers.Flight_PID.Q_OUTPUT, 2))
+
+            if FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT > FBW.vertical.controllers.Flight_PID.Q_OUTPUT then
+                print("AoA")
+            else
+                print("C*")
+            end
+
             if get(FBW_vertical_law) == FBW_NORMAL_LAW then
-                FBW.vertical.controllers.Flight_PID.output = Math_rescale(
-                    0, FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT,
-                    1, FBW.vertical.controllers.Flight_PID.Q_OUTPUT,
-                    FBW.vertical.protections.General.AoA.G.ENTERY_RATIO(get(Total_input_pitch))
+                FBW.vertical.controllers.Flight_PID.output = math.min(
+                    FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT,
+                    FBW.vertical.controllers.Flight_PID.Q_OUTPUT
                 )
             else
                 FBW.vertical.controllers.Flight_PID.output = FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT
@@ -253,6 +277,7 @@ FBW.vertical.controllers = {
         end,
         bp = function ()
             FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = ELEV_BP()
+            FBW_PID_arrays.FBW_AoA_PID.Actual_output = ELEV_BP()
         end,
     },
 

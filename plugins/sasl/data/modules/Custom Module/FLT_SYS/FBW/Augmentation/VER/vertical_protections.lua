@@ -183,7 +183,7 @@ FBW.vertical.protections = {
                     local UP_G_LIM = Math_rescale(-0.5, MIN_G, CLAMP_MARGIN, MAX_G, AOA_SP - FILTERED_AOA)
                     local CLAMPED_G = Math_clamp_higher(G, UP_G_LIM)
 
-                    return CLAMPED_G
+                    return G
                 end,
                 Q_DEMAND = function (pid_array)
                     local MAX_ALPHA_DEMAND_Q = 4--degs of AoA prior to aprot
