@@ -32,30 +32,22 @@ local function draw_trim_flag(PFD_table)
     end
 end
 
-local function draw_stall_flag(PFD_table)
+local function draw_stall_flag()
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
 
-    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and RA_sys.single_RA_user(PFD_table.RA_sensor) < 1500) or
-       get(Any_wheel_on_ground) == 1 or
-       adirs_is_att_ok(PFD_table.Screen_ID) == false or
-       get(FAC_1_status) == 0 and get(FAC_2_status) == 0 or
-       adirs_is_aoa_ok(PFD_table.Screen_ID) == false then
-        return
-    end
+    if get(GPWS_mode_stall) == 0 then return end
 
-    local NRM_LAW = {13.5, 21}
-    local ALT_LAW = {8,    13}
+    sasl.gl.drawText(Font_ECAMfont, ATT_x_center, ATT_y_center + 70, "STALL    STALL", 38, true, false, TEXT_ALIGN_CENTER, ECAM_RED)
+end
 
-    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
-        if adirs_get_aoa(PFD_table.Screen_ID) > NRM_LAW[(get(Slats) <= 15/27) and 1 or 2] then
-            sasl.gl.drawText(Font_ECAMfont, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, true, false, TEXT_ALIGN_CENTER, ECAM_RED)
-        end
-    else
-        if adirs_get_aoa(PFD_table.Screen_ID) > ALT_LAW[(get(Slats) <= 15/27) and 1 or 2] then
-            sasl.gl.drawText(Font_ECAMfont, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, true, false, TEXT_ALIGN_CENTER, ECAM_RED)
-        end
-    end
+local function draw_windshear_flag()
+    local ATT_x_center = size[1]/2-55
+    local ATT_y_center = size[2]/2-7
+
+    if get(GPWS_mode_windshear_PFD) == 0 then return end
+
+    sasl.gl.drawText(Font_ECAMfont, ATT_x_center, ATT_y_center + 35, "WINDSHEAR", 38, true, false, TEXT_ALIGN_CENTER, ECAM_RED)
 end
 
 local function draw_SI_trapezoid(PFD_table)
@@ -242,5 +234,6 @@ function PFD_draw_att(PFD_table)
 
     SASL_draw_img_xcenter_aligned(PFD_bank_angle, size[1]/2-56, size[2]/2+158, 366, 95, {1,1,1,1})
 
-    draw_stall_flag(PFD_table)
+    draw_stall_flag()
+    draw_windshear_flag()
 end

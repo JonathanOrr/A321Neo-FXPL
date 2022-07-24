@@ -589,6 +589,7 @@ FBW_MLA_output =   createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_mla_o
 FBW_GLA_output =   createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_gla_output", 0, false, true, false)
 --flight envelope "sensors"
 Turbulence_ratio = globalProperty("sim/weather/wind_turbulence_percent")
+Wind_flightmodel_dir = globalProperty("sim/weather/wind_direction_degt")
 Wind_layer_1_alt = globalProperty("sim/weather/wind_altitude_msl_m[0]")
 Wind_layer_2_alt = globalProperty("sim/weather/wind_altitude_msl_m[1]")
 Wind_layer_3_alt = globalProperty("sim/weather/wind_altitude_msl_m[2]")
@@ -809,6 +810,8 @@ GPWS_mode_5_glideslope_hard = createGlobalPropertyi("a321neo/dynamics/gpws/mode_
 GPWS_mode_pitch = createGlobalPropertyi("a321neo/dynamics/gpws/mode_pitch", 0, false, true, false)
 GPWS_mode_speed = createGlobalPropertyi("a321neo/dynamics/gpws/mode_speed", 0, false, true, false)
 GPWS_mode_stall = createGlobalPropertyi("a321neo/dynamics/gpws/mode_stall", 0, false, true, false)
+GPWS_mode_windshear = createGlobalPropertyi("a321neo/dynamics/gpws/mode_windshear", 0, false, true, false)
+GPWS_mode_windshear_PFD = createGlobalPropertyi("a321neo/dynamics/gpws/mode_windshear_pfd", 0, false, true, false)
 
 GPWS_mode_dual_input     = createGlobalPropertyi("a321neo/dynamics/gpws/mode_dual_input", 0, false, true, false)
 GPWS_mode_priority_left  = createGlobalPropertyi("a321neo/dynamics/gpws/mode_priority_left", 0, false, true, false)

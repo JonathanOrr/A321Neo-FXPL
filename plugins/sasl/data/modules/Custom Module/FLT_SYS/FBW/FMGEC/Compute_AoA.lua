@@ -1,6 +1,6 @@
 include('FMGS/functions.lua')
 
-local aoa_filtering_table = {
+local alpha_tbl = {
     CA_ALPHA = {
         x = 0,
         cut_frequency = 0.25,
@@ -9,11 +9,11 @@ local aoa_filtering_table = {
         x = 0,
         cut_frequency = 0.25,
     },
-    FAC_1_ALPHA = {
+    FMGEC1_ALPHA = {
         x = 0,
         cut_frequency = 0.25,
     },
-    FAC_2_ALPHA = {
+    FMGEC2_ALPHA = {
         x = 0,
         cut_frequency = 0.25,
     },
@@ -35,7 +35,7 @@ local alpha0s = {
     -13.70
 }
 
-local vsw_aprot_alphas = {
+local vsw_aprot_aoas = {
     8.5,
     14,
     14,
@@ -44,7 +44,7 @@ local vsw_aprot_alphas = {
     11
 }
 
-local alpha_floor_alphas = {
+local alpha_floor_aoas = {
     9.5,
     15,
     15,
@@ -53,7 +53,7 @@ local alpha_floor_alphas = {
     13
 }
 
-local alpha_max_alphas = {
+local alpha_max_aoas = {
     10.5,
     16,
     16,
@@ -64,16 +64,16 @@ local alpha_max_alphas = {
 
 local function FILTER_ALPHA()--to smooth out the AoA so that the info is usable
     --filter display AoA for readable purposes
-    aoa_filtering_table.CA_ALPHA.x = adirs_get_aoa(PFD_CAPT)
-    aoa_filtering_table.FO_ALPHA.x = adirs_get_aoa(PFD_FO)
-    aoa_filtering_table.FAC_1_ALPHA.x = FBW.FMGEC.FMGEC_1.aoa
-    aoa_filtering_table.FAC_2_ALPHA.x = FBW.FMGEC.FMGEC_2.aoa
-    aoa_filtering_table.MIXED_ALPHA.x = FBW.FMGEC.MIXED.aoa
-    set(Filtered_CA_AoA,        low_pass_filter(aoa_filtering_table.CA_ALPHA))
-    set(Filtered_FO_AoA,        low_pass_filter(aoa_filtering_table.FO_ALPHA))
-    set(Filtered_FAC_1_AoA,     low_pass_filter(aoa_filtering_table.FAC_1_ALPHA))
-    set(Filtered_FAC_2_AoA,     low_pass_filter(aoa_filtering_table.FAC_2_ALPHA))
-    set(Filtered_FAC_MIXED_AoA, low_pass_filter(aoa_filtering_table.MIXED_ALPHA))
+    alpha_tbl.CA_ALPHA.x = adirs_get_aoa(PFD_CAPT)
+    alpha_tbl.FO_ALPHA.x = adirs_get_aoa(PFD_FO)
+    alpha_tbl.FMGEC1_ALPHA.x = FBW.FMGEC.FMGEC_1.aoa
+    alpha_tbl.FMGEC2_ALPHA.x = FBW.FMGEC.FMGEC_2.aoa
+    alpha_tbl.MIXED_ALPHA.x = FBW.FMGEC.MIXED.aoa
+    set(Filtered_CA_AoA,        low_pass_filter(alpha_tbl.CA_ALPHA))
+    set(Filtered_FO_AoA,        low_pass_filter(alpha_tbl.FO_ALPHA))
+    set(Filtered_FAC_1_AoA,     low_pass_filter(alpha_tbl.FMGEC1_ALPHA))
+    set(Filtered_FAC_2_AoA,     low_pass_filter(alpha_tbl.FMGEC2_ALPHA))
+    set(Filtered_FAC_MIXED_AoA, low_pass_filter(alpha_tbl.MIXED_ALPHA))
 end
 
 local function GET_MAX_ALPHA_LIM(flap_config, weight)
@@ -101,7 +101,7 @@ local function COMPUTE_BUSS_ALPHA()
         {0.7*27 + 10, GET_MAX_ALPHA_LIM(2, get(Aircraft_total_weight_kgs))},
         {0.8*27 + 14, GET_MAX_ALPHA_LIM(3, get(Aircraft_total_weight_kgs))},
         {0.8*27 + 21, GET_MAX_ALPHA_LIM(4, get(Aircraft_total_weight_kgs))},
-        {1.0*27 + 30, GET_MAX_ALPHA_LIM(5, get(Aircraft_total_weight_kgs))},
+        {1.0*27 + 34, GET_MAX_ALPHA_LIM(5, get(Aircraft_total_weight_kgs))},
     }
     local BUSS_VLS_alphas = {
         {0.0*27 + 0,  5.4},
@@ -109,15 +109,15 @@ local function COMPUTE_BUSS_ALPHA()
         {0.7*27 + 10, 7.2},
         {0.8*27 + 14, 7.2},
         {0.8*27 + 21, 5.8},
-        {1.0*27 + 30, 6.6},
+        {1.0*27 + 34, 6.6},
     }
     local BUSS_VSW_alphas = {
-        {0.0*27 + 0,  vsw_aprot_alphas[1]},
-        {0.7*27 + 0,  vsw_aprot_alphas[2]},
-        {0.7*27 + 10, vsw_aprot_alphas[3]},
-        {0.8*27 + 14, vsw_aprot_alphas[4]},
-        {0.8*27 + 21, vsw_aprot_alphas[5]},
-        {1.0*27 + 30, vsw_aprot_alphas[6]},
+        {0.0*27 + 0,  vsw_aprot_aoas[1]},
+        {0.7*27 + 0,  vsw_aprot_aoas[2]},
+        {0.7*27 + 10, vsw_aprot_aoas[3]},
+        {0.8*27 + 14, vsw_aprot_aoas[4]},
+        {0.8*27 + 21, vsw_aprot_aoas[5]},
+        {1.0*27 + 34, vsw_aprot_aoas[6]},
     }
 
     set(BUSS_VFE_red_AoA,  Table_interpolate(BUSS_VMAX_alphas, get(Slats)*27 + get(Flaps_deployed_angle)))
@@ -133,15 +133,15 @@ local function COMPUTE_A0_AFLOOR()
         {0.7*27 + 10, alpha0s[3]},
         {0.8*27 + 14, alpha0s[4]},
         {0.8*27 + 21, alpha0s[5]},
-        {1.0*27 + 30, alpha0s[6]},
+        {1.0*27 + 34, alpha0s[6]},
     }
     local afloor_alphas = {
-        {0.0*27 + 0,  alpha_floor_alphas[1]},
-        {0.7*27 + 0,  alpha_floor_alphas[2]},
-        {0.7*27 + 10, alpha_floor_alphas[3]},
-        {0.8*27 + 14, alpha_floor_alphas[4]},
-        {0.8*27 + 21, alpha_floor_alphas[5]},
-        {1.0*27 + 30, alpha_floor_alphas[6]},
+        {0.0*27 + 0,  alpha_floor_aoas[1]},
+        {0.7*27 + 0,  alpha_floor_aoas[2]},
+        {0.7*27 + 10, alpha_floor_aoas[3]},
+        {0.8*27 + 14, alpha_floor_aoas[4]},
+        {0.8*27 + 21, alpha_floor_aoas[5]},
+        {1.0*27 + 34, alpha_floor_aoas[6]},
     }
 
     set(A0_AoA,     Table_interpolate(a0_alphas,     get(Slats)*27 + get(Flaps_deployed_angle)))
@@ -149,23 +149,23 @@ local function COMPUTE_A0_AFLOOR()
 end
 
 local function COMPUTE_APROT_AMAX(aprot_dataref, amax_dataref, MACH)
-    local CLEAN_APROT_ALPHA = Math_rescale(0.5, vsw_aprot_alphas[1], 0.75, 3.5, MACH)
-    local CLEAN_AMAX_ALPHA =  Math_rescale(0.5, alpha_max_alphas[1], 0.75, 5.5, MACH)
+    local CLEAN_APROT_ALPHA = Math_rescale(0.5, vsw_aprot_aoas[1], 0.78, 3.5, MACH)
+    local CLEAN_AMAX_ALPHA =  Math_rescale(0.5, alpha_max_aoas[1], 0.78, 5.5, MACH)
     local aprot_alphas = {
         {0.0*27 + 0,  CLEAN_APROT_ALPHA},
-        {0.7*27 + 0,  vsw_aprot_alphas[2]},
-        {0.7*27 + 10, vsw_aprot_alphas[3]},
-        {0.8*27 + 14, vsw_aprot_alphas[4]},
-        {0.8*27 + 21, vsw_aprot_alphas[5]},
-        {1.0*27 + 30, vsw_aprot_alphas[6]},
+        {0.7*27 + 0,  vsw_aprot_aoas[2]},
+        {0.7*27 + 10, vsw_aprot_aoas[3]},
+        {0.8*27 + 14, vsw_aprot_aoas[4]},
+        {0.8*27 + 21, vsw_aprot_aoas[5]},
+        {1.0*27 + 34, vsw_aprot_aoas[6]},
     }
     local amax_alphas = {
         {0.0*27 + 0,  CLEAN_AMAX_ALPHA},
-        {0.7*27 + 0,  alpha_max_alphas[2]},
-        {0.7*27 + 10, alpha_max_alphas[3]},
-        {0.8*27 + 14, alpha_max_alphas[4]},
-        {0.8*27 + 21, alpha_max_alphas[5]},
-        {1.0*27 + 30, alpha_max_alphas[6]},
+        {0.7*27 + 0,  alpha_max_aoas[2]},
+        {0.7*27 + 10, alpha_max_aoas[3]},
+        {0.8*27 + 14, alpha_max_aoas[4]},
+        {0.8*27 + 21, alpha_max_aoas[5]},
+        {1.0*27 + 34, alpha_max_aoas[6]},
     }
 
     set(aprot_dataref, Table_interpolate(aprot_alphas, get(Slats)*27 + get(Flaps_deployed_angle)))

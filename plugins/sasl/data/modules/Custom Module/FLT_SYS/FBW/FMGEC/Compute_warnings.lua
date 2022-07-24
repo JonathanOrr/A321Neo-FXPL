@@ -1,3 +1,5 @@
+include('FMGS/functions.lua')
+
 local speed_speed_speed_time = 0
 
 local function SPEED_SPEED_SPEED()
@@ -34,7 +36,7 @@ local function STALL_STALL()
     --stall warning (needs to be further comfirmed)
     if (get(FBW_total_control_law) == FBW_NORMAL_LAW and RA_sys.all_RA_user() < 1500) or
        get(Any_wheel_on_ground) == 1 or
-       get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then
+       not FMGC_get_single_status(1) and not FMGC_get_single_status(2) then
         return
     end
 
@@ -52,7 +54,42 @@ local function STALL_STALL()
     end
 end
 
+local last_wind_dir = 0
+local windshear_pfd_timer = 15
+
+local function WINDSHEAR()
+    if get(DELTA_TIME) == 0 then return end
+
+    if RA_sys.all_RA_user() > 1300 or
+       RA_sys.all_RA_user() < 50 or
+       get(Flaps_internal_config) == 0 then
+        set(GPWS_mode_windshear, 0)
+        set(GPWS_mode_windshear_PFD, 0)
+        return
+    end
+
+    set(GPWS_mode_windshear, 0)
+
+    if windshear_pfd_timer < 15 then
+        windshear_pfd_timer = windshear_pfd_timer + get(DELTA_TIME)
+    else
+        set(GPWS_mode_windshear_PFD, 0)
+    end
+
+    local wind_dir_delta = get(Wind_flightmodel_dir) - last_wind_dir
+    local abs_wind_dir_dt = math.abs(wind_dir_delta / get(DELTA_TIME))
+    last_wind_dir = get(Wind_flightmodel_dir)
+
+    --threshold determined through flight tests
+    if abs_wind_dir_dt > 35 then
+        set(GPWS_mode_windshear, 1)
+        set(GPWS_mode_windshear_PFD, 1)
+        windshear_pfd_timer = 0
+    end
+end
+
 function update()
     SPEED_SPEED_SPEED()
     STALL_STALL()
+    WINDSHEAR()
 end
