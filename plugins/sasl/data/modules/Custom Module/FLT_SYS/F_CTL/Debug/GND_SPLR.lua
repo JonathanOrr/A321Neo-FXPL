@@ -20,7 +20,7 @@ function draw()
     Sasl_DrawWideFrame(10, 10 + 235 + 10, 550, 175, 2, 1, ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 410, "PLD", 20, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
-    sasl.gl.drawText(Font_MCDU, 15, 390, "       ONE/TWO LEV IDL/REV                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1 and UI_LIGHT_BLUE or ECAM_WHITE)
+    sasl.gl.drawText(Font_MCDU, 15, 390, "   AT LEAST ONE LEV IN REV                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1 and UI_LIGHT_BLUE or ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 380, "                          AND                   ", 12, false, false, TEXT_ALIGN_LEFT, (A_1 and A_2) and UI_LIGHT_BLUE or ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 365, " ALL LEV AT/LOWER THAN IDL                      ", 12, false, false, TEXT_ALIGN_LEFT, A_2 and UI_LIGHT_BLUE or ECAM_WHITE)
 
@@ -57,7 +57,7 @@ function draw()
     Sasl_DrawWideFrame(10, 10, 550, 235, 2, 1, ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 225, "GIS", 20, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
-    sasl.gl.drawText(Font_MCDU, 15, 205, "           GND SPLR ARMED                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1_1 and UI_LIGHT_BLUE or ECAM_WHITE)
+    sasl.gl.drawText(Font_MCDU, 15, 205, "  AT LEAST ONE LEV IN REV                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1_1 and UI_LIGHT_BLUE or ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 190, "                         OR                    ", 12, false, false, TEXT_ALIGN_LEFT, (A_1_1 or A_1_2) and UI_LIGHT_BLUE or ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 175, "      ONE/TWO LEV IDL/REV                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1_2 and UI_LIGHT_BLUE or ECAM_WHITE)
 
