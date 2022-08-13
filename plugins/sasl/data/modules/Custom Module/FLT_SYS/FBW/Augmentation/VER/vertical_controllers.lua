@@ -256,7 +256,7 @@ FBW.vertical.controllers = {
             FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT = PID_OUTPUT_FF (FBW_PID_arrays.FBW_CSTAR_PID)
             ----------------------------------------------------------------------------------------------------------
 
-            print("SP AoA " .. Round_fill(Math_rescale(0, get(FMGEC_MIXED_Aprot_AoA), 1, get(FMGEC_MIXED_Amax_AoA), get(Total_input_pitch)), 2))
+            --[[print("SP AoA " .. Round_fill(Math_rescale(0, get(FMGEC_MIXED_Aprot_AoA), 1, get(FMGEC_MIXED_Amax_AoA), get(Total_input_pitch)), 2))
 
             print("C* " .. Round_fill(FBW.vertical.controllers.Flight_PID.CSTART_OUTPUT, 2), "AoA " .. Round_fill(FBW.vertical.controllers.Flight_PID.Q_OUTPUT, 2))
 
@@ -264,7 +264,7 @@ FBW.vertical.controllers = {
                 print("AoA")
             else
                 print("C*")
-            end
+            end]]
 
             if get(FBW_vertical_law) == FBW_NORMAL_LAW then
                 FBW.vertical.controllers.Flight_PID.output = math.min(

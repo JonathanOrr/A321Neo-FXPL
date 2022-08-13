@@ -495,3 +495,19 @@ GND_SPLR_debug_window = contextWindow {
     GND_SPLR {position = { 0 , 0 , 700 , 500 }}
   };
 }
+
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Debug")
+
+FBW_PID_debug_window = contextWindow {
+  name = "FBW PID DEBUG";
+  position = { 100 , 100 , 700 , 500 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 700 , 500 };
+  maximumSize = { 700 , 500 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    PID {position = { 0 , 0 , 700 , 500 }}
+  };
+}

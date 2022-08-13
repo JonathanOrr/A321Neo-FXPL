@@ -241,3 +241,8 @@ FLT_SYS_FBW_debug = sasl.createMenu("", Menu_FLT_SYS, FLT_SYS_FBW_debug_item)
 sasl.appendMenuItem(FLT_SYS_FCTL_debug, "GND SPLR DEBUG", function ()
   GND_SPLR_debug_window:setIsVisible(not GND_SPLR_debug_window:isVisible())
 end)
+
+--FBW debug--
+sasl.appendMenuItem(FLT_SYS_FBW_debug, "FBW PID DEBUG", function ()
+  FBW_PID_debug_window:setIsVisible(not FBW_PID_debug_window:isVisible())
+end)
