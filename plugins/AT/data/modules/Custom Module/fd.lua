@@ -38,6 +38,7 @@ local FD_roll_delta = 0
 
 local maintain_bank = createGlobalPropertyi("a32nx/debug/maintain_bank", 0, false, true, false)
 local FD_activated = createGlobalPropertyi("a32nx/debug/fd_activated", 0, false, true, false)
+local target_bank = createGlobalPropertyi("a32nx/debug/target_bank", 0, false, true, false)
 local target_hdg = createGlobalPropertyi("a32nx/debug/target_hdg", 180, false, true, false)
 local target_vs = createGlobalPropertyi("a32nx/debug/target_vs", 0, false, true, false)
 local Dataref_pitch_delta = createGlobalPropertyf("a32nx/debug/FD_pitch_delta", 0, false, true, false)
@@ -100,8 +101,8 @@ function update()
             FD_roll = Set_linear_anim_value(FD_roll, FBW_PID_BP(Bank_angle_PID_array, compute_hdg_delta(get(aircraft_heading), get(target_hdg)), get(aircraft_heading)), -25, 25, 10)
             A32nx_stick_roll.P_gain = 1
         else
-            FD_roll = Set_linear_anim_value(FD_roll, 0, -25, 25, 10)
-            A32nx_stick_roll.P_gain = 2.5
+            FD_roll = Set_linear_anim_value(FD_roll, get(target_bank), -67, 67, 10)
+            A32nx_stick_roll.P_gain = 2
         end
         FD_pitch = Set_linear_anim_value(FD_pitch, FBW_PID_BP(Pitch_PID_array, get(target_vs) - get(vvi), get(vvi)), -25, 25, 10)
         Pitch_PID_array.Actual_output = get(aircraft_pitch)
