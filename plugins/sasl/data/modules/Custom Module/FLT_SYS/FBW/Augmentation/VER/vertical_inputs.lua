@@ -32,7 +32,7 @@ FBW.vertical.inputs = {
             end
 
             --BP AoA Q demand PID
-            FBW_PID_arrays.FBW_ROTATION_APROT_PID.Actual_output = FBW.rates.Pitch.x
+            FBW_PID_arrays.FBW_ROTATION_APROT_PID.Actual_output = FBW.angular_rates.Theta.deg
 
             return OUT_Q
         end
@@ -45,7 +45,7 @@ FBW.vertical.inputs = {
             Q = FBW.vertical.protections.Flight.Q_Pitch(Q)
 
             --BP AoA Q demand PID
-            FBW_PID_arrays.FBW_FLIGHT_APROT_PID.Actual_output = FBW.rates.Pitch.x
+            FBW_PID_arrays.FBW_FLIGHT_APROT_PID.Actual_output = FBW.angular_rates.Theta.deg
 
             return Q
         end,
@@ -107,7 +107,7 @@ FBW.vertical.inputs = {
             end
 
             --BP AoA Q demand PID
-            FBW_PID_arrays.FBW_FLARE_APROT_PID.Actual_output = FBW.rates.Pitch.x
+            FBW_PID_arrays.FBW_FLARE_APROT_PID.Actual_output = FBW.angular_rates.Theta.deg
 
             return OUT_Q
         end

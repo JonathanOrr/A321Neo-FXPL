@@ -58,7 +58,7 @@ FBW.vertical.controllers = {
             FBW.vertical.controllers.Rotation_PID.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_PITCH_RATE_PID,
                 FBW.vertical.inputs.Rotation.INPUT(get(Total_input_pitch)),
-                FBW.rates.Pitch.x,
+                FBW.angular_rates.Theta.deg,
                 FBW.filtered_sensors.IAS.filtered
             )
         end,
@@ -213,7 +213,7 @@ FBW.vertical.controllers = {
             --[[FBW.vertical.controllers.Flight_PID.Q_OUTPUT = FBW_PID_BP(
                 FBW_PID_arrays.FBW_PITCH_RATE_PID,
                 FBW.vertical.inputs.Flight.Q_INPUT(),
-                FBW.rates.Pitch.x,
+                FBW.angular_rates.Theta.deg,
                 FBW.filtered_sensors.IAS.filtered
             )]]
 
@@ -309,7 +309,7 @@ FBW.vertical.controllers = {
             FBW.vertical.controllers.Flare_PID.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_PITCH_RATE_PID,
                 FBW.vertical.inputs.Flare.INPUT(get(Total_input_pitch)),
-                FBW.rates.Pitch.x,
+                FBW.angular_rates.Theta.deg,
                 FBW.filtered_sensors.IAS.filtered
             )
         end,

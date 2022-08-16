@@ -456,7 +456,7 @@ local function update_mode_pitch()
     
     local THRESHOLD = 8.25
     local pitch_now      = get(Flightmodel_pitch)
-    local pitch_in_1_sec = get(Flightmodel_pitch) + FBW.rates.Pitch.x
+    local pitch_in_1_sec = get(Flightmodel_pitch) + FBW.angular_rates.Theta.deg
 
     if pitch_now > THRESHOLD or pitch_in_1_sec > THRESHOLD then
         set(GPWS_mode_pitch, 1)

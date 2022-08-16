@@ -13,36 +13,48 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
-FBW.rates ={
-    Pitch = {
-        x = 0,
-        dataref = Flightmodel_pitch
+local msin = function (x) return math.sin(math.rad(x)) end
+local mcos = function (x) return math.cos(math.rad(x)) end
+local mtan = function (x) return math.tan(math.rad(x)) end
+
+
+FBW.angular_rates ={
+    Theta = {
+        deg = 0,
+        rad = 0,
+        compute = function ()
+            local roll = get(Flightmodel_roll)
+
+           return get(Flightmodel_q) * mcos(roll) + get(Flightmodel_r) * msin(roll)
+        end
     },
-    Roll = {
-        x = 0,
-        dataref = Flightmodel_roll
+    Phi = {
+        deg = 0,
+        rad = 0,
+        compute = function ()
+            local roll = get(Flightmodel_roll)
+            local pitch = get(Flightmodel_pitch)
+
+           return get(Flightmodel_p) + (get(Flightmodel_q) * msin(roll) + get(Flightmodel_r) * mcos(roll)) * mtan(pitch)
+        end
+    },
+    Psi = {
+        deg = 0,
+        rad = 0,
+        compute = function ()
+            local roll = get(Flightmodel_roll)
+            local pitch = get(Flightmodel_pitch)
+
+           return (get(Flightmodel_q) * msin(roll) + get(Flightmodel_r) * mcos(roll)) / mcos(pitch)
+        end
     },
 }
 
-local function update_rates(table)
-
+local function update_angular_rates(table)
     for key, value in pairs(table) do
         -- Ignore non-dataref based rates
-        if value.dataref then
-            --init tables--
-            if value.previous_value == nil then
-                table[key].previous_value = get(value.dataref)
-            end
-
-            --check if paused--
-            if get(DELTA_TIME) ~= 0 then
-                --compute rates--
-                table[key].x = (get(value.dataref) - value.previous_value) / get(DELTA_TIME)
-            end
-
-            --record value--
-            table[key].previous_value = get(value.dataref)
-        end
+        value.rad = value.compute()
+        value.deg = (value.rad / math.pi) * 180
     end
 end
 
@@ -94,5 +106,5 @@ end
 end]]--
 
 function update()
-    update_rates(FBW.rates)
+    update_angular_rates(FBW.angular_rates)
 end
