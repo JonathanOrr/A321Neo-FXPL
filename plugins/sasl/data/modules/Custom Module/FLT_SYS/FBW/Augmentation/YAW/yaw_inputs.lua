@@ -24,14 +24,16 @@ FBW.yaw.inputs = {
         return wind_turb / 10 -- XP datarefs are on scale [0;10], we change it to [0;1]
     end,
 
-    damper_input = function (bank, TAS)
-        bank = Math_clamp(bank, -90, 90)
-        TAS = Math_clamp(TAS, 1, 530)
-        local abs_bank = math.abs(bank)
+    damper_r_deg = function ()
+        local msin = function (a) return math.sin(math.rad(a)) end
+        local mcos = function (a) return math.sin(math.rad(a)) end
+        local TAS_MS = adirs_get_avg_tas() / 1.944
+        local VPATH = adirs_get_avg_vpath()
+        local ROLL = adirs_get_avg_roll()
 
-        local TAS_ratio = -0.00348*TAS + 187/100
-        local R_curve = -0.0004*abs_bank^2 + 0.0849*abs_bank
-        return R_curve * TAS_ratio * (bank < 0 and -1 or 1)
+        local r_rad = (get(Weather_g) / TAS_MS) * (msin(ROLL) * mcos(VPATH) + get(Total_lateral_g_load))
+
+        return (r_rad / math.pi) * 180
     end,
 
     x_to_beta = function (x)
