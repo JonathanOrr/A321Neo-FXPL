@@ -36,22 +36,19 @@ FBW.vertical.dynamics = {
         local mrad = math.rad
 
         local RAD_ALPHA = mrad(get(Alpha))
-        local RAD_BANK  = mrad(get(Flightmodel_roll))
+        local RAD_BANK = mrad(get(Flightmodel_roll))
 
-        local SIDE_G = get(Total_lateral_g_load)
-        local AXIL_G = get(Total_long_g_load)
-        local NRML_G = get(Total_vertical_g_load)
+        local SDE_F = -get(Flightmodel_TOT_SDE_FORCE)
+        local AXL_F = -get(Flightmodel_TOT_AXL_FORCE) --reversed 
+        local NML_F = get(Flightmodel_TOT_NRM_FORCE)
 
-        --X AXIS--(right is positive)
-        --Y AXIS--(forward is positive)
-        --Z AXIS--(up is positive)
-        local SIDE_Z = SIDE_G * msin(-RAD_BANK) * mcos(RAD_ALPHA)
-        local AXIL_Z = AXIL_G * msin(-RAD_ALPHA)
-        local NRML_Z = NRML_G * mcos(RAD_ALPHA)
+        local SDE_Nz = SDE_F * msin(RAD_BANK) * mcos(RAD_ALPHA)
+        local AXL_Nz = AXL_F * msin(RAD_ALPHA)
+        local NML_Nz = NML_F * mcos(RAD_ALPHA)
 
-        --print("Z  G: ", (SIDE_Z + AXIL_Z + NRML_Z) * (9.80665 / get(Weather_g)))
+        local Nz = (NML_Nz + AXL_Nz + SDE_Nz) / (get(Weather_g) * get(Gross_weight))
 
-        return (SIDE_Z + AXIL_Z + NRML_Z) * (9.80665 / get(Weather_g))
+        return Nz
     end,
 
     GET_CSTAR = function (Nz, Q)

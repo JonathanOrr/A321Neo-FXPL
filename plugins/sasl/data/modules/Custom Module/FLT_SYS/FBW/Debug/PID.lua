@@ -144,14 +144,13 @@ function update()
     if not FBW_PID_debug_window:isVisible() then return end
 
     Grapher_update(test_tbl, {
-        G = {graph = true, number = true, color = ECAM_BLUE, value = get(Total_vertical_g_load)},
-        Q = {graph = true, number = true, color = ECAM_RED, value = get(Flightmodel_q_deg)},
+        G = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.GET_GLOAD()},
     })
 end
 
 function draw()
     Grapher_draw(test_tbl)
     Grapher_draw_function(test_tbl, {
-        sin = {color = ECAM_MAGENTA, func = function(x) return math.sin(math.rad(x)) end, dom = {-180, 180}, sample = 50},
+        --sin = {color = ECAM_MAGENTA, func = function(x) return math.sin(math.rad(x)) end, dom = {-180, 180}, sample = 50},
     })
 end
