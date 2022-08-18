@@ -144,7 +144,9 @@ function update()
     if not FBW_PID_debug_window:isVisible() then return end
 
     Grapher_update(test_tbl, {
-        G = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.GET_GLOAD()},
+        NX = {graph = true, number = true, color = ECAM_RED, value = FBW.vertical.dynamics.Path_Load_Factor("x")},
+        NY = {graph = true, number = true, color = ECAM_GREEN, value = FBW.vertical.dynamics.Path_Load_Factor("y")},
+        NZ = {graph = true, number = true, color = ECAM_BLUE, value = FBW.vertical.dynamics.Path_Load_Factor("z")},
     })
 end
 

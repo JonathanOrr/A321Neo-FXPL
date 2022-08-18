@@ -236,14 +236,14 @@ FBW.vertical.controllers = {
             PID_COMPUTE (
                 FBW_PID_arrays.FBW_CSTAR_PID,
                 FBW.vertical.inputs.Flight.CSTAR_INPUT(get(Total_input_pitch)),
-                FBW.vertical.dynamics.GET_CSTAR(FBW.vertical.dynamics.GET_GLOAD(), get(Flightmodel_q))
+                FBW.vertical.dynamics.GET_CSTAR(FBW.vertical.dynamics.Path_Load_Factor("z"), get(Flightmodel_q))
             )
 
             PID_FF (
                 FBW_PID_arrays.CSTAR_STABILITY_FF,
                 FBW_PID_arrays.FBW_CSTAR_PID,
-                (FBW.vertical.dynamics.GET_GLOAD() < 0.9 or FBW.vertical.dynamics.GET_GLOAD() > 1.2) -- only while maneuvering
-                and (FBW.vertical.dynamics.GET_MANEUVER_Q(FBW.vertical.dynamics.GET_GLOAD()) - get(Flightmodel_q))
+                (FBW.vertical.dynamics.Path_Load_Factor("z") < 0.9 or FBW.vertical.dynamics.Path_Load_Factor("z") > 1.2) -- only while maneuvering
+                and (FBW.vertical.dynamics.GET_MANEUVER_Q(FBW.vertical.dynamics.Path_Load_Factor("z")) - get(Flightmodel_q))
                 or 0
             )
 

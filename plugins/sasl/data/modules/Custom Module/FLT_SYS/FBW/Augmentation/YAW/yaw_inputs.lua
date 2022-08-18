@@ -26,8 +26,8 @@ FBW.yaw.inputs = {
 
     damper_r_deg = function ()
         local msin = function (a) return math.sin(math.rad(a)) end
-        local mcos = function (a) return math.sin(math.rad(a)) end
-        local TAS_MS = adirs_get_avg_tas() / 1.944
+        local mcos = function (a) return math.cos(math.rad(a)) end
+        local TAS_MS = Math_clamp_lower(adirs_get_avg_tas() / 1.944, 0.1)
         local VPATH = adirs_get_avg_vpath()
         local ROLL = adirs_get_avg_roll()
 

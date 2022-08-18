@@ -8,6 +8,7 @@ FBW.yaw.controllers = {
                 FBW.yaw.inputs.damper_r_deg(),
                 get(Flightmodel_r_deg)
             )
+
             --law reconfiguration
             if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
                 --limit travel ability to 5 degrees of rudder

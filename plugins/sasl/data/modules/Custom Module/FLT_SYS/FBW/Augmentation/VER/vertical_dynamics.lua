@@ -30,25 +30,30 @@ FBW.vertical.dynamics = {
         return (g / TAS_MS) * (G - math.cos(RAD_VPATH) * math.cos(RAD_BANK))
     end,
 
-    GET_GLOAD = function ()
-        local msin = math.sin
-        local mcos = math.cos
-        local mrad = math.rad
+    Path_Load_Factor = function (axis)
+        local msin = function (a) return math.sin(math.rad(a)) end
+        local mcos = function (a) return math.cos(math.rad(a)) end
 
-        local RAD_ALPHA = mrad(get(Alpha))
-        local RAD_BANK = mrad(get(Flightmodel_roll))
+        local ALPHA = get(Alpha)
+        local BETA  = get(Beta)
 
-        local SDE_F = -get(Flightmodel_TOT_SDE_FORCE)
-        local AXL_F = -get(Flightmodel_TOT_AXL_FORCE) --reversed 
-        local NML_F = get(Flightmodel_TOT_NRM_FORCE)
+        local ACF_X_F = -get(Flightmodel_TOT_AXL_FORCE) --reversed 
+        local ACF_Y_F = get(Flightmodel_TOT_SDE_FORCE)
+        local ACF_Z_F = get(Flightmodel_TOT_NRM_FORCE)
 
-        local SDE_Nz = SDE_F * msin(RAD_BANK) * mcos(RAD_ALPHA)
-        local AXL_Nz = AXL_F * msin(RAD_ALPHA)
-        local NML_Nz = NML_F * mcos(RAD_ALPHA)
+        local PATH_X_F =  ACF_X_F * mcos(ALPHA) * mcos(BETA) + ACF_Y_F * msin(BETA) - ACF_Z_F * msin(ALPHA) * mcos(BETA)
+        local PATH_Y_F = -ACF_X_F * mcos(ALPHA) * msin(BETA) + ACF_Y_F * mcos(BETA) + ACF_Z_F * msin(ALPHA) * msin(BETA)
+        local PATH_Z_F =  ACF_X_F * msin(ALPHA)                                     + ACF_Z_F * mcos(ALPHA)
 
-        local Nz = (NML_Nz + AXL_Nz + SDE_Nz) / (get(Weather_g) * get(Gross_weight))
+        local WEIGHT_F = get(Gross_weight) * get(Weather_g)
 
-        return Nz
+        local PATH_N = {
+            ["x"] = PATH_X_F / WEIGHT_F,
+            ["y"] = PATH_Y_F / WEIGHT_F,
+            ["z"] = PATH_Z_F / WEIGHT_F,
+        }
+
+        return PATH_N[axis]
     end,
 
     GET_CSTAR = function (Nz, Q)
