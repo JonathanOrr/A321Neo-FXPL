@@ -16,9 +16,9 @@
 -- Short description: The HUD logic and graphics
 -------------------------------------------------------------------------------
 
-local default_head_x = -0.445792
-local default_head_y = 2.204
-local default_head_z = -17.3736
+local default_head_x = -0.45
+local default_head_y = 2.2
+local default_head_z = -17.4
 
 local actual_alt_ft = 3.281 * get(Elevation_m)
 

@@ -57,7 +57,7 @@ function draw()
     Sasl_DrawWideFrame(10, 10, 550, 235, 2, 1, ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 225, "GIS", 20, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
-    sasl.gl.drawText(Font_MCDU, 15, 205, "  AT LEAST ONE LEV IN REV                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1_1 and UI_LIGHT_BLUE or ECAM_WHITE)
+    sasl.gl.drawText(Font_MCDU, 15, 205, "          GND SPLRS ARMED                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1_1 and UI_LIGHT_BLUE or ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 190, "                         OR                    ", 12, false, false, TEXT_ALIGN_LEFT, (A_1_1 or A_1_2) and UI_LIGHT_BLUE or ECAM_WHITE)
     sasl.gl.drawText(Font_MCDU, 15, 175, "      ONE/TWO LEV IDL/REV                      ", 12, false, false, TEXT_ALIGN_LEFT, A_1_2 and UI_LIGHT_BLUE or ECAM_WHITE)
 
