@@ -33,18 +33,6 @@ local function Compute_THS_HYD_SPD()
     return HYD_SPD
 end
 
-local function THS_DEF2RAT(CURR_DEF)
-    local CONVERSION_TBL = {
-        {-MAX_THS_DN, -1},
-        {0,            0},
-        {MAX_THS_UP,   1},
-    }
-
-    local THS_RATIO = Table_interpolate(CONVERSION_TBL, CURR_DEF)
-
-    set(XP_THS_ratio, THS_RATIO)
-end
-
 FCTL.THS.ACT = function (REQ_DEF)
     local TGT_SPD = 0
     local DEF_DATAREF = THS_DEF
@@ -73,8 +61,8 @@ FCTL.THS.ACT = function (REQ_DEF)
     end
 
     --ACTUATE--
-    set(DEF_DATAREF, Math_clamp(CURR_DEF + get(THS_CURR_SPD) * (1 - STUCK) * get(DELTA_TIME), -MAX_THS_DN, MAX_THS_UP))
-    THS_DEF2RAT(CURR_DEF)
+    set(DEF_DATAREF, Math_clamp(CURR_DEF + get(THS_CURR_SPD) * (1 - STUCK) * get(DELTA_TIME), -MAX_THS_UP, MAX_THS_DN))
+    set(XP_THS_DEF, -get(DEF_DATAREF))
 
     if get(Human_pitch_trim) ~= 0 then
         set(THS_CURR_SPD, 0)

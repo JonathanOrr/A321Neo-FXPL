@@ -718,6 +718,12 @@ Flaps_handle_position =      createGlobalPropertyf("a321neo/dynamics/surfaces/fl
 Flaps_internal_config =      createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
 Slats_predeploy_ratio =      createGlobalPropertyf("a321neo/dynamics/surfaces/slats_pre_deploy_ratio") -- 0 --> 1
 Slats =                      globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
+Flap_inboard_cl =            globalProperty("sim/aircraft/controls/acf_flap_cl")
+Flap_inboard_cd =            globalProperty("sim/aircraft/controls/acf_flap_cd")
+Flap_inboard_cm =            globalProperty("sim/aircraft/controls/acf_flap_cm")
+Flap_outboard_cl =           globalProperty("sim/aircraft/controls/acf_flap2_cl")
+Flap_outboard_cd =           globalProperty("sim/aircraft/controls/acf_flap2_cd")
+Flap_outboard_cm =           globalProperty("sim/aircraft/controls/acf_flap2_cm")
 Left_outboard_flaps =        globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 14, 3 = 21, 4 = 25
 Left_inboard_flaps =         globalProperty("sim/flightmodel/controls/wing1l_fla1def")
 Right_inboard_flaps =        globalProperty("sim/flightmodel/controls/wing1r_fla1def")
@@ -732,7 +738,7 @@ Human_pitch_trim =    createGlobalPropertyi("a321neo/dynamics/FBW/controls/human
 Digital_THS_def_tgt = createGlobalPropertyf("a321neo/dynamics/FBW/controls/digital_ths_deflection", 0, false, true, false)
 THS_DEF =             createGlobalPropertyf("a321neo/dynamics/FBW/controls/THS_deflection", 0, false, true, false)
 THS_CURR_SPD =        createGlobalPropertyf("a321neo/dynamics/FBW/controls/THS_current_speed", 0, false, true, false)
-XP_THS_ratio =        globalProperty("sim/flightmodel2/controls/elevator_trim")
+XP_THS_DEF =          globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")--negative is up
 Max_THS_up =          globalProperty("sim/aircraft/controls/acf_hstb_trim_up")--13.5 deggrees
 Max_THS_dn =          globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")--4 degrees
 L_elevator =          globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators 17 deg down -30 deg up
