@@ -55,6 +55,37 @@ function Math_clamp_higher(val, max)
     return val >= max and max or val
 end
 
+function Math_clamp_heading_sum(val, add, min, max)
+    local newVal = (val + add) % 360
+
+    -- Ensure the input values are within [0, 360).
+    val = val % 360
+    min = min % 360
+    max = max % 360
+
+    if min < max then
+        -- If min is less than max, clamp within that range.
+        if newVal < min then
+            return min
+        elseif newVal > max then
+            return max
+        else
+            return newVal
+        end
+    else
+        -- If min is greater than or equal to max, clamp within the inverted range.
+        if newVal < min and newVal > max then
+            if add >= 0 then -- trying to go clockwise
+                return max
+            else -- trying to go anticlockwise
+                return min
+            end
+        else
+            return newVal
+        end
+    end
+end
+
 --used to cycle a value e.g. 1 --> 2 --> 3 |
 --                           ^<----------<--
 function Math_cycle(val, start, finish)
