@@ -23,6 +23,11 @@ include('PFD/PFD_drawing_assets.lua')
 include('PFD/PFD_sub_functions/PFD_spd_tape.lua')
 
 function update()
+    if sasl.getCurrentCameraStatus() == CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE then
+        Cinetracker_HUD:setIsVisible(true)
+    else
+        Cinetracker_HUD:setIsVisible(false)
+    end
     Cinetracker_HUD:setPosition (0, 0, 408*0.6, 561*0.6)
 end
 
