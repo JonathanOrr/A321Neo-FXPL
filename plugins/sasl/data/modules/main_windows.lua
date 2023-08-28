@@ -413,7 +413,9 @@ Cinetracker_window = contextWindow {
   minimumSize = { 240 , 275 };
   maximumSize = { 480 , 550 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = false ;
+  visible = true ;
+  noDecore = true ;
+  layer = SASL_CW_LAYER_FLIGHT_OVERLAY;
   components = {
     cinetracker_main {}
   };

@@ -16,35 +16,6 @@
 -- Short description: Checklist widget
 -------------------------------------------------------------------------------
 
-size = { 480 , 550 }
-position = { 0 , 0 , 480 , 550 }
-
-
-local UI_BGD_GREY = {0.1568, 0.1803, 0.2039}
-local UI_FGD_GREY = {0.1568 * 1.1, 0.1803 * 1.1, 0.2039 * 1.1}
-
-addSearchPath(moduleDirectory .. "/Custom Module/Cinetracker/sub_functions")
-
-components = {
-    constants {},
-    camera_status {},
-    camera_functions {},
-    input_functions {},
-}
-
-
-local NAME_ENTRY = createGlobalPropertys("a321neo/cinetracker/name", "new", false, true, false)
-local TIME_ENTRY = createGlobalPropertyf("a321neo/cinetracker/time", 0, false, true, false)
-
---image textures
-local camera_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/checklist/white_camera.png")
-local zigzag_arrow_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/checklist/zigzag_arrow.png")
-
---checklist items
-local cinetracks = {
-    test_track
-}
-
 --[[
 local current_view = {
     get(Head_x
@@ -69,34 +40,52 @@ local function load_save_view()
 end
 ]]
 
---checklist function
-local function resize_checklist(checklist_array)
-    local pos_x
-    local pos_y
-    local pos_width
-    local pos_height
+require "Cinetracker.libs.Vector"
+addSearchPath(moduleDirectory .. "/Custom Module/Cinetracker/sub_functions")
 
-    pos_x, pos_y, pos_width, pos_height = Checklist_window:getPosition()
+size = { 480, 550 }
+position = { 0, 0, 480, 550 }
 
-    local window_height = 20 + 20 + 30 --20px for upper boarder and 20px for lower boarder 30px for the title box
+-- player camera rotation
+CAMERAZOOM = 1
+userRot = Vector3(0, 0, 0)
+smoothUserRot = Vector3(0, 0, 0)
 
-    --resize to fit the checklist
-    size[1] = 480
-    size[2] = window_height
-    Checklist_window:setSizeLimits ( 480 / 2, window_height / 2, 480, window_height)
-    Checklist_window:setPosition ( pos_x , pos_y + (pos_height - window_height), 480, window_height)
+components = {
+    camera_functions {}
+}
+
+local prevCurX, prevCurY = 0, 0
+function onMouseDown(component, x, y, button, parentX, parentY)
+    if button == MB_LEFT then
+        prevCurX, prevCurY = x, y -- avoid sudden view change
+    end
+
+    return true
+end
+
+function onMouseHold(component, x, y, button, parentX, parentY)
+    if button == MB_LEFT then
+        local dX, dY = (x - prevCurX) / CAMERAZOOM, (y - prevCurY) / CAMERAZOOM
+        prevCurX, prevCurY = x, y
+        userRot.x = Math_clamp_heading_sum(userRot.x, dY, 270, 90)
+        userRot.y = (userRot.y + dX) % 360
+    end
+
+    return true
+end
+
+function onMouseUp(component, x, y, button, parentX, parentY)
+    if button == MB_LEFT then
+    end
+
+    return true
 end
 
 function onMouseWheel(component, x, y, button, parentX, parentY, value)
-    Cinetracker.inputs.mouse.wheel.down(component, x, y, button, parentX, parentY, value)
-end
+    CAMERAZOOM = Math_clamp(CAMERAZOOM + value, 1, 3)
 
-function onMouseDown(component, x, y, button, parentX, parentY)
-
-end
-
-function onKeyDown(component, char, key, shDown, ctrlDown, altOptDown)
-    Cinetracker.inputs.keyboard.down(component, char, key, shDown, ctrlDown, altOptDown)
+    return true
 end
 
 function update()
@@ -106,9 +95,19 @@ function update()
     else
         sasl.setMenuItemState(Menu_main, ShowHideCinetracker, MENU_UNCHECKED)
     end
+    if sasl.getCurrentCameraStatus() == CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE then
+        Cinetracker_window:setIsVisible(true)
+    else
+        Cinetracker_window:setIsVisible(false)
+    end
+    if not Cinetracker_window:isVisible() then return end
+
+    local x, y, width, height = sasl.windows.getScreenBoundsGlobal()
+    size = { width, height }
+    Cinetracker_window:setSizeLimits(width, height, width, height)
+    Cinetracker_window:setPosition(x, y, width, height)
 end
 
 function draw()
-    sasl.gl.drawRectangle(0, 0, size[1], size[2], UI_BGD_GREY)
-    sasl.gl.drawRectangle(10, 10, size[1] - 20, size[2] - 20, UI_FGD_GREY)
+    Sasl_DrawWideFrame(0, 0, size[1], size[2], 10, 2, ECAM_RED)
 end

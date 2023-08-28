@@ -1,204 +1,186 @@
-Cinetracker.camera = {
-    AXIS_MATH = {
-        Common = {
-            get_user_cam_pos = function ()
-                return Cinetracker.status.camera_pos.x,
-                       Cinetracker.status.camera_pos.y,
-                       Cinetracker.status.camera_pos.z
-            end,
-            get_user_cam_rot = function ()
-                return Cinetracker.status.camera_pos.roll,
-                       Cinetracker.status.camera_pos.pitch,
-                       Cinetracker.status.camera_pos.yaw
-            end,
-            get_user_orbit_rot = function ()
-                local deg2rad = math.rad
-                return Cinetracker.status.camera_pos.r,
-                       deg2rad(Cinetracker.status.camera_pos.h_rot),
-                       deg2rad(Cinetracker.status.camera_pos.v_rot)
-            end,
-            get_acf_rot = function ()
-                local deg2rad = math.rad
-                return deg2rad(get(Flightmodel_NRM_roll)),
-                       deg2rad(get(Flightmodel_NRM_pitch)),
-                       deg2rad(get(Flightmodel_NRM_heading))
-            end,
-            get_flt_rot = function ()
-                local deg2rad = math.rad
-                return math.atan(get(Flightmodel_vy)/math.sqrt(get(Flightmodel_vz)^2 + get(Flightmodel_vx)^2)),-- deg2rad(get(Vpath)),
-                       (math.atan2(get(Flightmodel_vz), get(Flightmodel_vx)) + math.pi/2) % (2 * math.pi)
-            end,
-        },
-        Global = {
-            GLOBAL = function ()
-                local SIN = math.sin
-                local COS = math.cos
-                local TAN = math.tan
-                local RAD2DEG = math.deg
-                local DEG2RAD = math.rad
+require "Cinetracker.libs.Vector"
+include("Cinetracker/libs/signal_processing.lua")
 
-                local CURR_BANK, CURR_PITCH, CURR_TRU_HDG = Cinetracker.camera.AXIS_MATH.Common.get_acf_rot()
-                local USER_roll, USER_pitch, USER_yaw = Cinetracker.camera.AXIS_MATH.Common.get_user_cam_rot()
-                local USER_x, USER_y, USER_z = Cinetracker.camera.AXIS_MATH.Common.get_user_cam_pos()
+local smoothZoom = 1
 
-                local LOCAL_x = USER_x
-                local LOCAL_y = USER_y
-                local LOCAL_z = USER_z
+-- gforce lowpass filters
+local nxLP = LowPass:new { freq = 0.25 }
+local nyLP = LowPass:new { freq = 0.25 }
+local nzLP = LowPass:new { freq = 0.25 }
 
-                local GLOBAL_dx = LOCAL_x * COS(CURR_TRU_HDG) - LOCAL_z * SIN(CURR_TRU_HDG)
-                local GLOBAL_dy = LOCAL_y
-                local GLOBAL_dz = LOCAL_z * COS(CURR_TRU_HDG) + LOCAL_x * SIN(CURR_TRU_HDG)
+local function Set_smooth_rotation(current_angle, target, speed)
+    assert(speed >= 0, "Anim value speed must be > 0!")
+    local delta = (target - current_angle + 180) % 360 - 180
+    return Math_approx_value((current_angle + delta * speed * get(DELTA_TIME)), 0.1, 360) % 360
+end
 
-                return GLOBAL_dx, GLOBAL_dy, GLOBAL_dz, USER_roll, USER_pitch, USER_yaw
-            end,
-            GLOBAL_ROT = function ()
-                local SIN = math.sin
-                local COS = math.cos
-                local TAN = math.tan
-                local RAD2DEG = math.deg
-                local DEG2RAD = math.rad
+local function camRotation()
+    local RAD2DEG = math.deg
+    local DEG2RAD = math.rad
 
-                local CURR_BANK, CURR_PITCH, CURR_TRU_HDG = Cinetracker.camera.AXIS_MATH.Common.get_acf_rot()
-                local USER_roll, USER_pitch, USER_yaw = Cinetracker.camera.AXIS_MATH.Common.get_user_cam_rot()
-                local USER_x, USER_y, USER_z = Cinetracker.camera.AXIS_MATH.Common.get_user_cam_pos()
+    local MAX_ROLL = 15
+    local MAX_PITCH = 35
 
-                local LOCAL_x = USER_x * COS(CURR_BANK) + USER_y * SIN(CURR_BANK)
-                local LOCAL_y = USER_y * COS(CURR_BANK) * COS(CURR_PITCH)
-                local LOCAL_z = USER_z * COS(CURR_PITCH) + USER_y * COS(CURR_BANK) * SIN(CURR_PITCH)
+    local ROLL, PITCH, TRU_HDG =
+        DEG2RAD(get(Flightmodel_roll)),
+        DEG2RAD(get(Flightmodel_pitch)),
+        DEG2RAD(get(Flightmodel_true_heading))
+    local VPATH, HPATH =
+        DEG2RAD(get(Vpath)),
+        DEG2RAD(get(Flightmodel_true_track))
 
-                --bank correction--
-                LOCAL_z = LOCAL_z - USER_x * SIN(CURR_BANK) * SIN(CURR_PITCH)
+    --start using velocity vector only if it has enough speed to be jump around
+    local VECTOR_BLEND_RATIO = Math_rescale(30, 0, 40, 1, math.abs(get(IAS)))
+    VPATH = VPATH * VECTOR_BLEND_RATIO
+    local TRK_DELTA = ((HPATH - TRU_HDG) * VECTOR_BLEND_RATIO) % (2 * math.pi)
 
-                local GLOBAL_dx = LOCAL_x * COS(CURR_TRU_HDG) - LOCAL_z * SIN(CURR_TRU_HDG)
-                local GLOBAL_dy = LOCAL_y - USER_x * SIN(CURR_BANK) * COS(CURR_PITCH) - USER_z * SIN(CURR_PITCH)
-                local GLOBAL_dz = LOCAL_z * COS(CURR_TRU_HDG) + LOCAL_x * SIN(CURR_TRU_HDG)
+    local roll_tbl = {
+        { -180, 0 },
+        { -90,  -MAX_ROLL },
+        { 0,    0 },
+        { 90,   MAX_ROLL },
+        { 180,  0 },
+    }
+    local pitch_tbl = {
+        { -90, -MAX_PITCH },
+        { 0,   0 },
+        { 90,  MAX_PITCH },
+    }
 
-                return GLOBAL_dx, GLOBAL_dy, GLOBAL_dz, USER_roll, USER_pitch, USER_yaw
-            end
-        },
-        Orbit = {
-            ORBIT = function ()
-                local SIN = math.sin
-                local COS = math.cos
-                local TAN = math.tan
-                local RAD2DEG = math.deg
-                local DEG2RAD = math.rad
+    local CAM_ROLL = Table_interpolate(roll_tbl, RAD2DEG(ROLL))
+    local CAM_PITCH = Table_interpolate(pitch_tbl, RAD2DEG(VPATH))
+    local CAM_TRUHDG = get(Flightmodel_true_heading) + RAD2DEG(TRK_DELTA)
 
-                local CURR_BANK, CURR_PITCH, CURR_TRU_HDG = Cinetracker.camera.AXIS_MATH.Common.get_acf_rot()
-                local USER_roll, USER_pitch, USER_yaw = Cinetracker.camera.AXIS_MATH.Common.get_user_cam_rot()
-                local USER_r, USER_h_rot, USER_v_rot = Cinetracker.camera.AXIS_MATH.Common.get_user_orbit_rot()
+    return CAM_ROLL, CAM_PITCH, CAM_TRUHDG
+end
 
-                local LOCAL_x = USER_r * COS(USER_v_rot) * COS(USER_h_rot)
-                local LOCAL_y = USER_r * SIN(USER_v_rot)
-                local LOCAL_z = USER_r * COS(USER_v_rot) * SIN(-USER_h_rot)
+local function extCamControl()
+    smoothZoom = Set_anim_value_no_lim(smoothZoom, CAMERAZOOM, 5)
 
-                local GLOBAL_dx = LOCAL_x * COS(CURR_TRU_HDG) - LOCAL_z * SIN(CURR_TRU_HDG)
-                local GLOBAL_dy = LOCAL_y
-                local GLOBAL_dz = LOCAL_z * COS(CURR_TRU_HDG) + LOCAL_x * SIN(CURR_TRU_HDG)
+    smoothUserRot.x = Set_smooth_rotation(smoothUserRot.x, userRot.x, 5)
+    smoothUserRot.y = Set_smooth_rotation(smoothUserRot.y, userRot.y, 5)
+    smoothUserRot.z = Set_smooth_rotation(smoothUserRot.z, userRot.z, 5)
 
-                USER_pitch = Math_clamp(USER_pitch -RAD2DEG(USER_v_rot), -90, 90)
-                USER_yaw = (USER_yaw -RAD2DEG(USER_h_rot) - 90) % 360
+    local CAM_ROLL, CAM_PITCH, CAM_TRUHDG = camRotation()
 
-                return GLOBAL_dx, GLOBAL_dy, GLOBAL_dz, USER_roll, USER_pitch, USER_yaw
-            end
-        },
-        Local = {
-            
-        },
-        Follow = {
-            FOLLOW_GLOAD = function ()
-                local SIN = math.sin
-                local COS = math.cos
-                local TAN = math.tan
-                local RAD2DEG = math.deg
-                local DEG2RAD = math.rad
+    -- transform rotations of the camera view
+    local rot = Vector3(CAM_PITCH, CAM_TRUHDG, CAM_ROLL)
+    rot = Vector3.RotateY(rot, -smoothUserRot.y)
+    rot.x, rot.y, rot.z = rot.x % 360, rot.y % 360, rot.z % 360
 
-                local FIXED_USER_pitch = 0
-                local MAX_ROLL = 15
-                local MAX_PITCH = 35
+    -- filtered camera gforce
+    local camNx, camNy, camNz =
+        nyLP:filterOut(get(Total_lateral_g_load)),
+        nzLP:filterOut(get(Total_vertical_g_load)),
+        nxLP:filterOut(get(Total_long_g_load))
 
-                local CURR_BANK, CURR_PITCH, CURR_TRU_HDG = Cinetracker.camera.AXIS_MATH.Common.get_acf_rot()
-                local CURR_VPATH, CURR_HPATH = Cinetracker.camera.AXIS_MATH.Common.get_flt_rot()
-                local USER_roll, USER_pitch, USER_yaw = Cinetracker.camera.AXIS_MATH.Common.get_user_cam_rot()
-                local USER_x, USER_y, USER_z = Cinetracker.camera.AXIS_MATH.Common.get_user_cam_pos()
+    -- camera gforce displacement
+    local gDelta = Vector3(-camNx, -camNy, -camNz)
+    gDelta = Vector3.RotateZ(gDelta, -get(Flightmodel_roll))
+    gDelta = Vector3.RotateX(gDelta, get(Flightmodel_pitch))
+    gDelta = Vector3.RotateY(gDelta, -get(Flightmodel_true_heading))
+    gDelta = (gDelta + Vector3(0, 1, 0)) * 10
 
-                local vector_blend_table = {
-                    {0,  0},
-                    {30, 0},
-                    {40, 1},
-                }
-                local VECTOR_BLEND_RATIO = Table_interpolate(vector_blend_table, get(IAS))
-                CURR_VPATH = CURR_VPATH * VECTOR_BLEND_RATIO
-                local TRK_DELTA = ((CURR_HPATH - CURR_TRU_HDG) * VECTOR_BLEND_RATIO) % (2*math.pi)
+    -- camera positioning around the aircraft
+    local pos = Vector3(0, 0, 50) --behind the plane
 
-                local ORIGIN_y = 2.52
-                local ORIGIN_z = 23.95
+    -- camera intrinsic rotation positioning
+    -- y -> x' -> z'' -> y''' -> x'''' -> z'''''
+    pos = Vector3.RotateZ(pos, -smoothUserRot.z)
+    pos = Vector3.RotateX(pos, smoothUserRot.x)
+    pos = Vector3.RotateY(pos, -smoothUserRot.y)
+    pos = Vector3.RotateZ(pos, -CAM_ROLL)
+    pos = Vector3.RotateX(pos, CAM_PITCH)
+    pos = Vector3.RotateY(pos, -CAM_TRUHDG)
 
-                local LOCAL_ORIGIN_x = ORIGIN_y * SIN(CURR_BANK)
-                local LOCAL_ORIGIN_y = ORIGIN_y * COS(CURR_BANK) * COS(CURR_VPATH) - ORIGIN_z * SIN(CURR_VPATH)
-                local LOCAL_ORIGIN_z = ORIGIN_y * COS(CURR_BANK) * SIN(CURR_VPATH) + ORIGIN_z * COS(CURR_VPATH)
+    pos = pos + gDelta              --add g effects
+    pos.y = pos.y + 10 / smoothZoom --above the plane
 
-                local ORIGIN_H_ROT_x = LOCAL_ORIGIN_z * COS(TRK_DELTA + math.pi/2)
-                local ORIGIN_H_ROT_y = LOCAL_ORIGIN_y
-                local ORIGIN_H_ROT_z = LOCAL_ORIGIN_z * SIN(TRK_DELTA + math.pi/2)
+    -- global gl coordinate calculation
+    local x = get(Flightmodel_x) + pos.x
+    local y = get(Flightmodel_y) + pos.y
+    local z = get(Flightmodel_z) + pos.z
 
-                local FOLLOW_y = 6.8
-                local FOLLOW_z = 26.5
+    sasl.setCamera(
+        x,
+        y,
+        z,
+        rot.x + smoothUserRot.x,
+        rot.y + smoothUserRot.y,
+        rot.z + smoothUserRot.z,
+        smoothZoom
+    )
+end
 
-                local LOCAL_x = ORIGIN_H_ROT_x + FOLLOW_z * COS(TRK_DELTA + math.pi/2)
-                local LOCAL_y = ORIGIN_H_ROT_y + FOLLOW_y
-                local LOCAL_z = ORIGIN_H_ROT_z + FOLLOW_z * SIN(TRK_DELTA + math.pi/2)
+-- override SHIFT+8 camera
+local extCamController = sasl.registerCameraController(extCamControl)
+sasl.registerCommandHandler(EXT_chase_view, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        userRot.x, userRot.y, userRot.z = 0, 0, 0
+        if (sasl.getCurrentCameraStatus() ~= CAMERA_CONTROLLED_ALWAYS) then
+            sasl.startCameraControl(extCamController, CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE)
+        end
+    end
 
-                local GLOBAL_dx = LOCAL_x * COS(CURR_TRU_HDG) - LOCAL_z * SIN(CURR_TRU_HDG)
-                local GLOBAL_dy = LOCAL_y
-                local GLOBAL_dz = LOCAL_z * COS(CURR_TRU_HDG) + LOCAL_x * SIN(CURR_TRU_HDG)
+    return 0
+end)
 
-                local roll_table = {
-                    {-180,        0},
-                    {-90, -MAX_ROLL},
-                    {0,           0},
-                    {90,   MAX_ROLL},
-                    {180,         0},
-                }
-                local pitch_table = {
-                    {-90, -MAX_PITCH},
-                    {0,           0},
-                    {90,   MAX_PITCH},
-                }
+-- override hatswitches
+sasl.registerCommandHandler(Hatswitch_U, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        if sasl.getCurrentCameraStatus() ~= CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE then
+            return 1
+        end
 
-                USER_roll =  Table_interpolate(roll_table, RAD2DEG(CURR_BANK))
-                USER_pitch = Table_interpolate(pitch_table, RAD2DEG(CURR_VPATH))
-                USER_pitch = Math_clamp(USER_pitch + FIXED_USER_pitch, -90, 90)
+        userRot.x, userRot.y, userRot.z = 0, 180, 0
+    end
+    if phase == SASL_COMMAND_END then
+        userRot.x, userRot.y, userRot.z = 0, 0, 0
+    end
 
-                return GLOBAL_dx, GLOBAL_dy, GLOBAL_dz, USER_roll, USER_pitch, RAD2DEG(TRK_DELTA)
-            end,
-        },
-    },
+    return 1
+end)
+sasl.registerCommandHandler(Hatswitch_D, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        if sasl.getCurrentCameraStatus() ~= CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE then
+            return 1
+        end
 
-    Global_controller = function ()
-        local dx, dy, dz, roll, pitch, yaw = Cinetracker.camera.AXIS_MATH.Follow.FOLLOW_GLOAD()
+        userRot.x, userRot.y, userRot.z = 0, 0, 0
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        if sasl.getCurrentCameraStatus() ~= CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE then
+            return 1
+        end
+    end
 
-        local x = get(Flightmodel_x) + dx
-        local y = get(Flightmodel_y) + dy
-        local z = get(Flightmodel_z) + dz
+    return 1
+end)
+sasl.registerCommandHandler(Hatswitch_L, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        if sasl.getCurrentCameraStatus() ~= CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE then
+            return 1
+        end
 
-        sasl.setCamera(
-            x,
-            y,
-            z,
-            pitch,
-            get(Flightmodel_NRM_heading) + yaw,
-            roll,
-            Cinetracker.status.camera_pos.zoom
-        )
-    end,
-}
+        userRot.x, userRot.y, userRot.z = 0, 270, 0
+    end
+    if phase == SASL_COMMAND_END then
+        userRot.x, userRot.y, userRot.z = 0, 0, 0
+    end
 
-Cinetracker.camera.Controller_ID = {
-    Global = {
+    return 1
+end)
+sasl.registerCommandHandler(Hatswitch_R, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        if sasl.getCurrentCameraStatus() ~= CAMERA_CONTROLLED_UNTIL_VIEW_CHANGE then
+            return 1
+        end
 
-    },
-    follow = {
-        FOLLOW_GLOAD = sasl.registerCameraController(Cinetracker.camera.Global_controller)
-    },
-}
+        userRot.x, userRot.y, userRot.z = 0, 90, 0
+    end
+    if phase == SASL_COMMAND_END then
+        userRot.x, userRot.y, userRot.z = 0, 0, 0
+    end
+
+    return 1
+end)
