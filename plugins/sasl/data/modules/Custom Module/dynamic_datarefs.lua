@@ -961,5 +961,6 @@ TOPCAT_ldgrwy_elev = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_elev", 0, 
 
 PANEL_AA_LEVEL_1to32 = createGlobalPropertyi("a321neo/panels/antialiasing_lvl_actual", 1, false, true, false)
 
-
-
+--VISUAL MODEL CUSTOMIZATION--------------------------------------------------------------------------------------------------------------------------------
+USE_LEGACY_OBJS = createGlobalPropertyi("a321neo/models/use_legacy", 0, false, true, false) -- use legacy visual models (selectable reversion for players)
+USE_NEW_OBJS = createGlobalPropertyi("a321neo/models/use_new", 1, false, true, false) -- use newest visual models (default for development)

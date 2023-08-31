@@ -18323,6 +18323,7 @@ P _body/7/_top_t2 0.000000000
 P _body/count 39
 P _engn/0/_RSC_max_pwr_ENGN 1.000000000
 P _engn/0/_RSC_redline_ENGN 1.000000000
+P _engn/0/_burner_inc 0.000000000
 P _engn/0/_engn_clutch_EQ 0
 P _engn/0/_engn_freewheels 0
 P _engn/0/_engn_vector_EQ 0
@@ -18336,9 +18337,11 @@ P _engn/0/_part_x -19.190000534
 P _engn/0/_part_y -6.960000038
 P _engn/0/_part_z 66.989997864
 P _engn/0/_power_max_limit 0.000000000
+P _engn/0/_thrust_max_limit 3.311E4
 P _engn/0/_type JET_2SPOOL
 P _engn/1/_RSC_max_pwr_ENGN 1.000000000
 P _engn/1/_RSC_redline_ENGN 1.000000000
+P _engn/1/_burner_inc 0.000000000
 P _engn/1/_engn_clutch_EQ 0
 P _engn/1/_engn_freewheels 0
 P _engn/1/_engn_vector_EQ 0
@@ -18352,12 +18355,13 @@ P _engn/1/_part_x 19.190000534
 P _engn/1/_part_y -6.960000038
 P _engn/1/_part_z 66.989997864
 P _engn/1/_power_max_limit 0.000000000
+P _engn/1/_thrust_max_limit 3.311E4
 P _engn/1/_type JET_2SPOOL
 P _engn/count 16
 P _gear/0/_axiE 0.000000000
 P _gear/0/_axiR 0.000000000
 P _gear/0/_cyc_time 8.000000000
-P _gear/0/_damp 3713.094482422
+P _gear/0/_damp 6044.893554688
 P _gear/0/_eagle_claw_deg 0.000000000
 P _gear/0/_gear_brakes 0
 P _gear/0/_gear_can_retract 1
@@ -18376,7 +18380,7 @@ P _gear/0/_steerdeg_hispeed 5.000000000
 P _gear/0/_steerdeg_lospeed 75.000000000
 P _gear/0/_strut_comp 0.899999976
 P _gear/0/_strut_max_wgt_def 0.800000012
-P _gear/0/_strut_max_wgt_frc 2.9704758E4
+P _gear/0/_strut_max_wgt_frc 4.835915E4
 P _gear/0/_strut_preload_def 0.490000010
 P _gear/0/_strut_preload_frc 8681.696289062
 P _gear/0/_strut_s1 0.000000000
@@ -18389,7 +18393,7 @@ P _gear/0/_tire_swidth 0.360000014
 P _gear/1/_axiE 0.000000000
 P _gear/1/_axiR 0.000000000
 P _gear/1/_cyc_time 10.000000000
-P _gear/1/_damp 1.0155901E4
+P _gear/1/_damp 9174.091796875
 P _gear/1/_eagle_claw_deg 0.000000000
 P _gear/1/_gear_brakes 1
 P _gear/1/_gear_can_retract 1
@@ -18408,7 +18412,7 @@ P _gear/1/_steerdeg_hispeed 0.000000000
 P _gear/1/_steerdeg_lospeed 0.000000000
 P _gear/1/_strut_comp 0.699999988
 P _gear/1/_strut_max_wgt_def 0.949999988
-P _gear/1/_strut_max_wgt_frc 9.648106E4
+P _gear/1/_strut_max_wgt_frc 8.715387E4
 P _gear/1/_strut_preload_def 0.560000002
 P _gear/1/_strut_preload_frc 4.6696152E4
 P _gear/1/_strut_s1 0.000000000
@@ -18421,7 +18425,7 @@ P _gear/1/_tire_swidth 0.720000029
 P _gear/2/_axiE 0.000000000
 P _gear/2/_axiR 0.000000000
 P _gear/2/_cyc_time 10.500000000
-P _gear/2/_damp 1.0155901E4
+P _gear/2/_damp 9174.091796875
 P _gear/2/_eagle_claw_deg 0.000000000
 P _gear/2/_gear_brakes 1
 P _gear/2/_gear_can_retract 1
@@ -18440,7 +18444,7 @@ P _gear/2/_steerdeg_hispeed 0.000000000
 P _gear/2/_steerdeg_lospeed 0.000000000
 P _gear/2/_strut_comp 0.699999988
 P _gear/2/_strut_max_wgt_def 0.949999988
-P _gear/2/_strut_max_wgt_frc 9.648106E4
+P _gear/2/_strut_max_wgt_frc 8.715387E4
 P _gear/2/_strut_preload_def 0.560000002
 P _gear/2/_strut_preload_frc 4.6696152E4
 P _gear/2/_strut_s1 0.000000000
@@ -18727,6 +18731,7 @@ P _obja/12/_v10_att_z_acf_prt_ref 73.000000000
 P _obja/12/_v10_is_internal 2005571104
 P _obja/12/_v10_steers_with_gear 0
 P _obja/13/_obj_flags 24
+P _obja/13/_obj_hide_dataref a321neo/models/use_legacy
 P _obja/13/_v10_att_body -1
 P _obja/13/_v10_att_file_stl fuselage.obj
 P _obja/13/_v10_att_gear -1
@@ -18741,7 +18746,7 @@ P _obja/13/_v10_is_internal 731197194
 P _obja/13/_v10_steers_with_gear 0
 P _obja/14/_obj_flags 24
 P _obja/14/_v10_att_body -1
-P _obja/14/_v10_att_file_stl fuse misc items.obj
+P _obja/14/_v10_att_file_stl engine pylons.obj
 P _obja/14/_v10_att_gear -1
 P _obja/14/_v10_att_phi_ref 0.000000000
 P _obja/14/_v10_att_psi_ref 0.000000000
@@ -18750,11 +18755,12 @@ P _obja/14/_v10_att_wing -1
 P _obja/14/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/14/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/14/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/14/_v10_is_internal 1781831200
+P _obja/14/_v10_is_internal 731197194
 P _obja/14/_v10_steers_with_gear 0
 P _obja/15/_obj_flags 24
+P _obja/15/_obj_hide_dataref a321neo/customization/pw_engine_enabled
 P _obja/15/_v10_att_body -1
-P _obja/15/_v10_att_file_stl engine pylons.obj
+P _obja/15/_v10_att_file_stl left engine external.obj
 P _obja/15/_v10_att_gear -1
 P _obja/15/_v10_att_phi_ref 0.000000000
 P _obja/15/_v10_att_psi_ref 0.000000000
@@ -18768,7 +18774,7 @@ P _obja/15/_v10_steers_with_gear 0
 P _obja/16/_obj_flags 24
 P _obja/16/_obj_hide_dataref a321neo/customization/pw_engine_enabled
 P _obja/16/_v10_att_body -1
-P _obja/16/_v10_att_file_stl left engine external.obj
+P _obja/16/_v10_att_file_stl right engine external.obj
 P _obja/16/_v10_att_gear -1
 P _obja/16/_v10_att_phi_ref 0.000000000
 P _obja/16/_v10_att_psi_ref 0.000000000
@@ -18780,9 +18786,9 @@ P _obja/16/_v10_att_z_acf_prt_ref 73.000000000
 P _obja/16/_v10_is_internal 731197194
 P _obja/16/_v10_steers_with_gear 0
 P _obja/17/_obj_flags 24
-P _obja/17/_obj_hide_dataref a321neo/customization/pw_engine_enabled
+P _obja/17/_obj_hide_dataref a321neo/customization/leap_engine_enabled
 P _obja/17/_v10_att_body -1
-P _obja/17/_v10_att_file_stl right engine external.obj
+P _obja/17/_v10_att_file_stl left engine internal.obj
 P _obja/17/_v10_att_gear -1
 P _obja/17/_v10_att_phi_ref 0.000000000
 P _obja/17/_v10_att_psi_ref 0.000000000
@@ -18791,12 +18797,12 @@ P _obja/17/_v10_att_wing -1
 P _obja/17/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/17/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/17/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/17/_v10_is_internal 731197194
+P _obja/17/_v10_is_internal -1150931984
 P _obja/17/_v10_steers_with_gear 0
 P _obja/18/_obj_flags 24
 P _obja/18/_obj_hide_dataref a321neo/customization/leap_engine_enabled
 P _obja/18/_v10_att_body -1
-P _obja/18/_v10_att_file_stl left engine internal.obj
+P _obja/18/_v10_att_file_stl right engine internal.obj
 P _obja/18/_v10_att_gear -1
 P _obja/18/_v10_att_phi_ref 0.000000000
 P _obja/18/_v10_att_psi_ref 0.000000000
@@ -18805,12 +18811,11 @@ P _obja/18/_v10_att_wing -1
 P _obja/18/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/18/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/18/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/18/_v10_is_internal -1150931984
+P _obja/18/_v10_is_internal -735548528
 P _obja/18/_v10_steers_with_gear 0
-P _obja/19/_obj_flags 24
-P _obja/19/_obj_hide_dataref a321neo/customization/leap_engine_enabled
+P _obja/19/_obj_flags 4
 P _obja/19/_v10_att_body -1
-P _obja/19/_v10_att_file_stl right engine internal.obj
+P _obja/19/_v10_att_file_stl ext lights.obj
 P _obja/19/_v10_att_gear -1
 P _obja/19/_v10_att_phi_ref 0.000000000
 P _obja/19/_v10_att_psi_ref 0.000000000
@@ -18819,7 +18824,7 @@ P _obja/19/_v10_att_wing -1
 P _obja/19/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/19/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/19/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/19/_v10_is_internal -735548528
+P _obja/19/_v10_is_internal -2102684128
 P _obja/19/_v10_steers_with_gear 0
 P _obja/2/_obj_flags 29
 P _obja/2/_v10_att_body -1
@@ -18834,9 +18839,9 @@ P _obja/2/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/2/_v10_att_z_acf_prt_ref 73.000000000
 P _obja/2/_v10_is_internal 441134858
 P _obja/2/_v10_steers_with_gear 0
-P _obja/20/_obj_flags 4
+P _obja/20/_obj_flags 0
 P _obja/20/_v10_att_body -1
-P _obja/20/_v10_att_file_stl ext lights.obj
+P _obja/20/_v10_att_file_stl particles/particles.obj
 P _obja/20/_v10_att_gear -1
 P _obja/20/_v10_att_phi_ref 0.000000000
 P _obja/20/_v10_att_psi_ref 0.000000000
@@ -18845,11 +18850,11 @@ P _obja/20/_v10_att_wing -1
 P _obja/20/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/20/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/20/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/20/_v10_is_internal -2102684128
+P _obja/20/_v10_is_internal -1032021824
 P _obja/20/_v10_steers_with_gear 0
-P _obja/21/_obj_flags 0
+P _obja/21/_obj_flags 25
 P _obja/21/_v10_att_body -1
-P _obja/21/_v10_att_file_stl particles/particles.obj
+P _obja/21/_v10_att_file_stl cockpit_interior_obj/cabinets.obj
 P _obja/21/_v10_att_gear -1
 P _obja/21/_v10_att_phi_ref 0.000000000
 P _obja/21/_v10_att_psi_ref 0.000000000
@@ -18858,11 +18863,11 @@ P _obja/21/_v10_att_wing -1
 P _obja/21/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/21/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/21/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/21/_v10_is_internal -1032021824
+P _obja/21/_v10_is_internal -856437200
 P _obja/21/_v10_steers_with_gear 0
 P _obja/22/_obj_flags 25
 P _obja/22/_v10_att_body -1
-P _obja/22/_v10_att_file_stl cockpit_interior_obj/cabinets.obj
+P _obja/22/_v10_att_file_stl cockpit_interior_obj/cockpit back walls.obj
 P _obja/22/_v10_att_gear -1
 P _obja/22/_v10_att_phi_ref 0.000000000
 P _obja/22/_v10_att_psi_ref 0.000000000
@@ -18871,11 +18876,11 @@ P _obja/22/_v10_att_wing -1
 P _obja/22/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/22/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/22/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/22/_v10_is_internal -856437200
+P _obja/22/_v10_is_internal -856443120
 P _obja/22/_v10_steers_with_gear 0
 P _obja/23/_obj_flags 25
 P _obja/23/_v10_att_body -1
-P _obja/23/_v10_att_file_stl cockpit_interior_obj/cockpit back walls.obj
+P _obja/23/_v10_att_file_stl cockpit_interior_obj/cockpit interior.obj
 P _obja/23/_v10_att_gear -1
 P _obja/23/_v10_att_phi_ref 0.000000000
 P _obja/23/_v10_att_psi_ref 0.000000000
@@ -18888,7 +18893,7 @@ P _obja/23/_v10_is_internal -856443120
 P _obja/23/_v10_steers_with_gear 0
 P _obja/24/_obj_flags 25
 P _obja/24/_v10_att_body -1
-P _obja/24/_v10_att_file_stl cockpit_interior_obj/cockpit interior.obj
+P _obja/24/_v10_att_file_stl cockpit_interior_obj/cockpit seats.obj
 P _obja/24/_v10_att_gear -1
 P _obja/24/_v10_att_phi_ref 0.000000000
 P _obja/24/_v10_att_psi_ref 0.000000000
@@ -18901,7 +18906,7 @@ P _obja/24/_v10_is_internal -856443120
 P _obja/24/_v10_steers_with_gear 0
 P _obja/25/_obj_flags 25
 P _obja/25/_v10_att_body -1
-P _obja/25/_v10_att_file_stl cockpit_interior_obj/cockpit seats.obj
+P _obja/25/_v10_att_file_stl cockpit_interior_obj/cockpit window frames.obj
 P _obja/25/_v10_att_gear -1
 P _obja/25/_v10_att_phi_ref 0.000000000
 P _obja/25/_v10_att_psi_ref 0.000000000
@@ -18910,11 +18915,11 @@ P _obja/25/_v10_att_wing -1
 P _obja/25/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/25/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/25/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/25/_v10_is_internal -856443120
+P _obja/25/_v10_is_internal -856457920
 P _obja/25/_v10_steers_with_gear 0
 P _obja/26/_obj_flags 25
 P _obja/26/_v10_att_body -1
-P _obja/26/_v10_att_file_stl cockpit_interior_obj/cockpit window frames.obj
+P _obja/26/_v10_att_file_stl cockpit_interior_obj/cockpit_misc_objs.obj
 P _obja/26/_v10_att_gear -1
 P _obja/26/_v10_att_phi_ref 0.000000000
 P _obja/26/_v10_att_psi_ref 0.000000000
@@ -18923,11 +18928,11 @@ P _obja/26/_v10_att_wing -1
 P _obja/26/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/26/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/26/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/26/_v10_is_internal -856457920
+P _obja/26/_v10_is_internal -856452000
 P _obja/26/_v10_steers_with_gear 0
 P _obja/27/_obj_flags 25
 P _obja/27/_v10_att_body -1
-P _obja/27/_v10_att_file_stl cockpit_interior_obj/cockpit_misc_objs.obj
+P _obja/27/_v10_att_file_stl cockpit_interior_obj/flight_control.obj
 P _obja/27/_v10_att_gear -1
 P _obja/27/_v10_att_phi_ref 0.000000000
 P _obja/27/_v10_att_psi_ref 0.000000000
@@ -18936,11 +18941,11 @@ P _obja/27/_v10_att_wing -1
 P _obja/27/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/27/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/27/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/27/_v10_is_internal -856452000
+P _obja/27/_v10_is_internal -856434240
 P _obja/27/_v10_steers_with_gear 0
 P _obja/28/_obj_flags 25
 P _obja/28/_v10_att_body -1
-P _obja/28/_v10_att_file_stl cockpit_interior_obj/flight_control.obj
+P _obja/28/_v10_att_file_stl cockpit_interior_obj/glareshield bases.obj
 P _obja/28/_v10_att_gear -1
 P _obja/28/_v10_att_phi_ref 0.000000000
 P _obja/28/_v10_att_psi_ref 0.000000000
@@ -18949,11 +18954,11 @@ P _obja/28/_v10_att_wing -1
 P _obja/28/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/28/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/28/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/28/_v10_is_internal -856434240
+P _obja/28/_v10_is_internal -856440160
 P _obja/28/_v10_steers_with_gear 0
 P _obja/29/_obj_flags 25
 P _obja/29/_v10_att_body -1
-P _obja/29/_v10_att_file_stl cockpit_interior_obj/glareshield bases.obj
+P _obja/29/_v10_att_file_stl cockpit_interior_obj/panels bases.obj
 P _obja/29/_v10_att_gear -1
 P _obja/29/_v10_att_phi_ref 0.000000000
 P _obja/29/_v10_att_psi_ref 0.000000000
@@ -18962,7 +18967,7 @@ P _obja/29/_v10_att_wing -1
 P _obja/29/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/29/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/29/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/29/_v10_is_internal -856440160
+P _obja/29/_v10_is_internal -856437200
 P _obja/29/_v10_steers_with_gear 0
 P _obja/3/_obj_flags 29
 P _obja/3/_v10_att_body -1
@@ -18979,7 +18984,7 @@ P _obja/3/_v10_is_internal 441134858
 P _obja/3/_v10_steers_with_gear 0
 P _obja/30/_obj_flags 25
 P _obja/30/_v10_att_body -1
-P _obja/30/_v10_att_file_stl cockpit_interior_obj/panels bases.obj
+P _obja/30/_v10_att_file_stl cockpit_interior_obj/temp fix.obj
 P _obja/30/_v10_att_gear -1
 P _obja/30/_v10_att_phi_ref 0.000000000
 P _obja/30/_v10_att_psi_ref 0.000000000
@@ -18988,11 +18993,11 @@ P _obja/30/_v10_att_wing -1
 P _obja/30/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/30/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/30/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/30/_v10_is_internal -856437200
+P _obja/30/_v10_is_internal -856431280
 P _obja/30/_v10_steers_with_gear 0
 P _obja/31/_obj_flags 25
 P _obja/31/_v10_att_body -1
-P _obja/31/_v10_att_file_stl cockpit_interior_obj/temp fix.obj
+P _obja/31/_v10_att_file_stl cockpit_interior_obj/iPad Pro.obj
 P _obja/31/_v10_att_gear -1
 P _obja/31/_v10_att_phi_ref 0.000000000
 P _obja/31/_v10_att_psi_ref 0.000000000
@@ -19001,11 +19006,11 @@ P _obja/31/_v10_att_wing -1
 P _obja/31/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/31/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/31/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/31/_v10_is_internal -856431280
+P _obja/31/_v10_is_internal 461346352
 P _obja/31/_v10_steers_with_gear 0
 P _obja/32/_obj_flags 25
 P _obja/32/_v10_att_body -1
-P _obja/32/_v10_att_file_stl cockpit_interior_obj/iPad Pro.obj
+P _obja/32/_v10_att_file_stl cockpit_interior_obj/iPad stand.obj
 P _obja/32/_v10_att_gear -1
 P _obja/32/_v10_att_phi_ref 0.000000000
 P _obja/32/_v10_att_psi_ref 0.000000000
@@ -19016,9 +19021,9 @@ P _obja/32/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/32/_v10_att_z_acf_prt_ref 73.000000000
 P _obja/32/_v10_is_internal 461346352
 P _obja/32/_v10_steers_with_gear 0
-P _obja/33/_obj_flags 25
+P _obja/33/_obj_flags 1
 P _obja/33/_v10_att_body -1
-P _obja/33/_v10_att_file_stl cockpit_interior_obj/iPad stand.obj
+P _obja/33/_v10_att_file_stl cockpit_obj/checklist arrows.obj
 P _obja/33/_v10_att_gear -1
 P _obja/33/_v10_att_phi_ref 0.000000000
 P _obja/33/_v10_att_psi_ref 0.000000000
@@ -19027,34 +19032,91 @@ P _obja/33/_v10_att_wing -1
 P _obja/33/_v10_att_x_acf_prt_ref 0.000000000
 P _obja/33/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/33/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/33/_v10_is_internal 461346352
+P _obja/33/_v10_is_internal -1283942880
 P _obja/33/_v10_steers_with_gear 0
-P _obja/34/_obj_flags 1
+P _obja/34/_obj_flags 0
 P _obja/34/_v10_att_body -1
-P _obja/34/_v10_att_file_stl cockpit_obj/checklist arrows.obj
+P _obja/34/_v10_att_file_stl cup.obj
 P _obja/34/_v10_att_gear -1
 P _obja/34/_v10_att_phi_ref 0.000000000
-P _obja/34/_v10_att_psi_ref 0.000000000
+P _obja/34/_v10_att_psi_ref -90.000000000
 P _obja/34/_v10_att_the_ref 0.000000000
 P _obja/34/_v10_att_wing -1
-P _obja/34/_v10_att_x_acf_prt_ref 0.000000000
-P _obja/34/_v10_att_y_acf_prt_ref 0.000000000
-P _obja/34/_v10_att_z_acf_prt_ref 73.000000000
-P _obja/34/_v10_is_internal -1283942880
+P _obja/34/_v10_att_x_acf_prt_ref -3.769999981
+P _obja/34/_v10_att_y_acf_prt_ref 1.210000038
+P _obja/34/_v10_att_z_acf_prt_ref 7.969999790
+P _obja/34/_v10_is_internal -885280352
 P _obja/34/_v10_steers_with_gear 0
-P _obja/35/_obj_flags 0
+P _obja/35/_obj_flags 25
+P _obja/35/_obj_hide_dataref a321neo/models/use_new
 P _obja/35/_v10_att_body -1
-P _obja/35/_v10_att_file_stl cup.obj
+P _obja/35/_v10_att_file_stl legacy/business class.obj
 P _obja/35/_v10_att_gear -1
 P _obja/35/_v10_att_phi_ref 0.000000000
-P _obja/35/_v10_att_psi_ref -90.000000000
+P _obja/35/_v10_att_psi_ref 0.000000000
 P _obja/35/_v10_att_the_ref 0.000000000
 P _obja/35/_v10_att_wing -1
-P _obja/35/_v10_att_x_acf_prt_ref -3.769999981
-P _obja/35/_v10_att_y_acf_prt_ref 1.210000038
-P _obja/35/_v10_att_z_acf_prt_ref 7.969999790
-P _obja/35/_v10_is_internal -885280352
+P _obja/35/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/35/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/35/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/35/_v10_is_internal 0
 P _obja/35/_v10_steers_with_gear 0
+P _obja/36/_obj_flags 25
+P _obja/36/_obj_hide_dataref a321neo/models/use_new
+P _obja/36/_v10_att_body -1
+P _obja/36/_v10_att_file_stl legacy/cabin dividers.obj
+P _obja/36/_v10_att_gear -1
+P _obja/36/_v10_att_phi_ref 0.000000000
+P _obja/36/_v10_att_psi_ref 0.000000000
+P _obja/36/_v10_att_the_ref 0.000000000
+P _obja/36/_v10_att_wing -1
+P _obja/36/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/36/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/36/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/36/_v10_is_internal 32763
+P _obja/36/_v10_steers_with_gear 0
+P _obja/37/_obj_flags 25
+P _obja/37/_obj_hide_dataref a321neo/models/use_new
+P _obja/37/_v10_att_body -1
+P _obja/37/_v10_att_file_stl legacy/cabin exteriors.obj
+P _obja/37/_v10_att_gear -1
+P _obja/37/_v10_att_phi_ref 0.000000000
+P _obja/37/_v10_att_psi_ref 0.000000000
+P _obja/37/_v10_att_the_ref 0.000000000
+P _obja/37/_v10_att_wing -1
+P _obja/37/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/37/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/37/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/37/_v10_is_internal 0
+P _obja/37/_v10_steers_with_gear 0
+P _obja/38/_obj_flags 25
+P _obja/38/_obj_hide_dataref a321neo/models/use_new
+P _obja/38/_v10_att_body -1
+P _obja/38/_v10_att_file_stl legacy/cabin roof and window frames.obj
+P _obja/38/_v10_att_gear -1
+P _obja/38/_v10_att_phi_ref 0.000000000
+P _obja/38/_v10_att_psi_ref 0.000000000
+P _obja/38/_v10_att_the_ref 0.000000000
+P _obja/38/_v10_att_wing -1
+P _obja/38/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/38/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/38/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/38/_v10_is_internal 0
+P _obja/38/_v10_steers_with_gear 0
+P _obja/39/_obj_flags 25
+P _obja/39/_obj_hide_dataref a321neo/models/use_new
+P _obja/39/_v10_att_body -1
+P _obja/39/_v10_att_file_stl legacy/economy.obj
+P _obja/39/_v10_att_gear -1
+P _obja/39/_v10_att_phi_ref 0.000000000
+P _obja/39/_v10_att_psi_ref 0.000000000
+P _obja/39/_v10_att_the_ref 0.000000000
+P _obja/39/_v10_att_wing -1
+P _obja/39/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/39/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/39/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/39/_v10_is_internal 32763
+P _obja/39/_v10_steers_with_gear 0
 P _obja/4/_obj_flags 29
 P _obja/4/_v10_att_body -1
 P _obja/4/_v10_att_file_stl cockpit_obj/aft overhead panel.obj
@@ -19068,6 +19130,104 @@ P _obja/4/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/4/_v10_att_z_acf_prt_ref 73.000000000
 P _obja/4/_v10_is_internal 441134858
 P _obja/4/_v10_steers_with_gear 0
+P _obja/40/_obj_flags 25
+P _obja/40/_obj_hide_dataref a321neo/models/use_new
+P _obja/40/_v10_att_body -1
+P _obja/40/_v10_att_file_stl legacy/cargo.obj
+P _obja/40/_v10_att_gear -1
+P _obja/40/_v10_att_phi_ref 0.000000000
+P _obja/40/_v10_att_psi_ref 0.000000000
+P _obja/40/_v10_att_the_ref 0.000000000
+P _obja/40/_v10_att_wing -1
+P _obja/40/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/40/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/40/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/40/_v10_is_internal 0
+P _obja/40/_v10_steers_with_gear 0
+P _obja/41/_obj_flags 25
+P _obja/41/_obj_hide_dataref a321neo/models/use_new
+P _obja/41/_v10_att_body -1
+P _obja/41/_v10_att_file_stl legacy/door.obj
+P _obja/41/_v10_att_gear -1
+P _obja/41/_v10_att_phi_ref 0.000000000
+P _obja/41/_v10_att_psi_ref 0.000000000
+P _obja/41/_v10_att_the_ref 0.000000000
+P _obja/41/_v10_att_wing -1
+P _obja/41/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/41/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/41/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/41/_v10_is_internal 0
+P _obja/41/_v10_steers_with_gear 0
+P _obja/42/_obj_flags 24
+P _obja/42/_obj_hide_dataref a321neo/models/use_new
+P _obja/42/_v10_att_body -1
+P _obja/42/_v10_att_file_stl legacy/fuselage.obj
+P _obja/42/_v10_att_gear -1
+P _obja/42/_v10_att_phi_ref 0.000000000
+P _obja/42/_v10_att_psi_ref 0.000000000
+P _obja/42/_v10_att_the_ref 0.000000000
+P _obja/42/_v10_att_wing -1
+P _obja/42/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/42/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/42/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/42/_v10_is_internal 32763
+P _obja/42/_v10_steers_with_gear 0
+P _obja/43/_obj_flags 24
+P _obja/43/_obj_hide_dataref a321neo/models/use_new
+P _obja/43/_v10_att_body -1
+P _obja/43/_v10_att_file_stl legacy/h stabs.obj
+P _obja/43/_v10_att_gear -1
+P _obja/43/_v10_att_phi_ref 0.000000000
+P _obja/43/_v10_att_psi_ref 0.000000000
+P _obja/43/_v10_att_the_ref 0.000000000
+P _obja/43/_v10_att_wing -1
+P _obja/43/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/43/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/43/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/43/_v10_is_internal 0
+P _obja/43/_v10_steers_with_gear 0
+P _obja/44/_obj_flags 24
+P _obja/44/_obj_hide_dataref a321neo/models/use_new
+P _obja/44/_v10_att_body -1
+P _obja/44/_v10_att_file_stl legacy/under carriage.obj
+P _obja/44/_v10_att_gear -1
+P _obja/44/_v10_att_phi_ref 0.000000000
+P _obja/44/_v10_att_psi_ref 0.000000000
+P _obja/44/_v10_att_the_ref 0.000000000
+P _obja/44/_v10_att_wing -1
+P _obja/44/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/44/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/44/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/44/_v10_is_internal 0
+P _obja/44/_v10_steers_with_gear 0
+P _obja/45/_obj_flags 24
+P _obja/45/_obj_hide_dataref a321neo/models/use_new
+P _obja/45/_v10_att_body -1
+P _obja/45/_v10_att_file_stl legacy/wing.obj
+P _obja/45/_v10_att_gear -1
+P _obja/45/_v10_att_phi_ref 0.000000000
+P _obja/45/_v10_att_psi_ref 0.000000000
+P _obja/45/_v10_att_the_ref 0.000000000
+P _obja/45/_v10_att_wing -1
+P _obja/45/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/45/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/45/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/45/_v10_is_internal 0
+P _obja/45/_v10_steers_with_gear 0
+P _obja/46/_obj_flags 24
+P _obja/46/_obj_hide_dataref a321neo/models/use_new
+P _obja/46/_v10_att_body -1
+P _obja/46/_v10_att_file_stl legacy/fuse misc items.obj
+P _obja/46/_v10_att_gear -1
+P _obja/46/_v10_att_phi_ref 0.000000000
+P _obja/46/_v10_att_psi_ref 0.000000000
+P _obja/46/_v10_att_the_ref 0.000000000
+P _obja/46/_v10_att_wing -1
+P _obja/46/_v10_att_x_acf_prt_ref 0.000000000
+P _obja/46/_v10_att_y_acf_prt_ref 0.000000000
+P _obja/46/_v10_att_z_acf_prt_ref 73.000000000
+P _obja/46/_v10_is_internal 0
+P _obja/46/_v10_steers_with_gear 0
 P _obja/5/_obj_flags 29
 P _obja/5/_v10_att_body -1
 P _obja/5/_v10_att_file_stl cockpit_obj/front center pedestal panel.obj
@@ -19133,7 +19293,7 @@ P _obja/9/_v10_att_y_acf_prt_ref 0.000000000
 P _obja/9/_v10_att_z_acf_prt_ref 73.000000000
 P _obja/9/_v10_is_internal -761868400
 P _obja/9/_v10_steers_with_gear 0
-P _obja/count 36
+P _obja/count 47
 P _prop/0/_des_AOA_pwr 1.000000000
 P _prop/0/_des_AOA_root 0.000000000
 P _prop/0/_des_AOA_tip 0.000000000
@@ -52219,11 +52379,14 @@ P acf/_ASlo_roll_rat 1.000000000
 P acf/_ASlo_the_V 0.000000000
 P acf/_ASlo_thedot_k 0.000000000
 P acf/_CHT_is_C 1
+P acf/_EFIS2_on_avio 1
 P acf/_EFIS_camera_xyz/0 0.000000000
 P acf/_EFIS_camera_xyz/1 0.000000000
 P acf/_EFIS_camera_xyz/2 0.000000000
 P acf/_EFIS_camera_xyz/count 3
 P acf/_EGT_is_C 1
+P acf/_FBWL 0.000000000
+P acf/_FBWVco 0.000000000
 P acf/_FBW_apply_P_to_engine/0 0
 P acf/_FBW_apply_P_to_engine/1 0
 P acf/_FBW_apply_P_to_engine/10 0
@@ -52275,6 +52438,9 @@ P acf/_FBW_apply_R_to_engine/7 0
 P acf/_FBW_apply_R_to_engine/8 0
 P acf/_FBW_apply_R_to_engine/9 0
 P acf/_FBW_apply_R_to_engine/count 16
+P acf/_FBWtheD 0.000000000
+P acf/_FBWtheI 0.000000000
+P acf/_FBWtheP 0.000000000
 P acf/_FF_is_lbsph 0
 P acf/_Gneg 3.000000000
 P acf/_Gpos 5.000000000
@@ -52308,6 +52474,7 @@ P acf/_SFC_half_lo_PRP 0.000000000
 P acf/_SFC_recip_rich_ratio 1.000000000
 P acf/_TOGA_discos_servos 0
 P acf/_TRQ_is_pcnt 0
+P acf/_Va_kts 0.000000000
 P acf/_Vbg_kts 0.000000000
 P acf/_Vfe1_kts 263.000000000
 P acf/_Vfem_kts 206.000000000
@@ -52964,7 +53131,7 @@ P acf/_auto_rpm_with_tvec 0
 P acf/_auto_sync_EQ 1
 P acf/_auto_trim_EQ 0
 P acf/_autopilot_logic 1
-P acf/_average_mac_acf 13.130735397
+P acf/_average_mac_acf 12.784100533
 P acf/_bagg_1/0 0.000000000
 P acf/_bagg_1/1 0.000000000
 P acf/_bagg_1/2 0.000000000
@@ -53223,6 +53390,7 @@ P acf/_cgY -3.200000048
 P acf/_cgZ 67.089996338
 P acf/_cgZ_aft 77.819999695
 P acf/_cgZ_fwd 64.040000916
+P acf/_cg_in_mac 0
 P acf/_chaff_max 0
 P acf/_chute_line_len/0 0.000000000
 P acf/_chute_line_len/1 0.000000000
@@ -54047,7 +54215,9 @@ P acf/_drone_FBW_ailn_per_max_rate_error_P 0.000000000
 P acf/_drone_FBW_elev_per_max_rate_error_Q 0.000000000
 P acf/_drone_FBW_hdng_future_predict 0.000000000
 P acf/_drone_FBW_level_ptch_in_sec 0.000000000
+P acf/_drone_FBW_level_ptch_pred_sec 0.000000000
 P acf/_drone_FBW_level_roll_in_sec 0.000000000
+P acf/_drone_FBW_level_roll_pred_sec 0.000000000
 P acf/_drone_FBW_ptch_future_predict 0.000000000
 P acf/_drone_FBW_roll_future_predict 0.000000000
 P acf/_drone_FBW_rudd_per_max_rate_error_R 0.000000000
@@ -54060,6 +54230,7 @@ P acf/_drone_FBW_washout_lin_throttles 0
 P acf/_drone_FBW_washout_sqrt_throttle 0
 P acf/_drone_FBW_washout_sqrt_throttles 0
 P acf/_drone_FBW_washout_vert_component 0
+P acf/_drone_FBW_washout_with_KEAS 0
 P acf/_drud_sbrk 0.000000000
 P acf/_dual_control_split_force_rat 0.000000000
 P acf/_dual_control_type 0
@@ -54390,7 +54561,7 @@ P acf/_feathered_pitch 0.000000000
 P acf/_ff_rat_idle_JET 0.071999997
 P acf/_ff_rat_idle_PRP 0.000000000
 P acf/_ff_rat_idle_turbo 0.000000000
-P acf/_file_writer_version 120039
+P acf/_file_writer_version 120611
 P acf/_fixed_max/0 0.000000000
 P acf/_fixed_max/1 0.000000000
 P acf/_fixed_max/2 0.000000000
@@ -54559,6 +54730,7 @@ P acf/_fuel_sel_cmnd_valid_pos_rgt/3 3
 P acf/_fuel_sel_cmnd_valid_pos_rgt/4 4
 P acf/_fuel_sel_cmnd_valid_pos_rgt/5 -1
 P acf/_fuel_sel_cmnd_valid_pos_rgt/count 6
+P acf/_g1000_keyboard_EQ -1
 P acf/_gear_EQ 1
 P acf/_gear_can_ret_on_ground 0
 P acf/_gear_exposed_when_retracted 0.000000000
@@ -54641,7 +54813,7 @@ P acf/_ground_pwr/2 0.000000000
 P acf/_ground_pwr/count 3
 P acf/_gyro_spooldown_time 60.000000000
 P acf/_gyro_spoolup_time 5.000000000
-P acf/_h_eqlbm 9.689857483
+P acf/_h_eqlbm 9.606047630
 P acf/_has_ADG 1
 P acf/_has_APU_bleed_air 1
 P acf/_has_APU_generator 1
@@ -54699,6 +54871,7 @@ P acf/_hud_panel_bottom_px 0.000000000
 P acf/_hud_panel_left_px 0.000000000
 P acf/_hud_panel_right_px 0.000000000
 P acf/_hud_panel_top_px 0.000000000
+P acf/_hud_region_index 0
 P acf/_hud_tapes_track_vector 0
 P acf/_hyd_PTU_type 0
 P acf/_hyd_brakes 0
@@ -54869,6 +55042,7 @@ P acf/_min_vec_on_ground 0.000000000
 P acf/_mixt_x_ctr 0.000000000
 P acf/_n1_power_curve1 2.000000000
 P acf/_n1_power_curve2 3.000000000
+P acf/_n1_rated_thrust 100.000000000
 P acf/_n2_power_curve 4.360000134
 P acf/_name A321neo
 P acf/_new_plot_XP3D_cock/0 0
@@ -54876,6 +55050,7 @@ P acf/_new_plot_outer_acf/0 0
 P acf/_no_default_engine_fx 1
 P acf/_no_default_gear_fx 1
 P acf/_no_default_gun_fx 1
+P acf/_no_default_jato_fx 0
 P acf/_no_default_wash_fx 1
 P acf/_no_default_wing_fx 1
 P acf/_no_hydro_force_mult_brakes 1.000000000
@@ -55110,6 +55285,7 @@ P acf/_sfc_burner 0.000042524
 P acf/_shut_off_fuel_at_min_prop 0
 P acf/_single_axis_ap 0
 P acf/_skid_EQ 0
+P acf/_slat1_cd 0.000000000
 P acf/_slat1_dn/0 0.000000000
 P acf/_slat1_dn/1 0.699999988
 P acf/_slat1_dn/10 0.000000000
@@ -55123,8 +55299,10 @@ P acf/_slat1_dn/7 0.000000000
 P acf/_slat1_dn/8 0.000000000
 P acf/_slat1_dn/9 0.000000000
 P acf/_slat1_dn/count 12
+P acf/_slat1_dn_max_deg 10.000000000
 P acf/_slat1_inc 11.000000000
 P acf/_slat1_type 1
+P acf/_slat2_cd 0.000000000
 P acf/_slat2_dn/0 0.000000000
 P acf/_slat2_dn/1 0.699999988
 P acf/_slat2_dn/10 0.000000000
@@ -55138,6 +55316,7 @@ P acf/_slat2_dn/7 0.000000000
 P acf/_slat2_dn/8 0.000000000
 P acf/_slat2_dn/9 0.000000000
 P acf/_slat2_dn/count 12
+P acf/_slat2_dn_max_deg 10.000000000
 P acf/_slat2_inc 11.000000000
 P acf/_slat2_type 1
 P acf/_slat_EQ 1
@@ -55299,6 +55478,16 @@ P acf/_tank_rat/6 0.000000000
 P acf/_tank_rat/7 0.000000000
 P acf/_tank_rat/8 0.000000000
 P acf/_tank_rat/count 9
+P acf/_tank_rat_def/0 0.500000000
+P acf/_tank_rat_def/1 0.500000000
+P acf/_tank_rat_def/2 0.500000000
+P acf/_tank_rat_def/3 0.500000000
+P acf/_tank_rat_def/4 0.500000000
+P acf/_tank_rat_def/5 0.500000000
+P acf/_tank_rat_def/6 0.500000000
+P acf/_tank_rat_def/7 0.500000000
+P acf/_tank_rat_def/8 0.500000000
+P acf/_tank_rat_def/count 9
 P acf/_tank_role/0 0
 P acf/_tank_role/1 0
 P acf/_tank_role/2 0
@@ -55367,7 +55556,7 @@ P acf/_tank_xyz_full/8,1 0.000000000
 P acf/_tank_xyz_full/8,2 0.000000000
 P acf/_tank_xyz_full/i_count 9
 P acf/_tank_xyz_full/j_count 3
-P acf/_the_eqlbm 0.257402599
+P acf/_the_eqlbm 0.440516174
 P acf/_thro_non_vect_props_at_sin_vect 0
 P acf/_thro_x_ctr 0.000000000
 P acf/_throt_max_fwd_emr 1.049999952
@@ -55451,6 +55640,7 @@ P acf/_wheel_t2 0.300000012
 P acf/_windshield_eff_factor 1.000000000
 P acf/_windshield_scratchy 0
 P acf/_wing_damp_rat 1.000000000
+P acf/_wing_frac_fuel 0.500000000
 P acf/_wing_frac_mass 0.250000000
 P acf/_wing_mid_dihed_per_g 0.000000000
 P acf/_wing_tilt_ptch 0.000000000
@@ -55466,6 +55656,7 @@ P acf/_wiper_ang2/2 120.000000000
 P acf/_wiper_ang2/3 120.000000000
 P acf/_wiper_ang2/count 4
 P acf/_wiper_max_cycles_second 2.000000000
+P acf/_xmsn_is_C 0
 P acf/_xmsn_of_engn/0 0
 P acf/_xmsn_of_engn/1 1
 P acf/_xmsn_of_engn/10 0
@@ -55792,6 +55983,7 @@ GROUP hud vertical
         DECIMALS 1
         PERIOD_WIDTH 0
         LED_ROWS 0
+        ROUNDING ROUND_ROUND
 
       gen_LED Alt Display 2
         POS 3892.000000 2254.000000
@@ -55808,6 +56000,7 @@ GROUP hud vertical
         DECIMALS 1
         PERIOD_WIDTH 0
         LED_ROWS 0
+        ROUNDING ROUND_ROUND
 
     END_GROUP
     GROUP Alt Tape Upper
@@ -55970,6 +56163,7 @@ GROUP hud vertical
         DECIMALS 0
         PERIOD_WIDTH 0
         LED_ROWS 0
+        ROUNDING ROUND_ROUND
 
     END_GROUP
     GROUP VS Translate 2
@@ -55999,6 +56193,7 @@ GROUP hud vertical
         DECIMALS 0
         PERIOD_WIDTH 0
         LED_ROWS 0
+        ROUNDING ROUND_ROUND
 
     END_GROUP
     gen_pointer Accel Arrow
@@ -56101,6 +56296,7 @@ GROUP hud vertical
             DECIMALS 1
             PERIOD_WIDTH 0
             LED_ROWS 0
+            ROUNDING ROUND_ROUND
 
           gen_LED gen_LED.png 2
             POS 3483.000000 2362.000000
@@ -56115,6 +56311,7 @@ GROUP hud vertical
             DECIMALS 1
             PERIOD_WIDTH 0
             LED_ROWS 0
+            ROUNDING ROUND_ROUND
 
           gen_LED gen_LED.png 2 2
             POS 3483.000000 2362.000000
@@ -56129,6 +56326,7 @@ GROUP hud vertical
             DECIMALS 1
             PERIOD_WIDTH 0
             LED_ROWS 0
+            ROUNDING ROUND_ROUND
 
         END_GROUP
         gen_needle Bird

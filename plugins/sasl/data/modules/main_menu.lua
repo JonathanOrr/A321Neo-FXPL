@@ -132,6 +132,11 @@ function Save_current_view_as_default()
     table.save(current_view, moduleDirectory .. "/Custom Module/saved_configs/saved_view")
 end
 
+function Swap_visual_model()
+    set(USE_LEGACY_OBJS, 1 - get(USE_LEGACY_OBJS))
+    set(USE_NEW_OBJS, 1 - get(USE_NEW_OBJS))
+end
+
 function Reset_RAT()
     if get(All_on_ground) == 0 then
         sasl.messageWindow (500 , 500 , 300 , 150 , " This is a ground-only operation " , 
@@ -196,6 +201,7 @@ ShowHideCinetracker = sasl.appendMenuItem(Menu_main, "Show/Hide Cinetracker", Sh
 sasl.appendMenuSeparator(Menu_main)
 
 SaveView          = sasl.appendMenuItem(Menu_main, "Save view as default", Save_current_view_as_default)
+SwapModel         = sasl.appendMenuItem(Menu_main, "Swap visual model version", Swap_visual_model)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Toggle Ground Air Supply", Toggle_Ground_Air_Supply)
 ResetAbnLaw       = sasl.appendMenuItem(Menu_main, "Reset Abnormal Law", Reset_Abn_law)
