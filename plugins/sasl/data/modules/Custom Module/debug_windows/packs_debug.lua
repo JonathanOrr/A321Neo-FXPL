@@ -223,8 +223,8 @@ local function draw_a32nx_part()
     sasl.gl.drawLine(width_end-50, 120, width_end-50, 200, ECAM_WHITE)
     sasl.gl.drawLine(width_start+50, 130, width_start+40, 130, ECAM_WHITE)    
     sasl.gl.drawLine(width_end-50, 130, width_end-40, 130, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, width_end-40, 130, "ENG2\nSTARTER", 8, false, false, TEXT_ALIGN_LEFT, get(Eng_is_spooling_up, 2) == 1 and ECAM_GREEN or ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, width_start+40, 130, "ENG1\nSTARTER", 8, false, false, TEXT_ALIGN_RIGHT, get(Eng_is_spooling_up, 1) == 1 and ECAM_GREEN or ECAM_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, width_end-40, 130, "ENG2\nSTARTER", 8, false, false, TEXT_ALIGN_LEFT, ENG.dyn[2].starter_valve and ECAM_GREEN or ECAM_WHITE) --get(Eng_is_spooling_up, 2) TODO:fix starter check
+    sasl.gl.drawText(Font_B612MONO_regular, width_start+40, 130, "ENG1\nSTARTER", 8, false, false, TEXT_ALIGN_RIGHT, ENG.dyn[1].starter_valve and ECAM_GREEN or ECAM_WHITE) --get(Eng_is_spooling_up, 1)
 
     -- BLEED L/R status
     sasl.gl.drawText(Font_B612MONO_regular, width_start+10, 290, "BLEED L", 10, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
