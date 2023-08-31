@@ -79,6 +79,9 @@ local function mouse_down(x,y)
             table.save(FMGS_sys.fpln.active, "exported_fpln.saved")
             load_result = "EXPORTED"
             load_result_color = ECAM_GREEN
+        elseif x>=450 and y <= 130 and x<=600 and y >= 90 then
+
+            debug_FMGS_disable_turn_computer = not debug_FMGS_disable_turn_computer
         end
     elseif curr_page == 2 then
         if x>=90 and y <= 520 and x<=110 and y >= 500 then
@@ -195,6 +198,12 @@ local function draw_page_config()
     sasl.gl.drawText(Font_B612MONO_regular, 130, size[2]-200, FMGS_sys.config.gps_primary and "YES" or "NO", 12, false, false, TEXT_ALIGN_LEFT, FMGS_sys.config.gps_primary and ECAM_GREEN or ECAM_ORANGE)
 
     ----------------------
+    -- Debug buttons
+    ----------------------
+    sasl.gl.drawFrame (450, 90, BTN_WIDTH, BTN_HEIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 450+(BTN_WIDTH/2), 102, "Turn " .. (debug_FMGS_disable_turn_computer and "ON" or "OFF").. " turn.comp.", 12, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+
+    ----------------------
     -- Load example
     ----------------------
     sasl.gl.drawFrame (450, 40, BTN_WIDTH, BTN_HEIGHT, UI_LIGHT_BLUE)
@@ -273,6 +282,9 @@ local function draw_page_pred_errors()
     sasl.gl.drawFrame (450, size[2]-230, 500, 150, UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-100, "PREDICTION PROBLEMS", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
 
+    if not FMGS_sys.pred_internals then
+        return
+    end
 
     local reason_fail
     if FMGS_sys.pred_internals.why_prediction_failed == 0 then
@@ -302,6 +314,37 @@ local function draw_page_pred_errors()
 
 end
 
+local function draw_page_online()
+    sasl.gl.drawFrame (450, size[2]-400, 500, 150, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-270, "ONLINE PREDICTIONS & GUIDANCE", 14, true, false, TEXT_ALIGN_LEFT,UI_WHITE)
+
+    local offset = FMGS_sys.fpln.active.sequencer.segment_curved_list_curr or 2
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-290, Fwd_string_fill("OFF=" .. offset, " ", 7) .. "       PAST          TARGET        FUTURE", 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-310, "Sequencing:  ", 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+
+    if not FMGS_sys.fpln.active.segment_curved_list then
+        sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-310, "              NO SEGMENTS", 16, false, false, TEXT_ALIGN_LEFT,ECAM_RED)
+    elseif #FMGS_sys.fpln.active.segment_curved_list < 3 then
+        sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-310, "              TOO FEW SEGMENTS", 16, false, false, TEXT_ALIGN_LEFT,ECAM_RED)
+    else
+        local past_point   = FMGS_sys.fpln.active.segment_curved_list[offset-1]
+        local target_point = FMGS_sys.fpln.active.segment_curved_list[offset]
+        local future_point = FMGS_sys.fpln.active.segment_curved_list[offset+2]
+        if past_point and past_point.orig_ref then
+            local text = past_point.orig_ref.id or "[UNKN]"
+            sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-310, "              " .. text, 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+        end
+        if target_point and target_point.orig_ref then
+            local text = target_point.orig_ref.id or "[UNKN]"
+            sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-310, "                            " .. text, 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+        end
+        if future_point and future_point.orig_ref then
+            local text = future_point.orig_ref.id or "[UNKN]"
+            sasl.gl.drawText(Font_B612MONO_regular, 460, size[2]-310, "                                          " .. text, 14, false, false, TEXT_ALIGN_LEFT,UI_WHITE)
+        end
+    end
+
+end
 
 local function draw_ab_info()
 
@@ -334,7 +377,16 @@ local function draw_page_fpln_column(x, fpln)
     -- SID
     ----------------
     local dep_sid = fpln.apts.dep_sid
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-140, dep_sid and dep_sid.proc_name or "SID NOT SET", 12, false, false, TEXT_ALIGN_LEFT, dep_sid and UI_LIGHT_BLUE or {.6,.6,.6})
+    local sid_nr
+    if dep_sid then
+        for i,x in ipairs(fpln.apts.dep_cifp.sids) do
+            if x.proc_name == dep_sid.proc_name then
+                sid_nr = i
+                break
+            end
+        end
+    end
+    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-140, dep_sid and (dep_sid.proc_name .. " (ID="..(sid_nr or "?")..")") or "SID NOT SET", 12, false, false, TEXT_ALIGN_LEFT, dep_sid and UI_LIGHT_BLUE or {.6,.6,.6})
     if dep_sid and dep_sid.legs then
         sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-160, "#LEGS = " .. #dep_sid.legs, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
@@ -343,7 +395,16 @@ local function draw_page_fpln_column(x, fpln)
     -- TRANS
     ----------------
     local dep_trans = fpln.apts.dep_trans
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-190, dep_trans and dep_trans.trans_name or "TRANS NOT SET", 12, false, false, TEXT_ALIGN_LEFT, dep_trans and UI_LIGHT_BLUE or {.6,.6,.6})
+    local trans_nr
+    if dep_trans then
+        for i,x in ipairs(fpln.apts.dep_cifp.sids) do
+            if x.proc_name == dep_trans.proc_name and x.trans_name == dep_trans.trans_name then
+                trans_nr = i
+                break
+            end
+        end
+    end
+    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-190, dep_trans and (dep_trans.trans_name .. " (ID="..(trans_nr or "?")..")")  or "TRANS NOT SET", 12, false, false, TEXT_ALIGN_LEFT, dep_trans and UI_LIGHT_BLUE or {.6,.6,.6})
     if dep_trans and dep_trans.legs then
         sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-210, "#LEGS = " .. #dep_trans.legs, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
@@ -357,7 +418,16 @@ local function draw_page_fpln_column(x, fpln)
     -- TRANS
     ----------------
     local arr_trans = fpln.apts.arr_trans
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-310, arr_trans and arr_trans.trans_name or "TRANS NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_trans and UI_LIGHT_BLUE or {.6,.6,.6})
+    local trans_nr
+    if arr_trans then
+        for i,x in ipairs(fpln.apts.arr_cifp.stars) do
+            if x.proc_name == arr_trans.proc_name and x.trans_name == arr_trans.trans_name then
+                trans_nr = i
+                break
+            end
+        end
+    end
+    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-310, arr_trans and (arr_trans.trans_name .. " (ID="..(trans_nr or "?")..")") or "TRANS NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_trans and UI_LIGHT_BLUE or {.6,.6,.6})
     if arr_trans and arr_trans.legs then
         sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-330, "#LEGS = " .. #arr_trans.legs, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
@@ -366,7 +436,16 @@ local function draw_page_fpln_column(x, fpln)
     -- STAR
     ----------------
     local arr_star = fpln.apts.arr_star
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-360, arr_star and arr_star.proc_name or "STAR NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_star and UI_LIGHT_BLUE or {.6,.6,.6})
+    local star_nr
+    if arr_star then
+        for i,x in ipairs(fpln.apts.arr_cifp.stars) do
+            if x.proc_name == arr_star.proc_name and x.trans_name == arr_star.trans_name then
+                star_nr = i
+                break
+            end
+        end
+    end
+    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-360, arr_star and (arr_star.proc_name .. " (ID="..(star_nr or "?")..")") or "STAR NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_star and UI_LIGHT_BLUE or {.6,.6,.6})
     if arr_star and arr_star.legs then
         sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-380, "#LEGS = " .. #arr_star.legs, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
@@ -375,7 +454,16 @@ local function draw_page_fpln_column(x, fpln)
     -- VIA
     ----------------
     local arr_via = fpln.apts.arr_via
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-410, arr_via and arr_via.trans_name or "VIA NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_via and UI_LIGHT_BLUE or {.6,.6,.6})
+    local via_nr
+    if arr_via then
+        for i,x in ipairs(fpln.apts.arr_cifp.apprs) do
+            if x.proc_name == arr_via.proc_name and x.trans_name == arr_via.trans_name then
+                via_nr = i
+                break
+            end
+        end
+    end
+    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-410, arr_via and (arr_via.trans_name .. " (ID="..(via_nr or "?")..")") or "VIA NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_via and UI_LIGHT_BLUE or {.6,.6,.6})
     if arr_via and arr_via.legs then
         sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-430, "#LEGS = " .. #arr_via.legs, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
@@ -384,7 +472,16 @@ local function draw_page_fpln_column(x, fpln)
     -- APPR
     ----------------
     local arr_appr = fpln.apts.arr_appr
-    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-460, arr_appr and arr_appr.proc_name or "VIA NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_appr and UI_LIGHT_BLUE or {.6,.6,.6})
+    local appr_nr
+    if arr_appr then
+        for i,x in ipairs(fpln.apts.arr_cifp.apprs) do
+            if x.proc_name == arr_appr.proc_name and x.trans_name == arr_appr.trans_name then
+                appr_nr = i
+                break
+            end
+        end
+    end
+    sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-460, arr_appr and (arr_appr.proc_name .. " (ID="..(appr_nr or "?")..")")  or "VIA NOT SET", 12, false, false, TEXT_ALIGN_LEFT, arr_appr and UI_LIGHT_BLUE or {.6,.6,.6})
     if arr_appr and arr_appr.legs then
         sasl.gl.drawText(Font_B612MONO_regular, x, size[2]-480, "#LEGS = " .. #arr_appr.legs, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     end
@@ -535,6 +632,7 @@ function draw()
         draw_page_data()
         draw_page_pred()
         draw_page_pred_errors()
+        draw_page_online()
     elseif curr_page == 2 then
         draw_page_fpln()
         draw_leg_details()
@@ -554,8 +652,8 @@ end
 function update()
     if load_result_color == ECAM_ORANGE then
         if FMGS_sys.fpln.temp.apts.dep_cifp and FMGS_sys.fpln.temp.apts.arr_cifp then
-            FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
-            FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
+            FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[31])
+            FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[32])
             FMGS_arr_set_appr(FMGS_sys.fpln.temp.apts.arr_cifp.apprs[9], FMGS_sys.fpln.temp.apts.arr.rwys[1], true)
             FMGS_arr_set_star(FMGS_sys.fpln.temp.apts.arr_cifp.stars[22])
             FMGS_arr_set_via(FMGS_arr_get_available_vias(true)[2])

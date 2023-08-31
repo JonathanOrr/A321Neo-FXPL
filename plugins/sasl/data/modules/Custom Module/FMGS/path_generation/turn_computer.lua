@@ -108,7 +108,7 @@ local function create_turn_less_180(curr, next, curr_bear, next_bear, speed)
     if sign_diff > 0 then
         internal_angle = - internal_angle
     end
-    return { segment_type=FMGS_COMP_SEGMENT_ARC, end_lat=curr.end_lat, end_lon=curr.end_lon, end_lat=next.start_lat, end_lon=next.start_lon, ctr_lat=ctr_lat, ctr_lon=ctr_lon, radius=turn_radius, start_angle=-perp_angle-90, arc_length_deg=-internal_angle, leg_name = ""}
+    return { segment_type=FMGS_COMP_SEGMENT_ARC, end_lat=curr.end_lat, end_lon=curr.end_lon, end_lat=next.start_lat, end_lon=next.start_lon, ctr_lat=ctr_lat, ctr_lon=ctr_lon, radius=turn_radius, start_angle=-perp_angle-90, arc_length_deg=-internal_angle, leg_name = "", orig_ref = curr.orig_ref}
 
 end
 
@@ -189,8 +189,8 @@ local function create_turn_fly_over(curr, next, speed)
     end
 
     return {
-        { segment_type=FMGS_COMP_SEGMENT_ARC, start_lat=curr.end_lat, start_lon=curr.end_lon, end_lat=next.start_lat, end_lon=next.start_lon, ctr_lat=ctr_1_lat, ctr_lon=ctr_1_lon, radius=turn_radius, start_angle=start_first_segment, arc_length_deg=-epsilon, leg_name = "XXXX"},
-        { segment_type=FMGS_COMP_SEGMENT_ARC, start_lat=curr.end_lat, start_lon=curr.end_lon, end_lat=next.start_lat, end_lon=next.start_lon, ctr_lat=ctr_2_lat, ctr_lon=ctr_2_lon, radius=turn_radius, start_angle=start_second_segment, arc_length_deg=gamma, leg_name = "XXXX"}
+        { segment_type=FMGS_COMP_SEGMENT_ARC, start_lat=curr.end_lat, start_lon=curr.end_lon, end_lat=next.start_lat, end_lon=next.start_lon, ctr_lat=ctr_1_lat, ctr_lon=ctr_1_lon, radius=turn_radius, start_angle=start_first_segment, arc_length_deg=-epsilon, leg_name = "XXXX", orig_ref = curr.orig_ref},
+        { segment_type=FMGS_COMP_SEGMENT_ARC, start_lat=curr.end_lat, start_lon=curr.end_lon, end_lat=next.start_lat, end_lon=next.start_lon, ctr_lat=ctr_2_lat, ctr_lon=ctr_2_lon, radius=turn_radius, start_angle=start_second_segment, arc_length_deg=gamma, leg_name = "XXXX", orig_ref = curr.orig_ref}
     }
 end
 

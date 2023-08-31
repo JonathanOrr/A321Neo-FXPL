@@ -716,6 +716,22 @@ function adirs_get_fms(i) -- i==FMS1 or FMS2?
     return {mixed_irs[1]+ADIRS_sys.FMS_bias[i][1], mixed_irs[2]+ADIRS_sys.FMS_bias[i][2]}
 end
 
+function adirs_get_any_fmgs()   -- This doesn't exist in the real ACF
+    local my_pos = adirs_get_fms(1) -- Captain side here
+
+    if not my_pos[1] or not my_pos[2] then
+        my_pos = adirs_get_fms(2) -- F/O side here
+    end
+
+
+    if not my_pos[1] or not my_pos[2] then
+        sequencer_data = {}    -- Reset derivatives
+        return {nil,nil} -- No valid position, no sequencing
+    end
+
+    return my_pos
+end
+
 function adirs_get_gpirs(i) -- i == 1 CAPT SIDE, i==2 FO SIDE. It returns lat,lon. It may return nil,nil!
     local lat = 0
     local lon = 0

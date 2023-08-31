@@ -446,6 +446,11 @@ local function draw_arpt_symbol(data)
     if not apt then
         return
     end
+
+    if FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+        return  -- Already sequenced, let's get rid of it
+    end
+
     
     local rwy, sibl = FMGS_dep_get_rwy(false)
     if not rwy then

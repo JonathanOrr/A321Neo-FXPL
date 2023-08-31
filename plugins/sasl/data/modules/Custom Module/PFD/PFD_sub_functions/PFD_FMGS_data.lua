@@ -13,23 +13,19 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+include('FMGS/functions_online.lua')
 
-local THIS_PAGE = MCDU_Page:new({id=300})
+local UPDATE_DATA_SEC = 1
 
+function Get_FMGS_data(data)
 
-function THIS_PAGE:render(mcdu_data)
-    if FMGS_get_phase() == FMGS_PHASE_PREFLIGHT or FMGS_get_phase() == FMGS_PHASE_DONE then
-        mcdu_open_page(mcdu_data, 302)
-    elseif FMGS_get_phase() == FMGS_PHASE_CLIMB or FMGS_get_phase() == FMGS_PHASE_CRUISE then
-        mcdu_open_page(mcdu_data, 303)
-    elseif FMGS_get_phase() == FMGS_PHASE_DESCENT then
-        mcdu_open_page(mcdu_data, 305)
-    elseif FMGS_get_phase() == FMGS_PHASE_APPROACH then
-        mcdu_open_page(mcdu_data, 306)
-    else
-        mcdu_open_page(mcdu_data, 302) -- Just in case
+    local time =  get(TIME)
+    if (time - data.FMGS_timer) < UPDATE_DATA_SEC then
+        return
     end
+
+    data.FMGS_timer = time
+
+    local ias, mach = FMGS_get_current_target_speed()
+    data.target_speed = ias -- Potentially nil
 end
-
-
-mcdu_pages[THIS_PAGE.id] = THIS_PAGE

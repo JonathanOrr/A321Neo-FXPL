@@ -1,3 +1,17 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
 include('ADIRS_data_source.lua')
 
 local function draw_accel_arrow(x, y, PFD_table)
@@ -206,6 +220,22 @@ local function draw_airspeed_tape(airspeed, x, y, PFD_table)
     end
 end
 
+local function draw_target_spd(x, y, PFD_table)
+
+    -- TODO: This should become cyan when selected by FCU
+
+    -- TODO: ECON speed range
+    if PFD_table.target_speed then
+        local offset_y = y + size[2]/2 - 9 + Math_rescale_no_lim(-43, -240, 42, 240, PFD_table.target_speed - adirs_get_ias(PFD_table.Screen_ID))
+        local offset_x = x + size[1]/2-336
+        local height = 40
+        local width  = 28
+        sasl.gl.drawWideLine(offset_x, offset_y-5, offset_x + width, offset_y - height/2, 3, ECAM_MAGENTA)
+        sasl.gl.drawWideLine(offset_x, offset_y+5, offset_x + width, offset_y + height/2, 3, ECAM_MAGENTA)
+        sasl.gl.drawWideLine(offset_x + width, offset_y + height/2, offset_x + width, offset_y - height/2, 3, ECAM_MAGENTA)
+    end
+end
+
 function PFD_draw_spd_tape(x, y, PFD_table)
     local boarder_cl = ECAM_WHITE
 
@@ -249,6 +279,10 @@ function PFD_draw_spd_tape(x, y, PFD_table)
         sasl.gl.setClipArea(x + size[1]/2-437, y + size[2]/2-244, 185, 473)
         draw_characteristics_spd(x, y, PFD_table)
         sasl.gl.resetClipArea ()
+
+        sasl.gl.setClipArea(x + size[1]/2-437, y + size[2]/2-244, 185, 473)
+        draw_target_spd(x, y, PFD_table)
+        sasl.gl.resetClipArea()
 
         --draw spd needle
         sasl.gl.drawTexture(PFD_spd_needle, x + size[1]/2-370, y + size[2]/2-18, 56, 21, ECAM_YELLOW)

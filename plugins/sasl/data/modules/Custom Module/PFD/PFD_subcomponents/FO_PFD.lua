@@ -1,3 +1,18 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+
 position = {get(Fo_pfd_position, 1), get(Fo_pfd_position, 2), get(Fo_pfd_position, 3), get(Fo_pfd_position, 4)}
 size = {900, 900}
 include('PFD/PFD_drawing_assets.lua')
@@ -11,6 +26,8 @@ include('PFD/PFD_sub_functions/PFD_spd_tape.lua')
 include('PFD/PFD_sub_functions/PFD_hdg_tape.lua')
 include('PFD/PFD_sub_functions/PFD_vs_needle.lua')
 include('PFD/PFD_sub_functions/PFD_timers.lua')
+include('PFD/PFD_sub_functions/PFD_FMGS_data.lua')
+
 fbo = true
 
 PFD.Fo_PFD_table = {
@@ -64,6 +81,8 @@ PFD.Fo_PFD_table = {
     BUSS_update_time = 0,
     BUSS_vsw_pos = 64,
     BUSS_target_pos = 400,
+    FMGS_timer = 0,
+    target_speed = nil,
 }
 
 sasl.registerCommandHandler(FCU_Fo_LS_cmd, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Fo_landing_system_enabled, 1 - get(Fo_landing_system_enabled)) end end)
@@ -74,6 +93,7 @@ function update()
     pb_set(PB.FCU.fo_ls, false, get(Fo_landing_system_enabled) == 1)
 
     Get_ILS_data(PFD.Fo_PFD_table)
+    Get_FMGS_data(PFD.Fo_PFD_table)
     PFD_update_timers(PFD.Fo_PFD_table)
 end
 

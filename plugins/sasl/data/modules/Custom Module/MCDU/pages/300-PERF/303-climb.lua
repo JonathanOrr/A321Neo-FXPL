@@ -48,6 +48,10 @@ local function fill_managed_data(managed_data_table, target_alt)
         return -- Not found (too high)
     end
 
+    if not (legs[found_leg] and legs[found_leg].pred) then
+        return -- Missing prev leg (?)
+    end
+
     local ias, mach, time, dist
     if legs[found_leg].pred.ias and legs[found_leg+1].pred.ias then
         ias = Math_rescale(legs[found_leg].pred.altitude or 0, legs[found_leg].pred.ias, legs[found_leg+1].pred.altitude, legs[found_leg+1].pred.ias, target_alt)

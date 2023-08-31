@@ -257,8 +257,8 @@ local function prepare_add_generic_pseudo(list_messages, pseudo_wpt, name, upper
     for i,x in ipairs(list_messages) do
         if x == pseudo_wpt.prev_wpt then
             assert(pseudo_wpt.dist_prev_wpt, "dist_prev_wpt is mandatory for pseudo wpts, but not present in " .. name .. "/" .. (pseudo_wpt.id or "[UNKN]"))
-            list_messages[i].temp_computed_distance = list_messages[i].computed_distance - pseudo_wpt.dist_prev_wpt
-            table.insert(list_messages, i, {id=name, 
+            list_messages[i+1].temp_computed_distance = list_messages[i+1].computed_distance - pseudo_wpt.dist_prev_wpt
+            table.insert(list_messages, i+1, {id=name, 
                                             airway_name=upper_name, -- May be nil
                                             pred={  time=pseudo_wpt.time, 
                                                     ias=pseudo_wpt.ias, 
@@ -292,8 +292,12 @@ end
 
 function THIS_PAGE:prepare_list(mcdu_data)
     local list_messages = {
-        {invalid=true} -- First one is always empty (it represents the departure airport)
     }
+
+    if not FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+         -- First one is always empty (it represents the departure airport)
+        table.insert(list_messages, {invalid=true})
+    end
 
     THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
 
@@ -684,7 +688,10 @@ function THIS_PAGE:render(mcdu_data)
     end
     self:set_updn_arrows_bottom(mcdu_data, true)
 
-    THIS_PAGE:render_dep(mcdu_data)
+    if not FMGS_sys.fpln.active.sequencer.sequenced_after_takeoff then
+        -- Show the departure airport only if the airport has no been yet sequenced
+        THIS_PAGE:render_dep(mcdu_data)
+    end
     THIS_PAGE:render_list(mcdu_data)
     THIS_PAGE:print_render_list(mcdu_data)
 

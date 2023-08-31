@@ -34,6 +34,11 @@ local MCDU_ENTRIES =
         ref_callback = 
         function (mcdu_data, count, val)
             mcdu_data.is_page_button_hit = true
+            if count == 4 then
+                FMGS_signal_phase_update(FMGS_PHASE_EVENT_INIT_PRESS)
+            elseif count == 3 then
+                FMGS_signal_phase_update(FMGS_PHASE_EVENT_PERF_PRESS)
+            end
             mcdu_open_page(mcdu_data,count * 100)
         end
     },

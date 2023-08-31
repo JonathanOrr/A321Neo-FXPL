@@ -70,6 +70,8 @@ function GC_distance_kt(lat1, lon1, lat2, lon2)
     --(about 5 NM at 6000 NM), we are going to use the same.
     --Other formulas I've tested, seem to break when latitudes are in different hemisphere (west-east).
 
+    assert(lat1 and lat2 and lon1 and lon2)
+
     if lat1 == lat2 and lon1 == lon2 then
         return 0
     end
@@ -153,6 +155,26 @@ function point_from_a_segment_lat_lon_limited(lat1, lon1, lat2, lon2, distance_n
 
     return lat3, lon3
 end
+
+function point_from_a_arc_lat_lon(ctr_lat, ctr_lon, arc_radius_nm, arc_start_angle, arc_length_deg, distance_nm)  -- APPROXIMATED! Only for short distances
+
+    assert(arc_radius_nm >= 0)
+    assert(distance_nm >= 0)
+
+    local arc_length_rad = math.abs(math.rad(arc_length_deg))
+    local arc_length_nm  = arc_length_rad * arc_radius_nm
+    local perc = math.min(1, distance_nm > 0 and (arc_length_nm / distance_nm) or 0)   -- This shouldn't be larger than 1
+    if arc_length_nm < distance_nm then
+        sasl.logWarning("point_from_a_arc_lat_lon: distance_nm > arc_length_nm")
+    end
+    local perc_rad    = arc_length_rad*perc * (arc_length_deg >= 0 and 1 or -1)
+    local final_angle = perc_rad + math.rad(arc_start_angle)
+
+    local lat3, lon3 = Move_along_distance_NM(ctr_lat, ctr_lon, arc_radius_nm, math.deg(final_angle))
+
+    return lat3, lon3
+end
+
 
 function heading_difference(hdg1,hdg2) -- range -180 to 180, difference between 2 bearings, +ve is right turn, -ve is left.
     local turn = 0

@@ -44,6 +44,70 @@ local function draw_poi_special(data, functions, lat, lon, offset_x, texture, co
 
 end
 
+local function ND_draw_active_reset_specials(data)
+    data.poi_specials = {
+        {poi=FMGS_pred_get_toc(),          img=image_point_toc,       img_off=25, drawing=false, drawn=false, leg_offset=0},
+        {poi=FMGS_pred_get_tod(),          img=image_point_tod,       img_off=25, drawn=false, leg_offset=0},
+        {poi=FMGS_pred_get_climb_lim(),    img=image_point_spdchange, img_off=0, drawing=false, drawn=false, leg_offset=0},
+        {poi=FMGS_pred_get_descent_lim(),  img=image_point_spdchange, img_off=0,  drawn=false, leg_offset=0},
+        {poi=FMGS_pred_get_decel_point(),  img=image_point_decel,     img_off=0,  drawn=false, leg_offset=0},
+        {poi=FMGS_pred_get_flap_1_point(), img=image_point_flaps_one, img_off=0,  drawn=false, leg_offset=0},
+        {poi=FMGS_pred_get_flap_2_point(), img=image_point_flaps_two, img_off=0,  drawn=false, leg_offset=0}
+    }
+end
+
+local function ND_draw_active_fpln_specials(data, functions, prev_orig_ref, x)
+
+    -- An helper lambda function...
+    local check_and_run = function(special)
+        local poi = special.poi
+
+        if prev_orig_ref == poi.prev_wpt or special.drawing then
+
+            local segment_length
+            if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE then
+                segment_length = get_distance_nm(x.start_lat,x.start_lon,x.end_lat,x.end_lon)
+            elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
+                segment_length = x.radius * math.abs(math.rad(x.arc_length_deg))
+            else
+                segment_length = 0  
+            end
+            special.leg_offset = special.leg_offset + segment_length
+            special.drawing = true
+
+            -- Time to draw it?
+            if special.leg_offset > poi.dist_prev_wpt then
+                local lat, lon
+                local dist_diff = poi.dist_prev_wpt - (special.leg_offset - segment_length) -- Remaining difference of distance
+                assert(dist_diff >= 0)
+                if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE then
+                    lat, lon = point_from_a_segment_lat_lon(x.start_lat,x.start_lon,x.end_lat,x.end_lon, dist_diff)
+                elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
+                    lat, lon = point_from_a_arc_lat_lon(x.ctr_lat, x.ctr_lon, x.radius, x.start_angle, x.arc_length_deg, dist_diff)
+                end
+                if lat and lon then
+                    draw_poi_special(data, functions, lat, lon, special.img_off, special.img, ECAM_WHITE)
+                end
+                special.drawn = true
+            end
+        end
+    end
+
+    if prev_orig_ref then   -- If there exists a previous point...
+        for i,spec in ipairs(data.poi_specials) do
+            if spec.poi and not spec.drawn then
+                check_and_run(spec)
+            end
+        end
+    end
+    if x.orig_ref.lat and x.orig_ref.lon then
+        -- Some waypoints don't have lat/lon information, let's skip them
+        prev_orig_ref = x.orig_ref
+    end
+
+    return prev_orig_ref
+end
+
 function ND_draw_active_fpln(data, functions)
 
     local active_legs = FMGS_get_enroute_legs()
@@ -83,9 +147,10 @@ function ND_draw_active_fpln(data, functions)
     local LINE_SIZE = 3
 
     local already_drawn = {}
-    local first_point_drawn = false
-
     local prev_orig_ref = nil
+    local prev_orig_ref_done_white = false
+
+    ND_draw_active_reset_specials(data)
 
     for i,x in ipairs(curved_route) do
         if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE or x.segment_type == FMGS_COMP_SEGMENT_RWY_LINE then
@@ -124,13 +189,23 @@ function ND_draw_active_fpln(data, functions)
             end
         end
 
-        local color = first_point_drawn and ECAM_GREEN or ECAM_WHITE
+        local color = ECAM_GREEN
+
+        if not prev_orig_ref then
+            prev_orig_ref = x.orig_ref
+        elseif not prev_orig_ref_done_white then
+            if prev_orig_ref ~= x.orig_ref then
+                color = ECAM_WHITE
+                prev_orig_ref_done_white = true
+            end
+        end
+
 
         if x.orig_ref and x.orig_ref.leg_name_poi and not already_drawn[x.orig_ref.leg_name] then
             already_drawn[x.orig_ref.leg_name] = true
-            first_point_drawn = true
 
             local poi = x.orig_ref.leg_name_poi
+
             if poi.ptr_type == FMGS_PTR_WPT then
                 functions.draw_poi_array(data, poi, image_point_wpt, color)
             elseif poi.ptr_type == FMGS_PTR_NDB then
@@ -148,30 +223,7 @@ function ND_draw_active_fpln(data, functions)
         -- FMGS vertical profile: T/C, T/D, SPD LIM (x2), FLAP1, FLAP2, DECEL
         --
         if x.orig_ref then
-
-            -- An helper lambda function...
-            local check_and_run = function(poi_special, texture, offset)
-                if prev_orig_ref and prev_orig_ref ~= x.orig_ref and poi_special and x.orig_ref == poi_special.prev_wpt then
-                    assert(prev_orig_ref.lat and prev_orig_ref.lon, "Previous point (" .. (prev_orig_ref.id or "[UNKN]") .. ") doesn't have lat or lon!")
-                    assert(x.orig_ref.lat and x.orig_ref.lon, "Current point (" .. (x.orig_ref.id or "[UNKN]") .. ") doesn't have lat or lon!")
-                    local lat, lon = point_from_a_segment_lat_lon(prev_orig_ref.lat, prev_orig_ref.lon, x.orig_ref.lat, x.orig_ref.lon, poi_special.dist_prev_wpt)
-                    draw_poi_special(data, functions, lat, lon, offset, texture, ECAM_WHITE)
-                end
-    
-            end
-
-            check_and_run(FMGS_pred_get_toc(), image_point_toc, 25)
-            check_and_run(FMGS_pred_get_tod(), image_point_tod, 25)
-            check_and_run(FMGS_pred_get_climb_lim(), image_point_spdchange, 0)
-            check_and_run(FMGS_pred_get_descent_lim(), image_point_spdchange, 0)
-            check_and_run(FMGS_pred_get_decel_point(), image_point_decel, 0)
-            check_and_run(FMGS_pred_get_flap_1_point(), image_point_flaps_one, 0)
-            check_and_run(FMGS_pred_get_flap_2_point(), image_point_flaps_two, 0)
-
-            if x.orig_ref.lat and x.orig_ref.lon then
-                -- Some waypoints don't have lat/lon information, let's skip them
-                prev_orig_ref = x.orig_ref
-            end
+            prev_orig_ref = ND_draw_active_fpln_specials(data, functions, prev_orig_ref, x)
         end
 
     end   

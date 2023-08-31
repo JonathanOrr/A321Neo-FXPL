@@ -102,6 +102,32 @@ function FMGS_get_master()
     return FMGS_sys.config.master
 end
 
+local function reset_FMGS_on_done()
+    FMGS_sys.config.takeoff_time = nil
+    FMGS_sys.config.landing_time = nil
+    FMGS_sys.data.pred.appr.next_step = 7
+end
+
+function FMGS_signal_phase_update(event_id)
+    if event_id == FMGS_PHASE_EVENT_APPR_MANUAL then
+        if FMGS_sys.config.phase == FMGS_PHASE_DESCENT or FMGS_sys.config.phase == FMGS_PHASE_GOAROUND then
+            FMGS_sys.config.phase = FMGS_PHASE_APPROACH
+        end
+    elseif event_id == FMGS_PHASE_EVENT_NEW_CRZ then
+        if FMGS_sys.config.phase == FMGS_PHASE_APPROACH then
+            FMGS_sys.config.phase = FMGS_PHASE_CLIMB
+        end
+    elseif event_id == FMGS_PHASE_EVENT_INIT_PRESS or event_id == FMGS_PHASE_EVENT_PERF_PRESS then
+        if FMGS_sys.config.phase == FMGS_PHASE_DONE then
+            FMGS_sys.config.phase = FMGS_PHASE_PREFLIGHT
+            reset_FMGS_on_done()
+        end
+    elseif event_id == FMGS_PHASE_EVENT_ALTN_OR_NEW_DEST then
+        if FMGS_sys.config.phase == FMGS_PHASE_GOAROUND and adirs_get_avg_alt() >= FMGS_perf_get_current_takeoff_acc() then
+            FMGS_sys.config.phase = FMGS_PHASE_CLIMB
+        end
+    end
+end
 -------------------------------------------------------------------------------
 -- INIT stuffs
 -------------------------------------------------------------------------------
@@ -125,6 +151,7 @@ end
 function FMGS_init_set_crz_fl(crz_fl, crz_temp)
     FMGS_sys.data.init.crz_fl = crz_fl
     FMGS_sys.data.init.crz_temp = crz_temp
+    FMGS_signal_phase_update(FMGS_PHASE_EVENT_NEW_CRZ)
     FMGS_refresh_pred()
 end
 
@@ -570,6 +597,9 @@ function FMGS_create_temp_fpln()
     
     FMGS_sys.fpln.temp.legs     = FMGS_sys.fpln.active.legs
     FMGS_sys.fpln.temp.next_leg = FMGS_sys.fpln.active.next_leg
+
+    FMGS_sys.fpln.temp.segment_curved_list = FMGS_sys.fpln.active.segment_curved_list
+    FMGS_sys.fpln.temp.sequencer = FMGS_sys.fpln.active.sequencer
 
 end
 
@@ -1314,3 +1344,5 @@ end
 function FMGS_winds_get_cruise_at_alt(req_alt, leg)
     return interpolate_wind(req_alt, leg)
 end
+
+

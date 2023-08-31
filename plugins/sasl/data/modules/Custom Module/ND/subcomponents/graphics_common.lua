@@ -489,10 +489,9 @@ local function draw_next_waypoint_info(data)
         return -- Not present in OANS mode
     end
 
-    local active_legs = FMGS_get_enroute_legs()
-    local next_leg_id = FMGS_get_next_leg_id()
+    local target = FMGS_sys.fpln.active.sequencer.segment_curved_list_target
 
-    if active_legs == nil or #active_legs == 0 or next_leg_id == nil then
+    if target == nil then
         return
     end
     
@@ -500,18 +499,19 @@ local function draw_next_waypoint_info(data)
         return
     end
     
-    local next_wpt = active_legs[next_leg_id]
+    -- WPT Name
+    local next_wpt_name = target.orig_ref.id
+    if not next_wpt_name then
+        return
+    end
+    sasl.gl.drawText(Font_ECAMfont, size[1]-120, size[2]-50, next_wpt_name, 28, true, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     
-    if next_wpt.discontinuity then
+    if not target.orig_ref.lat or not target.orig_ref.lon then
         return
     end
 
-    -- WPT Name
-    local next_wpt_name = next_wpt.id == nil and "COORDS" or next_wpt.id    -- This is possible when the waypoint is coordinates
-    sasl.gl.drawText(Font_ECAMfont, size[1]-120, size[2]-50, next_wpt.id, 28, true, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    
     -- Bearing
-    local true_bearing = get_earth_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,next_wpt.lat,next_wpt.lon)
+    local true_bearing = get_earth_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,target.orig_ref.lat,target.orig_ref.lon)
     if data.inputs.is_true_heading_showed then
         true_bearing = true_bearing - Local_magnetic_deviation()
     end
@@ -520,7 +520,7 @@ local function draw_next_waypoint_info(data)
 
 
     -- Distance
-    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,next_wpt.lat,next_wpt.lon)
+    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,target.orig_ref.lat,target.orig_ref.lon)
     sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-82, Round(distance, 0) .. ".", 28, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_ECAMfont, size[1]-65, size[2]-82, math.floor((distance%1)*10, 0), 22, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_ECAMfont, size[1]-20, size[2]-82, "NM", 22, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
