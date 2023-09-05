@@ -33,7 +33,7 @@ function FMGS_get_current_target_speed()
     local dep_rwy_alt = FMGS_sys.fpln.active.apts.dep and FMGS_sys.fpln.active.apts.dep.alt or 0
 
     local gear_is_out = get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment) > 0.
-    local VS = FBW.FAC_COMPUTATION.Extract_vs1g(get(Gross_weight), get(Flaps_internal_config), gear_is_out)
+    local VS = FBW.FMGEC.Extract_vs1g(get(Gross_weight), get(Flaps_internal_config), gear_is_out)
 
     if FMGS_sys.config.phase == FMGS_PHASE_TAKEOFF then
         if not v2 then
