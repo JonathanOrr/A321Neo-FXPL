@@ -53,6 +53,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/MCDU/")
 addSearchPath(moduleDirectory .. "/Custom Module/AUTOFLT/")
 addSearchPath(moduleDirectory .. "/Custom Module/AOC_ATC/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
+addSearchPath(moduleDirectory .. "/Custom Module/LED/")
 
 position = {0, 0, 4096, 4096}
 size = { 4096, 4096 }
@@ -88,7 +89,7 @@ components = {
   HUD {},
   DCDU {},
   clock {},
-  LED_screens {},
+  LED_main {},
   failures_manager {},
   doors {},
   hydraulics {},

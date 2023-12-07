@@ -1,4 +1,4 @@
-addSearchPath(moduleDirectory .. "/Custom Module/LED_subcomponents/")
+include("LED/lib/LED7Seg.lua")
 
 components = {
     bat_1 {},

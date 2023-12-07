@@ -1,7 +1,7 @@
 position = {2343, 1539, 178, 85}
 size = {178, 85}
 
-include('LED_subcomponents/qnh_common.lua')
+include('LED/qnh_common.lua')
 
 local qnh_status = {
     mode = MODE_QNH,
