@@ -2,7 +2,7 @@
 -- Context windows
 -------------------------------------------------------------------------------
 
-local cwDecoreRes = nil
+local cwDecoreRes
 local function initDefDecoreRes(headerHeight)
     if cwDecoreRes == nil then
         cwDecoreRes = {
@@ -13,7 +13,7 @@ local function initDefDecoreRes(headerHeight)
         }
     end
     if not cwDecoreRes.fH[headerHeight] then
-        local fW, fH = sasl.gl.measureText(cwDecoreRes.f, 'T', headerHeight - 4, false, false)
+        local _, fH = sasl.gl.measureText(cwDecoreRes.f, 'T', headerHeight - 4, false, false)
         cwDecoreRes.fH[headerHeight] = fH
     end
 end
@@ -21,13 +21,8 @@ end
 local function contextWindowHeaderDrawDef(window, w, h)
     local bckColor = { 0.25, 0.25, 0.25, 1 }
     local elColor = { 0.9, 0.9, 0.9, 1 }
-    local actRect = window.decoration.hActiveRect
 
     sasl.gl.drawRectangle(0, 0, w, h, bckColor)
-    if actRect then
-        sasl.gl.drawRectangle(actRect[1], actRect[2], actRect[3], actRect[4], { 0.1, 0.1, 0.1, 1})
-    end
-
     sasl.gl.drawTexture(cwDecoreRes.clT, 2, 2, h - 4, h - 4, elColor)
     sasl.gl.drawTexture(cwDecoreRes.outT, h + 2, 2, h - 4, h - 4, elColor)
 
@@ -41,7 +36,7 @@ local function contextWindowHeaderDrawDef(window, w, h)
     end
 end
 
-local function contextWindowHeaderMDownDef(window, x, y, w, h, button)
+local function contextWindowHeaderMDownDef(window, x, y, w, h, _)
     if isInRect({ 0, 0, h, h }, x, y) or isInRect({ w - h, 0, h, h }, x, y) then
         window:setIsVisible(false)
         return true
@@ -58,10 +53,10 @@ local function getContextWindowDecorationDef(window)
         headerHeight = 25,
         draw = function(w, h) contextWindowHeaderDrawDef(window, w, h) end,
         onMouseDown = function(x, y, w, h, button) return contextWindowHeaderMDownDef(window, x, y, w, h, button) end,
-        onMouseUp = function(x, y, w, h, button) return false end,
-        onMouseHold = function(x, y, w, h, button) return false end,
-        onMouseMove = function(x, y, w, h) return 1 end,
-        onMouseWheel = function(x, y, w, h, clicks) return false end,
+        onMouseUp = function(_, _, _, _, _) return false end,
+        onMouseHold = function(_, _, _, _, _) return false end,
+        onMouseMove = function(_, _, _, _) return 1 end,
+        onMouseWheel = function(_, _, _, _, _) return false end,
         main = {}
     }
 end
@@ -70,6 +65,11 @@ local defaultWindowName = "cWindow"
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
+
+--- @class CWLayerID
+--- @class CWResizeModeID
+--- @class CWEventID
+--- @class CWModeID
 
 --- @class ContextWindowDecorationCallbacks
 --- @field draw fun(w:number, h:number)
@@ -123,13 +123,14 @@ local defaultWindowName = "cWindow"
 --- @field setPosition fun(self:ContextWindow, x:number, y:number, w:number, h:number)
 --- @field getPosition fun(self:ContextWindow):number, number, number, number
 --- @field setMode fun(self:ContextWindow, mode:CWModeID, monitor:number)
---- @field getMode fun(self:ContextWindow):CWModeID, monitor
+--- @field getMode fun(self:ContextWindow):CWModeID, number
 --- @field isPoppedOut fun(self:ContextWindow):boolean
 --- @field isInVR fun(self:ContextWindow):boolean
 --- @field setVrAutoHandling fun(self:ContextWindow, auto:boolean)
 --- @field setProportional fun(self:ContextWindow, isProportional:boolean)
 --- @field setResizable fun(self:ContextWindow, isResizable:boolean)
 --- @field setMovable fun(self:ContextWindow, isMovable:boolean)
+--- @field setDecoration fun(self:ContextWindow, decoration:ContextWindowDecoration)
 --- @field setCallback fun(self:ContextWindow, callback:fun(id:number, event:CWEventID))
 --- @field destroy fun(self:ContextWindow)
 
@@ -185,26 +186,26 @@ function contextWindow(tbl)
 
     -------------------------------------------------------------------------------
 
-    function drawContextWindow(wId)
+    function drawContextWindow(_)
         private.drawComponent(c)
     end
 
-    function onMouseDownContextWindow(wId, x, y, button)
+    function onMouseDownContextWindow(_, x, y, button)
         private.eventCounter = 0
         return processMouseDown(c, x, y, button)
     end
 
-    function onMouseUpContextWindow(wId, x, y, button)
+    function onMouseUpContextWindow(_, x, y, button)
         private.eventCounter = 0
         return processMouseUp(c, x, y, button)
     end
 
-    function onMouseHoldContextWindow(wId, x, y, button)
+    function onMouseHoldContextWindow(_, x, y, button)
         private.eventCounter = 0
         return processMouseHold(c, x, y, button)
     end
 
-    function onMouseWheelContextWindow(wId, x, y, wheelClicks)
+    function onMouseWheelContextWindow(_, x, y, wheelClicks)
         private.eventCounter = 0
         return processMouseWheel(c, x, y, wheelClicks)
     end
@@ -223,7 +224,7 @@ function contextWindow(tbl)
     end
 
     local resizeCallback = tbl.resizeCallback
-    function onContextWindowResize(wId, width, height, mode, proportional)
+    function onContextWindowResize(_, width, height, mode, proportional)
         if resizeCallback then
             return resizeCallback(c, width, height, mode, proportional)
         else
@@ -251,7 +252,7 @@ function contextWindow(tbl)
         end
     end
 
-    function onContextWindowLayoutChange(wId, isInFront)
+    function onContextWindowLayoutChange(_, isInFront)
         private.eventCounter = 1
         local currentFocusedComponentPath = private.getFocusedComponentPath()
         local focusedNow = false
@@ -285,19 +286,30 @@ function contextWindow(tbl)
     -------------------------------------------------------------------------------
 
     if cwDecoration == SASL_CW_DECORATED then
-        window.decoration = getContextWindowDecorationDef(window)
-        local decor = window.decoration
-        if tbl.decoration ~= nil then
-            for k, v in pairs(tbl.decoration) do
-                decor[k] = v
+        window.setDecoration = function(self, decoration)
+            self.decoration = getContextWindowDecorationDef(self)
+            local decor = self.decoration
+            if decoration ~= nil then
+                for k, v in pairs(decoration) do
+                    decor[k] = v
+                end
             end
+            if decor.headerHeight ~= 0 then
+                if decor.headerHeight < 15 or decor.headerHeight > 75 then
+                    logWarning("Context window decoration header height exceeds limits (15-75)")
+                    decor.headerHeight = 25
+                end
+                initDefDecoreRes(decor.headerHeight)
+            end
+            sasl.windows.setContextWindowDecoration(self.id, decor.headerHeight,
+                decor.draw, decor.onMouseDown, decor.onMouseUp,
+                decor.onMouseHold, decor.onMouseMove, decor.onMouseWheel,
+                decor.main.draw, decor.main.onMouseDown, decor.main.onMouseUp,
+                decor.main.onMouseHold, decor.main.onMouseMove, decor.main.onMouseWheel)
         end
-        initDefDecoreRes(decor.headerHeight)
-        sasl.windows.setContextWindowDecoration(window.id, decor.headerHeight,
-            decor.draw, decor.onMouseDown, decor.onMouseUp,
-            decor.onMouseHold, decor.onMouseMove, decor.onMouseWheel,
-            decor.main.draw, decor.main.onMouseDown, decor.main.onMouseUp,
-            decor.main.onMouseHold, decor.main.onMouseMove, decor.main.onMouseWheel)
+        window:setDecoration(tbl.decoration)
+    else
+        window.setDecoration = function(self) end
     end
 
     -------------------------------------------------------------------------------
@@ -496,27 +508,27 @@ end
 
 --- Saves context windows states in global state holder.
 function private.saveContextWindowsState()
-    local cw = {}
+    local cw = private.savedState.contextWindows
     for _, c in ipairs(contextWindows.components) do
         local name = c.name
         local sstate = get(c.saveState)
-        if sstate and name ~= defaultWindowName then
-            local modeId, modeMonitor = c.window:getMode()
-            local x, y, w, h = c.window:getPosition()
-            local vis = c.window:isVisible()
-            cw[name] = {
-                mode = { modeId, modeMonitor },
-                position = { x, y, w, h },
-                visible = vis
-            }
+        if sstate then
+            if name ~= defaultWindowName then
+                local modeId, modeMonitor = c.window:getMode()
+                local x, y, w, h = c.window:getPosition()
+                local vis = c.window:isVisible()
+                cw[name] = {
+                    mode = { modeId, modeMonitor },
+                    position = { x, y, w, h },
+                    visible = vis
+                }
+            else
+                logWarning("Context window requsted saving its state, but 'name' wasn't provided at CW creation")
+            end
+        else
+            cw[name] = nil
         end
     end
-
-    if not #cw then
-        return
-    end
-
-    private.savedState.contextWindows = cw
 end
 
 -------------------------------------------------------------------------------

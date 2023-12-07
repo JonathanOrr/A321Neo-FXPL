@@ -81,7 +81,7 @@ _SFCACHE = {}
 --- @see reference
 --- : https://1-sim.com/files/SASL3Manual.pdf#openFile
 function openFile(fileName, cache)
-    local cache = cache or false
+    local ch = cache or false
     local name = extractFileName(fileName)
 
     for _, v in ipairs(private.searchPath) do
@@ -95,11 +95,11 @@ function openFile(fileName, cache)
             subdir = name
         end
 
-        if cache and _SFCACHE[fullName] then return _SFCACHE[fullName] end
+        if ch and _SFCACHE[fullName] then return _SFCACHE[fullName] end
         if isFileExists(fullName) then
             local f, errorMsg = loadfile(fullName)
             if f then
-                if cache then
+                if ch then
                     _SFCACHE[fullName] = f
                 end
                 return f
@@ -109,11 +109,11 @@ function openFile(fileName, cache)
         end
 
         local subFullName = subdir .. '/' .. fileName
-        if cache and _SFCACHE[subFullName] then return _SFCACHE[subFullName] end
+        if ch and _SFCACHE[subFullName] then return _SFCACHE[subFullName] end
         if isFileExists(subFullName) then
             local f, errorMsg = loadfile(subFullName)
             if f then
-                if cache then
+                if ch then
                     _SFCACHE[subFullName] = f
                 end
                 return f, subdir

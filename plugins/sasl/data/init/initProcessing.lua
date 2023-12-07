@@ -21,7 +21,7 @@ end
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawAll3D
 function drawAll3D(components)
     for _, v in ipairs(components) do
-        private.drawComponent3D(v)
+        v:draw3D()
     end
 end
 
@@ -34,7 +34,7 @@ end
 --- : https://1-sim.com/files/SASL3Manual.pdf#drawAllObjects
 function drawAllObjects(components)
     for _, v in ipairs(components) do
-        private.drawObjects(v)
+        v:drawObjects()
     end
 end
 
@@ -101,18 +101,6 @@ function private.drawComponent(v)
     end
 end
 
---- Draws 3D from component.
---- @param v Component
-function private.drawComponent3D(v)
-    v:draw3D()
-end
-
---- Draws objects from components.
---- @param v Component
-function private.drawObjects(v)
-    v:drawObjects()
-end
-
 -------------------------------------------------------------------------------
 -- Update
 -------------------------------------------------------------------------------
@@ -123,17 +111,6 @@ end
 --- : https://1-sim.com/files/SASL3Manual.pdf#updateAll
 function updateAll(components)
     for _, v in ipairs(components) do
-        private.updateComponent(v)
-    end
-end
-
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-
---- Updates component.
---- @param v Component
-function private.updateComponent(v)
-    if v and v.update then
         v:update()
     end
 end
@@ -145,24 +122,36 @@ end
 --- Calls callback function for component recursively.
 --- @param name string
 --- @param component Component
+--- @param isForward boolean
 --- @param arg any
-function private.callCallback(name, component, arg)
+function private.callCallback(name, component, isForward, arg)
     local handler = rawget(component, name)
     if handler then
         handler(arg)
     end
-    for i = #component.components, 1, -1 do
-        private.callCallback(name, component.components[i], arg)
+    local first, last, step
+    if isForward then
+        first = 1
+        last = #component.components
+        step = 1
+    else
+        first = #component.components
+        last = 1
+        step = -1
+    end
+    for i = first, last, step do
+        private.callCallback(name, component.components[i], isForward, arg)
     end
 end
 
 --- Calls callback for all components layers.
 --- @param name string
+--- @param isForward boolean
 --- @param arg any
-function private.callCallbackForAllLayers(name, arg)
-    private.callCallback(name, popups, arg)
-    private.callCallback(name, panel, arg)
-    private.callCallback(name, contextWindows, arg)
+function private.callCallbackForAllLayers(name, isForward, arg)
+    private.callCallback(name, popups, isForward, arg)
+    private.callCallback(name, panel, isForward, arg)
+    private.callCallback(name, contextWindows, isForward, arg)
 end
 
 -------------------------------------------------------------------------------
@@ -187,7 +176,7 @@ end
 
 --- Draws 3D.
 function draw3DStage()
-    private.drawComponent3D(panel)
+    panel:draw3D()
 end
 
 -------------------------------------------------------------------------------
@@ -195,7 +184,7 @@ end
 
 --- Draws objects.
 function drawObjectsStage()
-    private.drawObjects(panel)
+    panel:drawObjects()
 end
 
 -------------------------------------------------------------------------------
@@ -203,18 +192,18 @@ end
 
 --- Updates components.
 function update()
-    private.updateComponent(panel)
-    private.updateComponent(popups)
-    private.updateComponent(contextWindows)
+    panel:update()
+    popups:update()
+    contextWindows:update()
 end
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
 --- Called whenever the user's plane is positioned at a new airport (or new flight start).
---- @param flightNumber number
+--- @param flightIndex number
 function onAirportLoaded(flightIndex)
-    private.callCallbackForAllLayers("onAirportLoaded", flightIndex)
+    private.callCallbackForAllLayers("onAirportLoaded", true, flightIndex)
 end
 
 -------------------------------------------------------------------------------
@@ -222,7 +211,7 @@ end
 
 --- Called whenever new scenery is loaded.
 function onSceneryLoaded()
-    private.callCallbackForAllLayers("onSceneryLoaded")
+    private.callCallbackForAllLayers("onSceneryLoaded", true)
 end
 
 -------------------------------------------------------------------------------
@@ -230,7 +219,7 @@ end
 
 --- Called whenever the user adjusts the number of X-Plane aircraft models.
 function onAirplaneCountChanged()
-    private.callCallbackForAllLayers("onAirplaneCountChanged")
+    private.callCallbackForAllLayers("onAirplaneCountChanged", true)
 end
 
 -------------------------------------------------------------------------------
@@ -238,7 +227,7 @@ end
 
 --- Called when user aircraft is loaded.
 function onPlaneLoaded()
-    private.callCallbackForAllLayers("onPlaneLoaded")
+    private.callCallbackForAllLayers("onPlaneLoaded", true)
 end
 
 -------------------------------------------------------------------------------
@@ -246,7 +235,7 @@ end
 
 --- Called when user aircraft is unloaded.
 function onPlaneUnloaded()
-    private.callCallbackForAllLayers("onPlaneUnloaded")
+    private.callCallbackForAllLayers("onPlaneUnloaded", false)
 end
 
 -------------------------------------------------------------------------------
@@ -261,10 +250,10 @@ function onPlaneCrash()
     end
     if needReload == 0 then
         for i = #panel.components, 1, -1 do
-            private.callCallback('onPlaneCrash', panel.components[i])
+            private.callCallback('onPlaneCrash', panel.components[i], false)
         end
-        private.callCallback('onPlaneCrash', popups)
-        private.callCallback('onPlaneCrash', contextWindows)
+        private.callCallback('onPlaneCrash', popups, false)
+        private.callCallback('onPlaneCrash', contextWindows, false)
     end
     return needReload
 end
@@ -274,15 +263,20 @@ end
 
 --- Called on module shutdown.
 function shutdownModules()
-    private.callCallbackForAllLayers("onModuleShutdown")
+    private.callCallbackForAllLayers("onModuleShutdown", false)
 end
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
+--- Called right before first 'update' call.
+function initModules()
+    private.callCallbackForAllLayers("onModuleInit", true)
+end
+
 --- Called when module is unloading.
 function doneModules()
-    private.callCallbackForAllLayers("onModuleDone")
+    private.callCallbackForAllLayers("onModuleDone", false)
     private.saveState()
 end
 

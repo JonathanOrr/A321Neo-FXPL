@@ -179,18 +179,20 @@ end
 
 --- Saves current positions of 2D floating panels in global state holder.
 function private.savePopupsState()
-    local positions = {}
+    local positions = private.savedState.legacyPopups
     for _, c in ipairs(popups.components) do
-        if get(c.savePosition) and get(c.name) ~= "subpanel" then
-            positions[get(c.name)] = get(c.position)
+        local needStore = get(c.savePosition)
+        local popupName = get(c.name)
+        if needStore then
+            if popupName ~= "subpanel" then
+                positions[popupName] = get(c.position)
+            else
+                logWarning("Legacy subpanel requsted saving its state, but 'name' wasn't provided at subpanel creation")
+            end
+        else
+            positions[popupName] = nil
         end
     end
-
-    if not #positions then
-        return
-    end
-
-    private.savedState.legacyPopups = positions
 end
 
 -------------------------------------------------------------------------------

@@ -1,4 +1,130 @@
 ----------------------------------------------------------
+SASL 3.16.4 (XP11.25+ support)
+----------------------------------------------------------
+
+-- Fix fatal regression in activation process introduced in 3.16.3
+
+----------------------------------------------------------
+SASL 3.16.3 (XP11.25+ support)
+----------------------------------------------------------
+
+-- Included changes for Commercial versions
+
+----------------------------------------------------------
+SASL 3.16.2 (XP11.25+ support)
+----------------------------------------------------------
+
+-- Included changes for Commercial versions
+
+----------------------------------------------------------
+SASL 3.16.1 (XP11.25+ support)
+----------------------------------------------------------
+
+-- Added native plugin version for Apple Silicon ARM64 processors
+-- Signed/notarized macOS plugin binaries
+-- Switched to LuaJIT version supporting 64bit address space and use its default allocator
+-- Changed some minor UI in widgets
+-- Make ESC key unfocus currently selected command in Developer Widget commands tab
+-- Added project option to call 'update' callback after XP flightmodel calculation (default is before XP FM)
+-- Added "*" mode for product serial key field in Activation Widget (Commercial version)
+
+----------------------------------------------------------
+SASL 3.15.0 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed possible issue with sound playback in XP12 on macOS (switched to OpenAL-soft implementation)
+- Added functions to save/load XP situations (.sit files)
+- Added functions to place user aircraft at specific airport or other location
+- Updated X-Plane SDK and MSVC tools used to build SASL plugin
+
+----------------------------------------------------------
+SASL 3.14.5 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed incorrect context window header height for some cases
+- Fixed unnecessary events calling for context windows in some variants 
+- Fixed possible case when context window not restore saved position properly due to deferred context window creation
+- Add warning for cases when context window should save its state, but window name is not provided
+- globalProperty wrapper will now use double values in case when both floating point types are provided via dataref accessors
+
+----------------------------------------------------------
+SASL 3.14.4 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed initial state of textures created with 'createRenderTarget' function, now they contain transparent black as earlier (regression from 3.14.0)
+- Fixed missing dependencies for Linux plugin distributions
+
+----------------------------------------------------------
+SASL 3.14.2 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed possible regression crashes which occur in case of extensive usage of fonts or using of 'recreateTexture' function
+
+----------------------------------------------------------
+SASL 3.14.1 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed the order of calling 'onModuleInit' (and some other general callbacks) for subcomponents
+- Fixed distribution packages not working correctly on server (Commercial version)
+
+----------------------------------------------------------
+SASL 3.14.0 (XP11.25+ support)
+----------------------------------------------------------
+
+- Replace 'initialize' and 'initializeAll' component functions with 'onModuleInit' function called for every component (analogue to 'onModuleDone')
+- Optimize rendering code in various ways (less queries, more caching, revised OpenGL state processing etc)
+- Fixed possible incorrect clipping 1px off when drawing into render target
+- Fixed a few regression issues with drawing in render targets (including drawing not always working when AA is enabled for target)
+- Fixed incorrect call to OpenGL API when destroying shader objects
+- Fixed correct shutdown of drawing system in case if render targets were not correctly restored in project's Lua code
+- Fixed possible issue with capturing right mouse click when using Auxiliary click system interface
+- Fixed redundant Project Tree processing when this page is not active in Developer Widget
+- Fixed interface for using external texture spaces for fonts atlases
+- Fixed drawing backgrounds for fonts with specified external texture spaces
+- Fixed resetting correct render target in all cases
+- Fixed possible texture memory not properly freed after call to 'destroyRenderTarget'
+- Fixed redundant calls to 'onModuleShutdown' after failed check for correct .key file (Commercial version)
+- Fixed showing SASL error notification after failed check for correct .key file (Commercial version)
+- Fixed various minor issues which might occur during fonts loading/processing
+- Fixed possibly incorrect kerning of fonts when auto-hinting is used
+- Fixed the cases when text outlines may not appear strictly correct in some cases
+- Added ability to specify hinting algorithm for font loading – 'loadFontHinted' function
+- Added ability to disable custom blending support - 'setCustomBlending' function
+- Added ability to optimize drawing in multiple render targets in 'update' callback - 'setUpdateDrawingReady'
+- Removed some processing running in background when related page is not selected in Developer Widget
+- Removed unused check of audio capture device
+- Removed automatic creation of 'ovrdconfiguration.ini' file, fixed possible crash during its processing
+- Make 3D primitives rendering capability disabled by default for projects (since it's not available on Vulkan anyway)
+- Optimize memory usage for vertex data used in renderer
+
+----------------------------------------------------------
+SASL 3.13.1 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed Lua annotations for functions on C/C++ side
+- Fixed possible issue with wrong 3D positional sounds location
+- Fixed errors/warnings logging in cases when errors occured inside nested C++/Lua/C++... function calls
+- Fixed possible incorrect warnings in case of anti-aliasing usage for render targets (textures)
+- Fixed collecting telemetry in SASL Developer Widget when telemetry tab is not active
+- Fixed 'resetBlending' function – initial blending state is correctly reset now
+- Fixed 'getElapsedMicroseconds' function result
+- Added validation for created framebuffers before usage
+- Added ability to not create Depth/Stencil buffer attachment on render target creation (masking won't work in this case)
+- Added ability to specify AA level for render target on render target creation, without need to specify this parameter in 'setRenderTarget' function
+- Added ability to override SASL project configuration with 'ovrdconfiguration.ini' file (only in Free SASL version, may be useful for distributed development in teams) 
+- Added improvements on logging side (fixed formatting and update logged information)
+- Added general 'log' function, parametrized with more flexible output options per log action 
+- Added ability to set decoration for custom decorated context windows with 'setDecoration' method
+- Added special notification window reporting Lua errors when developer console in widget is not enabled/visible
+- Added ability to draw convex geometry with per-vertex color specification
+- Added ability to create separate instances of the same font file and use defined texture region for glyphs creation
+- Added functions to display dynamic information about font and display generated fonts textures ('getFontInfo', 'drawFontTexture')
+- Added 'initialize' callback for Lua components ('initialize' callbacks guaranteed to be called right before first 'update' call)
+- Added logic to prevent possible drawing calls in components before 'initialize' and first 'update' calls are done.
+- Improved text drawing performance a little bit and improved glyphs packaging algorithm
+- Set SASL_STOP_PROCESSING as default Lua errors handling policy ('setLuaErrorsHandling' function can be used to alter behavior)
+
+----------------------------------------------------------
 SASL 3.12.1 (XP11.25+ support)
 ----------------------------------------------------------
 
