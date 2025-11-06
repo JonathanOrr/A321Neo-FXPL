@@ -14,7 +14,7 @@ function newInterpolator(...)
     if #arg == 1 then
         input = { arg[1][1] }
         value = arg[1][2]
-        return sasl.newCPPInterpolator(input, value)
+        return sasl.newCPPInterpolator(input, value), arg
     end
 
     local N = #arg - 1
@@ -37,7 +37,7 @@ function newInterpolator(...)
         return nil
     end
 
-    return sasl.newCPPInterpolator(input, value)
+    return sasl.newCPPInterpolator(input, value), arg
 end
 
 -------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ end
 --- : https://1-sim.com/files/SASL3Manual.pdf#selfInterpolator
 function selfInterpolator(...)
     local r = {}
-    r.interp = newInterpolator(...)
+    r.interp, r.values = newInterpolator(...)
     r.interpolate = function(x, flag)
         return interpolate(x, r.interp, flag)
     end

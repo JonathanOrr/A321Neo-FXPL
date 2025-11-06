@@ -1,23 +1,155 @@
 ----------------------------------------------------------
-SASL 3.16.4 (XP11.25+ support)
+SASL 3.21.0
+----------------------------------------------------------
+
+-- Revert 3.20.1 changes for textures subpixel coordinates. This will be added in future version as per-texture option instead
+-- Added dedicated function for importing X-Plane owned textures (can be used for getting pilot and copilot weather radar image in XP 12.3):
+    - importXPTexture(number xpTexId)
+-- 'importTexture', 'importXPTexture' returns imported textures width and height as 2 and 3 return values
+
+----------------------------------------------------------
+SASL 3.20.1
+----------------------------------------------------------
+
+-- Use better defaults for textures filtering
+-- Use subpixel coordinates for texture parts drawing
+-- Use double precision floating values to position object instances (available since X-Plane 12.3)
+-- Added new X-Plane texture identifiers to import (available since X-Plane 12.3):
+    - AIRCRAFT_WXR_PILOT_TEX
+    - AIRCRAFT_WXR_COPILOT_TEX
+
+----------------------------------------------------------
+SASL 3.19.4
+----------------------------------------------------------
+
+-- Added a change related to fonts data processing
+
+----------------------------------------------------------
+SASL 3.19.3
+----------------------------------------------------------
+
+-- Added boolean parameter for 'onModuleShutdown' function indicating if project is being shutdown due to error condition
+
+----------------------------------------------------------
+SASL 3.19.2
+----------------------------------------------------------
+
+-- Added new functional to handle HTTP response results for 'net' functions group:
+    - downloadFileSync
+    - downloadFileAsync
+    - downloadFileContentsSync
+    - downloadFileContentsAsync
+    - setDownloadFailOnHttpError
+-- Added 'screenClear' parameter for 'avionicsDevice' function to optionally clear screen framebuffer before every draw
+-- Fixed Lua code breaking change related to functions 'placeUserAtAirport', 'placeUserAtLocation'
+-- Fixed possible conflicts between mouse interaction events for Avionics Devices in 3D and old 3D panel components
+
+----------------------------------------------------------
+SASL 3.19.1
+----------------------------------------------------------
+
+-- Circumvent possible rendering bugs/issues related to drawing masks ('drawMaskStart' etc) and NVIDIA 50 series graphics cards/drivers
+-- Added Lua function to draw textured triangles
+-- Added Lua wrappers for XPLMWeather interface:
+    - getMETARForAirport(...)
+    - getWeatherAtLocation(...)
+-- Added functional to create and manage additional flight loop callbacks on project side:
+    - registerFlightLoop(...)
+    - unregisterFlightLoop(...)
+    - scheduleFlightLoop(...)
+-- Added missing functions for exlusive handling of AI aircraft and TCAS overrides:
+    - countAircraft(...)
+    - setActiveAircraftCount(...)
+    - acquireExclusiveAircraftAccess(...)
+    - releaseExclusiveAircraftAccess(...)
+-- Added Lua global variables corresponding to some X-Plane interplugin messages:
+    - XP_MSG_ENTERED_VR
+    - XP_MSG_EXITING_VR
+    - XP_MSG_RELEASE_PLANES
+-- Added function to destroy previously created Avionics Devices ('destroy' method)
+-- Added variant of 'createTextureDataStorage' function, which initializes its contents from specified file
+-- Added function to save texture storage contents into file ('imageFromTextureStorage')
+-- Fixed possible CTD when 'drawMaskEnd' function called in a wrong place
+-- Fixed Avionics Device draw callback not clearing frame buffer before 'draw' by default
+-- Fixed incorrect handling of 'onMouseDown' and 'onMouseWheel' functions in Avionics Devices
+-- Fixed 'onMouseUp' events not called for Avionics Device because of incorrect coordinates
+-- Fixed 'onMouseHold' event not called continuosly when mouse is not moving on Avionics Device
+
+----------------------------------------------------------
+SASL 3.18.2
+----------------------------------------------------------
+
+-- Fixed a bug in click system interface related to processing clicks from touch screen devices
+
+----------------------------------------------------------
+SASL 3.18.1
+----------------------------------------------------------
+
+-- Fixed usage of custom render targets for Avionics Devices drawing ('fbo' component property etc)
+-- Fixed incorrect mouse wheel events handling in Avionics Devices
+-- Fixed 'isPoppedOut' Devices function returning value of incorrect type
+-- Fixed calling Avionics Devices component callbacks before project is fully initialized 
+-- Fixed calling Avionics Devices component callbacks after project is stopped
+-- Allow bezel size to be equal to screen size in Avionics Device
+-- 'newInterpolator' function returns second value (table with function arguments)
+
+----------------------------------------------------------
+SASL 3.18.0
+----------------------------------------------------------
+
+-- Add Avionics Devices management interface for X-Plane 12
+    - avionicsDevice(...)
+    - avionicsDeviceBuiltin(...)
+    - avionicsDeviceOverride(...)
+
+----------------------------------------------------------
+SASL 3.17.3
+----------------------------------------------------------
+
+-- Fix incorrect mouse events register/processing in click system interface when sim is on pause
+
+----------------------------------------------------------
+SASL 3.17.2
+----------------------------------------------------------
+
+-- Fix possible plugin crashes on project/plugin reloads
+
+----------------------------------------------------------
+SASL 3.17.0
+----------------------------------------------------------
+
+-- Update LuaJIT to the latest version
+-- Tune internal JIT parameters to circumvent performance issues for some complex projects
+-- Optimize memory usage a little bit for loading Lua scripts (Commercial version)
+-- SASL project reports scripts loading time in Log
+-- Fix managing OpenGL state when rendering into targets in "update" functions
+-- Fix "request" function not creating new script instance when it should
+-- Remove registering SASL developer commands for Commercial version
+-- Context windows will reposition themselves into visible areas only when window visibility changes
+-- Add function to treat project warnings as errors ("setLuaWarningsAsErrors")
+-- Change default context windows decoration colors a little bit
+-- Change OpenAL-soft backend on Windows OS 
+
+----------------------------------------------------------
+SASL 3.16.4
 ----------------------------------------------------------
 
 -- Fix fatal regression in activation process introduced in 3.16.3
 
 ----------------------------------------------------------
-SASL 3.16.3 (XP11.25+ support)
+SASL 3.16.3
 ----------------------------------------------------------
 
 -- Included changes for Commercial versions
 
 ----------------------------------------------------------
-SASL 3.16.2 (XP11.25+ support)
+SASL 3.16.2
 ----------------------------------------------------------
 
 -- Included changes for Commercial versions
 
 ----------------------------------------------------------
-SASL 3.16.1 (XP11.25+ support)
+SASL 3.16.1
 ----------------------------------------------------------
 
 -- Added native plugin version for Apple Silicon ARM64 processors
@@ -29,7 +161,7 @@ SASL 3.16.1 (XP11.25+ support)
 -- Added "*" mode for product serial key field in Activation Widget (Commercial version)
 
 ----------------------------------------------------------
-SASL 3.15.0 (XP11.25+ support)
+SASL 3.15.0
 ----------------------------------------------------------
 
 - Fixed possible issue with sound playback in XP12 on macOS (switched to OpenAL-soft implementation)
@@ -38,7 +170,7 @@ SASL 3.15.0 (XP11.25+ support)
 - Updated X-Plane SDK and MSVC tools used to build SASL plugin
 
 ----------------------------------------------------------
-SASL 3.14.5 (XP11.25+ support)
+SASL 3.14.5
 ----------------------------------------------------------
 
 - Fixed incorrect context window header height for some cases
@@ -48,27 +180,27 @@ SASL 3.14.5 (XP11.25+ support)
 - globalProperty wrapper will now use double values in case when both floating point types are provided via dataref accessors
 
 ----------------------------------------------------------
-SASL 3.14.4 (XP11.25+ support)
+SASL 3.14.4
 ----------------------------------------------------------
 
 - Fixed initial state of textures created with 'createRenderTarget' function, now they contain transparent black as earlier (regression from 3.14.0)
 - Fixed missing dependencies for Linux plugin distributions
 
 ----------------------------------------------------------
-SASL 3.14.2 (XP11.25+ support)
+SASL 3.14.2
 ----------------------------------------------------------
 
 - Fixed possible regression crashes which occur in case of extensive usage of fonts or using of 'recreateTexture' function
 
 ----------------------------------------------------------
-SASL 3.14.1 (XP11.25+ support)
+SASL 3.14.1
 ----------------------------------------------------------
 
 - Fixed the order of calling 'onModuleInit' (and some other general callbacks) for subcomponents
 - Fixed distribution packages not working correctly on server (Commercial version)
 
 ----------------------------------------------------------
-SASL 3.14.0 (XP11.25+ support)
+SASL 3.14.0
 ----------------------------------------------------------
 
 - Replace 'initialize' and 'initializeAll' component functions with 'onModuleInit' function called for every component (analogue to 'onModuleDone')
@@ -98,7 +230,7 @@ SASL 3.14.0 (XP11.25+ support)
 - Optimize memory usage for vertex data used in renderer
 
 ----------------------------------------------------------
-SASL 3.13.1 (XP11.25+ support)
+SASL 3.13.1
 ----------------------------------------------------------
 
 - Fixed Lua annotations for functions on C/C++ side
@@ -125,7 +257,7 @@ SASL 3.13.1 (XP11.25+ support)
 - Set SASL_STOP_PROCESSING as default Lua errors handling policy ('setLuaErrorsHandling' function can be used to alter behavior)
 
 ----------------------------------------------------------
-SASL 3.12.1 (XP11.25+ support)
+SASL 3.12.1
 ----------------------------------------------------------
 
 - Fixed possible broken XP menu layout after menu item deletion
@@ -145,7 +277,7 @@ SASL 3.12.1 (XP11.25+ support)
 - Update default SASL Context Window decoration (drawing performance and title showing)
 
 ----------------------------------------------------------
-SASL 3.11.0 (XP11.25+ support)
+SASL 3.11.0
 ----------------------------------------------------------
 
 - Fixed 'readConfig', 'writeConfig' functions (make them correctly save information about values types)
@@ -154,21 +286,21 @@ SASL 3.11.0 (XP11.25+ support)
 - Added function to save textures to files in common formats
 
 ----------------------------------------------------------
-SASL 3.10.2 (XP11.25+ support)
+SASL 3.10.2
 ----------------------------------------------------------
 
 - Fixed failing 'request' function behavior in both Free and Commercial SASL
 - Fixed incorrect saving of telemetry active state between project reboots
 
 ----------------------------------------------------------
-SASL 3.10.1 (XP11.25+ support)
+SASL 3.10.1
 ----------------------------------------------------------
 
 - Fixed drawing components cursors in old-style <subpanel>
 - Fixed possible crash in case of enabled telemetry in Dev Widget
 
 ----------------------------------------------------------
-SASL 3.10.0 (XP11.25+ support)
+SASL 3.10.0
 ----------------------------------------------------------
 
 - Fixed lookup of multi-typed datarefs (for example, for datarefs provinding both float and double, type request is how handled correctly)
@@ -198,7 +330,7 @@ SASL 3.10.0 (XP11.25+ support)
 - Updated dependencies (C++ libraries) and toolsets
 
 ----------------------------------------------------------
-SASL 3.9.0 (XP11.25+ support)
+SASL 3.9.0
 ----------------------------------------------------------
 
 - Fixed tracking of 3D panel mouse position in multi-monitor configurations and with rotational offsets applied for monitors
@@ -213,7 +345,7 @@ SASL 3.9.0 (XP11.25+ support)
 - Updated SASL default cursors texture 
 
 ----------------------------------------------------------
-SASL 3.8.0 (XP11.25+ support)
+SASL 3.8.0
 ----------------------------------------------------------
 
 - Fixed cathing middle mouse button events for legacy pop-ups and 3d panel
@@ -230,20 +362,20 @@ SASL 3.8.0 (XP11.25+ support)
 - Restructured internal code related to events system, etc
 
 ----------------------------------------------------------
-SASL 3.7.2 (XP11.25+ support)
+SASL 3.7.2
 ----------------------------------------------------------
 
 - Fixed usage of nested render targets in non-graphics callbacks (<update>, etc)
 
 ----------------------------------------------------------
-SASL 3.7.1 (XP11.25+ support)
+SASL 3.7.1
 ----------------------------------------------------------
 
 - Fixed some unnecessary re-activation triggers on Windows OS (Commercial Version)
 - Fixed irrelevant entry in the Log about error before activation (Commercial Version)
 
 ----------------------------------------------------------
-SASL 3.7.0 (XP11.25+ support)
+SASL 3.7.0
 ----------------------------------------------------------
 
 - Fixed possible CTD during automatic context window positioning
@@ -252,27 +384,27 @@ SASL 3.7.0 (XP11.25+ support)
 - Added new Lua callback for components on shutdown - <onModuleShutdown>
 
 ----------------------------------------------------------
-SASL 3.6.5 (XP11.25+ support)
+SASL 3.6.5
 ----------------------------------------------------------
 
 - Fixed CTD on X-Plane exit in case if SASL project is a Global Plugin
 - Fixed internal click system bug with HOLD and UP mouse buttons statuses
 
 ----------------------------------------------------------
-SASL 3.6.4 (XP11.25+ support)
+SASL 3.6.4
 ----------------------------------------------------------
 
 - Fixed possibility of CTD on startup in Linux version
 - Fixed middle mouse button event for old-style <subpanel> windows
 
 ----------------------------------------------------------
-SASL 3.6.3 (XP11.25+ support)
+SASL 3.6.3
 ----------------------------------------------------------
 
 - Minor internal DRM fix (Commercial Version)
 
 ----------------------------------------------------------
-SASL 3.6.1 (XP11.25+ support)
+SASL 3.6.1
 ----------------------------------------------------------
 
 - Added <drawArcLine> function
@@ -281,7 +413,7 @@ SASL 3.6.1 (XP11.25+ support)
 - Updated <setFontBckPadding> function
 
 ----------------------------------------------------------
-SASL 3.6.0 (XP11.25+ support)
+SASL 3.6.0
 ----------------------------------------------------------
 
 - Fixed drawing multi-line text with non-default alignment
@@ -306,7 +438,7 @@ SASL 3.6.0 (XP11.25+ support)
 - Removed some experimental text rendering modes
 
 ----------------------------------------------------------
-SASL 3.5.1 (XP11.25+ support)
+SASL 3.5.1
 ----------------------------------------------------------
 
 - Fixed <globalProperty> wrapper for string datarefs
@@ -320,7 +452,7 @@ SASL 3.5.1 (XP11.25+ support)
 - Partially reverted focus logic for Context Windows (fixes possible issues with global key handlers)
 
 ----------------------------------------------------------
-SASL 3.5.0 (XP11.25+ support)
+SASL 3.5.0
 ----------------------------------------------------------
 
 - Fixed possible corruption of X-Plane interface textures after textured drawing in the Context Window
@@ -356,14 +488,14 @@ SASL 3.5.0 (XP11.25+ support)
 - Improved activation widget interface (Commercial Version)
 
 ----------------------------------------------------------
-SASL 3.4.2 (XP11.25+ support)
+SASL 3.4.2
 ----------------------------------------------------------
 
 - Added way to invert masking logic on <drawUnderMask> call
 - Fixed global key handlers - now there's additional argument which identifies the event 
 
 ----------------------------------------------------------
-SASL 3.4.1 (XP11.20+ support)
+SASL 3.4.1
 ----------------------------------------------------------
 
 - Improved custom datarefs export to DRE and to Datarefs Tree in Widget - now the export is correct 
@@ -379,7 +511,7 @@ SASL 3.4.1 (XP11.20+ support)
 - Fixed crash on project reboot when Functional Properties in use 
 
 ----------------------------------------------------------
-SASL 3.4.0 (XP11.20+ support)
+SASL 3.4.0
 ----------------------------------------------------------
 
 - Fixed a few issues with <noResize> and <noMove> options for <contextWindow>
@@ -390,21 +522,21 @@ SASL 3.4.0 (XP11.20+ support)
 - Fixed a bug with 3D panel clicks introduces in 3.3.0 version.
 
 ----------------------------------------------------------
-SASL 3.3.3 (XP11.20+ support)
+SASL 3.3.3
 ----------------------------------------------------------
 
 - Fixed various issues with unnecessary re-activation requests (Commercial Version)
 - Fixed <drawMaskStart> function
 
 ----------------------------------------------------------
-SASL 3.3.2 (XP11.20+ support)
+SASL 3.3.2
 ----------------------------------------------------------
 
 - Fixed cache for interpolators objects
 - Fixed graphics artifacts in SASL Developer widget title
 
 ----------------------------------------------------------
-SASL 3.3.1 (XP11.20+ support)
+SASL 3.3.1
 ----------------------------------------------------------
 
 - Fixed various issues with unnecessary re-activation requests (Commercial Version)
@@ -413,7 +545,7 @@ SASL 3.3.1 (XP11.20+ support)
 - Fixed huge FPS drop in case of Context Windows usage in VR
 
 ----------------------------------------------------------
-SASL 3.3.0 (XP11.20+ support)
+SASL 3.3.0
 ----------------------------------------------------------
 
 - Removed XP10 support
