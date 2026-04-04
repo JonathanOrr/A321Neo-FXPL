@@ -379,15 +379,15 @@ MAGIC_window = contextWindow {
 
 PID_UI_window = contextWindow {
   name = "PID TUNING UI";
-  position = { 150 , 150 , 600, 300 };
+  position = { 150 , 150 , 720, 580 };
   noBackground = true ;
-  proportional = false ;
-  minimumSize = { 600 , 300 };
-  maximumSize = { 600 , 300 };
+  proportional = true ;
+  minimumSize = { 720 , 580 };
+  maximumSize = { 720*2 , 580*2 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    PID_UI {position = { 0 , 0 , 600 , 300 }}
+    PID_UI {position = { 0 , 0 , 720 , 580 }}
   };
 }
 
